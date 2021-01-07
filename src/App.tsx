@@ -1,15 +1,15 @@
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { About } from "./pages/plain/About";
 import { Chapters } from "./pages/chapters/Chapters";
 import { Covers } from "./pages/covers/Covers";
+import { About } from "./pages/plain/About";
 import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
 import { Home } from "./pages/plain/Home";
 import { HomeCoil } from "./pages/plain/HomeCoil";
-import { Privacy } from "./pages/plain/Privacy";
 import { PlainPageContainer } from "./pages/plain/PlainPagesContainer";
+import { Privacy } from "./pages/plain/Privacy";
 
 const plainPageRoutes = [
   { url: "/home", component: <Home /> },
@@ -23,7 +23,7 @@ const plainPageRoutes = [
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter basename={"/"}>
       <PageContainer>
         <Switch>
           <Route exact path="/">
@@ -56,7 +56,7 @@ function App() {
           <Route>Missing Route</Route>
         </Switch>
       </PageContainer>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
