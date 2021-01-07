@@ -11,7 +11,7 @@ import { Menu } from "grommet-icons";
 
 export const NavMenu = () => {
   return (
-    <Layer modal={false} position="top-left">
+    <Layer modal={false} position="top-left" responsive={false}>
       <Box pad="small">
         <DropButton
           alignSelf="start"

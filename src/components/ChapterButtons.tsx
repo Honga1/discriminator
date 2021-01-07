@@ -8,8 +8,8 @@ export const ChapterButtons = ({
   chapterNumber: number;
 }) => {
   return (
-    <Layer modal={false} position="bottom">
-      <Box direction="row" background="lightgrey">
+    <Layer modal={false} position="bottom" responsive={false}>
+      <Box direction="row" background="grey">
         <Button icon={<Play />} />
         <Button icon={<Pause />} />
         <Button icon={<FastForward />} href={`/cover${chapterNumber + 1}`} />

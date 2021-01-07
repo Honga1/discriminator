@@ -4,8 +4,8 @@ import { ProgressIndicator } from "./ProgressIndicator";
 
 export const CoverButtons = ({ coverNumber }: { coverNumber: number }) => {
   return (
-    <Layer modal={false} position="bottom">
-      <Box direction="row" background="lightgrey">
+    <Layer modal={false} position="bottom" responsive={false}>
+      <Box direction="row" background="grey">
         <Button icon={<Launch />} href={`/chapter${coverNumber}`} />
         <Button icon={<Rewind />} href={`/chapter${coverNumber - 1}`} />
         <ProgressIndicator />

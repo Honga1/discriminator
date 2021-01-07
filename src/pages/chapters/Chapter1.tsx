@@ -2,7 +2,7 @@ import { Box, Text, Video } from "grommet";
 
 export const Chapter1 = () => {
   return (
-    <Box fill>
+    <Box>
       <Text>Chapter1</Text>
       <Video controls={false} messages={{ openMenu: "cat" }}>
         <source src="small.mp4" type="video/mp4" />

@@ -7,7 +7,7 @@ export const CoverContainer = ({
   coverNumber,
 }: PropsWithChildren<{ coverNumber: number }>) => {
   return (
-    <Box>
+    <Box fill justify="center" alignContent="center">
       <CoverButtons coverNumber={coverNumber} />
       {children}
     </Box>
