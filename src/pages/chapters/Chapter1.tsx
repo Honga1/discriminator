@@ -1,24 +1,17 @@
-import { Box, Text, Video } from "grommet";
+import { Box, Stack, Text, Video } from "grommet";
+import video from "./../../720p.mp4";
 
 export const Chapter1 = () => {
   return (
-    <Box>
-      <Text>Chapter1</Text>
-      <Video controls={false} messages={{ openMenu: "cat" }}>
-        <source src="small.mp4" type="video/mp4" />
-        <source
-          src="http://techslides.com/demos/sample-videos/small.webm"
-          type="video/webm"
-        />
-        <source
-          src="http://techslides.com/demos/sample-videos/small.ogv"
-          type="video/ogg"
-        />
-        <source
-          src="http://techslides.com/demos/sample-videos/small.3gp"
-          type="video/3gp"
-        />
-      </Video>
-    </Box>
+    <Stack interactiveChild="first">
+      <Box fill>
+        <Video fit="contain" controls={false} autoPlay muted>
+          <source src={video} type="video/mp4" />
+        </Video>
+      </Box>
+      <Box fill align="center" justify="center" alignSelf="center">
+        <Text>Chapter1</Text>
+      </Box>
+    </Stack>
   );
 };
