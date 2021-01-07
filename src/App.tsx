@@ -1,14 +1,25 @@
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { About } from "./pages/About";
+import { About } from "./pages/plain/About";
 import { Chapters } from "./pages/chapters/Chapters";
 import { Covers } from "./pages/covers/Covers";
-import { Credits } from "./pages/Credits";
-import { EndPage } from "./pages/EndPage";
-import { Error } from "./pages/Error";
-import { Home } from "./pages/Home";
-import { HomeCoil } from "./pages/HomeCoil";
-import { Privacy } from "./pages/Privacy";
+import { Credits } from "./pages/plain/Credits";
+import { EndPage } from "./pages/plain/EndPage";
+import { Error } from "./pages/plain/Error";
+import { Home } from "./pages/plain/Home";
+import { HomeCoil } from "./pages/plain/HomeCoil";
+import { Privacy } from "./pages/plain/Privacy";
+import { PlainPageContainer } from "./pages/plain/PlainPagesContainer";
+
+const plainPageRoutes = [
+  { url: "/home", component: <Home /> },
+  { url: "/coil", component: <HomeCoil /> },
+  { url: "/about", component: <About /> },
+  { url: "/credits", component: <Credits /> },
+  { url: "/end", component: <EndPage /> },
+  { url: "/error", component: <Error /> },
+  { url: "/privacy", component: <Privacy /> },
+];
 
 function App() {
   return (
@@ -16,33 +27,22 @@ function App() {
       <PageContainer>
         <Switch>
           <Route exact path="/">
-            <Home />
+            <PlainPageContainer>
+              <Home />
+            </PlainPageContainer>
           </Route>
-          <Route path="/coil">
-            <HomeCoil />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/credits">
-            <Credits />
-          </Route>
-          <Route path="/end">
-            <EndPage />
-          </Route>
-          <Route path="/error">
-            <Error />
-          </Route>
-          <Route path="/privacy">
-            <Privacy />
-          </Route>
+          {plainPageRoutes.map(({ url, component }) => (
+            <Route path={url} key={url}>
+              <PlainPageContainer>{component}</PlainPageContainer>
+            </Route>
+          ))}
           {([1, 2, 3, 4, 5] as const).map((chapter) => (
-            <Route path={`/chapter${chapter}`}>
+            <Route path={`/chapter${chapter}`} key={chapter}>
               <Chapters chapterNumber={chapter} />
             </Route>
           ))}
           {([1, 2, 3, 4, 5] as const).map((cover) => (
-            <Route path={`/cover${cover}`}>
+            <Route path={`/cover${cover}`} key={cover}>
               <Covers coverNumber={cover} />
             </Route>
           ))}

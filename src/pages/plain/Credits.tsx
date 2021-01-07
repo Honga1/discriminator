@@ -1,10 +1,11 @@
-import { grommet, Grommet, Heading, Paragraph } from "grommet";
+import { Box, Heading,Paragraph } from "grommet";
+import React from "react";
 
-export const About = () => {
+export const Credits = () => {
   return (
-    <Grommet theme={grommet}>
-      <Heading>About</Heading>
-      <Paragraph>
+    <Box>
+      <Heading>Credits</Heading>
+      <Paragraph fill>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
         pretium finibus leo nec commodo. Vestibulum vestibulum eget lectus sit
         amet rhoncus. Phasellus pretium nulla eget pellentesque fringilla. Nunc
@@ -19,7 +20,7 @@ export const About = () => {
         neque. Suspendisse volutpat risus nibh, non scelerisque libero facilisis
         sed.
       </Paragraph>
-      <Paragraph>
+      <Paragraph fill>
         Cras nibh sapien, consequat sed varius vitae, sagittis sed felis.
         Pellentesque tincidunt justo lorem, sollicitudin varius quam malesuada
         at. Duis eget sagittis ex, placerat aliquam nisi. Integer condimentum
@@ -33,14 +34,14 @@ export const About = () => {
         lorem eget ultricies pellentesque, sapien sem ullamcorper ligula, non
         ornare velit nulla ut eros.
       </Paragraph>
-      <Paragraph>
+      <Paragraph fill>
         Nulla in eros tincidunt, bibendum leo eu, lobortis justo. Donec et
         tristique arcu. Duis nec semper turpis. In at lacinia nulla, et
         imperdiet lectus. Donec sodales aliquet fringilla. Ut et mauris eros.
         Fusce eget lacinia enim. Fusce posuere nec lacus at ullamcorper. Cras
         imperdiet maximus consectetur.
       </Paragraph>
-      <Paragraph>
+      <Paragraph fill>
         Suspendisse in sapien varius, accumsan arcu sit amet, egestas quam. Ut
         dapibus velit odio, a ultricies urna interdum sed. Maecenas in dapibus
         sem, at euismod purus. Quisque semper nulla efficitur, sagittis sapien
@@ -50,7 +51,7 @@ export const About = () => {
         lacus, in tempus nunc. Sed sed nisl sem. Suspendisse ullamcorper id odio
         eu volutpat.
       </Paragraph>
-      <Paragraph>
+      <Paragraph fill>
         Donec placerat neque a rhoncus molestie. Nunc a faucibus orci. Praesent
         elementum ligula ut nulla iaculis, nec luctus elit faucibus. Nam
         aliquam, mauris non imperdiet fringilla, augue purus tristique sapien,
@@ -63,6 +64,6 @@ export const About = () => {
         consequat ornare sagittis. Vestibulum at vehicula diam, quis consectetur
         justo. Proin sed feugiat orci.
       </Paragraph>
-    </Grommet>
+    </Box>
   );
 };
