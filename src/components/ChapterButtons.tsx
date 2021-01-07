@@ -1,4 +1,5 @@
-import { Nav, Button, Anchor } from "grommet";
+import { Button, Footer } from "grommet";
+import { FastForward, Pause, Play, Rewind } from "grommet-icons";
 import { ProgressIndicator } from "./ProgressIndicator";
 
 export const ChapterButtons = ({
@@ -7,12 +8,12 @@ export const ChapterButtons = ({
   chapterNumber: number;
 }) => {
   return (
-    <Nav direction="row" background="brand">
-      <Button label="play" />
-      <Button label="pause" />
-      <Anchor label="next" href={`/cover${chapterNumber + 1}`} />
-      <Anchor label="back" href={`/cover${chapterNumber - 1}`} />
+    <Footer direction="row">
+      <Button icon={<Play />} />
+      <Button icon={<Pause />} />
+      <Button icon={<FastForward />} href={`/cover${chapterNumber + 1}`} />
+      <Button icon={<Rewind />} href={`/cover${chapterNumber - 1}`} />
       <ProgressIndicator />
-    </Nav>
+    </Footer>
   );
 };

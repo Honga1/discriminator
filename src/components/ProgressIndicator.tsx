@@ -1,9 +1,10 @@
-import { RangeInput, FormField } from "grommet";
+import { Box, RangeInput, Text } from "grommet";
 
 export const ProgressIndicator = () => {
   return (
-    <FormField label="progress">
-      <RangeInput min={0} max={1} />
-    </FormField>
+    <Box direction="row">
+      <Text>Progress</Text>
+      <RangeInput min={0} max={1} step={0.01} />
+    </Box>
   );
 };

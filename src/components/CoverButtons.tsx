@@ -1,12 +1,13 @@
-import { Anchor, Nav } from "grommet";
+import { Button, Footer } from "grommet";
+import { Launch, Rewind } from "grommet-icons";
 import { ProgressIndicator } from "./ProgressIndicator";
 
 export const CoverButtons = ({ coverNumber }: { coverNumber: number }) => {
   return (
-    <Nav direction="row" background="brand">
-      <Anchor label="enter" href={`/chapter${coverNumber}`} />
-      <Anchor label="back" href={`/chapter${coverNumber - 1}`} />
+    <Footer direction="row">
+      <Button icon={<Launch />} href={`/chapter${coverNumber}`} />
+      <Button icon={<Rewind />} href={`/chapter${coverNumber - 1}`} />
       <ProgressIndicator />
-    </Nav>
+    </Footer>
   );
 };
