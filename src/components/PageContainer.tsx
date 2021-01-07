@@ -4,7 +4,7 @@ import { NavMenu } from "./NavMenu";
 
 export const PageContainer = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Grommet theme={grommet}>
+    <Grommet theme={grommet} full>
       <Box direction="row">
         <NavMenu />
         <Box>{children}</Box>
