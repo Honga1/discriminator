@@ -1,7 +1,7 @@
 import { Box } from "grommet";
 import { PropsWithChildren, useEffect } from "react";
-import { CoverNumbers, coverNumberToProgress } from "../store/Progress";
-import { useStore } from "../store/store";
+import { CoverNumbers, coverNumberToProgress } from "../../store/Progress";
+import { useStore } from "../../store/store";
 import { CoverButtons } from "./CoverButtons";
 
 export const CoverContainer = ({

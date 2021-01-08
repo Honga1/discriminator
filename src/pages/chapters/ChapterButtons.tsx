@@ -1,8 +1,8 @@
 import { Box, Button, Layer } from "grommet";
 import { FastForward, Pause, Play, Rewind } from "grommet-icons";
-import { ChapterNumbers } from "../store/Progress";
-import { ProgressIndicator } from "./ProgressIndicator";
-import { RoutedButton } from "./RoutedAnchor";
+import { ChapterNumbers } from "../../store/Progress";
+import { ProgressIndicator } from "../../components/ProgressIndicator";
+import { RoutedButton } from "../../components/RoutedAnchor";
 
 export const ChapterButtons = ({
   chapterNumber,

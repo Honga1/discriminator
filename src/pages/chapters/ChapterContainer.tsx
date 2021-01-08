@@ -1,7 +1,7 @@
 import { Box } from "grommet";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { ChapterNumbers, chapterNumberToProgress } from "../store/Progress";
-import { useStore } from "../store/store";
+import { ChapterNumbers, chapterNumberToProgress } from "../../store/Progress";
+import { useStore } from "../../store/store";
 import { ChapterButtons } from "./ChapterButtons";
 
 export const ChapterContainer = ({

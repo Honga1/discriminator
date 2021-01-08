@@ -1,7 +1,7 @@
 import { Box, Layer } from "grommet";
 import { Launch, Rewind } from "grommet-icons";
-import { ProgressIndicator } from "./ProgressIndicator";
-import { RoutedButton } from "./RoutedAnchor";
+import { ProgressIndicator } from "../../components/ProgressIndicator";
+import { RoutedButton } from "../../components/RoutedAnchor";
 
 export const CoverButtons = ({ coverNumber }: { coverNumber: number }) => {
   return (

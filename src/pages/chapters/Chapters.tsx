@@ -1,5 +1,5 @@
 import React from "react";
-import { ChapterContainer } from "../../components/ChapterContainer";
+import { ChapterContainer } from "./ChapterContainer";
 import { Chapter1 } from "./Chapter1";
 import { Chapter2 } from "./Chapter2";
 import { Chapter3 } from "./Chapter3";

@@ -1,5 +1,5 @@
 import React from "react";
-import { CoverContainer } from "../../components/CoverContainer";
+import { CoverContainer } from "./CoverContainer";
 import { Cover1 } from "./Cover1";
 import { Cover2 } from "./Cover2";
 import { Cover3 } from "./Cover3";
