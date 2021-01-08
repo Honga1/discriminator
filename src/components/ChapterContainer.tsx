@@ -1,12 +1,19 @@
 import { Box } from "grommet";
 import { PropsWithChildren, useEffect, useState } from "react";
+import { ChapterNumbers, chapterNumberToProgress } from "../store/Progress";
+import { useStore } from "../store/store";
 import { ChapterButtons } from "./ChapterButtons";
 
 export const ChapterContainer = ({
   children,
   chapterNumber,
-}: PropsWithChildren<{ chapterNumber: number }>) => {
+}: PropsWithChildren<{ chapterNumber: ChapterNumbers }>) => {
   const dimensions = use169Dimensions();
+  const setProgress = useStore((state) => state.setProgress);
+
+  useEffect(() => {
+    setProgress(chapterNumberToProgress[chapterNumber]);
+  }, [chapterNumber, setProgress]);
 
   return (
     <Box fill background="black" justify="center">

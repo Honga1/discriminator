@@ -1,16 +1,22 @@
 import { Box, Button, Layer } from "grommet";
 import { FastForward, Pause, Play, Rewind } from "grommet-icons";
+import { ChapterNumbers } from "../store/Progress";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { RoutedButton } from "./RoutedAnchor";
 
 export const ChapterButtons = ({
   chapterNumber,
 }: {
-  chapterNumber: number;
+  chapterNumber: ChapterNumbers;
 }) => {
   return (
-    <Layer modal={false} position="bottom" responsive={false}>
-      <Box direction="row" background="grey">
+    <Layer full="horizontal" modal={false} position="bottom" responsive={false}>
+      <Box
+        alignSelf="center"
+        direction="row"
+        background="grey"
+        margin={{ bottom: "small" }}
+      >
         <Button icon={<Play />} />
         <Button icon={<Pause />} />
         <RoutedButton
@@ -18,8 +24,8 @@ export const ChapterButtons = ({
           href={`/cover${chapterNumber + 1}`}
         />
         <RoutedButton icon={<Rewind />} href={`/cover${chapterNumber - 1}`} />
-        <ProgressIndicator />
       </Box>
+      <ProgressIndicator />
     </Layer>
   );
 };

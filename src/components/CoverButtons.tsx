@@ -5,12 +5,17 @@ import { RoutedButton } from "./RoutedAnchor";
 
 export const CoverButtons = ({ coverNumber }: { coverNumber: number }) => {
   return (
-    <Layer modal={false} position="bottom" responsive={false}>
-      <Box direction="row" background="grey">
+    <Layer full="horizontal" modal={false} position="bottom" responsive={false}>
+      <Box
+        alignSelf="center"
+        direction="row"
+        background="grey"
+        margin={{ bottom: "small" }}
+      >
         <RoutedButton icon={<Launch />} href={`/chapter${coverNumber}`} />
         <RoutedButton icon={<Rewind />} href={`/chapter${coverNumber - 1}`} />
-        <ProgressIndicator />
       </Box>
+      <ProgressIndicator />
     </Layer>
   );
 };
