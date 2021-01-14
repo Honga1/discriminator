@@ -108,7 +108,7 @@ export const WebcamPermissions = () => {
             }}
           />
           <Button
-            label={"Decline & Process"}
+            label={"Decline & Proceed"}
             onClick={() => setWebcamStream("NOT_USED")}
           />
           <RoutedButton label={"Check privacy policy"} href="/privacy" />
