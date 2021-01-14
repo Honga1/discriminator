@@ -3,6 +3,7 @@ import {
   AccordionPanel,
   Anchor,
   Box,
+  CheckBox,
   DropButton,
   Layer,
   Nav,
@@ -14,9 +15,11 @@ import {
   plainPageRouteNames,
   plainPageRoutes,
 } from "../Routes";
+import { store, useStore } from "../store/store";
 import { RoutedAnchor } from "./RoutedAnchor";
 
 export const NavMenu = () => {
+  const isUsingWebcam = useStore((state) => state.webcamStream !== "NOT_USED");
   return (
     <Layer modal={false} position="top-left" responsive={false}>
       <Box pad="small">
@@ -31,6 +34,23 @@ export const NavMenu = () => {
                   key={url}
                 />
               ))}
+
+              <CheckBox
+                toggle
+                label="Webcam"
+                checked={isUsingWebcam}
+                onChange={(event) => {
+                  if (event.target.checked) {
+                    const maybeStream = store.getState().webcamStream;
+                    if (maybeStream instanceof MediaStream) {
+                    } else {
+                      store.getState().setWebcamStream(undefined);
+                    }
+                  } else {
+                    store.getState().setWebcamStream("NOT_USED");
+                  }
+                }}
+              />
 
               <Accordion animate direction="row">
                 <AccordionPanel label={<Anchor label="Chapters" />}>

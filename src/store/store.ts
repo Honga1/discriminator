@@ -5,7 +5,7 @@ type State = {
   webcamStream: MediaStream | undefined | "DISCONNECTED" | "NOT_USED";
   nextVideoToPlay: HTMLVideoElement | undefined;
   setWebcamStream(
-    webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED"
+    webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED" | undefined
   ): void;
   setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined): void;
 };
