@@ -1,19 +1,18 @@
 import createStoreHook from "zustand";
 import create, { SetState } from "zustand/vanilla";
-import { ProgressNames } from "./Progress";
 
 type State = {
-  progress: ProgressNames;
   webcamStream: MediaStream | undefined | "DISCONNECTED" | "NOT_USED";
-  setProgress(progress: ProgressNames): void;
+  nextVideoToPlay: HTMLVideoElement | undefined;
   setWebcamStream(
     webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED"
   ): void;
+  setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement): void;
 };
 
 const initialState: NonFunctionProperties<State> = {
-  progress: "COVER_1",
   webcamStream: undefined,
+  nextVideoToPlay: undefined,
 };
 export const store = create<State>((set, get) => {
   const setWithLog: SetState<State> = (partial, replace) => {
@@ -23,11 +22,11 @@ export const store = create<State>((set, get) => {
   };
   return {
     ...initialState,
-    setProgress(progress: ProgressNames) {
-      setWithLog({ progress });
-    },
     setWebcamStream(webcamStream: MediaStream | "NOT_USED") {
       setWithLog({ webcamStream });
+    },
+    setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement) {
+      setWithLog({ nextVideoToPlay });
     },
   };
 });

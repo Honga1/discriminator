@@ -1,23 +1,58 @@
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Box } from "grommet";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
+import { ChapterNumbers, chapterNumbers, ChapterRoutes } from "../Routes";
 import { Chapters } from "./chapters/Chapters";
 import { Covers } from "./covers/Covers";
 
-export const ChaptersAndCovers = () => {
-  const isBody = new URLSearchParams(useLocation().search).has("body");
-
+export const RouteChaptersAndCovers = () => {
   return (
     <>
       <Switch>
-        {([1, 2, 3, 4, 5] as const).map((cover) => (
-          <Route path={`/chapter/${cover}`} key={cover}>
-            {isBody && <Chapters chapterNumber={cover} />}
-            {!isBody && <Covers coverNumber={cover} />}
+        {chapterNumbers.map((chapterNumber) => (
+          <Route path={`/chapter/${chapterNumber}`} key={chapterNumber}>
+            <ChaptersAndCovers
+              chapterNumber={chapterNumber}
+            ></ChaptersAndCovers>
           </Route>
         ))}
         <Route>
           <Redirect to="/error" />;
         </Route>
       </Switch>
+    </>
+  );
+};
+
+const ChaptersAndCovers = ({
+  chapterNumber,
+}: {
+  chapterNumber: ChapterNumbers;
+}) => {
+  const history = useHistory();
+  const isChapter = new URLSearchParams(useLocation().search).has("isChapter");
+  const isCover = new URLSearchParams(useLocation().search).has("isCover");
+
+  if (!isCover && !isChapter) {
+    history.push(`/chapter/${chapterNumber}?isCover` as ChapterRoutes);
+  }
+
+  return (
+    <>
+      <Box
+        fill
+        style={{ display: isChapter ? "unset" : "none" }}
+        className="MaybeHiddenChapter"
+      >
+        <Chapters chapterNumber={chapterNumber} />
+      </Box>
+
+      {!isChapter && <Covers chapterNumber={chapterNumber} />}
     </>
   );
 };

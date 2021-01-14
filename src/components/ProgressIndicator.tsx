@@ -1,28 +1,21 @@
 import { Box, Tip } from "grommet";
-import { useHistory } from "react-router-dom";
-import {
-  numberToProgress,
-  progressNameToHumanName,
-  progressNumberToRoute,
-  progressToNumber,
-} from "../store/Progress";
-import { useStore } from "../store/store";
+import { useHistory, useLocation } from "react-router-dom";
+import { chapterRouteNames, chapterRoutes } from "../Routes";
 
 export const ProgressIndicator = () => {
-  const progress = useStore((state) => state.progress);
   const history = useHistory();
+  const location = useLocation();
 
-  const barElements = Object.values(progressToNumber).map((progressNumber) => {
-    const isCurrentSection = progressNumber === progressToNumber[progress];
-    const progressName = numberToProgress[progressNumber];
-    const humanName = progressNameToHumanName[progressName];
+  const barElements = chapterRoutes.map((url) => {
+    const isCurrentSection = location.pathname + location.search === url;
+    const name = chapterRouteNames[url];
     return (
-      <Tip content={humanName} key={progressNumber}>
+      <Tip content={name} key={url}>
         <Box
           fill
           background={isCurrentSection ? "lightgrey" : "grey"}
           onClick={() => {
-            history.push(progressNumberToRoute[progressNumber]);
+            history.push(url);
           }}
         />
       </Tip>

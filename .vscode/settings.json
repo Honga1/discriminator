@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
     "xxsmall"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
