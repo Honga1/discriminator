@@ -1,4 +1,4 @@
-import { Box } from "grommet";
+import { Box, Layer, Stack } from "grommet";
 import {
   Redirect,
   Route,
@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { ChapterNumbers, chapterNumbers, ChapterRoutes } from "../Routes";
+import { useStore } from "../store/store";
 import { Chapters } from "./chapters/Chapters";
 import { Covers } from "./covers/Covers";
 
@@ -38,12 +39,22 @@ const ChaptersAndCovers = ({
   const isChapter = new URLSearchParams(useLocation().search).has("isChapter");
   const isCover = new URLSearchParams(useLocation().search).has("isCover");
 
+  const isRecording = useStore(
+    (state) => state.webcamStream instanceof MediaStream
+  );
+
   if (!isCover && !isChapter) {
     history.push(`/chapter/${chapterNumber}?isCover` as ChapterRoutes);
   }
 
   return (
     <>
+      <Layer modal={false} position="top-right" responsive={false}>
+        <Stack>
+          <Box>📷</Box>
+          {!isRecording && <Box>❌</Box>}
+        </Stack>
+      </Layer>
       <Box
         fill
         style={{ display: isChapter ? "unset" : "none" }}

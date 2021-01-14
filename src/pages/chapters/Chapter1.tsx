@@ -8,7 +8,6 @@ export const Chapter1 = ({ onFinished }: { onFinished: () => void }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const setNextVideoToPlay = useStore((state) => state.setNextVideoToPlay);
 
-  console.log("render");
   useEffect(() => {
     const video = ref.current;
     if (video === null) return;
