@@ -7,14 +7,7 @@ import { Chapter3 } from "./Chapter3";
 import { Chapter4 } from "./Chapter4";
 import { Chapter5 } from "./Chapter5";
 import { ChapterButtons } from "./ChapterButtons";
-
-const chapters = [
-  <Chapter1 />,
-  <Chapter2 />,
-  <Chapter3 />,
-  <Chapter4 />,
-  <Chapter5 />,
-];
+import { ChapterFinishCountDown } from "./ChapterFinishCountDown";
 
 export const Chapters = ({
   chapterNumber,
@@ -22,28 +15,34 @@ export const Chapters = ({
   chapterNumber: ChapterNumbers;
 }) => {
   const dimensions = use169Dimensions();
-  const chapterIndex = parseInt(chapterNumber) - 1;
 
-  if (Number.isInteger(chapterIndex) && chapters[chapterIndex] !== undefined) {
-    return (
-      <Box fill background="black" justify="center">
-        <ChapterButtons chapterNumber={chapterNumber} />
-        <Box
-          alignContent="center"
-          height={dimensions.height + "px"}
-          width={dimensions.width + "px"}
-          background="grey"
-          justify="center"
-          alignSelf="center"
-          align="center"
-        >
-          {chapters[chapterIndex]}
-        </Box>
+  const [isChapterFinished, setChapterFinished] = useState(false);
+
+  return (
+    <Box fill background="black" justify="center">
+      {isChapterFinished && (
+        <ChapterFinishCountDown chapterNumber={chapterNumber} />
+      )}
+      <ChapterButtons chapterNumber={chapterNumber} />
+      <Box
+        alignContent="center"
+        height={dimensions.height + "px"}
+        width={dimensions.width + "px"}
+        background="grey"
+        justify="center"
+        alignSelf="center"
+        align="center"
+      >
+        {chapterNumber === "1" && (
+          <Chapter1 onFinished={() => setChapterFinished(true)} />
+        )}
+        {chapterNumber === "2" && <Chapter2 />}
+        {chapterNumber === "3" && <Chapter3 />}
+        {chapterNumber === "4" && <Chapter4 />}
+        {chapterNumber === "5" && <Chapter5 />}
       </Box>
-    );
-  } else {
-    throw new Error(`Could not get chapter`);
-  }
+    </Box>
+  );
 };
 
 const useWindowDimensions = () => {

@@ -4,10 +4,11 @@ import { WebcamPermissions } from "../../components/WebcamPermissions";
 import { store, useStore } from "../../store/store";
 import video from "./../../720p.mp4";
 
-export const Chapter1 = () => {
+export const Chapter1 = ({ onFinished }: { onFinished: () => void }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const setNextVideoToPlay = useStore((state) => state.setNextVideoToPlay);
 
+  console.log("render");
   useEffect(() => {
     const video = ref.current;
     if (video === null) return;
@@ -19,11 +20,18 @@ export const Chapter1 = () => {
       }
     };
   }, [ref, setNextVideoToPlay]);
+
   return (
     <>
       <Stack interactiveChild="first">
         <Box fill>
-          <Video fit="contain" controls={false} autoPlay ref={ref as any}>
+          <Video
+            fit="contain"
+            controls={false}
+            autoPlay
+            ref={ref as any}
+            onEnded={onFinished}
+          >
             <source src={video} type="video/mp4" />
           </Video>
         </Box>
