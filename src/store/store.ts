@@ -7,7 +7,7 @@ type State = {
   setWebcamStream(
     webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED"
   ): void;
-  setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement): void;
+  setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined): void;
 };
 
 const initialState: NonFunctionProperties<State> = {
@@ -25,7 +25,7 @@ export const store = create<State>((set, get) => {
     setWebcamStream(webcamStream: MediaStream | "NOT_USED") {
       setWithLog({ webcamStream });
     },
-    setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement) {
+    setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined) {
       setWithLog({ nextVideoToPlay });
     },
   };
