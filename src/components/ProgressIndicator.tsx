@@ -10,7 +10,7 @@ export const ProgressIndicator = () => {
     const isCurrentSection = location.pathname + location.search === url;
     const name = chapterRouteNames[url];
     return (
-      <Tip content={name} key={url}>
+      <Tip content={name} key={url + isCurrentSection}>
         <Box
           fill
           background={isCurrentSection ? "lightgrey" : "grey"}

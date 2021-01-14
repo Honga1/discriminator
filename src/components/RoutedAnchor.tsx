@@ -11,7 +11,15 @@ export const RoutedAnchor = (props: AnchorProps & { href: Routes }) => {
   );
 };
 
-export const RoutedButton = (props: ButtonProps & { href: Routes }) => {
+export const RoutedButton = (
+  props: ButtonProps & { href: Routes } & Pick<
+      React.DetailedHTMLProps<
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+      >,
+      "onClick"
+    >
+) => {
   return (
     <Link to={props.href}>
       <Button {...props} as={"div"} />
