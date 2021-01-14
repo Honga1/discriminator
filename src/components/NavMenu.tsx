@@ -3,14 +3,23 @@ import {
   AccordionPanel,
   Anchor,
   Box,
+  CheckBox,
   DropButton,
   Layer,
   Nav,
 } from "grommet";
 import { Menu } from "grommet-icons";
+import {
+  chapterRouteNames,
+  chapterRoutes,
+  plainPageRouteNames,
+  plainPageRoutes,
+} from "../Routes";
+import { store, useStore } from "../store/store";
 import { RoutedAnchor } from "./RoutedAnchor";
 
 export const NavMenu = () => {
+  const isUsingWebcam = useStore((state) => state.webcamStream !== "NOT_USED");
   return (
     <Layer modal={false} position="top-left" responsive={false}>
       <Box pad="small">
@@ -18,27 +27,53 @@ export const NavMenu = () => {
           alignSelf="start"
           dropContent={
             <Nav direction="column" background="brand">
-              <RoutedAnchor href="/" label={"home"} />
-              <RoutedAnchor href="/coil" label={"coil"} />
-              <RoutedAnchor href="/about" label={"about"} />
-              <RoutedAnchor href="/privacy" label={"privacy"} />
-              <RoutedAnchor href="/credits" label={"credits"} />
-              <RoutedAnchor href="/error" label={"error"} />
+              {plainPageRoutes.map((url) => (
+                <RoutedAnchor
+                  href={url}
+                  label={plainPageRouteNames[url]}
+                  key={url}
+                />
+              ))}
+
+              <CheckBox
+                toggle
+                label="Webcam"
+                checked={isUsingWebcam}
+                onChange={(event) => {
+                  if (event.target.checked) {
+                    const maybeStream = store.getState().webcamStream;
+                    if (maybeStream instanceof MediaStream) {
+                    } else {
+                      store.getState().setWebcamStream(undefined);
+                    }
+                  } else {
+                    store.getState().setWebcamStream("NOT_USED");
+                  }
+                }}
+              />
 
               <Accordion animate direction="row">
-                <AccordionPanel label={<Anchor label="chapters" />}>
-                  <RoutedAnchor href="/chapter1" label={"chapter1"} />
-                  <RoutedAnchor href="/chapter2" label={"chapter2"} />
-                  <RoutedAnchor href="/chapter3" label={"chapter3"} />
-                  <RoutedAnchor href="/chapter4" label={"chapter4"} />
-                  <RoutedAnchor href="/chapter5" label={"chapter5"} />
+                <AccordionPanel label={<Anchor label="Chapters" />}>
+                  {chapterRoutes
+                    .filter((url) => url.includes("isChapter"))
+                    .map((url) => (
+                      <RoutedAnchor
+                        href={url}
+                        label={chapterRouteNames[url]}
+                        key={url}
+                      />
+                    ))}
                 </AccordionPanel>
-                <AccordionPanel label={<Anchor label="covers" />}>
-                  <RoutedAnchor href="/cover1" label={"cover1"} />
-                  <RoutedAnchor href="/cover2" label={"cover2"} />
-                  <RoutedAnchor href="/cover3" label={"cover3"} />
-                  <RoutedAnchor href="/cover4" label={"cover4"} />
-                  <RoutedAnchor href="/cover5" label={"cover5"} />
+                <AccordionPanel label={<Anchor label="Covers" />}>
+                  {chapterRoutes
+                    .filter((url) => url.includes("isCover"))
+                    .map((url) => (
+                      <RoutedAnchor
+                        href={url}
+                        label={chapterRouteNames[url]}
+                        key={url}
+                      />
+                    ))}
                 </AccordionPanel>
               </Accordion>
             </Nav>

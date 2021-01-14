@@ -1,17 +1,19 @@
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import { ReactElement } from "react";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { Chapters } from "./pages/chapters/Chapters";
-import { Covers } from "./pages/covers/Covers";
+import { RouteChaptersAndCovers } from "./pages/ChaptersAndCovers";
 import { About } from "./pages/plain/About";
 import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
 import { Home } from "./pages/plain/Home";
 import { HomeCoil } from "./pages/plain/HomeCoil";
-import { PlainPageContainer } from "./pages/plain/PlainPagesContainer";
+import { PlainPage } from "./pages/plain/PlainPagesContainer";
 import { Privacy } from "./pages/plain/Privacy";
+import { PlainPageRoutes } from "./Routes";
 
-const plainPageRoutes = [
+const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
+  { url: "/", component: <Home /> },
   { url: "/home", component: <Home /> },
   { url: "/coil", component: <HomeCoil /> },
   { url: "/about", component: <About /> },
@@ -26,33 +28,12 @@ function App() {
     <HashRouter basename={"/"}>
       <PageContainer>
         <Switch>
-          <Route exact path="/">
-            <PlainPageContainer>
-              <Home />
-            </PlainPageContainer>
-          </Route>
-          {plainPageRoutes.map(({ url, component }) => (
-            <Route path={url} key={url}>
-              <PlainPageContainer>{component}</PlainPageContainer>
+          {routeToComponent.map(({ url, component }) => (
+            <Route exact path={url} key={url}>
+              <PlainPage>{component}</PlainPage>
             </Route>
           ))}
-          {([1, 2, 3, 4, 5] as const).map((chapter) => (
-            <Route path={`/chapter${chapter}`} key={chapter}>
-              <Chapters chapterNumber={chapter} />
-            </Route>
-          ))}
-          {([1, 2, 3, 4, 5] as const).map((cover) => (
-            <Route path={`/cover${cover}`} key={cover}>
-              <Covers coverNumber={cover} />
-            </Route>
-          ))}
-
-          <Route path="/cover0">
-            <Redirect to="/"></Redirect>
-          </Route>
-          <Route path="/cover6">
-            <Redirect to="/end"></Redirect>
-          </Route>
+          <Route path={`/chapter`} component={RouteChaptersAndCovers} />
           <Route>Missing Route</Route>
         </Switch>
       </PageContainer>

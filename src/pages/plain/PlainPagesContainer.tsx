@@ -1,7 +1,7 @@
 import { Box, Grid } from "grommet";
 import { PropsWithChildren } from "react";
 
-export const PlainPageContainer = ({ children }: PropsWithChildren<{}>) => {
+export const PlainPage = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box pad="medium">
       <Grid
