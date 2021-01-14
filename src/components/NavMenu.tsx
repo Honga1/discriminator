@@ -10,6 +10,22 @@ import {
 import { Menu } from "grommet-icons";
 import { RoutedAnchor } from "./RoutedAnchor";
 
+const chapterRoutes = [
+  { url: "/chapter/1?body", label: "chapter 1" },
+  { url: "/chapter/2?body", label: "chapter 2" },
+  { url: "/chapter/3?body", label: "chapter 3" },
+  { url: "/chapter/4?body", label: "chapter 4" },
+  { url: "/chapter/5?body", label: "chapter 5" },
+] as const;
+
+const coverRoutes = [
+  { url: "/chapter/1?cover", label: "cover 1" },
+  { url: "/chapter/2?cover", label: "cover 2" },
+  { url: "/chapter/3?cover", label: "cover 3" },
+  { url: "/chapter/4?cover", label: "cover 4" },
+  { url: "/chapter/5?cover", label: "cover 5" },
+];
+
 export const NavMenu = () => {
   return (
     <Layer modal={false} position="top-left" responsive={false}>
@@ -27,18 +43,14 @@ export const NavMenu = () => {
 
               <Accordion animate direction="row">
                 <AccordionPanel label={<Anchor label="chapters" />}>
-                  <RoutedAnchor href="/chapter1" label={"chapter1"} />
-                  <RoutedAnchor href="/chapter2" label={"chapter2"} />
-                  <RoutedAnchor href="/chapter3" label={"chapter3"} />
-                  <RoutedAnchor href="/chapter4" label={"chapter4"} />
-                  <RoutedAnchor href="/chapter5" label={"chapter5"} />
+                  {chapterRoutes.map(({ url, label }) => (
+                    <RoutedAnchor href={url} label={label} key={url} />
+                  ))}
                 </AccordionPanel>
                 <AccordionPanel label={<Anchor label="covers" />}>
-                  <RoutedAnchor href="/cover1" label={"cover1"} />
-                  <RoutedAnchor href="/cover2" label={"cover2"} />
-                  <RoutedAnchor href="/cover3" label={"cover3"} />
-                  <RoutedAnchor href="/cover4" label={"cover4"} />
-                  <RoutedAnchor href="/cover5" label={"cover5"} />
+                  {coverRoutes.map(({ url, label }) => (
+                    <RoutedAnchor href={url} label={label} key={url} />
+                  ))}
                 </AccordionPanel>
               </Accordion>
             </Nav>

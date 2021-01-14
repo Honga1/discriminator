@@ -1,7 +1,6 @@
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { Chapters } from "./pages/chapters/Chapters";
-import { Covers } from "./pages/covers/Covers";
+import { ChaptersAndCovers } from "./pages/ChaptersAndCovers";
 import { About } from "./pages/plain/About";
 import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
@@ -36,17 +35,7 @@ function App() {
               <PlainPageContainer>{component}</PlainPageContainer>
             </Route>
           ))}
-          {([1, 2, 3, 4, 5] as const).map((chapter) => (
-            <Route path={`/chapter${chapter}`} key={chapter}>
-              <Chapters chapterNumber={chapter} />
-            </Route>
-          ))}
-          {([1, 2, 3, 4, 5] as const).map((cover) => (
-            <Route path={`/cover${cover}`} key={cover}>
-              <Covers coverNumber={cover} />
-            </Route>
-          ))}
-
+          <Route path={`/chapter`} component={ChaptersAndCovers} />
           <Route path="/cover0">
             <Redirect to="/"></Redirect>
           </Route>
