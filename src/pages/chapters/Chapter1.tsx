@@ -27,7 +27,6 @@ export const Chapter1 = ({ onFinished }: { onFinished: () => void }) => {
           <Video
             fit="contain"
             controls={false}
-            autoPlay
             ref={ref as any}
             onEnded={onFinished}
           >
