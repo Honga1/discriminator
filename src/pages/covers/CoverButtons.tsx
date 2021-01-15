@@ -15,7 +15,13 @@ export const CoverButtons = ({
   const history = useHistory();
 
   return (
-    <Layer full="horizontal" modal={false} position="bottom" responsive={false}>
+    <Layer
+      full="horizontal"
+      modal={false}
+      position="bottom"
+      responsive={false}
+      plain
+    >
       <Box
         alignSelf="center"
         direction="row"

@@ -83,6 +83,7 @@ export const ChapterButtons = ({
           modal={false}
           position="bottom"
           responsive={false}
+          plain
         >
           <Box
             alignSelf="center"
