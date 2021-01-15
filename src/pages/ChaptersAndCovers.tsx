@@ -8,7 +8,9 @@ import {
 } from "react-router-dom";
 import { ChapterNumbers, chapterNumbers, ChapterRoutes } from "../Routes";
 import { useStore } from "../store/store";
+import { ChapterButtons } from "./chapters/ChapterButtons";
 import { Chapters } from "./chapters/Chapters";
+import { CoverButtons } from "./covers/CoverButtons";
 import { Covers } from "./covers/Covers";
 
 export const RouteChaptersAndCovers = () => {
@@ -61,9 +63,15 @@ const ChaptersAndCovers = ({
         className="MaybeHiddenChapter"
       >
         <Chapters chapterNumber={chapterNumber} />
+        {isChapter && <ChapterButtons chapterNumber={chapterNumber} />}
       </Box>
 
-      {!isChapter && <Covers chapterNumber={chapterNumber} />}
+      {!isChapter && (
+        <>
+          <Covers chapterNumber={chapterNumber} />
+          <CoverButtons chapterNumber={chapterNumber} />
+        </>
+      )}
     </>
   );
 };

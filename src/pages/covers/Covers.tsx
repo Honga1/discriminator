@@ -1,12 +1,12 @@
 import { Box } from "grommet";
-import React from "react";
+import React, { useEffect } from "react";
 import { ChapterNumbers } from "../../Routes";
+import { store } from "../../store/store";
 import { Cover1 } from "./Cover1";
 import { Cover2 } from "./Cover2";
 import { Cover3 } from "./Cover3";
 import { Cover4 } from "./Cover4";
 import { Cover5 } from "./Cover5";
-import { CoverButtons } from "./CoverButtons";
 
 const covers = [<Cover1 />, <Cover2 />, <Cover3 />, <Cover4 />, <Cover5 />];
 
@@ -17,10 +17,13 @@ export const Covers = ({
 }) => {
   const coverIndex = parseInt(chapterNumber) - 1;
 
+  useEffect(() => {
+    store.getState().nextVideoToPlay?.pause();
+  }, []);
+
   if (Number.isInteger(coverIndex) && covers[coverIndex] !== undefined) {
     return (
       <Box fill justify="center" alignContent="center">
-        <CoverButtons chapterNumber={chapterNumber} />
         {covers[coverIndex]}
       </Box>
     );

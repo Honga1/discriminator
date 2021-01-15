@@ -6,7 +6,6 @@ import { Chapter2 } from "./Chapter2";
 import { Chapter3 } from "./Chapter3";
 import { Chapter4 } from "./Chapter4";
 import { Chapter5 } from "./Chapter5";
-import { ChapterButtons } from "./ChapterButtons";
 import { ChapterFinishCountDown } from "./ChapterFinishCountDown";
 
 export const Chapters = ({
@@ -23,7 +22,6 @@ export const Chapters = ({
       {isChapterFinished && (
         <ChapterFinishCountDown chapterNumber={chapterNumber} />
       )}
-      <ChapterButtons chapterNumber={chapterNumber} />
       <Box
         alignContent="center"
         height={dimensions.height + "px"}
