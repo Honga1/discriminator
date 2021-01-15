@@ -1,6 +1,7 @@
-import { Box, Stack, Text, Video } from "grommet";
+import { Box, Stack, Text } from "grommet";
 import { useEffect, useRef } from "react";
-import { WebcamPermissions } from "../../components/WebcamPermissions";
+import { Playable } from "../../components/Playable";
+import { PlayableVideo } from "../../components/PlayableVideo";
 import { store, useStore } from "../../store/store";
 import video from "./../../720p.mp4";
 
@@ -22,22 +23,19 @@ export const Chapter1 = ({ onFinished }: { onFinished: () => void }) => {
 
   return (
     <>
-      <Stack interactiveChild="first">
+      <Stack fill interactiveChild="first">
         <Box fill>
-          <Video
-            fit="contain"
-            controls={false}
-            ref={ref as any}
-            onEnded={onFinished}
-          >
-            <source src={video} type="video/mp4" />
-          </Video>
+          <Playable
+            fit="cover"
+            ref={ref}
+            playable={PlayableVideo([{ src: video, type: "video/mp4" }])}
+          ></Playable>
         </Box>
         <Box fill align="center" justify="center" alignSelf="center">
           <Text>Chapter1</Text>
         </Box>
       </Stack>
-      <WebcamPermissions />
+      {/* <WebcamPermissions /> */}
     </>
   );
 };
