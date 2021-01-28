@@ -68,7 +68,7 @@ export const VideoDetector = forwardRef<
 
       main();
     });
-    return <Video ref={videoRef as any}></Video>;
+    return <Video width="100%" fit="cover" ref={videoRef as any}></Video>;
   }
 );
 

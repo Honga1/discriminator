@@ -11,7 +11,7 @@ export const Cover2 = () => {
 
   return (
     <>
-      <Stack guidingChild={"last"}>
+      <Stack alignSelf="center" guidingChild={"last"}>
         <FaceTracker keyPoints={results} />
         {stream instanceof MediaStream ? (
           <VideoDetector stream={stream} results={results} />
