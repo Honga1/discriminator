@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from "grommet";
 import { useEffect, useRef } from "react";
-import { Playable } from "../../components/Playable";
-import { PlayableVideo } from "../../components/PlayableVideo";
+import { Playable } from "../../components/playable/Playable";
+import { PlayableVideo } from "../../components/playable/PlayableVideo";
 import { store, useStore } from "../../store/store";
 import video from "./../../720p.mp4";
 
