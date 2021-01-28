@@ -34,19 +34,16 @@ const customTheme: ThemeType = {
 
     breakpoints: {
       small: {
-        value: 568,
+        value: 600,
       },
       medium: {
-        value: 768,
+        value: 900,
       },
       large: {
-        value: 1200,
+        value: 1300,
         edgeSize: {
           large: "186px",
         },
-      },
-      xlarge: {
-        value: 1920,
       },
     },
   },

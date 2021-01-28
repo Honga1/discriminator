@@ -13,9 +13,10 @@ import React, { PropsWithChildren, useContext } from "react";
 export const Home = () => {
   const size = useContext(ResponsiveContext);
   const leftMargin =
-    size === "xlarge" ? "186px" : size === "large" ? "70px" : "small";
+    size === "large" ? "182px" : size === "medium" ? "45px" : "small";
 
-  const rightMargin = size === "large" ? "301px" : "small";
+  const rightMargin =
+    size === "large" ? "70px" : size === "medium" ? "70px" : "small";
   const textSize = size === "small" ? "small" : "medium";
 
   return (
