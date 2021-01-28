@@ -26,7 +26,8 @@ export const Covers = ({
     nextVideoToPlay.load();
   }, [nextVideoToPlay]);
 
-  if (Number.isInteger(coverIndex) && covers[coverIndex] !== undefined) {
+  const isValidCoverNumber = Number.isInteger(coverIndex);
+  if (isValidCoverNumber && covers[coverIndex] !== undefined) {
     return (
       <Box fill justify="center" alignContent="center">
         {covers[coverIndex]}
