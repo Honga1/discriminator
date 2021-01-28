@@ -150,7 +150,11 @@ async function getVideoStream(): Promise<MediaStream | WebcamFailureReason> {
     });
     return stream;
   } catch (error: DOMException | unknown) {
-    if (!(error instanceof DOMException)) throw error;
+    if (
+      !(error instanceof DOMException) &&
+      !(error instanceof MediaStreamError)
+    )
+      throw error;
 
     // These error names are from https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
     switch (error.name) {
