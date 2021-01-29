@@ -5,10 +5,11 @@ import {
   Heading,
   Paragraph,
   ResponsiveContext,
-  Stack,
   Text,
 } from "grommet";
-import React, { PropsWithChildren, useContext } from "react";
+import React, { PropsWithChildren, ReactNode, useContext, useRef } from "react";
+import { ThemeContext } from "styled-components";
+import { RoutedButton } from "../../components/RoutedAnchor";
 
 export const Home = () => {
   const size = useContext(ResponsiveContext);
@@ -19,35 +20,53 @@ export const Home = () => {
     size === "large" ? "70px" : size === "medium" ? "70px" : "small";
   const textSize = size === "small" ? "small" : "medium";
 
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
-    <Box
-      pad={{ left: leftMargin, right: rightMargin, bottom: "54px" }}
-      overflow={{ vertical: "auto" }}
-    >
-      <Box margin={{ top: "xlarge" }} width={{ max: "950px" }} flex={true}>
-        <LabelledBox heading="Discriminator" color="black">
-          <Paragraph size={textSize}>
-            Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-            Lectus euismod mauris faucibus massa nibh condimentum vitae nunc
-            quis. Lacus vitae amet aliquam id leo. Interdum vulputate eu et
-            aliquet elit morbi bibendum. Tellus euismod metus, id feugiat amet.
-            Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-            Lectus euismod mauris faucibus massa nibh condimentum vitae nunc
-            quis. Lacus vitae amet aliquam id leo. Interdum vulputate eu et
-            aliquet elit morbi bibendum. Tellus euismod metus, id feugiat amet.
-            Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-            Lectus euismod mauris faucibus massa nibh condimentum vitae nunc
-            quis. Lacus vitae amet aliquam id leo. Interdum vulputate eu et
-            aliquet elit morbi bibendum. Tellus euismod metus, id feugiat amet.
-          </Paragraph>
-          <Box direction="row">
-            <StyledButton color="blue" text="Start" />
-          </Box>
-        </LabelledBox>
+    <>
+      <Box
+        pad={{ left: leftMargin, right: rightMargin, bottom: "54px" }}
+        overflow={{ vertical: "auto" }}
+      >
+        <Box
+          ref={ref}
+          margin={{ top: "xlarge" }}
+          width={{ max: "950px" }}
+          flex={true}
+        >
+          <LabelledBox heading="Discriminator" color="black">
+            <Paragraph size={textSize}>
+              Egestas enim cursus pretium leo, egestas blandit egestas nunc
+              magna. Lectus euismod mauris faucibus massa nibh condimentum vitae
+              nunc quis. Lacus vitae amet aliquam id leo. Interdum vulputate eu
+              et aliquet elit morbi bibendum. Tellus euismod metus, id feugiat
+              amet.
+            </Paragraph>
+            <Box direction="row">
+              <StyledButton color="blue" text="Start" />
+            </Box>
+          </LabelledBox>
+        </Box>
       </Box>
-    </Box>
+      <Links />
+    </>
   );
 };
+
+// ::-webkit-scrollbar {
+//   -webkit-appearance: none;
+//   width: 7px;
+//   margin-right: 4px;
+// }
+
+// ::-webkit-scrollbar {
+//   width: 0!important;
+// }
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: hsla(0,0%,100%,.4);
+//   box-shadow: 0 0 1px rgb(0 0 0 / 40%);
+// }
 
 export const StyledButton = ({
   color,
@@ -76,6 +95,114 @@ export const StyledButton = ({
   );
 };
 
+export const Links = ({}) => {
+  const size = useContext(ResponsiveContext);
+  const rightMargin =
+    size === "large" ? "70px" : size === "medium" ? "70px" : "small";
+  return (
+    <Box
+      direction="row"
+      wrap
+      gap={"small"}
+      justify="end"
+      margin={{ right: rightMargin }}
+    >
+      <RoutedButton
+        margin={{ top: "medium" }}
+        plain
+        href={"/about"}
+        label={
+          <OutlinedBoxWithHeader
+            color={"blue"}
+            heading={<Text>About</Text>}
+          ></OutlinedBoxWithHeader>
+        }
+      />
+      <RoutedButton
+        plain
+        href={"/privacy"}
+        label={
+          <OutlinedBoxWithHeader
+            color={"red"}
+            heading={<Text>Privacy</Text>}
+          ></OutlinedBoxWithHeader>
+        }
+      />
+      <RoutedButton
+        margin={{ top: "large" }}
+        plain
+        href={"/credits"}
+        label={
+          <OutlinedBoxWithHeader
+            color={"green"}
+            heading={<Text>Credits</Text>}
+          ></OutlinedBoxWithHeader>
+        }
+      />
+    </Box>
+  );
+};
+
+const OutlinedBox = ({
+  children,
+  color,
+}: PropsWithChildren<{ color: "black" | "red" | "blue" | "green" }>) => {
+  const size = useContext(ResponsiveContext);
+  const theme = useContext(ThemeContext);
+  const borderWidth = size === "small" ? 3 : 5;
+
+  const colorValue = theme.global.colors[color];
+  return (
+    <Box
+      style={{
+        outlineOffset: `-${borderWidth}px`,
+        outline: `${borderWidth}px ${colorValue} solid`,
+      }}
+      flex={false}
+    >
+      {children}
+    </Box>
+  );
+};
+
+const OutlinedBoxWithHeader = ({
+  children,
+  heading,
+  color,
+}: PropsWithChildren<{
+  heading: ReactNode;
+  color: "black" | "red" | "blue" | "green";
+}>) => {
+  return (
+    <OutlinedBox color={color}>
+      <HeadingBlock color={color} heading={heading} />
+      <Box>{children}</Box>
+    </OutlinedBox>
+  );
+};
+
+const HeadingBlock = ({
+  heading,
+  color,
+}: {
+  heading: ReactNode;
+  color: "black" | "red" | "blue" | "green";
+}) => {
+  const size = useContext(ResponsiveContext);
+  const rightMargin = size === "small" ? "small" : "70px";
+  return (
+    <Box direction="row">
+      <Box
+        pad={{ left: "medium", vertical: "small", right: "medium" }}
+        margin={{ bottom: "large", right: rightMargin }}
+        background={color}
+      >
+        {heading}
+      </Box>
+    </Box>
+  );
+};
+
 export const LabelledBox = ({
   heading,
   children,
@@ -85,44 +212,29 @@ export const LabelledBox = ({
   color: "black" | "red" | "blue" | "green";
 }>) => {
   const size = useContext(ResponsiveContext);
-  const leftMargin =
-    size === "xlarge" ? "108px" : size === "large" ? "large" : "small";
+  console.log(size);
+  const leftMargin = size === "large" ? "108px" : "small";
   const rightMargin = size === "small" ? "small" : "70px";
-  const borderWidth = size === "small" ? 3 : 5;
 
   return (
-    <Box
-      className="LabelledBox"
-      style={{
-        outlineOffset: `-${borderWidth}px`,
-        outline: `${borderWidth}px #202122 solid`,
-      }}
-      flex={false}
+    <OutlinedBoxWithHeader
+      color={color}
+      heading={
+        <Heading margin="none" color={color === "black" ? "yellow" : "white"}>
+          {heading}
+        </Heading>
+      }
     >
-      <Stack guidingChild="last">
-        <Box direction="row">
-          <Box
-            border={{ color, size: "medium", style: "solid" }}
-            pad={{ left: "medium", vertical: "small", right: "medium" }}
-            background="black"
-          >
-            <Heading margin="none" color="yellow">
-              {heading}
-            </Heading>
-          </Box>
-        </Box>
-        <Box
-          pad={{
-            left: leftMargin,
-            right: rightMargin,
-            top: "xlarge",
-            bottom: "54px",
-          }}
-          gap="small"
-        >
-          {children}
-        </Box>
-      </Stack>
-    </Box>
+      <Box
+        pad={{
+          left: leftMargin,
+          right: rightMargin,
+          bottom: "54px",
+        }}
+        gap="small"
+      >
+        {children}
+      </Box>
+    </OutlinedBoxWithHeader>
   );
 };
