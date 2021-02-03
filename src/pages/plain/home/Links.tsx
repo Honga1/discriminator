@@ -1,5 +1,5 @@
-import { Box, Heading } from "grommet";
-import React, { CSSProperties, PropsWithChildren } from "react";
+import { Box, Heading, ResponsiveContext } from "grommet";
+import React, { CSSProperties, PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { RoutedButton } from "../../../components/RoutedAnchor";
 
@@ -51,6 +51,19 @@ export function LinksSmall() {
     </Box>
   );
 }
+
+export const Links = () => {
+  const size = useContext(ResponsiveContext);
+
+  switch (size) {
+    case "small":
+      return <LinksSmall />;
+    case "medium":
+      return <LinksFloating position="below" />;
+    default:
+      return <LinksFloating position="bottom-right" />;
+  }
+};
 
 export const LinksFloating = ({
   position,
@@ -143,13 +156,12 @@ const LinkFrame = ({
   textColor: string;
   heading: string;
 }>) => {
-  const outlineWidth = 3;
   return (
     <Box
       className="link frame"
       style={{
-        outlineOffset: `-${outlineWidth}px`,
-        outline: `${outlineWidth}px ${frameColor} solid`,
+        outlineOffset: `-3px`,
+        outline: `3px ${frameColor} solid`,
       }}
     >
       <LinksHeading
@@ -171,13 +183,11 @@ const LinksHeading = ({
   textColor: string;
   heading: string;
 }) => {
-  const padHorizontal = "16px";
-  const padVertical = "8px";
   return (
     <Box className="link heading" direction="row">
       <Box
         background={frameColor}
-        pad={{ horizontal: padHorizontal, vertical: padVertical }}
+        pad={{ horizontal: "16px", vertical: "8px" }}
       >
         <Heading level={2} color={textColor} margin="0" size="small">
           {heading}

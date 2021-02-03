@@ -1,7 +1,8 @@
-import { Box, Heading, Text } from "grommet";
-import React, { PropsWithChildren } from "react";
+import { Box, Text } from "grommet";
+import React from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { LinksFloating } from "./Links";
+import { Frame } from "./Frames";
+import { Links } from "./Links";
 
 export const HomeMedium = () => {
   return (
@@ -10,7 +11,7 @@ export const HomeMedium = () => {
       margin={{ horizontal: "64px", top: "96px", bottom: "64px" }}
       gap={"48px"}
     >
-      <FrameMedium
+      <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
@@ -38,59 +39,8 @@ export const HomeMedium = () => {
             </Box>
           </Box>
         </Box>
-      </FrameMedium>
-      <LinksFloating position="below" />
-    </Box>
-  );
-};
-
-export const FrameMedium = ({
-  children,
-  frameColor,
-  textColor,
-  heading,
-}: PropsWithChildren<{
-  frameColor: string;
-  textColor: string;
-  heading: string;
-}>) => {
-  return (
-    <Box
-      className="frame medium"
-      style={{
-        outlineOffset: `-${4}px`,
-        outline: `${4}px ${frameColor} solid`,
-      }}
-    >
-      <HeadingBlockMedium
-        textColor={textColor}
-        frameColor={frameColor}
-        heading={heading}
-      />
-      {children}
-    </Box>
-  );
-};
-
-const HeadingBlockMedium = ({
-  frameColor,
-  textColor,
-  heading,
-}: {
-  frameColor: string;
-  textColor: string;
-  heading: string;
-}) => {
-  return (
-    <Box className="heading-block medium" direction="row">
-      <Box
-        background={frameColor}
-        pad={{ horizontal: "20px", vertical: "12px" }}
-      >
-        <Heading level={1} color={textColor} margin="0" size="medium">
-          {heading}
-        </Heading>
-      </Box>
+      </Frame>
+      <Links />
     </Box>
   );
 };

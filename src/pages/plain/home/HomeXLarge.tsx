@@ -1,8 +1,8 @@
 import { Box, Text } from "grommet";
 import React from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { FrameMedium } from "./HomeMedium";
-import { LinksFloating } from "./Links";
+import { Frame } from "./Frames";
+import { Links } from "./Links";
 
 export const HomeXLarge = () => {
   return (
@@ -11,7 +11,7 @@ export const HomeXLarge = () => {
       margin={{ left: "112px", top: "112px", bottom: "20px" }}
       width={{ max: "896px" }}
     >
-      <FrameMedium
+      <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
@@ -39,8 +39,8 @@ export const HomeXLarge = () => {
             </Box>
           </Box>
         </Box>
-      </FrameMedium>
-      <LinksFloating position="bottom-right" />
+      </Frame>
+      <Links />
     </Box>
   );
 };
