@@ -13,12 +13,7 @@ export const HomeSmall = ({ children }: PropsWithChildren<{}>) => {
         heading="Discriminator"
         small
       >
-        <Box
-          className="content"
-          margin={{ horizontal: "32px", top: "56px", bottom: "64px" }}
-        >
-          {children}
-        </Box>
+        {children}
       </Frame>
       <Links />
     </Box>

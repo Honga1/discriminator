@@ -14,8 +14,8 @@ export const Frame = ({
   heading: string;
 }>) => {
   const style = {
-    outlineOffset: `-${4}px`,
-    outline: `${4}px ${frameColor} solid`,
+    outlineOffset: `-4px`,
+    outline: `4px ${frameColor} solid`,
   };
   return (
     <Box className="frame medium" style={style}>

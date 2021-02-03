@@ -16,12 +16,7 @@ export const HomeMedium = ({ children }: PropsWithChildren<{}>) => {
         frameColor={colorTheme.black}
         heading="Discriminator"
       >
-        <Box
-          className="content"
-          margin={{ horizontal: "64px", top: "48px", bottom: "64px" }}
-        >
-          {children}
-        </Box>
+        {children}
       </Frame>
       <Links />
     </Box>

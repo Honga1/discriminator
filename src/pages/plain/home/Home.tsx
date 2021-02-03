@@ -47,8 +47,15 @@ const HomeContent = () => {
     | "large"
     | "xlarge";
 
+  const isSmall = size === "small";
+  const marginTop = isSmall ? "56px" : "48px";
+  const marginHorizontal = isSmall ? "32px" : "64px";
+
   return (
-    <Box gap={"40px"}>
+    <Box
+      gap={"40px"}
+      margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
+    >
       <Text size={size === "small" ? "small" : "medium"}>
         Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
         Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.

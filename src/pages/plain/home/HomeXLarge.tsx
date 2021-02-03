@@ -16,13 +16,7 @@ export const HomeXLarge = ({ children }: PropsWithChildren<{}>) => {
         frameColor={colorTheme.black}
         heading="Discriminator"
       >
-        <Box
-          className="content"
-          margin={{ horizontal: "64px", top: "48px", bottom: "64px" }}
-          gap={"40px"}
-        >
-          {children}
-        </Box>
+        {children}
       </Frame>
       <Links />
     </Box>
