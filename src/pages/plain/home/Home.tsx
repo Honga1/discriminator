@@ -20,11 +20,23 @@ export const Home = () => {
         </HomeSmall>
       );
     case "medium":
-      return <HomeMedium />;
+      return (
+        <HomeMedium>
+          <HomeContent />
+        </HomeMedium>
+      );
     case "large":
-      return <HomeLarge />;
+      return (
+        <HomeLarge>
+          <HomeContent />
+        </HomeLarge>
+      );
     case "xlarge":
-      return <HomeXLarge />;
+      return (
+        <HomeXLarge>
+          <HomeContent />
+        </HomeXLarge>
+      );
   }
 };
 

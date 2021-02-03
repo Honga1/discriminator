@@ -6,7 +6,7 @@ import { Links } from "./Links";
 
 export const HomeSmall = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box className="home small" margin="32px" gap={"48px"}>
+    <Box className="home" margin="32px" gap={"48px"}>
       <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}

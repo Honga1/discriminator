@@ -1,10 +1,10 @@
-import { Box, Text } from "grommet";
-import React from "react";
+import { Box } from "grommet";
+import React, { PropsWithChildren } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { Frame } from "./Frames";
 import { Links } from "./Links";
 
-export const HomeXLarge = () => {
+export const HomeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box
       className="home xlarge"
@@ -21,23 +21,7 @@ export const HomeXLarge = () => {
           margin={{ horizontal: "64px", top: "48px", bottom: "64px" }}
           gap={"40px"}
         >
-          <Text size="medium">
-            Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-            Lectus euismod mauris faucibus massa nibh condimentum vitae nunc
-            quis. Lacus vitae amet aliquam id leo. Interdum vulputate eu et
-            aliquet elit morbi bibendum. Tellus euismod metus, id feugiat amet.
-          </Text>
-
-          <Box className="start-link" direction="row">
-            <Box
-              border={{ color: "blue", style: "solid", size: "3px" }}
-              pad={{ horizontal: "27px", vertical: "7px" }}
-            >
-              <Text size="medium" color="blue">
-                Start
-              </Text>
-            </Box>
-          </Box>
+          {children}
         </Box>
       </Frame>
       <Links />
