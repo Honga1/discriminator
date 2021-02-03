@@ -77,7 +77,6 @@ export const customTheme: ThemeType = {
     medium: {
       size: "32px",
       height: "48px",
-      maxWidth: "768px",
     },
   },
   button: {

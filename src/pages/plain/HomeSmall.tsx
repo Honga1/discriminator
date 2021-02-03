@@ -141,7 +141,7 @@ const HeadingBlock = ({
         background={frameColor}
         pad={{ horizontal: padHorizontal, vertical: padVertical }}
       >
-        <Heading level={headingLevel} color={textColor} margin="0">
+        <Heading level={headingLevel} color={textColor} margin="0" size="small">
           {heading}
         </Heading>
       </Box>
