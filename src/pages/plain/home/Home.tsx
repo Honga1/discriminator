@@ -2,6 +2,7 @@ import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { Frame } from "./Frames";
+import { Links } from "./Links";
 
 export const Home = () => {
   return (
@@ -44,7 +45,7 @@ const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   }
 
   return (
-    <Box className="home xlarge" {...props}>
+    <Box className="home" {...props}>
       <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
@@ -52,6 +53,7 @@ const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
       >
         {children}
       </Frame>
+      <Links />
     </Box>
   );
 };
