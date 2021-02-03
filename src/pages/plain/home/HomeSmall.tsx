@@ -1,12 +1,12 @@
 import { Box, Heading, Text } from "grommet";
 import React, { PropsWithChildren } from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { RoutedButton } from "../../../components/RoutedAnchor";
+import { LinksSmall } from "./Links";
 
 export const HomeSmall = () => {
   return (
     <Box className="home small" margin="32px" gap={"48px"}>
-      <FrameSmall
+      <ContentFrame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
@@ -35,59 +35,13 @@ export const HomeSmall = () => {
             </Box>
           </Box>
         </Box>
-      </FrameSmall>
-      <Box className="links" gap="24px">
-        <RoutedButton
-          href="/about"
-          plain
-          fill
-          label={
-            <FrameSmall
-              level="secondary"
-              textColor={colorTheme.white}
-              frameColor={colorTheme.blue}
-              heading="About"
-            >
-              <Box height={"32px"}></Box>
-            </FrameSmall>
-          }
-        />
-        <RoutedButton
-          href="/privacy"
-          plain
-          fill
-          label={
-            <FrameSmall
-              level="secondary"
-              textColor={colorTheme.white}
-              frameColor={colorTheme.red}
-              heading="Privacy"
-            >
-              <Box height={"32px"}></Box>
-            </FrameSmall>
-          }
-        />
-        <RoutedButton
-          href="/credits"
-          plain
-          fill
-          label={
-            <FrameSmall
-              level="secondary"
-              textColor={colorTheme.white}
-              frameColor={colorTheme.green}
-              heading="Credits"
-            >
-              <Box height={"32px"}></Box>
-            </FrameSmall>
-          }
-        />
-      </Box>
+      </ContentFrame>
+      <LinksSmall />
     </Box>
   );
 };
 
-export const FrameSmall = ({
+export const ContentFrame = ({
   children,
   frameColor,
   textColor,
@@ -97,7 +51,7 @@ export const FrameSmall = ({
   frameColor: string;
   textColor: string;
   heading: string;
-  level: "primary" | "secondary";
+  level: "primary";
 }>) => {
   const isPrimary = level === "primary";
   const outlineWidth = isPrimary ? 4 : 3;

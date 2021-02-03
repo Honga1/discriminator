@@ -1,9 +1,8 @@
 import { Box, Text } from "grommet";
 import React from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { RoutedButton } from "../../../components/RoutedAnchor";
 import { FrameMedium } from "./HomeMedium";
-import { FrameSmall } from "./HomeSmall";
+import { LinksFloating } from "./Links";
 
 export const HomeXLarge = () => {
   return (
@@ -41,77 +40,7 @@ export const HomeXLarge = () => {
           </Box>
         </Box>
       </FrameMedium>
-      <Box className="links" direction="row" justify="end">
-        <div style={{ position: "relative", left: "-282px", top: "-100px" }}>
-          <div
-            style={{
-              position: "absolute",
-              top: "64px",
-            }}
-          >
-            <RoutedButton
-              href="/about"
-              plain
-              fill
-              label={
-                <FrameSmall
-                  level="secondary"
-                  textColor={colorTheme.white}
-                  frameColor={colorTheme.blue}
-                  heading="About"
-                >
-                  <Box height={"64px"} width={"128px"}></Box>
-                </FrameSmall>
-              }
-            />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              left: "204px",
-            }}
-          >
-            <RoutedButton
-              href="/privacy"
-              plain
-              fill
-              label={
-                <FrameSmall
-                  level="secondary"
-                  textColor={colorTheme.white}
-                  frameColor={colorTheme.red}
-                  heading="Privacy"
-                >
-                  <Box height={"96px"} width={"142px"}></Box>
-                </FrameSmall>
-              }
-            />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              left: "314px",
-              top: "84px",
-            }}
-          >
-            <RoutedButton
-              href="/credits"
-              plain
-              fill
-              label={
-                <FrameSmall
-                  level="secondary"
-                  textColor={colorTheme.white}
-                  frameColor={colorTheme.green}
-                  heading="Credits"
-                >
-                  <Box height={"64px"} width={"140px"}></Box>
-                </FrameSmall>
-              }
-            />
-          </div>
-        </div>
-      </Box>
+      <LinksFloating position="bottom-right" />
     </Box>
   );
 };

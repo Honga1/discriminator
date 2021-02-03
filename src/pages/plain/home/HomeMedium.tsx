@@ -1,8 +1,7 @@
-import { Box, Heading, Stack, Text } from "grommet";
+import { Box, Heading, Text } from "grommet";
 import React, { PropsWithChildren } from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { RoutedButton } from "../../../components/RoutedAnchor";
-import { FrameSmall } from "./HomeSmall";
+import { LinksFloating } from "./Links";
 
 export const HomeMedium = () => {
   return (
@@ -40,64 +39,7 @@ export const HomeMedium = () => {
           </Box>
         </Box>
       </FrameMedium>
-      <Box className="links" direction="row" justify="end">
-        <Stack>
-          <Box width="442px" height={"196px"}></Box>
-          <Box direction="row" pad={{ top: "60px" }}>
-            <RoutedButton
-              href="/about"
-              plain
-              fill
-              label={
-                <FrameSmall
-                  level="secondary"
-                  textColor={colorTheme.white}
-                  frameColor={colorTheme.blue}
-                  heading="About"
-                >
-                  <Box height={"64px"} width={"128px"}></Box>
-                </FrameSmall>
-              }
-            />
-          </Box>
-          <Box fill direction="row" pad={{ left: "204px" }}>
-            <RoutedButton
-              href="/privacy"
-              plain
-              fill
-              label={
-                <FrameSmall
-                  level="secondary"
-                  textColor={colorTheme.white}
-                  frameColor={colorTheme.red}
-                  heading="Privacy"
-                >
-                  <Box height={"96px"} width={"142px"}></Box>
-                </FrameSmall>
-              }
-            />
-          </Box>
-          <Box justify="end" fill>
-            <Box direction="row" justify="end">
-              <RoutedButton
-                href="/credits"
-                plain
-                fill
-                label={
-                  <FrameSmall
-                    level="secondary"
-                    textColor={colorTheme.white}
-                    frameColor={colorTheme.green}
-                    heading="Credits"
-                  >
-                    <Box height={"64px"} width={"140px"}></Box>
-                  </FrameSmall>
-                }
-              />
-            </Box>
-          </Box>
-        </Stack>
-      </Box>
+      <LinksFloating position="below" />
     </Box>
   );
 };
