@@ -6,9 +6,8 @@ import { About } from "./pages/plain/About";
 import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
-import { Home } from "./pages/plain/Home";
+import { Home } from "./pages/plain/home/Home";
 import { HomeCoil } from "./pages/plain/HomeCoil";
-import { PlainPage } from "./pages/plain/PlainPagesContainer";
 import { Privacy } from "./pages/plain/Privacy";
 import { PlainPageRoutes } from "./Routes";
 
@@ -30,7 +29,7 @@ function App() {
         <Switch>
           {routeToComponent.map(({ url, component }) => (
             <Route exact path={url} key={url}>
-              <PlainPage>{component}</PlainPage>
+              {component}
             </Route>
           ))}
           <Route path={`/chapter`} component={RouteChaptersAndCovers} />

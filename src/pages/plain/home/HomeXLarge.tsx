@@ -1,15 +1,15 @@
 import { Box, Text } from "grommet";
 import React from "react";
-import { colorTheme } from "../../components/colorTheme";
-import { RoutedButton } from "../../components/RoutedAnchor";
+import { colorTheme } from "../../../components/colorTheme";
+import { RoutedButton } from "../../../components/RoutedAnchor";
 import { FrameMedium } from "./HomeMedium";
 import { FrameSmall } from "./HomeSmall";
 
-export const HomeLarge = () => {
+export const HomeXLarge = () => {
   return (
     <Box
-      className="home large"
-      margin={{ left: "64px", top: "96px", bottom: "20px" }}
+      className="home xlarge"
+      margin={{ left: "112px", top: "112px", bottom: "20px" }}
       width={{ max: "896px" }}
     >
       <FrameMedium

@@ -1,7 +1,7 @@
 import { Box, Heading, Stack, Text } from "grommet";
 import React, { PropsWithChildren } from "react";
-import { colorTheme } from "../../components/colorTheme";
-import { RoutedButton } from "../../components/RoutedAnchor";
+import { colorTheme } from "../../../components/colorTheme";
+import { RoutedButton } from "../../../components/RoutedAnchor";
 import { FrameSmall } from "./HomeSmall";
 
 export const HomeMedium = () => {
