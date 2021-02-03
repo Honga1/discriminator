@@ -9,18 +9,22 @@ import {
 } from "grommet";
 import React, { PropsWithChildren, useContext, useRef } from "react";
 import { RoutedButton } from "../../components/RoutedAnchor";
+import { HomeSmall } from "./HomeSmall";
 import { OutlinedBoxWithHeader } from "./OutlinedBox";
 
 export const Home = () => {
   const size = useContext(ResponsiveContext);
+  const ref = useRef<HTMLDivElement>(null);
+
+  if (size === "small") {
+    return <HomeSmall />;
+  }
   const leftMargin =
     size === "large" ? "182px" : size === "medium" ? "45px" : "small";
 
   const rightMargin =
     size === "large" ? "70px" : size === "medium" ? "70px" : "small";
   const textSize = size === "small" ? "small" : "medium";
-
-  const ref = useRef<HTMLDivElement>(null);
 
   return (
     <>

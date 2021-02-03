@@ -1,4 +1,5 @@
 import { ThemeType } from "grommet";
+import { colorTheme } from "./colorTheme";
 
 export const customTheme: ThemeType = {
   tip: {
@@ -10,14 +11,7 @@ export const customTheme: ThemeType = {
   },
   global: {
     colors: {
-      black: "#202122",
-      white: "#FFD237",
-      red: "#E01010",
-      blue: "#312DFF",
-      green: "#168500",
-      yellow: "#FFD237",
-      background: { light: "#FFD237", dark: "#202122" },
-      text: { light: "#2C2A21" },
+      ...colorTheme,
     },
     font: {
       family: '"Roboto"',
@@ -45,12 +39,23 @@ export const customTheme: ThemeType = {
   heading: {
     level: {
       "1": {
+        small: {
+          size: "32px",
+          height: "48px",
+        },
         medium: {
           size: "48px",
           height: "56.25px",
         },
       },
+      "2": {
+        small: {
+          size: "24px",
+          height: "32px",
+        },
+      },
     },
+    weight: 400,
   },
   paragraph: {
     medium: {
@@ -66,9 +71,8 @@ export const customTheme: ThemeType = {
   },
   text: {
     small: {
-      size: "16px",
-      height: "24px",
-      maxWidth: "768px",
+      size: "24px",
+      height: "32px",
     },
     medium: {
       size: "32px",
