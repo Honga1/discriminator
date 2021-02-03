@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/discriminator/static/js/main.539c193d.chunk.js",
-    "main.js.map": "/discriminator/static/js/main.539c193d.chunk.js.map",
+    "main.js": "/discriminator/static/js/main.63c24573.chunk.js",
+    "main.js.map": "/discriminator/static/js/main.63c24573.chunk.js.map",
     "runtime-main.js": "/discriminator/static/js/runtime-main.3af06fd9.js",
     "runtime-main.js.map": "/discriminator/static/js/runtime-main.3af06fd9.js.map",
-    "static/js/2.4a518ae1.chunk.js": "/discriminator/static/js/2.4a518ae1.chunk.js",
-    "static/js/2.4a518ae1.chunk.js.map": "/discriminator/static/js/2.4a518ae1.chunk.js.map",
+    "static/js/2.76cde9b6.chunk.js": "/discriminator/static/js/2.76cde9b6.chunk.js",
+    "static/js/2.76cde9b6.chunk.js.map": "/discriminator/static/js/2.76cde9b6.chunk.js.map",
     "index.html": "/discriminator/index.html",
-    "static/js/2.4a518ae1.chunk.js.LICENSE.txt": "/discriminator/static/js/2.4a518ae1.chunk.js.LICENSE.txt",
+    "static/js/2.76cde9b6.chunk.js.LICENSE.txt": "/discriminator/static/js/2.76cde9b6.chunk.js.LICENSE.txt",
     "static/media/1920x1080.f42afb0d.png": "/discriminator/static/media/1920x1080.f42afb0d.png",
     "static/media/720p.40b0841d.mp4": "/discriminator/static/media/720p.40b0841d.mp4"
   },
   "entrypoints": [
     "static/js/runtime-main.3af06fd9.js",
-    "static/js/2.4a518ae1.chunk.js",
-    "static/js/main.539c193d.chunk.js"
+    "static/js/2.76cde9b6.chunk.js",
+    "static/js/main.63c24573.chunk.js"
   ]
 }
