@@ -7,9 +7,9 @@ import {
   ResponsiveContext,
   Text,
 } from "grommet";
-import React, { PropsWithChildren, ReactNode, useContext, useRef } from "react";
-import { ThemeContext } from "styled-components";
+import React, { PropsWithChildren, useContext, useRef } from "react";
 import { RoutedButton } from "../../components/RoutedAnchor";
+import { OutlinedBoxWithHeader } from "./OutlinedBox";
 
 export const Home = () => {
   const size = useContext(ResponsiveContext);
@@ -52,21 +52,6 @@ export const Home = () => {
     </>
   );
 };
-
-// ::-webkit-scrollbar {
-//   -webkit-appearance: none;
-//   width: 7px;
-//   margin-right: 4px;
-// }
-
-// ::-webkit-scrollbar {
-//   width: 0!important;
-// }
-// ::-webkit-scrollbar-thumb {
-//   border-radius: 4px;
-//   background-color: hsla(0,0%,100%,.4);
-//   box-shadow: 0 0 1px rgb(0 0 0 / 40%);
-// }
 
 export const StyledButton = ({
   color,
@@ -139,66 +124,6 @@ export const Links = ({}) => {
           ></OutlinedBoxWithHeader>
         }
       />
-    </Box>
-  );
-};
-
-const OutlinedBox = ({
-  children,
-  color,
-}: PropsWithChildren<{ color: "black" | "red" | "blue" | "green" }>) => {
-  const size = useContext(ResponsiveContext);
-  const theme = useContext(ThemeContext);
-  const borderWidth = size === "small" ? 3 : 5;
-
-  const colorValue = theme.global.colors[color];
-  return (
-    <Box
-      style={{
-        outlineOffset: `-${borderWidth}px`,
-        outline: `${borderWidth}px ${colorValue} solid`,
-      }}
-      flex={false}
-    >
-      {children}
-    </Box>
-  );
-};
-
-const OutlinedBoxWithHeader = ({
-  children,
-  heading,
-  color,
-}: PropsWithChildren<{
-  heading: ReactNode;
-  color: "black" | "red" | "blue" | "green";
-}>) => {
-  return (
-    <OutlinedBox color={color}>
-      <HeadingBlock color={color} heading={heading} />
-      <Box>{children}</Box>
-    </OutlinedBox>
-  );
-};
-
-const HeadingBlock = ({
-  heading,
-  color,
-}: {
-  heading: ReactNode;
-  color: "black" | "red" | "blue" | "green";
-}) => {
-  const size = useContext(ResponsiveContext);
-  const rightMargin = size === "small" ? "small" : "70px";
-  return (
-    <Box direction="row">
-      <Box
-        pad={{ left: "medium", vertical: "small", right: "medium" }}
-        margin={{ bottom: "large", right: rightMargin }}
-        background={color}
-      >
-        {heading}
-      </Box>
     </Box>
   );
 };
