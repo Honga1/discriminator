@@ -9,6 +9,7 @@ import {
 } from "grommet";
 import React, { PropsWithChildren, useContext, useRef } from "react";
 import { RoutedButton } from "../../components/RoutedAnchor";
+import { HomeLarge } from "./HomeLarge";
 import { HomeMedium } from "./HomeMedium";
 import { HomeSmall } from "./HomeSmall";
 import { OutlinedBoxWithHeader } from "./OutlinedBox";
@@ -24,6 +25,11 @@ export const Home = () => {
   if (size === "medium") {
     return <HomeMedium />;
   }
+
+  if (size === "large") {
+    return <HomeLarge />;
+  }
+
   const leftMargin =
     size === "large" ? "182px" : size === "medium" ? "45px" : "small";
 

@@ -1,15 +1,16 @@
-import { Box, Heading, Stack, Text } from "grommet";
-import React, { PropsWithChildren } from "react";
+import { Box, Text } from "grommet";
+import React from "react";
 import { colorTheme } from "../../components/colorTheme";
 import { RoutedButton } from "../../components/RoutedAnchor";
+import { FrameMedium } from "./HomeMedium";
 import { FrameSmall } from "./HomeSmall";
 
-export const HomeMedium = () => {
+export const HomeLarge = () => {
   return (
     <Box
-      className="home medium"
-      margin={{ horizontal: "64px", top: "96px", bottom: "64px" }}
-      gap={"48px"}
+      className="home large"
+      margin={{ left: "64px", top: "96px", bottom: "20px" }}
+      width={{ max: "896px" }}
     >
       <FrameMedium
         textColor={colorTheme.yellow}
@@ -41,9 +42,13 @@ export const HomeMedium = () => {
         </Box>
       </FrameMedium>
       <Box className="links" direction="row" justify="end">
-        <Stack>
-          <Box width="442px" height={"196px"}></Box>
-          <Box direction="row" pad={{ top: "60px" }}>
+        <div style={{ position: "relative", left: "-282px", top: "-100px" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "64px",
+            }}
+          >
             <RoutedButton
               href="/about"
               plain
@@ -59,8 +64,13 @@ export const HomeMedium = () => {
                 </FrameSmall>
               }
             />
-          </Box>
-          <Box fill direction="row" pad={{ left: "204px" }}>
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "204px",
+            }}
+          >
             <RoutedButton
               href="/privacy"
               plain
@@ -76,78 +86,31 @@ export const HomeMedium = () => {
                 </FrameSmall>
               }
             />
-          </Box>
-          <Box justify="end" fill>
-            <Box direction="row" justify="end">
-              <RoutedButton
-                href="/credits"
-                plain
-                fill
-                label={
-                  <FrameSmall
-                    level="secondary"
-                    textColor={colorTheme.white}
-                    frameColor={colorTheme.green}
-                    heading="Credits"
-                  >
-                    <Box height={"64px"} width={"140px"}></Box>
-                  </FrameSmall>
-                }
-              />
-            </Box>
-          </Box>
-        </Stack>
-      </Box>
-    </Box>
-  );
-};
-
-export const FrameMedium = ({
-  children,
-  frameColor,
-  textColor,
-  heading,
-}: PropsWithChildren<{
-  frameColor: string;
-  textColor: string;
-  heading: string;
-}>) => {
-  return (
-    <Box
-      className="frame medium"
-      style={{
-        outlineOffset: `-${4}px`,
-        outline: `${4}px ${frameColor} solid`,
-      }}
-    >
-      <HeadingBlockMedium
-        textColor={textColor}
-        frameColor={frameColor}
-        heading={heading}
-      />
-      {children}
-    </Box>
-  );
-};
-
-const HeadingBlockMedium = ({
-  frameColor,
-  textColor,
-  heading,
-}: {
-  frameColor: string;
-  textColor: string;
-  heading: string;
-}) => {
-  return (
-    <Box className="heading-block medium" direction="row">
-      <Box
-        background={frameColor}
-        pad={{ horizontal: "20px", vertical: "12px" }}
-      >
-        <Heading level={1} color={textColor} margin="0" size="medium">
-          {heading}
-        </Heading>
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "314px",
+              top: "84px",
+            }}
+          >
+            <RoutedButton
+              href="/credits"
+              plain
+              fill
+              label={
+                <FrameSmall
+                  level="secondary"
+                  textColor={colorTheme.white}
+                  frameColor={colorTheme.green}
+                  heading="Credits"
+                >
+                  <Box height={"64px"} width={"140px"}></Box>
+                </FrameSmall>
+              }
+            />
+          </div>
+        </div>
       </Box>
     </Box>
   );
