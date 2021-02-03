@@ -1,6 +1,7 @@
 import { Box, Heading, Text } from "grommet";
 import React, { PropsWithChildren } from "react";
 import { colorTheme } from "../../components/colorTheme";
+import { RoutedButton } from "../../components/RoutedAnchor";
 
 export const HomeSmall = () => {
   return (
@@ -36,30 +37,51 @@ export const HomeSmall = () => {
         </Box>
       </FrameSmall>
       <Box className="links" gap="24px">
-        <FrameSmall
-          level="secondary"
-          textColor={colorTheme.white}
-          frameColor={colorTheme.blue}
-          heading="About"
-        >
-          <Box height={"32px"}></Box>
-        </FrameSmall>
-        <FrameSmall
-          level="secondary"
-          textColor={colorTheme.white}
-          frameColor={colorTheme.red}
-          heading="Privacy"
-        >
-          <Box height={"32px"}></Box>
-        </FrameSmall>
-        <FrameSmall
-          level="secondary"
-          textColor={colorTheme.white}
-          frameColor={colorTheme.green}
-          heading="Credits"
-        >
-          <Box height={"32px"}></Box>
-        </FrameSmall>
+        <RoutedButton
+          href="/about"
+          plain
+          fill
+          label={
+            <FrameSmall
+              level="secondary"
+              textColor={colorTheme.white}
+              frameColor={colorTheme.blue}
+              heading="About"
+            >
+              <Box height={"32px"}></Box>
+            </FrameSmall>
+          }
+        />
+        <RoutedButton
+          href="/privacy"
+          plain
+          fill
+          label={
+            <FrameSmall
+              level="secondary"
+              textColor={colorTheme.white}
+              frameColor={colorTheme.red}
+              heading="Privacy"
+            >
+              <Box height={"32px"}></Box>
+            </FrameSmall>
+          }
+        />
+        <RoutedButton
+          href="/credits"
+          plain
+          fill
+          label={
+            <FrameSmall
+              level="secondary"
+              textColor={colorTheme.white}
+              frameColor={colorTheme.green}
+              heading="Credits"
+            >
+              <Box height={"32px"}></Box>
+            </FrameSmall>
+          }
+        />
       </Box>
     </Box>
   );
