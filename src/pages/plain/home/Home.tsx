@@ -1,43 +1,59 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
-import { HomeLarge } from "./HomeLarge";
-import { HomeMedium } from "./HomeMedium";
-import { HomeSmall } from "./HomeSmall";
-import { HomeXLarge } from "./HomeXLarge";
+import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
+import React, { PropsWithChildren, useContext } from "react";
+import { colorTheme } from "../../../components/colorTheme";
+import { Frame } from "./Frames";
 
 export const Home = () => {
+  return (
+    <HomeContainer>
+      <HomeContent />
+    </HomeContainer>
+  );
+};
+
+const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
     | "large"
     | "xlarge";
 
+  let props: BoxProps;
   switch (size) {
     case "small":
-      return (
-        <HomeSmall>
-          <HomeContent />
-        </HomeSmall>
-      );
+      props = { margin: "32px", gap: "48px" };
+      break;
     case "medium":
-      return (
-        <HomeMedium>
-          <HomeContent />
-        </HomeMedium>
-      );
+      props = {
+        margin: { horizontal: "64px", top: "96px", bottom: "64px" },
+        gap: "48px",
+      };
+      break;
     case "large":
-      return (
-        <HomeLarge>
-          <HomeContent />
-        </HomeLarge>
-      );
+      props = {
+        margin: { left: "64px", top: "96px", bottom: "20px" },
+        width: { max: "896px" },
+      };
+      break;
     case "xlarge":
-      return (
-        <HomeXLarge>
-          <HomeContent />
-        </HomeXLarge>
-      );
+      props = {
+        margin: { left: "112px", top: "112px", bottom: "20px" },
+        width: { max: "896px" },
+      };
+      break;
   }
+
+  return (
+    <Box className="home xlarge" {...props}>
+      <Frame
+        textColor={colorTheme.yellow}
+        frameColor={colorTheme.black}
+        heading="Discriminator"
+      >
+        {children}
+      </Frame>
+    </Box>
+  );
 };
 
 const HomeContent = () => {
