@@ -1,6 +1,7 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
+import { CustomButton } from "./CustomButton";
 import { Frame } from "./Frames";
 import { Links } from "./Links";
 
@@ -12,7 +13,7 @@ export const Home = () => {
   );
 };
 
-const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
+export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -81,28 +82,7 @@ const HomeContent = () => {
         morbi bibendum. Tellus euismod metus, id feugiat amet.
       </Text>
 
-      <StartButton />
-    </Box>
-  );
-};
-
-const StartButton = () => {
-  const size = useContext(ResponsiveContext) as
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge";
-
-  return (
-    <Box className="start button" direction="row">
-      <Box
-        border={{ color: "blue", style: "solid", size: "3px" }}
-        pad={{ horizontal: "27px", vertical: "7px" }}
-      >
-        <Text size={size === "small" ? "small" : "medium"} color="blue">
-          Start
-        </Text>
-      </Box>
+      <CustomButton color="blue" textContent="Start" href="/permissions" />
     </Box>
   );
 };

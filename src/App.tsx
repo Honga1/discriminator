@@ -7,6 +7,7 @@ import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
 import { Home } from "./pages/plain/home/Home";
+import { Permission } from "./pages/plain/home/Permission";
 import { HomeCoil } from "./pages/plain/HomeCoil";
 import { Privacy } from "./pages/plain/Privacy";
 import { PlainPageRoutes } from "./Routes";
@@ -14,6 +15,7 @@ import { PlainPageRoutes } from "./Routes";
 const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
   { url: "/", component: <Home /> },
   { url: "/home", component: <Home /> },
+  { url: "/permissions", component: <Permission /> },
   { url: "/coil", component: <HomeCoil /> },
   { url: "/about", component: <About /> },
   { url: "/credits", component: <Credits /> },
