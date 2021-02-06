@@ -18,7 +18,7 @@ export const Frame = ({
     outline: `4px ${frameColor} solid`,
   };
   return (
-    <Box className="frame medium" style={style}>
+    <Box className="frame" style={style} flex={false}>
       <HeadingBlock frameColor={frameColor}>
         <Heading
           level={1}

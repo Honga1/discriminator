@@ -1,13 +1,114 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
+import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
+import React, { PropsWithChildren, useContext, useRef, useState } from "react";
+import { colorTheme } from "../../../components/colorTheme";
 import { CustomButton } from "./CustomButton";
-import { HomeContainer } from "./Home";
+import { Frame } from "./Frames";
+import { Links } from "./Links";
 
 export const Permission = () => {
+  const [showBorder, setShowBorder] = useState(false);
   return (
-    <HomeContainer>
-      <PermissionContent />
-    </HomeContainer>
+    <Box fill>
+      <CameraIndicator showBorder={showBorder} />
+      <Box
+        overflow="auto"
+        onScroll={(event) =>
+          setShowBorder((event.target as HTMLElement).scrollTop !== 0)
+        }
+      >
+        <PermissionContainer>
+          <PermissionContent />
+        </PermissionContainer>
+      </Box>
+    </Box>
+  );
+};
+
+export const CameraIndicator = ({ showBorder }: { showBorder: boolean }) => {
+  const bottomBorderStyle = showBorder
+    ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
+    : {};
+  return (
+    <Box
+      fill="horizontal"
+      background="yellow"
+      flex={false}
+      style={bottomBorderStyle}
+    >
+      <Box
+        direction="row"
+        justify="end"
+        margin={{ right: "16px", top: "16px", bottom: "12px" }}
+      >
+        <Box
+          background="redLight"
+          pad={{ horizontal: "20px", vertical: "10px" }}
+        >
+          <Text size="small" color="grayLight">
+            Camera
+          </Text>
+        </Box>
+        <Box
+          background="charcoal"
+          pad={{ horizontal: "20px", vertical: "10px" }}
+        >
+          <Text size="small" color="grayLight">
+            off
+          </Text>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const size = useContext(ResponsiveContext) as
+    | "small"
+    | "medium"
+    | "large"
+    | "xlarge";
+
+  let props: BoxProps;
+  switch (size) {
+    case "small":
+      props = {
+        margin: { horizontal: "32px", top: "16px", bottom: "32px" },
+        gap: "48px",
+      };
+      break;
+    case "medium":
+      props = {
+        margin: { horizontal: "64px", top: "96px", bottom: "64px" },
+        gap: "48px",
+      };
+      break;
+    case "large":
+      props = {
+        margin: { left: "64px", top: "96px", bottom: "20px" },
+        width: { max: "896px" },
+      };
+      break;
+    case "xlarge":
+      props = {
+        margin: { left: "112px", top: "112px", bottom: "20px" },
+        width: { max: "896px" },
+      };
+      break;
+  }
+
+  return (
+    <Box className="home container" ref={containerRef} {...props}>
+      <Frame
+        textColor={colorTheme.yellow}
+        frameColor={colorTheme.black}
+        heading="Discriminator"
+      >
+        {children}
+      </Frame>
+      <Links />
+    </Box>
   );
 };
 
@@ -28,9 +129,10 @@ const PermissionContent = () => {
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
       <Text size={size === "small" ? "small" : "medium"}>
-        To get out the best out of this experience, we recommend to enable your
-        webcam. We do not store any of your information (see our privacy
-        policy). If you choose to not enable your webcam you will see xyz.
+        Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
+        Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.
+        Lacus vitae amet aliquam id leo. Interdum vulputate eu et aliquet elit
+        morbi bibendum. Tellus euismod metus, id feugiat amet.
       </Text>
 
       <CustomButton

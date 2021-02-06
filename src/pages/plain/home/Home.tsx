@@ -46,7 +46,7 @@ export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   }
 
   return (
-    <Box className="home" {...props}>
+    <Box className="home container" {...props}>
       <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
