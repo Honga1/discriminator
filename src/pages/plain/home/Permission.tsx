@@ -35,12 +35,22 @@ const PermissionContent = () => {
 
       <CustomButton
         color={"red"}
-        textContent={"Continue without webcam"}
+        textContent={
+          <span>
+            Continue{" "}
+            <span style={{ textDecoration: "underline" }}>without</span> webcam
+          </span>
+        }
         href="/chapter/1?isCover"
       />
       <CustomButton
         color={"green"}
-        textContent={"Continue with webcam"}
+        textContent={
+          <span>
+            Continue <span style={{ textDecoration: "underline" }}>with</span>{" "}
+            webcam
+          </span>
+        }
         href="/chapter/1?isCover"
       />
     </Box>
