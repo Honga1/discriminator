@@ -163,6 +163,7 @@ const LinkFrame = ({
         outlineOffset: `-3px`,
         outline: `3px ${frameColor} solid`,
       }}
+      margin={{ bottom: "8px" }}
     >
       <LinksHeading
         textColor={textColor}

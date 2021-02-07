@@ -1,6 +1,7 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext, useRef, useState } from "react";
+import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../../components/colorTheme";
+import { CameraIndicator } from "./CameraIndicator";
 import { CustomButton } from "./CustomButton";
 import { Frame } from "./Frames";
 import { Links } from "./Links";
@@ -15,6 +16,7 @@ export const Permission = () => {
         onScroll={(event) =>
           setShowBorder((event.target as HTMLElement).scrollTop !== 0)
         }
+        height="100%"
       >
         <PermissionContainer>
           <PermissionContent />
@@ -24,46 +26,7 @@ export const Permission = () => {
   );
 };
 
-export const CameraIndicator = ({ showBorder }: { showBorder: boolean }) => {
-  const bottomBorderStyle = showBorder
-    ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
-    : {};
-  return (
-    <Box
-      fill="horizontal"
-      background="yellow"
-      flex={false}
-      style={bottomBorderStyle}
-    >
-      <Box
-        direction="row"
-        justify="end"
-        margin={{ right: "16px", top: "16px", bottom: "12px" }}
-      >
-        <Box
-          background="redLight"
-          pad={{ horizontal: "20px", vertical: "10px" }}
-        >
-          <Text size="small" color="grayLight">
-            Camera
-          </Text>
-        </Box>
-        <Box
-          background="charcoal"
-          pad={{ horizontal: "20px", vertical: "10px" }}
-        >
-          <Text size="small" color="grayLight">
-            off
-          </Text>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
 export const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -80,26 +43,26 @@ export const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "medium":
       props = {
-        margin: { horizontal: "64px", top: "96px", bottom: "64px" },
+        margin: { horizontal: "64px", top: "16px", bottom: "64px" },
         gap: "48px",
       };
       break;
     case "large":
       props = {
-        margin: { left: "64px", top: "96px", bottom: "20px" },
+        margin: { left: "64px", top: "20px", bottom: "20px" },
         width: { max: "896px" },
       };
       break;
     case "xlarge":
       props = {
-        margin: { left: "112px", top: "112px", bottom: "20px" },
+        margin: { left: "112px", top: "36px", bottom: "20px" },
         width: { max: "896px" },
       };
       break;
   }
 
   return (
-    <Box className="home container" ref={containerRef} {...props}>
+    <Box className="permission container" {...props}>
       <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
