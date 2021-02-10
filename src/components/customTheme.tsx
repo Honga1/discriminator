@@ -74,11 +74,18 @@ export const customTheme: ThemeType = {
     small: {
       size: "24px",
       height: "32px",
+      maxWidth: undefined,
     },
     medium: {
       size: "32px",
       height: "48px",
+      maxWidth: undefined,
     },
+    "2xl?": {},
+    "3xl?": {},
+    "4xl?": {},
+    "5xl?": {},
+    "6xl?": {},
   },
   button: {
     border: {
@@ -94,6 +101,13 @@ export const customTheme: ThemeType = {
         border: {
           radius: "0",
         },
+      },
+    },
+  },
+  layer: {
+    overlay: {
+      background: {
+        opacity: 0,
       },
     },
   },

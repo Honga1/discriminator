@@ -92,10 +92,9 @@ const PermissionContent = () => {
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
       <Text size={size === "small" ? "small" : "medium"}>
-        Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-        Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.
-        Lacus vitae amet aliquam id leo. Interdum vulputate eu et aliquet elit
-        morbi bibendum. Tellus euismod metus, id feugiat amet.
+        To get out the best out of this experience, we recommend to enable your
+        webcam. We do not store any of your information (see our privacy
+        policy). If you choose to not enable your webcam you will see xyz.
       </Text>
 
       <CustomButton

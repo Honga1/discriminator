@@ -4,14 +4,7 @@ import {
 } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh/util";
 import { MutableRefObject, ReactElement, useRef } from "react";
 import { Canvas, CanvasContext, useFrame, Viewport } from "react-three-fiber";
-import {
-  BufferAttribute,
-  BufferGeometry,
-  Color,
-  Mesh,
-  PointsMaterial,
-  Vector3,
-} from "three";
+import { BufferAttribute, Color, Mesh, Vector3 } from "three";
 import { useAnimationFrame } from "../../hooks/useAnimationFrame";
 import { PartGroups, PART_GROUPS } from "./part-groups";
 import { BoundingBox, IKeyPoints, KeyPoints } from "./VideoDetector";
@@ -216,7 +209,7 @@ const VideoPartRenderer = ({
   color?: string | number | Color | undefined;
   keyPoints: MutableRefObject<KeyPoints<HTMLVideoElement> | undefined>;
 }): React.ReactElement => {
-  const ref = useRef<Mesh<BufferGeometry, PointsMaterial>>();
+  const ref = useRef<Mesh>();
   const maxPoints = parts.map((part) => PART_GROUPS[part]).flat().length;
 
   useFrame(() => {

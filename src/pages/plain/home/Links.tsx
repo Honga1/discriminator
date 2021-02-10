@@ -1,15 +1,14 @@
 import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { CSSProperties, PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { RoutedButton } from "../../../components/RoutedAnchor";
+import { QueryButton } from "../../../components/RoutedAnchor";
 
 export function LinksSmall() {
   return (
     <Box className="links" gap="24px">
-      <RoutedButton
-        href="/about"
+      <QueryButton
+        query={{ key: "modal", value: "about", operation: "open" }}
         plain
-        fill
         label={
           <LinkFrame
             textColor={colorTheme.white}
@@ -20,10 +19,10 @@ export function LinksSmall() {
           </LinkFrame>
         }
       />
-      <RoutedButton
+      <QueryButton
+        query={{ key: "modal", value: "privacy", operation: "open" }}
         href="/privacy"
         plain
-        fill
         label={
           <LinkFrame
             textColor={colorTheme.white}
@@ -34,10 +33,10 @@ export function LinksSmall() {
           </LinkFrame>
         }
       />
-      <RoutedButton
+      <QueryButton
+        query={{ key: "modal", value: "credits", operation: "open" }}
         href="/credits"
         plain
-        fill
         label={
           <LinkFrame
             textColor={colorTheme.white}
@@ -83,8 +82,8 @@ export const LinksFloating = ({
             top: "64px",
           }}
         >
-          <RoutedButton
-            href="/about"
+          <QueryButton
+            query={{ key: "modal", value: "about", operation: "open" }}
             plain
             fill
             label={
@@ -104,7 +103,8 @@ export const LinksFloating = ({
             left: "204px",
           }}
         >
-          <RoutedButton
+          <QueryButton
+            query={{ key: "modal", value: "privacy", operation: "open" }}
             href="/privacy"
             plain
             fill
@@ -126,7 +126,8 @@ export const LinksFloating = ({
             top: "84px",
           }}
         >
-          <RoutedButton
+          <QueryButton
+            query={{ key: "modal", value: "credits", operation: "open" }}
             href="/credits"
             plain
             fill
@@ -136,7 +137,7 @@ export const LinksFloating = ({
                 frameColor={colorTheme.green}
                 heading="Credits"
               >
-                <Box height={"64px"} width={"140px"}></Box>
+                <Box height={"60px"} width={"140px"}></Box>
               </LinkFrame>
             }
           />

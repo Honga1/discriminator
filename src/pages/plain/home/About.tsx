@@ -2,8 +2,8 @@ import {
   Box,
   BoxProps,
   Heading,
+  Layer,
   ResponsiveContext,
-  Stack,
   Text,
 } from "grommet";
 import React, {
@@ -14,15 +14,41 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { colorTheme } from "../../../components/colorTheme";
+import { InteractiveStack } from "../../../components/InteractiveStack";
+import { QueryButton } from "../../../components/RoutedAnchor";
 import { CustomButton } from "./CustomButton";
 
-export const About = () => {
+export const About = ({ onClose }: { onClose: () => void }) => {
   return (
-    <Box fill background="yellowAlternative" overflow="hidden">
-      <AboutContainer>
-        <AboutContent />
-      </AboutContainer>
-    </Box>
+    <>
+      <Layer
+        full
+        responsive={false}
+        animate
+        position={"bottom"}
+        onEsc={onClose}
+        animation={"fadeIn"}
+      >
+        <Box fill background="yellowAlternative"></Box>
+      </Layer>
+      <Layer
+        full
+        responsive={false}
+        animate
+        position={"bottom"}
+        onEsc={onClose}
+        animation={"slide"}
+        style={{
+          backgroundColor: "rgba(0,0,0,0)",
+        }}
+      >
+        <Box fill overflow="hidden">
+          <AboutContainer>
+            <AboutContent />
+          </AboutContainer>
+        </Box>
+      </Layer>
+    </>
   );
 };
 
@@ -146,7 +172,7 @@ const ScrollableFrameLarge = ({
 
   return (
     <Box className="scrollable-frame" style={style} flex={false} fill>
-      <Stack fill interactiveChild="first">
+      <InteractiveStack fill>
         <Box fill>
           <ScrollableBox
             flex={false}
@@ -170,7 +196,7 @@ const ScrollableFrameLarge = ({
             </Heading>
           </ScrollingHeadingBlock>
         </Box>
-      </Stack>
+      </InteractiveStack>
     </Box>
   );
 };
@@ -218,9 +244,17 @@ const ScrollingHeadingBlock = ({
         {children}
       </Box>
       <Box pad={{ horizontal: "20px", vertical: "12px" }}>
-        <Heading level={1} margin="0" size={isSmall ? "small" : "medium"}>
-          X
-        </Heading>
+        <QueryButton
+          query={{ key: "modal", value: "credits", operation: "close" }}
+          href="/credits"
+          plain
+          fill
+          label={
+            <Heading level={1} margin="0" size={isSmall ? "small" : "medium"}>
+              X
+            </Heading>
+          }
+        />
       </Box>
     </Box>
   );

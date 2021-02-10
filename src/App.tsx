@@ -5,7 +5,6 @@ import { RouteChaptersAndCovers } from "./pages/ChaptersAndCovers";
 import { Credits } from "./pages/plain/Credits";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
-import { About } from "./pages/plain/home/About";
 import { Home } from "./pages/plain/home/Home";
 import { Permission } from "./pages/plain/home/Permission";
 import { HomeCoil } from "./pages/plain/HomeCoil";
@@ -17,7 +16,6 @@ const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
   { url: "/home", component: <Home /> },
   { url: "/permissions", component: <Permission /> },
   { url: "/coil", component: <HomeCoil /> },
-  { url: "/about", component: <About /> },
   { url: "/credits", component: <Credits /> },
   { url: "/end", component: <EndPage /> },
   { url: "/error", component: <Error /> },
@@ -27,17 +25,15 @@ const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
 function App() {
   return (
     <HashRouter basename={"/"}>
-      <PageContainer>
-        <Switch>
-          {routeToComponent.map(({ url, component }) => (
-            <Route exact path={url} key={url}>
-              {component}
-            </Route>
-          ))}
-          <Route path={`/chapter`} component={RouteChaptersAndCovers} />
-          <Route>Missing Route</Route>
-        </Switch>
-      </PageContainer>
+      <Switch>
+        {routeToComponent.map(({ url, component }) => (
+          <Route exact path={url}>
+            <PageContainer key={url}>{component}</PageContainer>
+          </Route>
+        ))}
+        <Route path={`/chapter`} component={RouteChaptersAndCovers} />
+        <Route>Missing Route</Route>
+      </Switch>
     </HashRouter>
   );
 }
