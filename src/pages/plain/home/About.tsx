@@ -4,6 +4,7 @@ import {
   Heading,
   Paragraph,
   ResponsiveContext,
+  Stack,
   Text,
 } from "grommet";
 import React, {
@@ -49,8 +50,7 @@ export const AboutContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "large":
       props = {
-        margin: { left: "64px", top: "20px", bottom: "20px" },
-        width: { max: "896px" },
+        margin: { horizontal: "48px", top: "48px", bottom: "-4px" },
       };
       break;
     case "xlarge":
@@ -61,15 +61,19 @@ export const AboutContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
   }
 
+  const Frame =
+    size === "small" || size === "medium"
+      ? ScrollableFrame
+      : ScrollableFrameLarge;
   return (
     <Box className="about container" {...props} background="yellow">
-      <ScrollableFrame
+      <Frame
         textColor={colorTheme.white}
         frameColor={colorTheme.blue}
-        heading="Discriminator"
+        heading="About"
       >
         {children}
-      </ScrollableFrame>
+      </Frame>
     </Box>
   );
 };
@@ -124,6 +128,56 @@ const ScrollableFrame = ({
   );
 };
 
+const ScrollableFrameLarge = ({
+  children,
+  frameColor,
+  textColor,
+  heading,
+}: PropsWithChildren<{
+  frameColor: string;
+  textColor: string;
+  heading: string;
+}>) => {
+  const style: CSSProperties = {
+    outlineOffset: `-4px`,
+    outline: `4px ${frameColor} solid`,
+  };
+  // const style = {};
+  const isSmall = useContext(ResponsiveContext) === "small";
+
+  const ScrollableBox = isSmall ? Box : CustomScrollbarBox;
+
+  return (
+    <Box className="scrollable-frame" style={style} flex={false} fill>
+      <Stack fill interactiveChild="first">
+        <Box fill>
+          <ScrollableBox
+            flex={false}
+            overflow={{ horizontal: "hidden", vertical: "auto" }}
+            height="100%"
+            pad={{ top: "76px" }}
+            margin={{ right: "12px", top: "12px" }}
+          >
+            {children}
+          </ScrollableBox>
+        </Box>
+        <Box margin={{ right: "32px" }}>
+          <ScrollingHeadingBlock frameColor={frameColor} showBorder={false}>
+            <Heading
+              level={1}
+              color={textColor}
+              margin="0"
+              size={isSmall ? "small" : "medium"}
+            >
+              {heading}
+            </Heading>
+          </ScrollingHeadingBlock>
+        </Box>
+      </Stack>
+    </Box>
+  );
+};
+
 const CustomScrollbarBox = styled(Box)`
   &::-webkit-scrollbar {
     width: 20px;
@@ -155,10 +209,9 @@ const ScrollingHeadingBlock = ({
   return (
     <Box
       flex={false}
-      className="heading-block medium"
+      className="heading-block"
       direction="row"
       style={bottomBorderStyle}
-      background="yellow"
       justify={"between"}
     >
       <Box
@@ -183,6 +236,30 @@ const AboutContent = () => {
     | "large"
     | "xlarge";
 
+  let props: BoxProps;
+  switch (size) {
+    case "small":
+      props = {
+        margin: { left: "18px", right: "18px", top: "56px" },
+      };
+      break;
+    case "medium":
+      props = {
+        margin: { left: "60px", right: "28px", top: "48px" },
+      };
+      break;
+    case "large":
+      props = {
+        margin: { left: "168px", right: "136px", top: "48px" },
+      };
+      break;
+    case "xlarge":
+      props = {
+        margin: { left: "168px", right: "136px", top: "48px" },
+      };
+      break;
+  }
+
   const isSmall = size === "small";
   const marginTop = isSmall ? "56px" : "48px";
   const marginRight = isSmall ? "18px" : `28px`;
@@ -197,6 +274,7 @@ const AboutContent = () => {
         top: marginTop,
         bottom: "64px",
       }}
+      {...props}
       flex={false}
     >
       <Text size={size === "small" ? "small" : "medium"}>
