@@ -37,6 +37,7 @@ export const customTheme: ThemeType = {
     },
   },
   heading: {
+    responsiveBreakpoint: undefined,
     level: {
       "1": {
         small: {
@@ -58,15 +59,15 @@ export const customTheme: ThemeType = {
     weight: 400,
   },
   paragraph: {
+    small: {
+      size: "24px",
+      height: "32px",
+      maxWidth: undefined,
+    },
     medium: {
       size: "32px",
       height: "48px",
-      maxWidth: "768px",
-    },
-    small: {
-      size: "16px",
-      height: "24px",
-      maxWidth: "768px",
+      maxWidth: undefined,
     },
   },
   text: {

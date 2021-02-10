@@ -1,10 +1,18 @@
-import { Box, BoxProps, Heading, ResponsiveContext, Text } from "grommet";
+import {
+  Box,
+  BoxProps,
+  Heading,
+  Paragraph,
+  ResponsiveContext,
+  Text,
+} from "grommet";
 import React, {
   CSSProperties,
   PropsWithChildren,
   useContext,
   useState,
 } from "react";
+import styled from "styled-components";
 import { colorTheme } from "../../../components/colorTheme";
 import { CustomButton } from "./CustomButton";
 
@@ -35,7 +43,7 @@ export const AboutContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "medium":
       props = {
-        margin: { horizontal: "64px", top: "16px", bottom: "64px" },
+        margin: { horizontal: "48px", top: "48px", bottom: "-4px" },
         gap: "48px",
       };
       break;
@@ -71,9 +79,7 @@ const ScrollableFrame = ({
   frameColor,
   textColor,
   heading,
-  small = false,
 }: PropsWithChildren<{
-  small?: boolean;
   frameColor: string;
   textColor: string;
   heading: string;
@@ -84,6 +90,9 @@ const ScrollableFrame = ({
   };
 
   const [showBorder, setShowBorder] = useState(false);
+  const isSmall = useContext(ResponsiveContext) === "small";
+
+  const ScrollableBox = isSmall ? Box : CustomScrollbarBox;
 
   return (
     <Box className="scrollable-frame" style={style} flex={false} fill>
@@ -92,27 +101,43 @@ const ScrollableFrame = ({
           level={1}
           color={textColor}
           margin="0"
-          size={small ? "small" : "medium"}
+          size={isSmall ? "small" : "medium"}
         >
           {heading}
         </Heading>
       </ScrollingHeadingBlock>
 
       <Box fill>
-        <Box
+        <ScrollableBox
           flex={false}
-          overflow="auto"
+          overflow={{ horizontal: "hidden", vertical: "auto" }}
           onScroll={(event) =>
             setShowBorder((event.target as HTMLElement).scrollTop !== 0)
           }
           height="100%"
+          margin={{ right: isSmall ? "0" : "12px" }}
         >
           {children}
-        </Box>
+        </ScrollableBox>
       </Box>
     </Box>
   );
 };
+
+const CustomScrollbarBox = styled(Box)`
+  &::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colorTheme.yellowAlternative};
+    outline-offset: -2px;
+    outline: 2px solid ${colorTheme.black};
+  }
+`;
 
 const ScrollingHeadingBlock = ({
   frameColor,
@@ -125,6 +150,7 @@ const ScrollingHeadingBlock = ({
   const bottomBorderStyle = showBorder
     ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
     : {};
+  const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
     <Box
@@ -142,7 +168,9 @@ const ScrollingHeadingBlock = ({
         {children}
       </Box>
       <Box pad={{ horizontal: "20px", vertical: "12px" }}>
-        <Text>X</Text>
+        <Heading level={1} margin="0" size={isSmall ? "small" : "medium"}>
+          X
+        </Heading>
       </Box>
     </Box>
   );
@@ -157,28 +185,40 @@ const AboutContent = () => {
 
   const isSmall = size === "small";
   const marginTop = isSmall ? "56px" : "48px";
-  const marginHorizontal = isSmall ? "32px" : "64px";
+  const marginRight = isSmall ? "18px" : `28px`;
+  const marginLeft = isSmall ? "18px" : "60px";
 
   return (
     <Box
       gap={"40px"}
-      margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
+      margin={{
+        right: marginRight,
+        left: marginLeft,
+        top: marginTop,
+        bottom: "64px",
+      }}
+      flex={false}
     >
       <Text size={size === "small" ? "small" : "medium"}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
         neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
         scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
         quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum. Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit. Eget euismod neque, sed justo, nibh
-        pulvinar fringilla euismod scelerisque. Eu et scelerisque maecenas magna
-        dolor id arcu massa orci. Nunc commodo neque, quis eu eget imperdiet
-        purus duis. Venenatis, amet sapien sollicitudin auctor sed gravida
-        aliquet bibendum. Lorem ipsum dolor sit amet, consectetur adipiscing
-        elit. Eget euismod neque, sed justo, nibh pulvinar fringilla euismod
-        scelerisque. Eu et scelerisque maecenas magna dolor id arcu massa orci.
-        Nunc commodo neque, quis eu eget imperdiet purus duis. Venenatis, amet
-        sapien sollicitudin auctor sed gravida aliquet bibendum.
+        auctor sed gravida aliquet bibendum.
+        <br />
+        <br />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
+        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
+        auctor sed gravida aliquet bibendum.
+        <br />
+        <br />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
+        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
+        auctor sed gravida aliquet bibendum.
       </Text>
 
       <CustomButton
