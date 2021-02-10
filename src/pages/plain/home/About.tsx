@@ -2,7 +2,6 @@ import {
   Box,
   BoxProps,
   Heading,
-  Paragraph,
   ResponsiveContext,
   Stack,
   Text,
@@ -55,8 +54,7 @@ export const AboutContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "xlarge":
       props = {
-        margin: { left: "112px", top: "36px", bottom: "20px" },
-        width: { max: "896px" },
+        margin: { horizontal: "48px", top: "48px", bottom: "-4px" },
       };
       break;
   }
@@ -142,7 +140,6 @@ const ScrollableFrameLarge = ({
     outlineOffset: `-4px`,
     outline: `4px ${frameColor} solid`,
   };
-  // const style = {};
   const isSmall = useContext(ResponsiveContext) === "small";
 
   const ScrollableBox = isSmall ? Box : CustomScrollbarBox;
@@ -246,79 +243,69 @@ const AboutContent = () => {
     case "medium":
       props = {
         margin: { left: "60px", right: "28px", top: "48px" },
+        width: { max: "768px" },
       };
       break;
     case "large":
       props = {
         margin: { left: "168px", right: "136px", top: "48px" },
+        width: { max: "768px" },
       };
       break;
     case "xlarge":
       props = {
-        margin: { left: "168px", right: "136px", top: "48px" },
+        margin: { left: "288px", right: "256px", top: "48px" },
+        width: { max: "768px" },
       };
       break;
   }
-
-  const isSmall = size === "small";
-  const marginTop = isSmall ? "56px" : "48px";
-  const marginRight = isSmall ? "18px" : `28px`;
-  const marginLeft = isSmall ? "18px" : "60px";
-
   return (
-    <Box
-      gap={"40px"}
-      margin={{
-        right: marginRight,
-        left: marginLeft,
-        top: marginTop,
-        bottom: "64px",
-      }}
-      {...props}
-      flex={false}
-    >
-      <Text size={size === "small" ? "small" : "medium"}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
-        <br />
-        <br />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
-        <br />
-        <br />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
-      </Text>
+    <Box align="center">
+      <Box gap={"40px"} {...props} flex={false}>
+        <Text size={size === "small" ? "small" : "medium"}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
+          neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+          scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo
+          neque, quis eu eget imperdiet purus duis. Venenatis, amet sapien
+          sollicitudin auctor sed gravida aliquet bibendum.
+          <br />
+          <br />
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+          neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+          scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo
+          neque, quis eu eget imperdiet purus duis. Venenatis, amet sapien
+          sollicitudin auctor sed gravida aliquet bibendum.
+          <br />
+          <br />
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+          neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+          scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo
+          neque, quis eu eget imperdiet purus duis. Venenatis, amet sapien
+          sollicitudin auctor sed gravida aliquet bibendum.
+        </Text>
 
-      <CustomButton
-        color={"red"}
-        textContent={
-          <span>
-            Continue{" "}
-            <span style={{ textDecoration: "underline" }}>without</span> webcam
-          </span>
-        }
-        href="/chapter/1?isCover"
-      />
-      <CustomButton
-        color={"green"}
-        textContent={
-          <span>
-            Continue <span style={{ textDecoration: "underline" }}>with</span>{" "}
-            webcam
-          </span>
-        }
-        href="/chapter/1?isCover"
-      />
+        <CustomButton
+          color={"red"}
+          textContent={
+            <span>
+              Continue{" "}
+              <span style={{ textDecoration: "underline" }}>without</span>{" "}
+              webcam
+            </span>
+          }
+          href="/chapter/1?isCover"
+        />
+        <CustomButton
+          color={"green"}
+          textContent={
+            <span>
+              Continue <span style={{ textDecoration: "underline" }}>with</span>{" "}
+              webcam
+            </span>
+          }
+          href="/chapter/1?isCover"
+        />
+      </Box>
     </Box>
   );
 };
