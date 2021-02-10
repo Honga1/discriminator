@@ -8,7 +8,6 @@ import { Error } from "./pages/plain/Error";
 import { Home } from "./pages/plain/home/Home";
 import { Permission } from "./pages/plain/home/Permission";
 import { HomeCoil } from "./pages/plain/HomeCoil";
-import { Privacy } from "./pages/plain/Privacy";
 import { PlainPageRoutes } from "./Routes";
 
 const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
@@ -19,7 +18,6 @@ const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
   { url: "/credits", component: <Credits /> },
   { url: "/end", component: <EndPage /> },
   { url: "/error", component: <Error /> },
-  { url: "/privacy", component: <Privacy /> },
 ];
 
 function App() {

@@ -2,7 +2,7 @@ import { ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
 import { CustomButton } from "./CustomButton";
 
-export const About = () => {
+export const Credits = () => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"

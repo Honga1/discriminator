@@ -3,7 +3,7 @@ import { deepMerge } from "grommet/utils";
 import React, { PropsWithChildren, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { customTheme } from "./customTheme";
-import { Modal } from "./Modal";
+import { ModalSelector } from "./ModalSelector";
 import { NavMenu } from "./NavMenu";
 
 const mergedTheme = deepMerge(customTheme);
@@ -18,7 +18,7 @@ export const PageContainer = ({ children }: PropsWithChildren<{}>) => {
     <Grommet theme={mergedTheme} full>
       <NavMenu />
       {children}
-      <Modal />
+      <ModalSelector />
     </Grommet>
   );
 };
