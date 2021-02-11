@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { About } from "../pages/plain/home/About";
 import { Modal } from "../pages/plain/home/Modal";
-import { Privacy } from "../pages/plain/home/Prviacy";
+import { Privacy } from "../pages/plain/home/Privacy";
 import { colorTheme } from "./colorTheme";
 import { useQuery } from "./PageContainer";
 

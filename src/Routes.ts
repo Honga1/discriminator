@@ -3,9 +3,6 @@ export const routes = [
   "/home",
   "/permissions",
   "/coil",
-  "/about",
-  "/privacy",
-  "/credits",
   "/error",
   "/chapter/1?isCover",
   "/chapter/1?isChapter",
@@ -26,12 +23,9 @@ export type ChapterRoutes = Routes & `/chapter/${string}`;
 
 export const plainPageRoutes: readonly PlainPageRoutes[] = [
   "/",
-  "/about",
   "/coil",
-  "/credits",
   "/end",
   "/error",
-  "/privacy",
 ] as const;
 
 export const chapterRoutes: readonly ChapterRoutes[] = [
@@ -117,10 +111,7 @@ export const plainPageRouteNames: { [key in PlainPageRoutes]: string } = {
   "/": "Home",
   "/home": "Home",
   "/permissions": "Permissions",
-  "/about": "About",
   "/coil": "Coil",
-  "/credits": "Credits",
   "/end": "End",
   "/error": "Error",
-  "/privacy": "Privacy",
 } as const;

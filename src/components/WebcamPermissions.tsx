@@ -1,7 +1,7 @@
 import { Box, Button, Layer, Text } from "grommet";
 import { useCallback, useState } from "react";
+import { CustomQueryButton } from "../pages/plain/home/CustomButton";
 import { useStore } from "../store/store";
-import { RoutedButton } from "./RoutedAnchor";
 
 export const WebcamPermissions = () => {
   const storeMediaStream = useStore((state) => state.webcamStream);
@@ -60,7 +60,11 @@ export const WebcamPermissions = () => {
           label={"Decline & Proceed"}
           onClick={() => setWebcamStream("NOT_USED")}
         />
-        <RoutedButton label={"Check privacy policy"} href="/privacy" />
+        <CustomQueryButton
+          color="red"
+          query={{ key: "modal", operation: "open", value: "privacy" }}
+          textContent={"Check privacy policy"}
+        />
       </Box>
     </Box>
   );
@@ -80,7 +84,11 @@ export const WebcamPermissions = () => {
           label={"Decline & Proceed"}
           onClick={() => setWebcamStream("NOT_USED")}
         />
-        <RoutedButton label={"Check privacy policy"} href="/privacy" />
+        <CustomQueryButton
+          color="red"
+          query={{ key: "modal", operation: "open", value: "privacy" }}
+          textContent={"Check privacy policy"}
+        />
       </Box>
     </Box>
   );
@@ -111,7 +119,11 @@ export const WebcamPermissions = () => {
             label={"Decline & Proceed"}
             onClick={() => setWebcamStream("NOT_USED")}
           />
-          <RoutedButton label={"Check privacy policy"} href="/privacy" />
+          <CustomQueryButton
+            color="red"
+            query={{ key: "modal", operation: "open", value: "privacy" }}
+            textContent={"Check privacy policy"}
+          />
         </Box>
       </Box>
     );

@@ -2,7 +2,7 @@ import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { CameraIndicator } from "./CameraIndicator";
-import { CustomButton } from "./CustomButton";
+import { CustomRoutedButton } from "./CustomButton";
 import { Frame } from "./Frames";
 import { Links } from "./Links";
 
@@ -97,7 +97,7 @@ const PermissionContent = () => {
         policy). If you choose to not enable your webcam you will see xyz.
       </Text>
 
-      <CustomButton
+      <CustomRoutedButton
         color={"red"}
         textContent={
           <span>
@@ -107,7 +107,7 @@ const PermissionContent = () => {
         }
         href="/chapter/1?isCover"
       />
-      <CustomButton
+      <CustomRoutedButton
         color={"green"}
         textContent={
           <span>

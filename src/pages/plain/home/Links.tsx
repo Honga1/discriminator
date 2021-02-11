@@ -21,7 +21,6 @@ export function LinksSmall() {
       />
       <QueryButton
         query={{ key: "modal", value: "privacy", operation: "open" }}
-        href="/privacy"
         plain
         label={
           <LinkFrame
@@ -35,7 +34,6 @@ export function LinksSmall() {
       />
       <QueryButton
         query={{ key: "modal", value: "credits", operation: "open" }}
-        href="/credits"
         plain
         label={
           <LinkFrame

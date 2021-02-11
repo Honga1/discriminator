@@ -284,24 +284,28 @@ const ModalContent = ({ children }: PropsWithChildren<{}>) => {
     case "small":
       props = {
         margin: { left: "18px", right: "18px", top: "56px" },
+        pad: { bottom: "68px" },
       };
       break;
     case "medium":
       props = {
         margin: { left: "60px", right: "28px", top: "48px" },
         width: { max: "768px" },
+        pad: { bottom: "132px" },
       };
       break;
     case "large":
       props = {
         margin: { left: "168px", right: "136px", top: "48px" },
         width: { max: "768px" },
+        pad: { bottom: "132px" },
       };
       break;
     case "xlarge":
       props = {
         margin: { left: "288px", right: "256px", top: "48px" },
         width: { max: "768px" },
+        pad: { bottom: "132px" },
       };
       break;
   }

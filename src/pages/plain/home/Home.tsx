@@ -1,7 +1,7 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
-import { CustomButton } from "./CustomButton";
+import { CustomRoutedButton } from "./CustomButton";
 import { Frame } from "./Frames";
 import { Links } from "./Links";
 
@@ -82,7 +82,7 @@ const HomeContent = () => {
         morbi bibendum. Tellus euismod metus, id feugiat amet.
       </Text>
 
-      <CustomButton color="blue" textContent="Start" href="/permissions" />
+      <CustomRoutedButton color="blue" textContent="Start" href="/permissions" />
     </Box>
   );
 };
