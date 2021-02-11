@@ -20,10 +20,10 @@ export const CustomRoutedButton = ({
     | "xlarge";
 
   return (
-    <RoutedButton
-      plain
-      label={
-        <Box className="custom button" direction="row">
+    <Box className="custom button" direction="row">
+      <RoutedButton
+        plain
+        label={
           <Box
             border={{ color, style: "solid", size: "3px" }}
             pad={{ horizontal: "27px", vertical: "7px" }}
@@ -32,10 +32,10 @@ export const CustomRoutedButton = ({
               {textContent}
             </Text>
           </Box>
-        </Box>
-      }
-      href={href}
-    />
+        }
+        href={href}
+      />
+    </Box>
   );
 };
 
