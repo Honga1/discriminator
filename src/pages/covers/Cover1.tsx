@@ -13,6 +13,8 @@ export const Cover1 = () => {
   }, []);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     const paint = (pointerX: number, pointerY: number) => {
       const context = contextRef.current;
       if (!context) return;
@@ -41,7 +43,7 @@ export const Cover1 = () => {
         paint(x, y);
       }
     };
-    window.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousemove", onMouseMove);
 
     const onTouchMove = (event: TouchEvent): void => {
       if (!canvasRef.current) return;
@@ -53,11 +55,18 @@ export const Cover1 = () => {
         paint(x, y);
       }
     };
-    window.addEventListener("touchmove", onTouchMove);
+    canvas.addEventListener("touchmove", onTouchMove);
+
+    const onWindowResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", onWindowResize);
 
     return () => {
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("mousemove", onMouseMove);
+      canvas.removeEventListener("touchmove", onTouchMove);
+      canvas.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("resize", onWindowResize);
     };
   }, []);
 

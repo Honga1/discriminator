@@ -54,7 +54,7 @@ export const CoverFrame = ({
   const isSmall = size === "small";
   return (
     <Box className="cover-frame" style={style}>
-      <Stack fill>
+      <Stack fill anchor="top-left">
         <Box fill>{children}</Box>
         <HeadingBlock frameColor={frameColor}>
           <Heading

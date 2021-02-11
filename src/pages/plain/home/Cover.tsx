@@ -84,13 +84,25 @@ export const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
             columns={{ count: 4, size: "auto" }}
             gap={"4px"}
           >
-            <Box background="yellowAlternative" height="8px"></Box>
-            <Box background="yellowAlternative" height="8px"></Box>
-            <Box background="yellowAlternative" height="8px"></Box>
-            <Box background="yellowAlternative" height="8px"></Box>
+            <Box
+              background={{ color: "yellowAlternative", opacity: 0.8 }}
+              height="8px"
+            ></Box>
+            <Box
+              background={{ color: "yellowAlternative", opacity: 0.8 }}
+              height="8px"
+            ></Box>
+            <Box
+              background={{ color: "yellowAlternative", opacity: 0.8 }}
+              height="8px"
+            ></Box>
+            <Box
+              background={{ color: "yellowAlternative", opacity: 0.8 }}
+              height="8px"
+            ></Box>
           </Grid>
 
-          <Box direction="row" justify="start" gap={"20px"}>
+          <Box direction="row" justify="start" gap={"20px"} flex={false}>
             <Box>Pause</Box>
             <Box>Back</Box>
           </Box>
