@@ -8,7 +8,7 @@ export const colorTheme = {
   blue: "#312DFF",
   green: "#168500",
   yellow: "#FFD237",
-  yellowAlternative: "#F1BE2A",
+  yellowAlternative: "#E8C100",
   background: { light: "#FFD237", dark: "#202122" },
   text: { light: "#202122" },
 } as const;
