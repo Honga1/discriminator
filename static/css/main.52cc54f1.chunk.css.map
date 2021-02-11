@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,UAEE,wBACF,CAEA,iBACE,iBACF,CAEA,kCACE,kBAAmB,CACnB,kBACF","file":"main.52cc54f1.chunk.css","sourcesContent":["html,\nbody {\n  background-color: #ffd237;\n}\n\n.wf-loading body {\n  visibility: hidden;\n}\n\n.wf-active body .wf-inactive body {\n  visibility: visible;\n  font-family: Roboto;\n}\n"]}
