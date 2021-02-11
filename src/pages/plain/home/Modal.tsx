@@ -236,9 +236,14 @@ const ScrollingHeadingBlock = ({
   frameColor: string;
   showBorder: boolean;
 }>) => {
-  const bottomBorderStyle = showBorder
-    ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
-    : { borderBottom: `4px solid ${colorTheme.yellow}` };
+  const size = useContext(ResponsiveContext);
+
+  let bottomBorderStyle = {};
+  if (size === "small" || size === "medium") {
+    bottomBorderStyle = showBorder
+      ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
+      : { borderBottom: `4px solid ${colorTheme.yellow}` };
+  }
   const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
