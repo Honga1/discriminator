@@ -53,7 +53,7 @@ export const CoverFrame = ({
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
   return (
-    <Box className="cover-frame" style={style} flex={false} fill>
+    <Box className="cover-frame" style={style}>
       <Stack fill>
         <Box fill>{children}</Box>
         <HeadingBlock frameColor={frameColor}>

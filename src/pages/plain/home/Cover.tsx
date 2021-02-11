@@ -1,4 +1,4 @@
-import { Box, BoxProps, ResponsiveContext } from "grommet";
+import { Box, BoxProps, Grid, ResponsiveContext } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { Cover1 } from "../../covers/Cover1";
@@ -52,14 +52,50 @@ export const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
   }
 
   return (
-    <Box className="cover container" {...props} fill="vertical">
-      <CoverFrame
-        textColor={colorTheme.black}
-        frameColor={colorTheme.yellow}
-        heading="Discriminator"
+    <Box className="cover container" {...props}>
+      <Grid
+        responsive={false}
+        areas={[
+          { name: "cover", start: [0, 0], end: [0, 0] },
+          {
+            name: "timeline",
+            start: [0, 1],
+            end: [0, 1],
+          },
+        ]}
+        fill
+        columns={["full"]}
+        rows={["flex", "auto"]}
+        gap="15px"
       >
-        {children}
-      </CoverFrame>
+        <Box gridArea="cover">
+          <CoverFrame
+            textColor={colorTheme.black}
+            frameColor={colorTheme.yellow}
+            heading="Discriminator"
+          >
+            {children}
+          </CoverFrame>
+        </Box>
+        <Box gridArea="timeline" gap="8px">
+          <Grid
+            fill
+            responsive={false}
+            columns={{ count: 4, size: "auto" }}
+            gap={"4px"}
+          >
+            <Box background="yellowAlternative" height="8px"></Box>
+            <Box background="yellowAlternative" height="8px"></Box>
+            <Box background="yellowAlternative" height="8px"></Box>
+            <Box background="yellowAlternative" height="8px"></Box>
+          </Grid>
+
+          <Box direction="row" justify="start" gap={"20px"}>
+            <Box>Pause</Box>
+            <Box>Back</Box>
+          </Box>
+        </Box>
+      </Grid>
     </Box>
   );
 };
