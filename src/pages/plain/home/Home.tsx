@@ -2,7 +2,7 @@ import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { CustomRoutedButton } from "./CustomButton";
-import { Frame } from "./Frames";
+import { PageFrame } from "./Frames";
 import { Links } from "./Links";
 
 export const Home = () => {
@@ -47,13 +47,13 @@ export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <Box className="home container" {...props}>
-      <Frame
+      <PageFrame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
       >
         {children}
-      </Frame>
+      </PageFrame>
       <Links />
     </Box>
   );

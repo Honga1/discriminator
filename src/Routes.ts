@@ -1,6 +1,7 @@
 export const routes = [
   "/",
   "/home",
+  "/cover",
   "/permissions",
   "/coil",
   "/error",
@@ -109,6 +110,7 @@ export const chapterRouteNames: { [key in ChapterRoutes]: string } = {
 
 export const plainPageRouteNames: { [key in PlainPageRoutes]: string } = {
   "/": "Home",
+  "/cover": "Template Cover",
   "/home": "Home",
   "/permissions": "Permissions",
   "/coil": "Coil",

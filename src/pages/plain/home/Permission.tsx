@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { CameraIndicator } from "./CameraIndicator";
 import { CustomRoutedButton } from "./CustomButton";
-import { Frame } from "./Frames";
+import { PageFrame } from "./Frames";
 import { Links } from "./Links";
 
 export const Permission = () => {
@@ -63,13 +63,13 @@ export const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <Box className="permission container" {...props}>
-      <Frame
+      <PageFrame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
       >
         {children}
-      </Frame>
+      </PageFrame>
       <Links />
     </Box>
   );
@@ -105,7 +105,7 @@ const PermissionContent = () => {
             <span style={{ textDecoration: "underline" }}>without</span> webcam
           </span>
         }
-        href="/chapter/1?isCover"
+        href="/cover"
       />
       <CustomRoutedButton
         color={"green"}
@@ -115,7 +115,7 @@ const PermissionContent = () => {
             webcam
           </span>
         }
-        href="/chapter/1?isCover"
+        href="/cover"
       />
     </Box>
   );

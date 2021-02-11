@@ -2,7 +2,13 @@ import { Box, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 
-export const CameraIndicator = ({ showBorder }: { showBorder: boolean }) => {
+export const CameraIndicator = ({
+  showBorder,
+  backgroundColor = "yellow",
+}: {
+  showBorder: boolean;
+  backgroundColor?: "black" | "yellow";
+}) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -19,26 +25,28 @@ export const CameraIndicator = ({ showBorder }: { showBorder: boolean }) => {
   return (
     <Box
       fill="horizontal"
-      background="yellow"
+      background={backgroundColor}
       flex={false}
       style={bottomBorderStyle}
     >
       <Box direction="row" justify="end" margin={margins}>
-        <Box
-          background="redLight"
-          pad={{ horizontal: "20px", vertical: "10px" }}
-        >
-          <Text size="small" color="grayLight">
-            Camera
-          </Text>
-        </Box>
-        <Box
-          background="charcoal"
-          pad={{ horizontal: "20px", vertical: "10px" }}
-        >
-          <Text size="small" color="grayLight">
-            off
-          </Text>
+        <Box direction="row" border={{ color: "yellow", size: "3px" }}>
+          <Box
+            background="redLight"
+            pad={{ horizontal: "17px", vertical: "7px" }}
+          >
+            <Text size="small" color="grayLight">
+              Camera
+            </Text>
+          </Box>
+          <Box
+            background="charcoal"
+            pad={{ horizontal: "17px", vertical: "7px" }}
+          >
+            <Text size="small" color="grayLight">
+              off
+            </Text>
+          </Box>
         </Box>
       </Box>
     </Box>

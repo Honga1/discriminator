@@ -21,7 +21,12 @@ import { RoutedAnchor } from "./RoutedAnchor";
 export const NavMenu = () => {
   const isUsingWebcam = useStore((state) => state.webcamStream !== "NOT_USED");
   return (
-    <Layer modal={false} position="top-left" responsive={false}>
+    <Layer
+      modal={false}
+      position="top-left"
+      responsive={false}
+      background={"yellow"}
+    >
       <Box pad="small">
         <DropButton
           alignSelf="start"
