@@ -1,8 +1,12 @@
 import { Anchor, AnchorProps, Button, ButtonProps } from "grommet";
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useMemo } from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { Routes } from "../Routes";
-import { useQuery } from "./PageContainer";
+
+export function useQuery() {
+  const location = useLocation().search;
+  return useMemo(() => new URLSearchParams(location), [location]);
+}
 
 export const RoutedAnchor = (props: AnchorProps & { href: Routes }) => {
   return (

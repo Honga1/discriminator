@@ -1,0 +1,13 @@
+html,
+body {
+  background-color: #ffd237;
+}
+
+.wf-loading body {
+  visibility: hidden;
+}
+
+.wf-active body .wf-inactive body {
+  visibility: visible;
+  font-family: Roboto;
+}

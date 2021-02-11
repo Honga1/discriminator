@@ -4,7 +4,7 @@ import { About } from "../pages/plain/home/About";
 import { Modal } from "../pages/plain/home/Modal";
 import { Privacy } from "../pages/plain/home/Privacy";
 import { colorTheme } from "./colorTheme";
-import { useQuery } from "./PageContainer";
+import { useQuery } from "./RoutedAnchor";
 
 export const ModalSelector = () => {
   const query = useQuery();
@@ -18,7 +18,6 @@ export const ModalSelector = () => {
     });
   }, [history, query]);
 
-  console.log(query.get("modal"));
   switch (query.get("modal")) {
     case "about":
       return (
@@ -54,6 +53,6 @@ export const ModalSelector = () => {
         </Modal>
       );
     default:
-      return <></>;
+      return null;
   }
 };

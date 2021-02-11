@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
 import { RouteChaptersAndCovers } from "./pages/ChaptersAndCovers";
@@ -21,15 +21,17 @@ const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
 function App() {
   return (
     <HashRouter basename={"/"}>
-      <Switch>
-        {routeToComponent.map(({ url, component }) => (
-          <Route exact path={url}>
-            <PageContainer key={url}>{component}</PageContainer>
-          </Route>
-        ))}
-        <Route path={`/chapter`} component={RouteChaptersAndCovers} />
-        <Route>Missing Route</Route>
-      </Switch>
+      <PageContainer>
+        <Switch>
+          {routeToComponent.map(({ url, component }) => (
+            <Route exact path={url} key={url}>
+              {component}
+            </Route>
+          ))}
+          <Route path={`/chapter`} component={RouteChaptersAndCovers} />
+          <Route>Missing Route</Route>
+        </Switch>
+      </PageContainer>
     </HashRouter>
   );
 }
