@@ -238,7 +238,7 @@ const ScrollingHeadingBlock = ({
 }>) => {
   const bottomBorderStyle = showBorder
     ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
-    : {};
+    : { borderBottom: `4px solid ${colorTheme.yellow}` };
   const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
