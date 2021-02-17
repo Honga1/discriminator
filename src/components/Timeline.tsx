@@ -1,7 +1,7 @@
 import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import React, { useEffect, useRef } from "react";
 import { QueryButton } from "./RoutedAnchor";
-
+import { Pause, Rewind } from "grommet-icons";
 export const Timeline = ({
   showScrubber = true,
   ...props
@@ -121,8 +121,8 @@ const Buttons = () => {
       align="center"
     >
       <Box direction="row" gap={"20px"} align="center">
-        <Text size="small">Pause</Text>
-        <Text size="small">Back</Text>
+        <Button plain icon={<Pause />}></Button>
+        <Button plain icon={<Rewind />}></Button>
       </Box>
       <Box direction="row" gap={"20px"} alignSelf="center">
         <QueryButton
