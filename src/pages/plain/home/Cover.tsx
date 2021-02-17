@@ -1,6 +1,7 @@
-import { Box, BoxProps, Grid, ResponsiveContext } from "grommet";
+import { Box, BoxProps, Grid, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
+import { QueryButton } from "../../../components/RoutedAnchor";
 import { Cover1 } from "../../covers/Cover1";
 import { CameraIndicator } from "./CameraIndicator";
 import { CoverFrame } from "./Frames";
@@ -38,8 +39,7 @@ export const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "large":
       props = {
-        margin: { left: "64px", top: "20px", bottom: "20px" },
-        width: { max: "896px" },
+        margin: "16px",
       };
       break;
     case "xlarge":
@@ -101,9 +101,40 @@ export const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
             ></Box>
           </Grid>
 
-          <Box direction="row" justify="start" gap={"20px"} flex={false}>
-            <Box>Pause</Box>
-            <Box>Back</Box>
+          <Box direction="row" justify="between" flex={false}>
+            <Box direction="row" gap={"20px"}>
+              <Text size="small">Pause</Text>
+              <Text size="small">Back</Text>
+            </Box>
+            <Box direction="row" gap={"20px"}>
+              <QueryButton
+                plain
+                query={{ key: "modal", value: "about", operation: "open" }}
+                label={
+                  <Text size="small" color="blue">
+                    About
+                  </Text>
+                }
+              />
+              <QueryButton
+                plain
+                query={{ key: "modal", value: "privacy", operation: "open" }}
+                label={
+                  <Text size="small" color="red">
+                    Privacy
+                  </Text>
+                }
+              />
+              <QueryButton
+                plain
+                query={{ key: "modal", value: "credits", operation: "open" }}
+                label={
+                  <Text size="small" color="green">
+                    Credits
+                  </Text>
+                }
+              />
+            </Box>
           </Box>
         </Box>
       </Grid>
