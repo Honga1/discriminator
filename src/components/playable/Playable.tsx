@@ -167,7 +167,7 @@ const Playable = forwardRef<
         }}
       />
 
-      <PlayableControls
+      {/* <PlayableControls
         onVolumeChange={changeVolume}
         onSeek={(time) => {
           if (!videoRef.current) return;
@@ -181,7 +181,7 @@ const Playable = forwardRef<
         playing={playing}
         duration={duration}
         currentTime={currentTime}
-      />
+      /> */}
     </Box>
   );
 });

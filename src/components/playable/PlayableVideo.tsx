@@ -7,6 +7,7 @@ export const PlayableVideo = (sources: { src: string; type: string }[]) => () =>
     ({ onEnded, onPause, onPlay, onTimeUpdate, onDurationChange }, ref) => {
       return (
         <StyledVideo
+          controls={false}
           fit={"contain"}
           ref={ref}
           onEnded={onEnded}
