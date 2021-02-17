@@ -327,7 +327,7 @@ const CoverHeadingBlock = ({
   );
 };
 
-export const CoverCameraIndicator = () => {
+const CoverCameraIndicator = () => {
   return (
     <Box fill="horizontal" background={"black"} flex={false}>
       <Box direction="row" justify="end">

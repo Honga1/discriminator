@@ -13,7 +13,7 @@ export const Home = () => {
   );
 };
 
-export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
+const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -82,7 +82,11 @@ const HomeContent = () => {
         morbi bibendum. Tellus euismod metus, id feugiat amet.
       </Text>
 
-      <CustomRoutedButton color="blue" textContent="Start" href="/permissions" />
+      <CustomRoutedButton
+        color="blue"
+        textContent="Start"
+        href="/permissions"
+      />
     </Box>
   );
 };

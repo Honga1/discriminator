@@ -57,7 +57,7 @@ export const Modal = ({
   );
 };
 
-export const ModalContainer = ({
+const ModalContainer = ({
   children,
   textColor,
   frameColor,

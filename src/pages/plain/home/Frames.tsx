@@ -35,7 +35,7 @@ export const PageFrame = ({
   );
 };
 
-export const HeadingBlock = ({
+const HeadingBlock = ({
   frameColor,
   children,
 }: PropsWithChildren<{

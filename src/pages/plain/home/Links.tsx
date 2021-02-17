@@ -3,7 +3,7 @@ import React, { CSSProperties, PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../../components/colorTheme";
 import { QueryButton } from "../../../components/RoutedAnchor";
 
-export function LinksSmall() {
+function LinksSmall() {
   return (
     <Box className="links" gap="24px">
       <QueryButton
@@ -62,7 +62,7 @@ export const Links = () => {
   }
 };
 
-export const LinksFloating = ({
+const LinksFloating = ({
   position,
 }: {
   position: "below" | "bottom-right";
