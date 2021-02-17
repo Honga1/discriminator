@@ -1,7 +1,7 @@
 import { Box, Button, Layer, Text } from "grommet";
-import { useCallback, useState } from "react";
-import { CustomQueryButton } from "../pages/plain/home/CustomButton";
+import React, { useCallback, useState } from "react";
 import { useStore } from "../store/store";
+import { CustomQueryButton } from "../pages/plain/CustomButton";
 
 export const WebcamPermissions = () => {
   const storeMediaStream = useStore((state) => state.webcamStream);

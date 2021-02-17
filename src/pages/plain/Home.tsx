@@ -1,8 +1,8 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
-import { colorTheme } from "../../../components/colorTheme";
+import { colorTheme } from "../../theme";
 import { CustomRoutedButton } from "./CustomButton";
-import { PageFrame } from "./Frames";
+import { PageFrame } from "../../components/Frames";
 import { Links } from "./Links";
 
 export const Home = () => {

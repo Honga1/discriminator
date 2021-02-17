@@ -1,9 +1,9 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext, useState } from "react";
-import { colorTheme } from "../../../components/colorTheme";
-import { CameraIndicator } from "./CameraIndicator";
+import { colorTheme } from "../../theme";
+import { CameraIndicator } from "./../../components/CameraIndicator";
 import { CustomRoutedButton } from "./CustomButton";
-import { PageFrame } from "./Frames";
+import { PageFrame } from "./../../components/Frames";
 import { Links } from "./Links";
 
 export const Permission = () => {

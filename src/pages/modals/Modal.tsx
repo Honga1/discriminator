@@ -1,14 +1,19 @@
 import { Box, BoxProps, Heading, Layer, ResponsiveContext } from "grommet";
-import React, {
+import {
   CSSProperties,
   PropsWithChildren,
+  useCallback,
   useContext,
   useState,
 } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { colorTheme } from "../../../components/colorTheme";
-import { InteractiveStack } from "../../../components/InteractiveStack";
-import { QueryButton } from "../../../components/RoutedAnchor";
+import { colorTheme } from "../../theme";
+import { InteractiveStack } from "../../components/InteractiveStack";
+import { QueryButton } from "../../components/RoutedAnchor";
+import { useQuery } from "../../hooks/useQuery";
+import { About } from "./About";
+import { Privacy } from "./Privacy";
 
 export const Modal = ({
   onClose,
@@ -321,4 +326,55 @@ const ModalContent = ({ children }: PropsWithChildren<{}>) => {
       </Box>
     </Box>
   );
+};
+
+export const ModalSelector = () => {
+  const query = useQuery();
+  const history = useHistory();
+
+  const close = useCallback(() => {
+    query.delete("modal");
+    history.push({
+      ...history.location,
+      search: query.toString(),
+    });
+  }, [history, query]);
+
+  switch (query.get("modal")) {
+    case "about":
+      return (
+        <Modal
+          onClose={close}
+          frameColor={colorTheme.blue}
+          textColor={colorTheme.white}
+          heading="About"
+        >
+          <About />
+        </Modal>
+      );
+    case "privacy":
+      return (
+        <Modal
+          onClose={close}
+          frameColor={colorTheme.red}
+          textColor={colorTheme.white}
+          heading="Privacy"
+        >
+          <Privacy />
+        </Modal>
+      );
+    case "credits":
+      return (
+        <Modal
+          onClose={close}
+          frameColor={colorTheme.green}
+          textColor={colorTheme.white}
+          heading="Credits"
+        >
+          <Privacy />
+        </Modal>
+      );
+    default:
+      return null;
+  }
 };

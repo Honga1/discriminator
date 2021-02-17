@@ -1,8 +1,8 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import React, { ReactNode, useContext } from "react";
-import { colorTheme } from "../../../components/colorTheme";
-import { QueryButton, RoutedButton } from "../../../components/RoutedAnchor";
-import { Routes } from "../../../Routes";
+import { colorTheme } from "../../theme";
+import { QueryButton, RoutedButton } from "../../components/RoutedAnchor";
+import { Routes } from "../../Routes";
 
 export const CustomRoutedButton = ({
   color,

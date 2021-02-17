@@ -4,9 +4,9 @@ import { PageContainer } from "./components/PageContainer";
 import { RouteChaptersAndCovers } from "./pages/ChaptersAndCovers";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
-import { Cover } from "./pages/plain/home/Cover";
-import { Home } from "./pages/plain/home/Home";
-import { Permission } from "./pages/plain/home/Permission";
+import { Cover } from "./pages/covers/Cover";
+import { Home } from "./pages/plain/Home";
+import { Permission } from "./pages/plain/Permission";
 import { HomeCoil } from "./pages/plain/HomeCoil";
 import { PlainPageRoutes } from "./Routes";
 

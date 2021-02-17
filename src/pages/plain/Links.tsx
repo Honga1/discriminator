@@ -1,7 +1,20 @@
 import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { CSSProperties, PropsWithChildren, useContext } from "react";
-import { colorTheme } from "../../../components/colorTheme";
-import { QueryButton } from "../../../components/RoutedAnchor";
+import { colorTheme } from "../../theme";
+import { QueryButton } from "./../../components/RoutedAnchor";
+
+export const Links = () => {
+  const size = useContext(ResponsiveContext);
+
+  switch (size) {
+    case "small":
+      return <LinksSmall />;
+    case "medium":
+      return <LinksFloating position="below" />;
+    default:
+      return <LinksFloating position="bottom-right" />;
+  }
+};
 
 function LinksSmall() {
   return (
@@ -48,19 +61,6 @@ function LinksSmall() {
     </Box>
   );
 }
-
-export const Links = () => {
-  const size = useContext(ResponsiveContext);
-
-  switch (size) {
-    case "small":
-      return <LinksSmall />;
-    case "medium":
-      return <LinksFloating position="below" />;
-    default:
-      return <LinksFloating position="bottom-right" />;
-  }
-};
 
 const LinksFloating = ({
   position,

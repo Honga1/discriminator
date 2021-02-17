@@ -1,6 +1,6 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
-import { colorTheme } from "../../../components/colorTheme";
+import { colorTheme } from "./../theme";
 
 export const CameraIndicator = ({
   showBorder,
