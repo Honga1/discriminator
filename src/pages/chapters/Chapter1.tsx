@@ -31,9 +31,6 @@ export const Chapter1 = ({ onFinished }: { onFinished: () => void }) => {
             playable={PlayableVideo([{ src: video, type: "video/mp4" }])}
           ></Playable>
         </Box>
-        <Box fill align="center" justify="center" alignSelf="center">
-          <Text>Chapter1</Text>
-        </Box>
       </Stack>
       {/* <WebcamPermissions /> */}
     </>

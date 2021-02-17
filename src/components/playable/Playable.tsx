@@ -137,6 +137,7 @@ const Playable = forwardRef<
         flexDirection: "column",
         overflow: "hidden",
         position: "relative",
+        zIndex: 0,
       }}
     >
       <PlayableChild
