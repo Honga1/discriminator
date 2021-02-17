@@ -10,6 +10,7 @@ export const colorTheme = {
   blue: "#312DFF",
   green: "#168500",
   yellow: "#FFD237",
+  yellowOpaque: "rgba(255, 210, 55, 0)",
   yellowAlternative: "#E8C100",
   background: { light: "#FFD237", dark: "#202122" },
   text: { light: "#202122" },

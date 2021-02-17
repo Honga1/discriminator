@@ -1,5 +1,11 @@
-import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext } from "react";
+import { Box, Grid, Heading, ResponsiveContext, Text, Timeout } from "grommet";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import styled from "styled-components";
 import { CameraIndicator } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
@@ -55,11 +61,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           gap="15px"
         >
           <Box gridArea="cover">
-            <ChapterFrame
-              textColor={colorTheme.black}
-              frameColor={colorTheme.yellow}
-              heading="Discriminator"
-            >
+            <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
               {children}
             </ChapterFrame>
           </Box>
@@ -73,11 +75,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box className="cover container" margin="16px">
-      <ChapterFrame
-        textColor={colorTheme.black}
-        frameColor={colorTheme.yellow}
-        heading="Discriminator"
-      >
+      <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
         <Grid
           responsive={false}
           areas={[
@@ -128,28 +126,59 @@ const ChapterContent = () => {
   );
 };
 
+const FadingOutline = styled(Box)<{ outlineColor: string }>`
+  outline-color: ${(props) => props.outlineColor};
+  outline-offset: -4px;
+  outline-style: solid;
+  outline-width: 4px;
+
+  transition: all 0.4s;
+`;
+
+function useIsActive() {
+  const [isActive, setIsActive] = useState(true);
+  useEffect(() => {
+    let timeout: Timeout | undefined;
+    const onActivity = () => {
+      setIsActive(true);
+      if (timeout) clearTimeout(timeout);
+
+      timeout = (setTimeout(() => {
+        setIsActive(false);
+      }, 4000) as unknown) as number;
+    };
+    window.addEventListener("mousemove", onActivity);
+
+    return () => {
+      timeout && clearTimeout(timeout);
+      window.removeEventListener("mousemove", onActivity);
+    };
+  }, []);
+
+  return isActive;
+}
+
 const ChapterFrame = ({
   children,
-  frameColor,
   textColor,
   heading,
 }: PropsWithChildren<{
-  frameColor: string;
   textColor: string;
   heading: string;
 }>) => {
-  const style = {
-    outlineOffset: `-4px`,
-    outline: `4px ${frameColor} solid`,
-  };
-
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
+
+  const isActive = useIsActive();
   return (
-    <Box className="cover-frame" style={style}>
+    <FadingOutline
+      outlineColor={isActive ? colorTheme.yellow : colorTheme.yellowOpaque}
+      className="cover-frame"
+    >
+      {/* <Box className="cover-frame" style={style}> */}
       <FullWidthStack fill anchor="top-fill">
         <Box fill>{children}</Box>
-        <ChapterHeadingBlock frameColor={frameColor}>
+        <ChapterHeadingBlock frameColor={colorTheme.yellow} isActive={isActive}>
           <Heading
             level={2}
             color={textColor}
@@ -160,14 +189,21 @@ const ChapterFrame = ({
           </Heading>
         </ChapterHeadingBlock>
       </FullWidthStack>
-    </Box>
+    </FadingOutline>
   );
 };
+
+const OpacityFade = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? 1 : 0)};
+  transition: all 0.4s;
+`;
 
 const ChapterHeadingBlock = ({
   frameColor,
   children,
+  isActive,
 }: PropsWithChildren<{
+  isActive: boolean;
   frameColor: string;
 }>) => {
   const size = useContext(ResponsiveContext) as "small" | string;
@@ -182,12 +218,13 @@ const ChapterHeadingBlock = ({
       justify="between"
       align="start"
     >
-      <Box
+      <OpacityFade
         background={frameColor}
+        isShown={isActive}
         pad={{ horizontal: "20px", vertical: "12px" }}
       >
         {children}
-      </Box>
+      </OpacityFade>
       {!isSmallOrMedium && (
         <Box justify="end">
           <ChapterCameraIndicator />
