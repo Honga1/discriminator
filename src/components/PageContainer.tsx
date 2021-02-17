@@ -1,7 +1,7 @@
 import { Grommet } from "grommet";
 import { deepMerge } from "grommet/utils";
 import React, { PropsWithChildren } from "react";
-import { ModalSelector } from "../pages/modals/Modal";
+import { ModalSelector } from "../pages/modals/ModalSelector";
 import { customTheme } from "../theme";
 import { NavMenu } from "./NavMenu";
 
