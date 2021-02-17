@@ -7,7 +7,7 @@ import { CoverFrame } from "./Frames";
 
 export const Cover = () => {
   return (
-    <Box fill background="black">
+    <Box fill background="grey">
       <CameraIndicator showBorder={false} backgroundColor="black" />
       <CoverContainer>
         <CoverContent />
@@ -33,8 +33,7 @@ export const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
     case "medium":
       props = {
-        margin: { horizontal: "64px", top: "16px", bottom: "64px" },
-        gap: "48px",
+        margin: { horizontal: "16px", top: "16px", bottom: "16px" },
       };
       break;
     case "large":
@@ -120,13 +119,14 @@ const CoverContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "4px" : "48px";
-  const marginHorizontal = isSmall ? "4px" : "64px";
+  const marginTop = isSmall ? "4px" : "4px";
+  const marginHorizontal = isSmall ? "4px" : "4px";
 
   return (
     <Box
       gap={"40px"}
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "4px" }}
+      className="cover content"
     >
       <Cover1 />
     </Box>
