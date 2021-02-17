@@ -1,18 +1,19 @@
 import React, { ReactElement } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { RouteChaptersAndCovers } from "./pages/ChaptersAndCovers";
+import { Chapter } from "./pages/chapters/Chapter";
+import { Cover } from "./pages/covers/Cover";
 import { EndPage } from "./pages/plain/EndPage";
 import { Error } from "./pages/plain/Error";
-import { Cover } from "./pages/covers/Cover";
 import { Home } from "./pages/plain/Home";
-import { Permission } from "./pages/plain/Permission";
 import { HomeCoil } from "./pages/plain/HomeCoil";
+import { Permission } from "./pages/plain/Permission";
 import { PlainPageRoutes } from "./Routes";
 
 const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
   { url: "/", component: <Home /> },
   { url: "/cover", component: <Cover /> },
+  { url: "/chapter", component: <Chapter /> },
   { url: "/home", component: <Home /> },
   { url: "/permissions", component: <Permission /> },
   { url: "/coil", component: <HomeCoil /> },
@@ -30,7 +31,6 @@ function App() {
               {component}
             </Route>
           ))}
-          <Route path={`/chapter`} component={RouteChaptersAndCovers} />
           <Route>Missing Route</Route>
         </Switch>
       </PageContainer>
