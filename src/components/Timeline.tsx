@@ -2,12 +2,15 @@ import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import React, { useEffect, useRef } from "react";
 import { QueryButton } from "./RoutedAnchor";
 
-export const Timeline = (props: BoxProps) => {
+export const Timeline = ({
+  showScrubber = true,
+  ...props
+}: BoxProps & { showScrubber?: boolean }) => {
   return (
-    <Box gap="8px">
+    <Box gap="8px" {...props}>
       <Stack interactiveChild="first">
         <ChapterIndicators />
-        <Scrubber />
+        {showScrubber && <Scrubber />}
       </Stack>
       <Buttons />
     </Box>
@@ -23,7 +26,7 @@ function getClickCoordinates(
 ): { x: number; y: number } {
   if (isTouchEvent(event)) {
     const x = event.changedTouches[0].clientX;
-    const y = event.changedTouches[1].clientY;
+    const y = event.changedTouches[0].clientY;
     return { x, y };
   } else {
     const x = event.clientX;
@@ -175,8 +178,7 @@ function useDraggableElement(
     let dragInitial = 0;
     let dragCurrent = 0;
     let startPosition =
-      containerDimensions.left +
-      percentageAcrossContainer * containerDimensions.width;
+      0 + percentageAcrossContainer * containerDimensions.width;
     let isDragging: boolean = false;
 
     const setTransform = (clippedX: number) => {
@@ -232,9 +234,9 @@ function useDraggableElement(
     window.addEventListener("mousedown", onDragStart, false);
     window.addEventListener("mouseup", onDragEndInner, false);
 
-    window.addEventListener("touchmove", onDrag, false);
-    window.addEventListener("touchstart", onDragStart, false);
-    window.addEventListener("touchend", onDragEndInner, false);
+    window.addEventListener("touchmove", onDrag, { passive: false });
+    window.addEventListener("touchstart", onDragStart, { passive: false });
+    window.addEventListener("touchend", onDragEndInner, { passive: false });
 
     return () => {
       window.removeEventListener("mousemove", onDrag);

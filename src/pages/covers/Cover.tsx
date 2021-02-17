@@ -1,10 +1,10 @@
 import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
-import { colorTheme } from "../../theme";
-import { FullWidthStack } from "../../components/FullWidthStack";
-import { QueryButton } from "../../components/RoutedAnchor";
-import { Cover1 } from "./Cover1";
 import { CameraIndicator } from "../../components/CameraIndicator";
+import { FullWidthStack } from "../../components/FullWidthStack";
+import { Timeline } from "../../components/Timeline";
+import { colorTheme } from "../../theme";
+import { Cover1 } from "./Cover1";
 
 export const Cover = () => {
   return (
@@ -59,67 +59,7 @@ const CoverContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
               {children}
             </CoverFrame>
           </Box>
-          <Box gridArea="timeline" gap="8px">
-            <Grid
-              fill
-              responsive={false}
-              columns={{ count: 4, size: "auto" }}
-              gap={"4px"}
-            >
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-            </Grid>
-
-            <Box direction="row" justify="between" flex={false}>
-              <Box direction="row" gap={"20px"}>
-                <Text size="small">Pause</Text>
-                <Text size="small">Back</Text>
-              </Box>
-              <Box direction="row" gap={"20px"}>
-                <QueryButton
-                  plain
-                  query={{ key: "modal", value: "about", operation: "open" }}
-                  label={
-                    <Text size="small" color="blue">
-                      About
-                    </Text>
-                  }
-                />
-                <QueryButton
-                  plain
-                  query={{ key: "modal", value: "privacy", operation: "open" }}
-                  label={
-                    <Text size="small" color="red">
-                      Privacy
-                    </Text>
-                  }
-                />
-                <QueryButton
-                  plain
-                  query={{ key: "modal", value: "credits", operation: "open" }}
-                  label={
-                    <Text size="small" color="green">
-                      Credits
-                    </Text>
-                  }
-                />
-              </Box>
-            </Box>
-          </Box>
+          <Timeline gridArea="timeline" showScrubber={false} />
         </Grid>
       </Box>
     </>
@@ -149,82 +89,7 @@ const CoverContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
           rows={["flex", "auto"]}
         >
           <Box gridArea="cover">{children}</Box>
-
-          <Box gridArea="timeline" gap="8px">
-            <Grid
-              fill
-              responsive={false}
-              columns={{ count: 4, size: "auto" }}
-              gap={"4px"}
-            >
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-              <Box
-                background={{ color: "yellowAlternative", opacity: 0.8 }}
-                height="8px"
-              ></Box>
-            </Grid>
-
-            <Box
-              direction="row"
-              justify="between"
-              flex={false}
-              pad={{ horizontal: "16px", top: "0px", bottom: "8px" }}
-              align="center"
-            >
-              <Box direction="row" gap={"20px"} align="center">
-                <Text size="small">Pause</Text>
-                <Text size="small">Back</Text>
-              </Box>
-              <Box direction="row" gap={"20px"} alignSelf="center">
-                <QueryButton
-                  plain
-                  query={{ key: "modal", value: "about", operation: "open" }}
-                  label={
-                    <Text size="small" color="blue">
-                      About
-                    </Text>
-                  }
-                />
-                <QueryButton
-                  plain
-                  query={{
-                    key: "modal",
-                    value: "privacy",
-                    operation: "open",
-                  }}
-                  label={
-                    <Text size="small" color="red">
-                      Privacy
-                    </Text>
-                  }
-                />
-                <QueryButton
-                  plain
-                  query={{
-                    key: "modal",
-                    value: "credits",
-                    operation: "open",
-                  }}
-                  label={
-                    <Text size="small" color="green">
-                      Credits
-                    </Text>
-                  }
-                />
-              </Box>
-            </Box>
-          </Box>
+          <Timeline gridArea="timeline" showScrubber={false} />
         </Grid>
       </CoverFrame>
     </Box>

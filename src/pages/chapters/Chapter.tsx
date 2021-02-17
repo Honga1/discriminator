@@ -1,11 +1,10 @@
 import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
-import { colorTheme } from "../../theme";
-import { FullWidthStack } from "../../components/FullWidthStack";
-import { QueryButton } from "../../components/RoutedAnchor";
-import { Chapter1 } from "./Chapter1";
 import { CameraIndicator } from "../../components/CameraIndicator";
+import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
+import { colorTheme } from "../../theme";
+import { Chapter1 } from "./Chapter1";
 
 export const Chapter = () => {
   return (
