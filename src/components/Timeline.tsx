@@ -98,7 +98,17 @@ const PlayPauseButton = () => {
     )
   );
 
-  return <Button plain icon={Icon}></Button>;
+  return (
+    <Button
+      plain
+      onClick={() =>
+        store.getState().chapter?.getIsPlaying()
+          ? store.getState().chapter?.pause()
+          : store.getState().chapter?.play()
+      }
+      icon={Icon}
+    ></Button>
+  );
 };
 
 const Buttons = () => {
