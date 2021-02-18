@@ -8,7 +8,7 @@ export const ChapterX = () => {
   const rewind = useCallback(() => {
     if (ref.current) ref.current.currentTime = 0;
   }, []);
-  const isChapterPlaying = useCallback(() => {
+  const getIsPlaying = useCallback(() => {
     if (!ref.current) return false;
     return !!(
       ref.current.currentTime > 0 &&
@@ -17,7 +17,7 @@ export const ChapterX = () => {
       ref.current.readyState > 2
     );
   }, []);
-  const progress = useCallback(() => {
+  const getProgress = useCallback(() => {
     if (!ref.current) return 0;
     return ref.current.currentTime / ref.current.duration;
   }, []);
@@ -27,18 +27,35 @@ export const ChapterX = () => {
   }, []);
 
   useEffect(() => {
-    store.setState({
-      chapter: {
-        play,
-        pause,
-        rewind,
-        isPlaying: isChapterPlaying,
-        progress,
-        setProgress,
-        chapterNumber: 1,
-      },
-    });
-  }, [isChapterPlaying, pause, play, progress, rewind, setProgress]);
+    const updateStore = (
+      event?: HTMLMediaElementEventMap["play" | "pause"]
+    ) => {
+      return store.setState({
+        chapter: {
+          play,
+          pause,
+          rewind,
+          getIsPlaying,
+          getProgress,
+          setProgress,
+          progress: getProgress(),
+          chapterNumber: 1,
+          intention: getIsPlaying() ? "PLAY" : "PAUSE",
+        },
+      });
+    };
+
+    const video = ref.current;
+    ref.current?.addEventListener("playing", updateStore);
+    ref.current?.addEventListener("pause", updateStore);
+    ref.current?.addEventListener("timeupdate", updateStore);
+    updateStore();
+    return () => {
+      video?.removeEventListener("play", updateStore);
+      video?.removeEventListener("pause", updateStore);
+      video?.removeEventListener("timeupdate", updateStore);
+    };
+  }, [getIsPlaying, pause, play, getProgress, rewind, setProgress]);
 
   return (
     <video
@@ -46,7 +63,7 @@ export const ChapterX = () => {
       style={{ boxSizing: "border-box", outline: "none" }}
       width="100%"
       src={videoSrc}
-      onClick={() => (isChapterPlaying() ? pause() : play())}
+      onClick={() => (getIsPlaying() ? pause() : play())}
     ></video>
   );
 };

@@ -1,6 +1,5 @@
 import createStoreHook from "zustand";
 import create, { SetState } from "zustand/vanilla";
-
 type State = {
   webcamStream: MediaStream | undefined | "DISCONNECTED" | "NOT_USED";
   nextVideoToPlay: HTMLVideoElement | undefined;
@@ -14,9 +13,11 @@ type State = {
         pause: () => void;
         rewind: () => void;
         setProgress: (progress: number) => void;
-        isPlaying: () => boolean;
-        progress: () => number;
+        getIsPlaying: () => boolean;
+        getProgress: () => number;
         chapterNumber: number;
+        intention: "PLAY" | "PAUSE";
+        progress: number;
       }
     | undefined;
 };

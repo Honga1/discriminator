@@ -1,7 +1,6 @@
 import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
-import { Pause, Rewind } from "grommet-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useAnimationFrame } from "../hooks/useAnimationFrame";
+import { Pause, Play, Rewind } from "grommet-icons";
+import React, { useCallback, useEffect, useRef } from "react";
 import { store, useStore } from "../store/store";
 import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
@@ -89,6 +88,19 @@ const ChapterIndicators = () => {
   );
 };
 
+const PlayPauseButton = () => {
+  const Icon = useStore((state) =>
+    state.chapter?.intention === undefined ||
+    state.chapter?.intention === "PAUSE" ? (
+      <Play />
+    ) : (
+      <Pause />
+    )
+  );
+
+  return <Button plain icon={Icon}></Button>;
+};
+
 const Buttons = () => {
   return (
     <Box
@@ -99,7 +111,7 @@ const Buttons = () => {
       align="center"
     >
       <Box direction="row" gap={"20px"} align="center">
-        <Button plain icon={<Pause />}></Button>
+        <PlayPauseButton />
         <Button plain icon={<Rewind />}></Button>
       </Box>
       <Box direction="row" gap={"20px"} alignSelf="center">
@@ -144,20 +156,20 @@ const Buttons = () => {
 };
 
 const StoreScrubber = () => {
-  const [progress, setProgress] = useState(
-    store.getState().chapter?.progress() || 0
+  const progress = useStore(
+    (state) => state.chapter?.progress || 0,
+    (oldState, newState) => {
+      const isSame = oldState === newState;
+      if (isSame) return true;
+      const isPlaying = store.getState().chapter?.getIsPlaying() || false;
+      return !isPlaying;
+    }
   );
 
-  const wasPlaying = useRef(store.getState().chapter?.isPlaying() ?? false);
-
-  useAnimationFrame(10, () => {
-    if (!store.getState().chapter?.isPlaying()) return;
-    const nextProgress = store.getState().chapter?.progress() || 0;
-    if (nextProgress !== progress) setProgress(nextProgress);
-  });
+  const wasPlaying = useRef(store.getState().chapter?.getIsPlaying() ?? false);
 
   const onScrubberDragStart = useCallback(() => {
-    wasPlaying.current = store.getState().chapter?.isPlaying() ?? false;
+    wasPlaying.current = store.getState().chapter?.getIsPlaying() ?? false;
     store.getState().chapter?.pause();
   }, []);
 
