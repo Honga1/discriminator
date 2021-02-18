@@ -35,6 +35,7 @@ export const ChapterX = () => {
         isPlaying: isChapterPlaying,
         progress,
         setProgress,
+        chapterNumber: 1,
       },
     });
   }, [isChapterPlaying, pause, play, progress, rewind, setProgress]);

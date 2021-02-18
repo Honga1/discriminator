@@ -16,6 +16,7 @@ type State = {
         setProgress: (progress: number) => void;
         isPlaying: () => boolean;
         progress: () => number;
+        chapterNumber: number;
       }
     | undefined;
 };

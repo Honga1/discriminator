@@ -2,50 +2,16 @@ import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import { Pause, Rewind } from "grommet-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "../hooks/useAnimationFrame";
-import { store } from "../store/store";
+import { store, useStore } from "../store/store";
 import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
   showScrubber = true,
   ...props
 }: BoxProps & { showScrubber?: boolean }) => {
-  const [progress, setProgress] = useState(
-    store.getState().chapter?.progress() || 0
-  );
-
-  const wasPlaying = useRef(store.getState().chapter?.isPlaying() ?? false);
-
-  useAnimationFrame(10, () => {
-    if (!store.getState().chapter?.isPlaying()) return;
-    const nextProgress = store.getState().chapter?.progress() || 0;
-    if (nextProgress !== progress) setProgress(nextProgress);
-  });
-
-  const onScrubberDragStart = useCallback(() => {
-    wasPlaying.current = store.getState().chapter?.isPlaying() ?? false;
-    store.getState().chapter?.pause();
-  }, []);
-
-  const onScrubberDragEnd = useCallback((progress: number): void => {
-    store.getState().chapter?.setProgress(progress);
-    if (wasPlaying.current) store.getState().chapter?.play();
-  }, []);
-
-  const onScrubberDrag = useCallback((progress: number): void => {
-    store.getState().chapter?.setProgress(progress);
-  }, []);
-
   return (
     <Box gap="8px" {...props}>
       <Stack interactiveChild="first">
         <ChapterIndicators />
-        {showScrubber && (
-          <Scrubber
-            position={progress}
-            onDrag={onScrubberDrag}
-            onDragStart={onScrubberDragStart}
-            onDragEnd={onScrubberDragEnd}
-          />
-        )}
       </Stack>
       <Buttons />
     </Box>
@@ -70,56 +36,8 @@ function getClickCoordinates(
   }
 }
 
-const Scrubber = ({
-  onDragStart,
-  onDrag,
-  onDragEnd,
-  position = 0,
-}: {
-  position?: number;
-  onDragStart?: () => void;
-  onDrag?: (position: number) => void;
-  onDragEnd?: (position: number) => void;
-}) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  console.log(position);
-
-  useDraggableElement(
-    containerRef,
-    buttonRef,
-    position,
-    onDragStart,
-    onDrag,
-    onDragEnd
-  );
-
-  return (
-    <Box
-      fill="horizontal"
-      ref={containerRef}
-      style={{ pointerEvents: "none", transform: "translateY(-50%)" }}
-    >
-      <Button
-        style={{ position: "absolute", pointerEvents: "auto" }}
-        ref={buttonRef}
-        plain
-        margin={{ top: "-7px", left: "-13px" }}
-      >
-        <Box
-          style={{ pointerEvents: "none" }}
-          round="100%"
-          background="yellowAlternative"
-          width="26px"
-          height="26px"
-        ></Box>
-      </Button>
-    </Box>
-  );
-};
-
 const ChapterIndicators = () => {
+  const chapterNumber = useStore((state) => state.chapter?.chapterNumber);
   return (
     <Grid
       fill
@@ -127,34 +45,46 @@ const ChapterIndicators = () => {
       columns={{ count: 4, size: "auto" }}
       gap={"4px"}
     >
-      <Button plain>
-        <Box
-          background={{ color: "yellowAlternative", opacity: 0.8 }}
-          height="8px"
-          style={{ pointerEvents: "none" }}
-        />
-      </Button>
-      <Button plain>
-        <Box
-          background={{ color: "yellowAlternative", opacity: 0.8 }}
-          height="8px"
-          style={{ pointerEvents: "none" }}
-        />
-      </Button>
-      <Button plain>
-        <Box
-          background={{ color: "yellowAlternative", opacity: 0.8 }}
-          height="8px"
-          style={{ pointerEvents: "none" }}
-        />
-      </Button>
-      <Button plain>
-        <Box
-          background={{ color: "yellowAlternative", opacity: 0.8 }}
-          height="8px"
-          style={{ pointerEvents: "none" }}
-        />
-      </Button>
+      <Box>
+        {chapterNumber === 1 && <StoreScrubber />}
+        <Button plain>
+          <Box
+            background={{ color: "yellowAlternative", opacity: 0.8 }}
+            height="8px"
+            style={{ pointerEvents: "none" }}
+          />
+        </Button>
+      </Box>
+      <Box>
+        {chapterNumber === 2 && <StoreScrubber />}
+        <Button plain>
+          <Box
+            background={{ color: "yellowAlternative", opacity: 0.8 }}
+            height="8px"
+            style={{ pointerEvents: "none" }}
+          />
+        </Button>
+      </Box>
+      <Box>
+        {chapterNumber === 3 && <StoreScrubber />}
+        <Button plain>
+          <Box
+            background={{ color: "yellowAlternative", opacity: 0.8 }}
+            height="8px"
+            style={{ pointerEvents: "none" }}
+          />
+        </Button>
+      </Box>
+      <Box>
+        {chapterNumber === 4 && <StoreScrubber />}
+        <Button plain>
+          <Box
+            background={{ color: "yellowAlternative", opacity: 0.8 }}
+            height="8px"
+            style={{ pointerEvents: "none" }}
+          />
+        </Button>
+      </Box>
     </Grid>
   );
 };
@@ -209,6 +139,90 @@ const Buttons = () => {
           }
         />
       </Box>
+    </Box>
+  );
+};
+
+const StoreScrubber = () => {
+  const [progress, setProgress] = useState(
+    store.getState().chapter?.progress() || 0
+  );
+
+  const wasPlaying = useRef(store.getState().chapter?.isPlaying() ?? false);
+
+  useAnimationFrame(10, () => {
+    if (!store.getState().chapter?.isPlaying()) return;
+    const nextProgress = store.getState().chapter?.progress() || 0;
+    if (nextProgress !== progress) setProgress(nextProgress);
+  });
+
+  const onScrubberDragStart = useCallback(() => {
+    wasPlaying.current = store.getState().chapter?.isPlaying() ?? false;
+    store.getState().chapter?.pause();
+  }, []);
+
+  const onScrubberDragEnd = useCallback((progress: number): void => {
+    store.getState().chapter?.setProgress(progress);
+    if (wasPlaying.current) store.getState().chapter?.play();
+  }, []);
+
+  const onScrubberDrag = useCallback((progress: number): void => {
+    store.getState().chapter?.setProgress(progress);
+  }, []);
+
+  return (
+    <Scrubber
+      position={progress}
+      onDrag={onScrubberDrag}
+      onDragStart={onScrubberDragStart}
+      onDragEnd={onScrubberDragEnd}
+    />
+  );
+};
+
+const Scrubber = ({
+  onDragStart,
+  onDrag,
+  onDragEnd,
+  position = 0,
+}: {
+  position?: number;
+  onDragStart?: () => void;
+  onDrag?: (position: number) => void;
+  onDragEnd?: (position: number) => void;
+}) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useDraggableElement(
+    containerRef,
+    buttonRef,
+    position,
+    onDragStart,
+    onDrag,
+    onDragEnd
+  );
+
+  return (
+    <Box
+      fill="horizontal"
+      ref={containerRef}
+      style={{ pointerEvents: "none", transform: "translateY(-50%)" }}
+    >
+      <Button
+        style={{ position: "absolute", pointerEvents: "auto" }}
+        ref={buttonRef}
+        plain
+        margin={{ top: "-7px", left: "-13px" }}
+      >
+        <Box
+          style={{ pointerEvents: "none" }}
+          round="100%"
+          background="yellowAlternative"
+          width="26px"
+          height="26px"
+        ></Box>
+      </Button>
     </Box>
   );
 };
