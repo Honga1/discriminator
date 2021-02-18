@@ -49,6 +49,7 @@ const ClickableBox = styled(Box)`
     bottom: -10px;
     left: -10px;
     right: -10px;
+    z-index: -1;
   }
 `;
 
