@@ -15,6 +15,7 @@ type State = {
         setProgress: (progress: number) => void;
         getIsPlaying: () => boolean;
         getProgress: () => number;
+        seekTimeDelta: (delta: number) => void;
         chapterNumber: number;
         intention: "PLAY" | "PAUSE";
         progress: number;

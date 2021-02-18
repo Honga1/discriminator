@@ -17,13 +17,22 @@ export const ChapterX = () => {
       ref.current.readyState > 2
     );
   }, []);
+
   const getProgress = useCallback(() => {
     if (!ref.current) return 0;
     return ref.current.currentTime / ref.current.duration;
   }, []);
+
   const setProgress = useCallback((progress: number) => {
-    if (!ref.current) return 0;
+    if (!ref.current) return;
     ref.current.currentTime = progress * ref.current.duration;
+  }, []);
+
+  const seekTimeDelta = useCallback((delta: number) => {
+    if (!ref.current) return;
+    const target = ref.current.currentTime + delta;
+    const clippedTarget = Math.min(Math.max(0, target), ref.current.duration);
+    ref.current.currentTime = clippedTarget;
   }, []);
 
   useEffect(() => {
@@ -38,6 +47,7 @@ export const ChapterX = () => {
           getIsPlaying,
           getProgress,
           setProgress,
+          seekTimeDelta,
           progress: getProgress(),
           chapterNumber: 1,
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
@@ -55,7 +65,15 @@ export const ChapterX = () => {
       video?.removeEventListener("pause", updateStore);
       video?.removeEventListener("timeupdate", updateStore);
     };
-  }, [getIsPlaying, pause, play, getProgress, rewind, setProgress]);
+  }, [
+    getIsPlaying,
+    pause,
+    play,
+    getProgress,
+    rewind,
+    setProgress,
+    seekTimeDelta,
+  ]);
 
   return (
     <video

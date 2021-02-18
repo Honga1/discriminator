@@ -1,6 +1,6 @@
 import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { store, useStore } from "../store/store";
 import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
@@ -111,6 +111,16 @@ const PlayPauseButton = () => {
   );
 };
 
+const RewindButton = () => {
+  return (
+    <Button
+      plain
+      onClick={() => store.getState().chapter?.seekTimeDelta(-10)}
+      icon={<Rewind />}
+    ></Button>
+  );
+};
+
 const Buttons = () => {
   return (
     <Box
@@ -122,7 +132,7 @@ const Buttons = () => {
     >
       <Box direction="row" gap={"20px"} align="center">
         <PlayPauseButton />
-        <Button plain icon={<Rewind />}></Button>
+        <RewindButton />
       </Box>
       <Box direction="row" gap={"20px"} alignSelf="center">
         <QueryButton
@@ -166,24 +176,26 @@ const Buttons = () => {
 };
 
 const StoreScrubber = () => {
+  const [isDragging, setIsDragging] = useState(false);
   const progress = useStore(
     (state) => state.chapter?.progress || 0,
     (oldState, newState) => {
       const isSame = oldState === newState;
       if (isSame) return true;
-      const isPlaying = store.getState().chapter?.getIsPlaying() || false;
-      return !isPlaying;
+      return isDragging;
     }
   );
 
   const wasPlaying = useRef(store.getState().chapter?.getIsPlaying() ?? false);
 
   const onScrubberDragStart = useCallback(() => {
+    setIsDragging(true);
     wasPlaying.current = store.getState().chapter?.getIsPlaying() ?? false;
     store.getState().chapter?.pause();
   }, []);
 
   const onScrubberDragEnd = useCallback((progress: number): void => {
+    setIsDragging(false);
     store.getState().chapter?.setProgress(progress);
     if (wasPlaying.current) store.getState().chapter?.play();
   }, []);
