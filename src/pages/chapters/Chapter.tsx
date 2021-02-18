@@ -10,7 +10,7 @@ import { CameraIndicator } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
-import { Chapter1 } from "./Chapter1";
+import { ChapterX } from "./ChapterX";
 
 export const Chapter = () => {
   return (
@@ -74,7 +74,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 
 const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box className="cover container" margin="16px">
+    <Box className="cover container" margin="16px" fill="vertical">
       <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
         <Grid
           responsive={false}
@@ -91,7 +91,9 @@ const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
           rows={["flex", "auto"]}
           gap="12px"
         >
-          <Box gridArea="cover">{children}</Box>
+          <Box gridArea="cover" fill>
+            {children}
+          </Box>
           <Timeline gridArea="timeline" />
         </Grid>
       </ChapterFrame>
@@ -107,9 +109,9 @@ const ChapterContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "4px" : "4px";
-  const marginHorizontal = isSmall ? "4px" : "4px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0" : "4px";
+  const marginTop = isSmall ? "4px" : "0px";
+  const marginHorizontal = isSmall ? "4px" : "0px";
+  const marginBottom = size === "large" || size === "xlarge" ? "0px" : "4px";
 
   return (
     <Box
@@ -121,7 +123,7 @@ const ChapterContent = () => {
       }}
       className="cover content"
     >
-      <Chapter1 onFinished={() => {}} />
+      <ChapterX />
     </Box>
   );
 };
@@ -132,7 +134,7 @@ const FadingOutline = styled(Box)<{ outlineColor: string }>`
   outline-style: solid;
   outline-width: 4px;
 
-  transition: all 0.4s;
+  transition: outline-color 0.4s;
 `;
 
 function useIsActive() {
@@ -158,6 +160,26 @@ function useIsActive() {
   return isActive;
 }
 
+const ChapterFrameStack = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
+const StackLayerGuiding = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const StackLayerNotGuiding = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+`;
+
 const ChapterFrame = ({
   children,
   textColor,
@@ -171,25 +193,35 @@ const ChapterFrame = ({
 
   const isActive = useIsActive();
   return (
-    <FadingOutline
-      outlineColor={isActive ? colorTheme.yellow : colorTheme.yellowOpaque}
-      className="cover-frame"
-    >
-      {/* <Box className="cover-frame" style={style}> */}
-      <FullWidthStack fill anchor="top-fill">
-        <Box fill>{children}</Box>
-        <ChapterHeadingBlock frameColor={colorTheme.yellow} isActive={isActive}>
-          <Heading
-            level={2}
-            color={textColor}
-            margin="0"
-            size={isSmall ? "small" : "medium"}
+    <ChapterFrameStack>
+      <StackLayerGuiding>
+        <FullWidthStack fill anchor="top-fill">
+          <Box fill background={{ color: "red", opacity: 0.0 }}>
+            {children}
+          </Box>
+          <ChapterHeadingBlock
+            frameColor={colorTheme.yellow}
+            isActive={isActive}
           >
-            {heading}
-          </Heading>
-        </ChapterHeadingBlock>
-      </FullWidthStack>
-    </FadingOutline>
+            <Heading
+              level={2}
+              color={textColor}
+              margin="0"
+              size={isSmall ? "small" : "medium"}
+            >
+              {heading}
+            </Heading>
+          </ChapterHeadingBlock>
+        </FullWidthStack>
+      </StackLayerGuiding>
+      <StackLayerNotGuiding>
+        <FadingOutline
+          fill
+          outlineColor={isActive ? colorTheme.yellow : colorTheme.yellowOpaque}
+          className="cover-frame"
+        />
+      </StackLayerNotGuiding>
+    </ChapterFrameStack>
   );
 };
 
