@@ -1,6 +1,7 @@
 import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { store, useStore } from "../store/store";
 import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
@@ -35,8 +36,48 @@ function getClickCoordinates(
   }
 }
 
-const ChapterIndicators = () => {
+const ClickableBox = styled(Box)`
+  & {
+    position: relative;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+  }
+`;
+
+const ChapterIndicator = ({ chapter }: { chapter: number }) => {
   const chapterNumber = useStore((state) => state.chapter?.chapterNumber);
+  const ref = useRef<HTMLDivElement>(null);
+  const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const clickWasOnIndicator = event.target === ref.current;
+    if (!clickWasOnIndicator) return;
+    const thisIsTheCurrentChapter = chapterNumber === chapter;
+    if (!thisIsTheCurrentChapter) return;
+    const { x } = getClickCoordinates(event.nativeEvent);
+    const rect = (event.target as HTMLDivElement).getBoundingClientRect();
+    const relativeX = Math.min(Math.max((x - rect.x) / rect.width, 0), 1);
+
+    store.getState().chapter?.setProgress(relativeX);
+  };
+  const thisIsTheCurrentChapter = chapterNumber === chapter;
+  return (
+    <ClickableBox ref={ref as any} onClick={onClick}>
+      {thisIsTheCurrentChapter && <StoreScrubber />}
+      <Box
+        background={{ color: "yellowAlternative", opacity: 0.8 }}
+        height="8px"
+        style={{ pointerEvents: "none" }}
+      />
+    </ClickableBox>
+  );
+};
+
+const ChapterIndicators = () => {
   return (
     <Grid
       fill
@@ -44,46 +85,10 @@ const ChapterIndicators = () => {
       columns={{ count: 4, size: "auto" }}
       gap={"4px"}
     >
-      <Box>
-        {chapterNumber === 1 && <StoreScrubber />}
-        <Button plain>
-          <Box
-            background={{ color: "yellowAlternative", opacity: 0.8 }}
-            height="8px"
-            style={{ pointerEvents: "none" }}
-          />
-        </Button>
-      </Box>
-      <Box>
-        {chapterNumber === 2 && <StoreScrubber />}
-        <Button plain>
-          <Box
-            background={{ color: "yellowAlternative", opacity: 0.8 }}
-            height="8px"
-            style={{ pointerEvents: "none" }}
-          />
-        </Button>
-      </Box>
-      <Box>
-        {chapterNumber === 3 && <StoreScrubber />}
-        <Button plain>
-          <Box
-            background={{ color: "yellowAlternative", opacity: 0.8 }}
-            height="8px"
-            style={{ pointerEvents: "none" }}
-          />
-        </Button>
-      </Box>
-      <Box>
-        {chapterNumber === 4 && <StoreScrubber />}
-        <Button plain>
-          <Box
-            background={{ color: "yellowAlternative", opacity: 0.8 }}
-            height="8px"
-            style={{ pointerEvents: "none" }}
-          />
-        </Button>
-      </Box>
+      <ChapterIndicator chapter={1} />
+      <ChapterIndicator chapter={2} />
+      <ChapterIndicator chapter={3} />
+      <ChapterIndicator chapter={4} />
     </Grid>
   );
 };
