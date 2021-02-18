@@ -1,16 +1,12 @@
-import { Box, Grid, Heading, ResponsiveContext, Text, Timeout } from "grommet";
-import React, {
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
+import React, { PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import { CameraIndicator } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
 import { ChapterX } from "./ChapterX";
+import { useIsActive } from "./useIsActive";
 
 export const Chapter = () => {
   return (
@@ -136,29 +132,6 @@ const FadingOutline = styled(Box)<{ outlineColor: string }>`
 
   transition: outline-color 0.4s;
 `;
-
-function useIsActive() {
-  const [isActive, setIsActive] = useState(true);
-  useEffect(() => {
-    let timeout: Timeout | undefined;
-    const onActivity = () => {
-      setIsActive(true);
-      if (timeout) clearTimeout(timeout);
-
-      timeout = (setTimeout(() => {
-        setIsActive(false);
-      }, 4000) as unknown) as number;
-    };
-    window.addEventListener("mousemove", onActivity);
-
-    return () => {
-      timeout && clearTimeout(timeout);
-      window.removeEventListener("mousemove", onActivity);
-    };
-  }, []);
-
-  return isActive;
-}
 
 const ChapterFrameStack = styled.div`
   position: relative;

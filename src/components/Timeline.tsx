@@ -2,7 +2,9 @@ import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useIsActive } from "../pages/chapters/useIsActive";
 import { store, useStore } from "../store/store";
+import { colorTheme } from "../theme";
 import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
   showScrubber = true,
@@ -13,7 +15,7 @@ export const Timeline = ({
       <Stack interactiveChild="first">
         <ChapterIndicators />
       </Stack>
-      <Buttons />
+      <ModalOpenButtons />
     </Box>
   );
 };
@@ -126,7 +128,13 @@ const RewindButton = () => {
   );
 };
 
-const Buttons = () => {
+const FadeColorText = styled(Text)<{ textColor: string }>`
+  color: ${(props) => props.textColor};
+  transition: color 0.4s;
+`;
+
+const ModalOpenButtons = () => {
+  const isActive = useIsActive();
   return (
     <Box
       direction="row"
@@ -144,9 +152,12 @@ const Buttons = () => {
           plain
           query={{ key: "modal", value: "about", operation: "open" }}
           label={
-            <Text size="small" color="blue">
+            <FadeColorText
+              size="small"
+              textColor={isActive ? colorTheme["blue"] : colorTheme.white}
+            >
               About
-            </Text>
+            </FadeColorText>
           }
         />
         <QueryButton
@@ -157,9 +168,12 @@ const Buttons = () => {
             operation: "open",
           }}
           label={
-            <Text size="small" color="red">
+            <FadeColorText
+              size="small"
+              textColor={isActive ? colorTheme["red"] : colorTheme.white}
+            >
               Privacy
-            </Text>
+            </FadeColorText>
           }
         />
         <QueryButton
@@ -170,9 +184,12 @@ const Buttons = () => {
             operation: "open",
           }}
           label={
-            <Text size="small" color="green">
+            <FadeColorText
+              size="small"
+              textColor={isActive ? colorTheme["green"] : colorTheme.white}
+            >
               Credits
-            </Text>
+            </FadeColorText>
           }
         />
       </Box>
