@@ -15,6 +15,7 @@ import { useQuery } from "../../hooks/useQuery";
 import { About } from "./About";
 import { Privacy } from "./Privacy";
 import { Credits } from "./Credits";
+import { useStore } from "../../store/store";
 
 export const ModalSelector = () => {
   const query = useQuery();
@@ -79,6 +80,9 @@ const Modal = ({
   textColor: string;
   heading: string;
 }>) => {
+  const backgroundColor = useStore((state) =>
+    state.chapter !== undefined ? "black" : "yellowAlternative"
+  );
   return (
     <>
       <Layer
@@ -89,7 +93,7 @@ const Modal = ({
         onEsc={onClose}
         animation={"fadeIn"}
       >
-        <Box fill background="yellowAlternative"></Box>
+        <Box fill background={backgroundColor}></Box>
       </Layer>
       <Layer
         full

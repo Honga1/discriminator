@@ -64,6 +64,7 @@ export const ChapterX = () => {
       video?.removeEventListener("play", updateStore);
       video?.removeEventListener("pause", updateStore);
       video?.removeEventListener("timeupdate", updateStore);
+      store.setState({ chapter: undefined });
     };
   }, [
     getIsPlaying,
