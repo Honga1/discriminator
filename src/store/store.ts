@@ -8,11 +8,22 @@ type State = {
     webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED" | undefined
   ): void;
   setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined): void;
+  chapter:
+    | {
+        play: () => void;
+        pause: () => void;
+        rewind: () => void;
+        setProgress: (progress: number) => void;
+        isPlaying: () => boolean;
+        progress: () => number;
+      }
+    | undefined;
 };
 
 const initialState: NonFunctionProperties<State> = {
   webcamStream: undefined,
   nextVideoToPlay: undefined,
+  chapter: undefined,
 };
 export const store = create<State>((set, get) => {
   const setWithLog: SetState<State> = (partial, replace) => {

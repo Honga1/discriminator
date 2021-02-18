@@ -1,16 +1,51 @@
 import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
-import React, { useEffect, useRef } from "react";
-import { QueryButton } from "./RoutedAnchor";
 import { Pause, Rewind } from "grommet-icons";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useAnimationFrame } from "../hooks/useAnimationFrame";
+import { store } from "../store/store";
+import { QueryButton } from "./RoutedAnchor";
 export const Timeline = ({
   showScrubber = true,
   ...props
 }: BoxProps & { showScrubber?: boolean }) => {
+  const [progress, setProgress] = useState(
+    store.getState().chapter?.progress() || 0
+  );
+
+  const wasPlaying = useRef(store.getState().chapter?.isPlaying() ?? false);
+
+  useAnimationFrame(10, () => {
+    if (!store.getState().chapter?.isPlaying()) return;
+    const nextProgress = store.getState().chapter?.progress() || 0;
+    if (nextProgress !== progress) setProgress(nextProgress);
+  });
+
+  const onScrubberDragStart = useCallback(() => {
+    wasPlaying.current = store.getState().chapter?.isPlaying() ?? false;
+    store.getState().chapter?.pause();
+  }, []);
+
+  const onScrubberDragEnd = useCallback((progress: number): void => {
+    store.getState().chapter?.setProgress(progress);
+    if (wasPlaying.current) store.getState().chapter?.play();
+  }, []);
+
+  const onScrubberDrag = useCallback((progress: number): void => {
+    store.getState().chapter?.setProgress(progress);
+  }, []);
+
   return (
     <Box gap="8px" {...props}>
       <Stack interactiveChild="first">
         <ChapterIndicators />
-        {showScrubber && <Scrubber />}
+        {showScrubber && (
+          <Scrubber
+            position={progress}
+            onDrag={onScrubberDrag}
+            onDragStart={onScrubberDragStart}
+            onDragEnd={onScrubberDragEnd}
+          />
+        )}
       </Stack>
       <Buttons />
     </Box>
@@ -36,16 +71,29 @@ function getClickCoordinates(
 }
 
 const Scrubber = ({
+  onDragStart,
+  onDrag,
   onDragEnd,
   position = 0,
 }: {
   position?: number;
-  onDragEnd?: (percent: number) => void;
+  onDragStart?: () => void;
+  onDrag?: (position: number) => void;
+  onDragEnd?: (position: number) => void;
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useDraggableElement(containerRef, buttonRef, position, onDragEnd);
+  console.log(position);
+
+  useDraggableElement(
+    containerRef,
+    buttonRef,
+    position,
+    onDragStart,
+    onDrag,
+    onDragEnd
+  );
 
   return (
     <Box
@@ -168,8 +216,10 @@ const Buttons = () => {
 function useDraggableElement(
   container: React.RefObject<HTMLDivElement>,
   element: React.RefObject<HTMLElement>,
-  percentageAcrossContainer: number,
-  onDragEnd: ((percentageAcrossContainer: number) => void) | undefined
+  relativePosition: number,
+  onDragStart: (() => void) | undefined,
+  onDrag: ((relativePosition: number) => void) | undefined,
+  onDragEnd: ((relativePosition: number) => void) | undefined
 ) {
   useEffect(() => {
     if (!container.current || !element.current) return;
@@ -177,8 +227,7 @@ function useDraggableElement(
 
     let dragInitial = 0;
     let dragCurrent = 0;
-    let startPosition =
-      0 + percentageAcrossContainer * containerDimensions.width;
+    let startPosition = 0 + relativePosition * containerDimensions.width;
     let isDragging: boolean = false;
 
     const setTransform = (clippedX: number) => {
@@ -187,7 +236,7 @@ function useDraggableElement(
     };
 
     setTransform(startPosition);
-    const onDragStart = (event: TouchEvent | MouseEvent) => {
+    const onDragStartInner = (event: TouchEvent | MouseEvent) => {
       if (event.target !== element.current) {
         isDragging = false;
         return;
@@ -197,9 +246,10 @@ function useDraggableElement(
       const { x } = getClickCoordinates(event);
       dragInitial = x - startPosition;
       isDragging = true;
+      onDragStart?.();
     };
 
-    const onDrag = (event: TouchEvent | MouseEvent) => {
+    const onDragInner = (event: TouchEvent | MouseEvent) => {
       if (!isDragging) return;
       if (!element.current) return;
       event.preventDefault();
@@ -213,6 +263,9 @@ function useDraggableElement(
         containerDimensions.width
       );
       dragCurrent = clippedX;
+      const relativeX = clippedX / containerDimensions.width;
+
+      onDrag?.(relativeX);
       setTransform(clippedX);
     };
 
@@ -230,22 +283,22 @@ function useDraggableElement(
       isDragging = false;
     };
 
-    window.addEventListener("mousemove", onDrag, false);
-    window.addEventListener("mousedown", onDragStart, false);
+    window.addEventListener("mousemove", onDragInner, false);
+    window.addEventListener("mousedown", onDragStartInner, false);
     window.addEventListener("mouseup", onDragEndInner, false);
 
-    window.addEventListener("touchmove", onDrag, { passive: false });
-    window.addEventListener("touchstart", onDragStart, { passive: false });
+    window.addEventListener("touchmove", onDragInner, { passive: false });
+    window.addEventListener("touchstart", onDragStartInner, { passive: false });
     window.addEventListener("touchend", onDragEndInner, { passive: false });
 
     return () => {
-      window.removeEventListener("mousemove", onDrag);
-      window.removeEventListener("mousedown", onDragStart);
+      window.removeEventListener("mousemove", onDragInner);
+      window.removeEventListener("mousedown", onDragStartInner);
       window.removeEventListener("mouseup", onDragEndInner);
 
-      window.removeEventListener("touchmove", onDrag);
-      window.removeEventListener("touchstart", onDragStart);
+      window.removeEventListener("touchmove", onDragInner);
+      window.removeEventListener("touchstart", onDragStartInner);
       window.removeEventListener("touchend", onDragEndInner);
     };
-  }, [element, onDragEnd, percentageAcrossContainer, container]);
+  }, [element, onDragEnd, relativePosition, container, onDragStart, onDrag]);
 }
