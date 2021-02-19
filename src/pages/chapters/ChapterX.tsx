@@ -59,9 +59,7 @@ function useChapter(ref: React.RefObject<HTMLVideoElement>) {
   ]);
 
   useEffect(() => {
-    const updateStore = (
-      event?: HTMLMediaElementEventMap["play" | "pause"]
-    ) => {
+    const updateStore = () => {
       return store.setState({
         chapter: {
           play,
