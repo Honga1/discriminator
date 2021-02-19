@@ -35,7 +35,10 @@ export const Cover1 = () => {
     };
     const onMouseMove = (event: MouseEvent): void => {
       if (!canvasRef.current) return;
-      const { relativeX, relativeY } = getRelativeClickPosition(event);
+      const { relativeX, relativeY } = getRelativeClickPosition(
+        event,
+        canvasRef.current
+      );
 
       const x = relativeX * canvasRef.current?.width;
       const y = relativeY * canvasRef.current?.height;
@@ -43,11 +46,14 @@ export const Cover1 = () => {
         paint(x, y);
       }
     };
-    canvas.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove);
 
     const onTouchMove = (event: TouchEvent): void => {
       if (!canvasRef.current) return;
-      const { relativeX, relativeY } = getRelativeTouchPosition(event);
+      const { relativeX, relativeY } = getRelativeTouchPosition(
+        event,
+        canvasRef.current
+      );
 
       const x = relativeX * canvasRef.current.width;
       const y = relativeY * canvasRef.current.height;
@@ -55,7 +61,7 @@ export const Cover1 = () => {
         paint(x, y);
       }
     };
-    canvas.addEventListener("touchmove", onTouchMove);
+    window.addEventListener("touchmove", onTouchMove);
 
     const onWindowResize = () => {
       canvas.width = window.innerWidth;
@@ -64,8 +70,8 @@ export const Cover1 = () => {
     window.addEventListener("resize", onWindowResize);
 
     return () => {
-      canvas.removeEventListener("touchmove", onTouchMove);
-      canvas.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onWindowResize);
     };
   }, []);
@@ -81,11 +87,12 @@ export const Cover1 = () => {
 };
 
 function getRelativeTouchPosition(
-  event: TouchEvent
+  event: TouchEvent,
+  target: HTMLCanvasElement
 ): { relativeX: number; relativeY: number } {
   const screenX = event.changedTouches[0].clientX;
   const screenY = event.changedTouches[0].clientY;
-  const rect = (event.target as HTMLElement).getBoundingClientRect();
+  const rect = target.getBoundingClientRect();
 
   const clip = (value: number, min: number, max: number) =>
     Math.min(max, Math.max(value, min));
@@ -99,11 +106,12 @@ function getRelativeTouchPosition(
 }
 
 function getRelativeClickPosition(
-  event: MouseEvent
+  event: MouseEvent,
+  target: HTMLCanvasElement
 ): { relativeX: number; relativeY: number } {
   const screenX = event.clientX;
   const screenY = event.clientY;
-  const rect = (event.target as HTMLElement).getBoundingClientRect();
+  const rect = target.getBoundingClientRect();
 
   const clip = (value: number, min: number, max: number) =>
     Math.min(max, Math.max(value, min));
