@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, ResponsiveContext } from "grommet";
+import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import {
@@ -156,6 +156,29 @@ const StackLayerNotGuiding = styled.div`
   pointer-events: none;
 `;
 
+const WebcamNotification = () => {
+  return (
+    <Box
+      flex={false}
+      style={{
+        position: "absolute",
+        minHeight: "100%",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+      }}
+      background={"black"}
+      pad="10px"
+      border={{ color: "red", size: "3px" }}
+    >
+      <Text size="xsmall" color="offWhite">
+        To make this sequence interactive, turn on your webcam
+      </Text>
+    </Box>
+  );
+};
+
 const ChapterFrame = ({
   children,
   textColor,
@@ -168,13 +191,12 @@ const ChapterFrame = ({
   const isSmall = size === "small";
 
   const isActive = useIsActive();
+
   return (
     <ChapterFrameStack>
       <StackLayerGuiding>
         <FullWidthStack fill anchor="top-fill">
-          <Box fill background={{ color: "red", opacity: 0.0 }}>
-            {children}
-          </Box>
+          <Box fill>{children}</Box>
           <ChapterHeadingBlock
             frameColor={colorTheme.yellow}
             isActive={isActive}
@@ -226,13 +248,14 @@ const ChapterHeadingBlock = ({
       justify="between"
       align="start"
     >
-      <OpacityFade
+      <Box
         background={frameColor}
-        isShown={isActive}
         pad={{ horizontal: "20px", vertical: "12px" }}
       >
-        {children}
-      </OpacityFade>
+        {isSmallOrMedium && <WebcamNotification />}
+
+        <OpacityFade isShown={isActive}>{children}</OpacityFade>
+      </Box>
       {!isSmallOrMedium && (
         <Box justify="end">
           <ChapterCameraIndicator />
