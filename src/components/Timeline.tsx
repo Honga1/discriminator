@@ -53,6 +53,21 @@ const ClickableBox = styled(Box)`
   }
 `;
 
+const LeftInsetOutline = styled.div`
+  & {
+    position: relative;
+  }
+  &:before {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-left: 2px solid ${colorTheme.yellow};
+  }
+`;
+
 const ChapterIndicator = ({ chapter }: { chapter: number }) => {
   const chapterNumber = useStore((state) => state.chapter?.chapterNumber);
   const ref = useRef<HTMLDivElement>(null);
@@ -68,6 +83,7 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
     store.getState().chapter?.setProgress(relativeX);
   };
   const thisIsTheCurrentChapter = chapterNumber === chapter;
+  const isActive = useIsActive();
   return (
     <ClickableBox ref={ref as any} onClick={onClick}>
       {thisIsTheCurrentChapter && <StoreScrubber />}
@@ -75,7 +91,26 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
         background={{ color: "yellowAlternative", opacity: 0.8 }}
         height="8px"
         style={{ pointerEvents: "none" }}
-      />
+      >
+        {thisIsTheCurrentChapter && isActive && (
+          <LeftInsetOutline
+            style={{
+              position: "absolute",
+              left: 0,
+              bottom: 0,
+              height: "102px",
+            }}
+          >
+            <Box
+              background="black"
+              pad="10px"
+              border={{ color: "yellow", size: "2px" }}
+            >
+              <Text size="small">Chapter 1</Text>
+            </Box>
+          </LeftInsetOutline>
+        )}
+      </Box>
     </ClickableBox>
   );
 };
