@@ -39,6 +39,23 @@ const ChapterContainer = ({ children }: PropsWithChildren<{}>) => {
   }
 };
 
+const AspectRatioBox = styled(Box)`
+  & {
+  }
+  &::before {
+    content: "";
+    float: left;
+    height: 0;
+    padding-top: calc(10 / 14 * 100%);
+  }
+  &::after {
+    /* to clear float */
+    content: "";
+    display: table;
+    clear: both;
+  }
+`;
+
 const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
   return (
     <>
@@ -61,7 +78,18 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
         >
           <Box gridArea="cover">
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
-              {children}
+              <AspectRatioBox responsive={false} flex={false}>
+                <Box
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  justify="center"
+                >
+                  {children}
+                </Box>
+              </AspectRatioBox>
             </ChapterFrame>
           </Box>
           <Timeline gridArea="timeline" />
