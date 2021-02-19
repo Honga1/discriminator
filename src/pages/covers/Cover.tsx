@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, ResponsiveContext } from "grommet";
+import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import {
   CameraIndicator,
@@ -126,6 +126,29 @@ const CoverContent = () => {
   );
 };
 
+const WebcamNotification = () => {
+  return (
+    <Box
+      flex={false}
+      style={{
+        position: "absolute",
+        minHeight: "100%",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+      }}
+      background={"black"}
+      pad="10px"
+      border={{ color: "red", size: "3px" }}
+    >
+      <Text size="xsmall" color="offWhite">
+        To make this sequence interactive, turn on your webcam
+      </Text>
+    </Box>
+  );
+};
+
 const CoverFrame = ({
   children,
   frameColor,
@@ -143,11 +166,14 @@ const CoverFrame = ({
 
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
+  const isSmallOrMedium = isSmall || size === "medium";
   return (
     <Box className="cover-frame" style={style}>
       <FullWidthStack fill anchor="top-fill">
         <Box fill>{children}</Box>
         <CoverHeadingBlock frameColor={frameColor}>
+          {isSmallOrMedium && <WebcamNotification />}
+
           <Heading
             level={2}
             color={textColor}
@@ -179,6 +205,7 @@ const CoverHeadingBlock = ({
       flex={false}
       justify="between"
       align="start"
+      style={{ userSelect: "none", pointerEvents: "none" }}
     >
       <Box
         background={frameColor}
