@@ -1,12 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  Button,
-  Grid,
-  ResponsiveContext,
-  Stack,
-  Text,
-} from "grommet";
+import { Box, BoxProps, Button, Grid, ResponsiveContext, Text } from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
 import React, {
   useCallback,
