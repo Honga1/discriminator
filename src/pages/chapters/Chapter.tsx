@@ -1,7 +1,10 @@
-import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
+import { Box, Grid, Heading, ResponsiveContext } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
-import { CameraIndicator } from "../../components/CameraIndicator";
+import {
+  CameraIndicator,
+  ChapterCameraIndicator,
+} from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
@@ -235,33 +238,6 @@ const ChapterHeadingBlock = ({
           <ChapterCameraIndicator />
         </Box>
       )}
-    </Box>
-  );
-};
-
-const ChapterCameraIndicator = () => {
-  return (
-    <Box fill="horizontal" background={"black"} flex={false}>
-      <Box direction="row" justify="end">
-        <Box direction="row" border={{ color: "yellow", size: "3px" }}>
-          <Box
-            background="redLight"
-            pad={{ horizontal: "17px", vertical: "7px" }}
-          >
-            <Text size="small" color="grayLight">
-              Camera
-            </Text>
-          </Box>
-          <Box
-            background="charcoal"
-            pad={{ horizontal: "17px", vertical: "7px" }}
-          >
-            <Text size="small" color="grayLight">
-              off
-            </Text>
-          </Box>
-        </Box>
-      </Box>
     </Box>
   );
 };

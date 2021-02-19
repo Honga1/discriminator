@@ -106,7 +106,9 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
               pad="10px"
               border={{ color: "yellow", size: "2px" }}
             >
-              <Text size="small">Chapter 1</Text>
+              <Text size="small" color="offWhite">
+                Chapter 1
+              </Text>
             </Box>
           </LeftInsetOutline>
         )}
@@ -150,6 +152,7 @@ const PlayPauseButton = () => {
           : store.getState().chapter?.play()
       }
       icon={Icon}
+      color="offWhite"
     ></Button>
   );
 };
@@ -160,6 +163,7 @@ const RewindButton = () => {
       plain
       onClick={() => store.getState().chapter?.seekTimeDelta(-10)}
       icon={<Rewind />}
+      color="offWhite"
     ></Button>
   );
 };
@@ -190,7 +194,7 @@ const ModalOpenButtons = () => {
           label={
             <FadeColorText
               size="small"
-              textColor={isActive ? colorTheme["blue"] : colorTheme.white}
+              textColor={isActive ? colorTheme["blue"] : colorTheme.offWhite}
             >
               About
             </FadeColorText>
@@ -206,7 +210,7 @@ const ModalOpenButtons = () => {
           label={
             <FadeColorText
               size="small"
-              textColor={isActive ? colorTheme["red"] : colorTheme.white}
+              textColor={isActive ? colorTheme["red"] : colorTheme.offWhite}
             >
               Privacy
             </FadeColorText>
@@ -222,7 +226,7 @@ const ModalOpenButtons = () => {
           label={
             <FadeColorText
               size="small"
-              textColor={isActive ? colorTheme["green"] : colorTheme.white}
+              textColor={isActive ? colorTheme["green"] : colorTheme.offWhite}
             >
               Credits
             </FadeColorText>

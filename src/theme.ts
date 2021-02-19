@@ -3,6 +3,7 @@ import { ThemeType } from "grommet";
 export const colorTheme = {
   black: "#202122",
   white: "#FFFFFF",
+  offWhite: "#F8F9FA",
   red: "#E01010",
   redLight: "#FF5959",
   grayLight: "#A2A9B1",
@@ -84,6 +85,11 @@ export const customTheme: ThemeType = {
     },
   },
   text: {
+    xsmall: {
+      size: "18px",
+      height: "24px",
+      maxWidth: undefined,
+    },
     small: {
       size: "24px",
       height: "32px",
