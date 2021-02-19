@@ -8,12 +8,13 @@ import {
 import { FullWidthStack } from "../../components/FullWidthStack";
 import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
+import { LinksSmall } from "../plain/Links";
 import { ChapterX } from "./ChapterX";
 import { useIsActive } from "./useIsActive";
 
 export const Chapter = () => {
   return (
-    <Box fill background="black">
+    <Box fill background="black" overflow="hidden">
       <ChapterContainer>
         <ChapterContent />
       </ChapterContainer>
@@ -57,6 +58,7 @@ const AspectRatioBox = styled(Box)`
 `;
 
 const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
+  const isSmall = useContext(ResponsiveContext) === "small";
   return (
     <>
       <CameraIndicator showBorder={false} backgroundColor="black" />
@@ -78,7 +80,13 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
         >
           <Box gridArea="cover">
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
-              <AspectRatioBox responsive={false} flex={false}>
+              <AspectRatioBox
+                responsive={false}
+                flex={false}
+                height={{
+                  min: 360 + "px",
+                }}
+              >
                 <Box
                   style={{
                     position: "absolute",
@@ -95,6 +103,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           <Timeline gridArea="timeline" />
         </Grid>
       </Box>
+      <Box margin="16px">{isSmall && <LinksSmall />}</Box>
     </>
   );
 };

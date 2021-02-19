@@ -16,7 +16,7 @@ export const Links = () => {
   }
 };
 
-function LinksSmall() {
+export function LinksSmall() {
   return (
     <Box className="links" gap="24px">
       <QueryButton

@@ -1,6 +1,20 @@
-import { Box, BoxProps, Button, Grid, Stack, Text } from "grommet";
+import {
+  Box,
+  BoxProps,
+  Button,
+  Grid,
+  ResponsiveContext,
+  Stack,
+  Text,
+} from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { useIsActive } from "../pages/chapters/useIsActive";
 import { store, useStore } from "../store/store";
@@ -12,10 +26,8 @@ export const Timeline = ({
 }: BoxProps & { showScrubber?: boolean }) => {
   return (
     <Box gap="8px" {...props}>
-      <Stack interactiveChild="first">
-        <ChapterIndicators />
-      </Stack>
-      <ModalOpenButtons />
+      <ChapterIndicators />
+      <ControlButtonRow />
     </Box>
   );
 };
@@ -173,8 +185,9 @@ const FadeColorText = styled(Text)<{ textColor: string }>`
   transition: color 0.4s;
 `;
 
-const ModalOpenButtons = () => {
+const ControlButtonRow = () => {
   const isActive = useIsActive();
+  const isSmall = useContext(ResponsiveContext) === "small";
   return (
     <Box
       direction="row"
@@ -187,52 +200,60 @@ const ModalOpenButtons = () => {
         <PlayPauseButton />
         <RewindButton />
       </Box>
-      <Box direction="row" gap={"20px"} alignSelf="center">
-        <QueryButton
-          plain
-          query={{ key: "modal", value: "about", operation: "open" }}
-          label={
-            <FadeColorText
-              size="small"
-              textColor={isActive ? colorTheme["blue"] : colorTheme.offWhite}
-            >
-              About
-            </FadeColorText>
-          }
-        />
-        <QueryButton
-          plain
-          query={{
-            key: "modal",
-            value: "privacy",
-            operation: "open",
-          }}
-          label={
-            <FadeColorText
-              size="small"
-              textColor={isActive ? colorTheme["red"] : colorTheme.offWhite}
-            >
-              Privacy
-            </FadeColorText>
-          }
-        />
-        <QueryButton
-          plain
-          query={{
-            key: "modal",
-            value: "credits",
-            operation: "open",
-          }}
-          label={
-            <FadeColorText
-              size="small"
-              textColor={isActive ? colorTheme["green"] : colorTheme.offWhite}
-            >
-              Credits
-            </FadeColorText>
-          }
-        />
-      </Box>
+      {!isSmall && (
+        <Box direction="row" gap={"20px"} alignSelf="center">
+          <QueryButton
+            plain
+            query={{ key: "modal", value: "about", operation: "open" }}
+            label={
+              <FadeColorText
+                size="small"
+                textColor={
+                  isActive ? colorTheme["blueLight"] : colorTheme.offWhite
+                }
+              >
+                About
+              </FadeColorText>
+            }
+          />
+          <QueryButton
+            plain
+            query={{
+              key: "modal",
+              value: "privacy",
+              operation: "open",
+            }}
+            label={
+              <FadeColorText
+                size="small"
+                textColor={
+                  isActive ? colorTheme["redLight"] : colorTheme.offWhite
+                }
+              >
+                Privacy
+              </FadeColorText>
+            }
+          />
+          <QueryButton
+            plain
+            query={{
+              key: "modal",
+              value: "credits",
+              operation: "open",
+            }}
+            label={
+              <FadeColorText
+                size="small"
+                textColor={
+                  isActive ? colorTheme["greenLight"] : colorTheme.offWhite
+                }
+              >
+                Credits
+              </FadeColorText>
+            }
+          />
+        </Box>
+      )}
     </Box>
   );
 };
