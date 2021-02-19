@@ -101,7 +101,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 
 const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box className="cover container" margin="16px" fill="vertical">
+    <Box className="cover container" margin="16px">
       <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
         <Grid
           responsive={false}
@@ -276,13 +276,16 @@ const ChapterHeadingBlock = ({
       justify="between"
       align="start"
     >
-      <Box
-        background={frameColor}
-        pad={{ horizontal: "20px", vertical: "12px" }}
-      >
+      <Box>
         {isSmallOrMedium && <WebcamNotification />}
 
-        <OpacityFade isShown={isActive}>{children}</OpacityFade>
+        <OpacityFade
+          pad={{ horizontal: "20px", vertical: "12px" }}
+          background={frameColor}
+          isShown={isActive}
+        >
+          {children}
+        </OpacityFade>
       </Box>
       {!isSmallOrMedium && (
         <Box justify="end">
