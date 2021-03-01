@@ -17,7 +17,7 @@ import { Cover1 } from "./Cover1";
 
 export const Cover = () => {
   return (
-    <Box fill background="black">
+    <Box fill background="black" height={{ min: "396px" }}>
       <CoverContainer>
         <CoverContent />
       </CoverContainer>
