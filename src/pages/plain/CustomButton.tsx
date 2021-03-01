@@ -1,8 +1,25 @@
 import { Box, Text } from "grommet";
 import React, { ReactNode } from "react";
+import styled from "styled-components";
 import { RoutedButton } from "../../components/RoutedAnchor";
 import { Routes } from "../../Routes";
 import { colorTheme } from "../../theme";
+
+const OnHoverBox = styled(Box)<{ fillColor: string }>`
+  &:hover {
+    background-color: ${(props) => props.fillColor};
+
+    & > span {
+      color: ${colorTheme.offWhite};
+    }
+  }
+
+  & > span {
+    color: ${(props) => props.fillColor};
+  }
+
+  transition: all 0.2s;
+`;
 
 export const CustomRoutedButton = ({
   color,
@@ -18,14 +35,15 @@ export const CustomRoutedButton = ({
       <RoutedButton
         plain
         label={
-          <Box
+          <OnHoverBox
             border={{ color, style: "solid", size: "3px" }}
             pad={{ horizontal: "24px", vertical: "9px" }}
+            fillColor={colorTheme[color]}
           >
             <Text size="24px" style={{ lineHeight: "100%" }} color={color}>
               {textContent}
             </Text>
-          </Box>
+          </OnHoverBox>
         }
         href={href}
       />

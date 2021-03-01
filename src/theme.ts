@@ -17,8 +17,6 @@ export const colorTheme = {
   yellow: "#FFD519",
   yellowOpaque: "rgba(255, 210, 55, 0)",
   yellowAlternative: "#E8C100",
-  background: { light: "#FFD237", dark: "#202122" },
-  text: { light: "#202122" },
 } as const;
 
 export const customTheme: ThemeType = {
