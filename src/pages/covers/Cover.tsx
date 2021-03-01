@@ -17,7 +17,7 @@ import { Cover1 } from "./Cover1";
 
 export const Cover = () => {
   return (
-    <Box fill background="grey">
+    <Box fill background="black">
       <CoverContainer>
         <CoverContent />
       </CoverContainer>
