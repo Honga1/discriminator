@@ -70,12 +70,15 @@ const HomeContent = () => {
   const marginTop = isSmall ? "56px" : "48px";
   const marginHorizontal = isSmall ? "32px" : "64px";
 
+  const textSize = isSmall ? "20px" : "24px";
+  const lineHeight = isSmall ? "30px" : "36px";
+
   return (
     <Box
       gap={"40px"}
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
-      <Text size={size === "small" ? "small" : "medium"}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }}>
         Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
         Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.
         Lacus vitae amet aliquam id leo. Interdum vulputate eu et aliquet elit

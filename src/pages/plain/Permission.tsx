@@ -92,6 +92,9 @@ const PermissionContent = () => {
   const marginTop = isSmall ? "104px" : "48px";
   const marginHorizontal = isSmall ? "32px" : "64px";
 
+  const textSize = isSmall ? "20px" : "24px";
+  const lineHeight = isSmall ? "30px" : "36px";
+
   const DeclineText = () =>
     isSmall ? (
       <span>
@@ -120,7 +123,7 @@ const PermissionContent = () => {
       gap={"40px"}
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
-      <Text size={size === "small" ? "small" : "medium"}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }}>
         To get out the best out of this experience, we recommend to enable your
         webcam. We do not store any of your information (see our privacy
         policy). If you choose to not enable your webcam you will see xyz.
