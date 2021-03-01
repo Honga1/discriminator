@@ -272,25 +272,43 @@ const ChapterSelectDropdown = () => {
       onOpen={onOpen}
       onClose={onClose}
       open={isOpen}
+      dropProps={{ align: { top: "bottom" } }}
       label={
         <Box direction="row">
           <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
             1/4
           </Text>
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M6 19.9646L8.98938 22.954L16 15.9434L23.0106 22.954L26 19.9646L16.0354 10L16 10.0354L15.9646 10L6 19.9646Z"
-              fill={colorTheme.offWhite}
-            />
-          </svg>
+          {!isOpen ? (
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6 19.9646L8.98938 22.954L16 15.9434L23.0106 22.954L26 19.9646L16.0354 10L16 10.0354L15.9646 10L6 19.9646Z"
+                fill={colorTheme.offWhite}
+              />
+            </svg>
+          ) : (
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M26 12.9894L23.0106 10L16 17.0106L8.98938 10L6 12.9894L15.9646 22.954L16 22.9186L16.0354 22.954L26 12.9894Z"
+                fill="#F8F9FA"
+              />
+            </svg>
+          )}
         </Box>
       }
       dropContent={
