@@ -21,7 +21,7 @@ export const CameraIndicator = ({
       ? { right: "16px", top: "16px", bottom: "12px" }
       : { right: "13px", top: "12px", bottom: "12px" };
   const bottomBorderStyle = showBorder
-    ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
+    ? { borderBottom: `3px solid ${colorTheme.yellowAlternative}` }
     : {};
   return (
     <Box
