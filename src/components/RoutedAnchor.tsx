@@ -50,7 +50,8 @@ export const QueryButton = (
     <Button
       {...props}
       as={"div"}
-      onClick={() => {
+      onClick={(event) => {
+        props.onClick?.(event);
         if (props.query.operation === "close") {
           query.delete(props.query.key);
         } else {

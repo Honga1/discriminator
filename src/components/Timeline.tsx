@@ -1,4 +1,12 @@
-import { Box, BoxProps, Button, Grid, ResponsiveContext, Text } from "grommet";
+import {
+  Box,
+  BoxProps,
+  Button,
+  DropButton,
+  Grid,
+  ResponsiveContext,
+  Text,
+} from "grommet";
 import { Pause, Play, Rewind } from "grommet-icons";
 import React, {
   useCallback,
@@ -250,6 +258,95 @@ const NextChapterButton = () => {
   );
 };
 
+const ChapterSelectDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const onOpen = () => {
+    setIsOpen(true);
+  };
+  const onClose = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <DropButton
+      plain
+      onOpen={onOpen}
+      onClose={onClose}
+      open={isOpen}
+      label={
+        <Box direction="row">
+          <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
+            1/4
+          </Text>
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M6 19.9646L8.98938 22.954L16 15.9434L23.0106 22.954L26 19.9646L16.0354 10L16 10.0354L15.9646 10L6 19.9646Z"
+              fill={colorTheme.offWhite}
+            />
+          </svg>
+        </Box>
+      }
+      dropContent={
+        <Box
+          background="black"
+          pad="24px"
+          border={{ color: "offWhite", size: "3px" }}
+          gap="24px"
+        >
+          <QueryButton
+            query={{ key: "modal", value: "about", operation: "open" }}
+            plain
+            onClick={onClose}
+            label={
+              <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
+                Chapter 1
+              </Text>
+            }
+          />
+          <QueryButton
+            query={{ key: "modal", value: "about", operation: "open" }}
+            plain
+            onClick={onClose}
+            label={
+              <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
+                Chapter 2
+              </Text>
+            }
+          />
+          <QueryButton
+            query={{ key: "modal", value: "about", operation: "open" }}
+            plain
+            onClick={onClose}
+            label={
+              <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
+                Chapter 3
+              </Text>
+            }
+          />
+          <QueryButton
+            query={{ key: "modal", value: "about", operation: "open" }}
+            plain
+            onClick={onClose}
+            label={
+              <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
+                Chapter 4
+              </Text>
+            }
+          />
+        </Box>
+      }
+    />
+  );
+};
+
 const FadeColorText = styled(Text)<{ textColor: string }>`
   color: ${(props) => props.textColor};
   transition: color 0.4s;
@@ -270,6 +367,7 @@ const ControlButtonRow = () => {
         <PlayPauseButton />
         <RewindButton />
         <NextChapterButton />
+        <ChapterSelectDropdown />
       </Box>
       {!isSmall && (
         <Box direction="row" gap={"20px"} alignSelf="center">
