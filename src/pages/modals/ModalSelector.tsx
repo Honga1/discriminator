@@ -1,4 +1,4 @@
-import { Box, BoxProps, Heading, Layer, ResponsiveContext } from "grommet";
+import { Box, BoxProps, Layer, ResponsiveContext, Text } from "grommet";
 import {
   CSSProperties,
   PropsWithChildren,
@@ -8,14 +8,14 @@ import {
 } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { colorTheme } from "../../theme";
 import { InteractiveStack } from "../../components/InteractiveStack";
 import { QueryButton } from "../../components/RoutedAnchor";
 import { useQuery } from "../../hooks/useQuery";
-import { About } from "./About";
-import { Privacy } from "./Privacy";
-import { Credits } from "./Credits";
 import { useStore } from "../../store/store";
+import { colorTheme } from "../../theme";
+import { About } from "./About";
+import { Credits } from "./Credits";
+import { Privacy } from "./Privacy";
 
 export const ModalSelector = () => {
   const query = useQuery();
@@ -192,20 +192,16 @@ const ScrollableFrame = ({
 
   const [showBorder, setShowBorder] = useState(false);
   const isSmall = useContext(ResponsiveContext) === "small";
+  const textSize = isSmall ? "24px" : "48px";
 
   const ScrollableBox = isSmall ? Box : CustomScrollbarBox;
 
   return (
     <Box className="scrollable-frame" style={style} flex={false} fill>
       <ScrollingHeadingBlock frameColor={frameColor} showBorder={showBorder}>
-        <Heading
-          level={1}
-          color={textColor}
-          margin="0"
-          size={isSmall ? "small" : "medium"}
-        >
+        <Text size={textSize} color={textColor} style={{ lineHeight: "100%" }}>
           {heading}
-        </Heading>
+        </Text>
       </ScrollingHeadingBlock>
 
       <Box fill>
@@ -239,15 +235,12 @@ const ScrollableFrameLarge = ({
     outlineOffset: `-3px`,
     outline: `3px ${frameColor} solid`,
   };
-  const isSmall = useContext(ResponsiveContext) === "small";
-
-  const ScrollableBox = isSmall ? Box : CustomScrollbarBox;
 
   return (
     <Box className="scrollable-frame" style={style} flex={false} fill>
       <InteractiveStack fill>
         <Box fill>
-          <ScrollableBox
+          <CustomScrollbarBox
             flex={false}
             overflow={{ horizontal: "hidden", vertical: "auto" }}
             height="100%"
@@ -255,18 +248,17 @@ const ScrollableFrameLarge = ({
             margin={{ right: "12px", top: "12px" }}
           >
             {children}
-          </ScrollableBox>
+          </CustomScrollbarBox>
         </Box>
         <Box margin={{ right: "32px" }}>
           <ScrollingHeadingBlock frameColor={frameColor} showBorder={false}>
-            <Heading
-              level={1}
+            <Text
+              size={"48px"}
               color={textColor}
-              margin="0"
-              size={isSmall ? "small" : "medium"}
+              style={{ lineHeight: "100%" }}
             >
               {heading}
-            </Heading>
+            </Text>
           </ScrollingHeadingBlock>
         </Box>
       </InteractiveStack>
@@ -317,23 +309,89 @@ const ScrollingHeadingBlock = ({
     >
       <Box
         background={frameColor}
-        pad={{ horizontal: "20px", vertical: "12px" }}
+        pad={{ horizontal: isSmall ? "16px" : "20px", vertical: "12px" }}
       >
         {children}
       </Box>
-      <Box pad={{ horizontal: "20px", vertical: "12px" }}>
-        <QueryButton
-          query={{ key: "modal", value: "credits", operation: "close" }}
-          href="/credits"
-          plain
-          fill
-          label={
-            <Heading level={1} margin="0" size={isSmall ? "small" : "medium"}>
-              X
-            </Heading>
-          }
-        />
-      </Box>
+      {isSmall ? <CloseButtonSmall /> : <CloseButtonNotSmall />}
+    </Box>
+  );
+};
+
+const CloseButtonSmall = () => {
+  return (
+    <Box pad={{ right: "11px", top: "10px" }}>
+      <QueryButton
+        query={{ key: "modal", value: "credits", operation: "close" }}
+        href="/credits"
+        plain
+        fill
+        label={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="6.82837"
+              y="4"
+              width="29.1079"
+              height="4"
+              transform="rotate(45 6.82837 4)"
+              fill="#202122"
+            />
+            <rect
+              x="27.4109"
+              y="6.82849"
+              width="29.1079"
+              height="4"
+              transform="rotate(135 27.4109 6.82849)"
+              fill="#202122"
+            />
+          </svg>
+        }
+      />
+    </Box>
+  );
+};
+
+const CloseButtonNotSmall = () => {
+  return (
+    <Box pad={{ right: "6px", top: "4px" }}>
+      <QueryButton
+        query={{ key: "modal", value: "credits", operation: "close" }}
+        href="/credits"
+        plain
+        fill
+        label={
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="13.6567"
+              y="8"
+              width="58.2158"
+              height="8"
+              transform="rotate(45 13.6567 8)"
+              fill="#202122"
+            />
+            <rect
+              x="54.8218"
+              y="13.6567"
+              width="58.2158"
+              height="8"
+              transform="rotate(135 54.8218 13.6567)"
+              fill="#202122"
+            />
+          </svg>
+        }
+      />
     </Box>
   );
 };
