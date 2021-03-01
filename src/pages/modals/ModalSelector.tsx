@@ -138,7 +138,7 @@ const ModalContainer = ({
   switch (size) {
     case "small":
       props = {
-        margin: { horizontal: "32px", top: "32px", bottom: "-4px" },
+        margin: { horizontal: "16px", top: "16px", bottom: "-4px" },
         gap: "48px",
       };
       break;
