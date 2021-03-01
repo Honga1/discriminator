@@ -17,18 +17,18 @@ export const Links = () => {
   }
 };
 
-export function LinksSmall() {
+export function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
+  const blue = !isOnDark ? colorTheme.blue : colorTheme.blueLight;
+  const red = !isOnDark ? colorTheme.red : colorTheme.redLight;
+  const green = !isOnDark ? colorTheme.green : colorTheme.greenLight;
+  const text = !isOnDark ? colorTheme.white : colorTheme.black;
   return (
     <Box className="links" gap="24px">
       <QueryButton
         query={{ key: "modal", value: "about", operation: "open" }}
         plain
         label={
-          <LinkFrame
-            textColor={colorTheme.white}
-            frameColor={colorTheme.blue}
-            heading="About"
-          >
+          <LinkFrame textColor={text} frameColor={blue} heading="About">
             <Box height={"32px"}></Box>
           </LinkFrame>
         }
@@ -37,11 +37,7 @@ export function LinksSmall() {
         query={{ key: "modal", value: "privacy", operation: "open" }}
         plain
         label={
-          <LinkFrame
-            textColor={colorTheme.white}
-            frameColor={colorTheme.red}
-            heading="Privacy"
-          >
+          <LinkFrame textColor={text} frameColor={red} heading="Privacy">
             <Box height={"32px"}></Box>
           </LinkFrame>
         }
@@ -50,11 +46,7 @@ export function LinksSmall() {
         query={{ key: "modal", value: "credits", operation: "open" }}
         plain
         label={
-          <LinkFrame
-            textColor={colorTheme.white}
-            frameColor={colorTheme.green}
-            heading="Credits"
-          >
+          <LinkFrame textColor={text} frameColor={green} heading="Credits">
             <Box height={"32px"}></Box>
           </LinkFrame>
         }

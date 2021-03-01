@@ -103,7 +103,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           <Timeline gridArea="timeline" />
         </Grid>
       </Box>
-      <Box margin="16px">{isSmall && <LinksSmall />}</Box>
+      <Box margin="16px">{isSmall && <LinksSmall isOnDark={true} />}</Box>
     </>
   );
 };
