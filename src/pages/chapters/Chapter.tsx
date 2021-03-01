@@ -19,7 +19,7 @@ import { useIsActive } from "./useIsActive";
 
 export const Chapter = () => {
   return (
-    <Box fill background="black" overflow="hidden">
+    <Box background="black" overflow="hidden">
       <ChapterContainer>
         <ChapterContent />
       </ChapterContainer>
@@ -52,11 +52,11 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <>
-      <Box className="cover container" margin="16px">
+      <Box className="chapter container" margin="16px">
         <Grid
           responsive={false}
           areas={[
-            { name: "cover", start: [0, 0], end: [0, 0] },
+            { name: "chapter", start: [0, 0], end: [0, 0] },
             { name: "notification", start: [0, 1], end: [0, 1] },
             {
               name: "timeline",
@@ -69,7 +69,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           rows={["flex", "auto", "auto"]}
           gap="16px"
         >
-          <Box gridArea="cover">
+          <Box gridArea="chapter" fill>
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
               {children}
             </ChapterFrame>
