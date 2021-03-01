@@ -7,9 +7,14 @@ export const About = () => {
     | "medium"
     | "large"
     | "xlarge";
+
+  const isSmall = size === "small";
+  const textSize = isSmall ? "20px" : "24px";
+  const lineHeight = isSmall ? "30px" : "36px";
+
   return (
     <>
-      <Text size={size === "small" ? "small" : "medium"}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
         neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
         scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
