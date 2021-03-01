@@ -1,5 +1,6 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
+import styled from "styled-components";
 import { colorTheme } from "./../theme";
 
 export const CameraIndicator = ({
@@ -36,19 +37,45 @@ export const CameraIndicator = ({
   );
 };
 
+const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
+  position: absolute;
+  left: ${(props) => (props.isLeft ? "0" : "100%")};
+  right: ${(props) => (props.isLeft ? "100%" : "0")};
+  transform: translateX(${(props) => (!props.isLeft ? "-100%" : "0%")});
+  top: 0;
+  transition: all 0.2s;
+`;
+
+const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
+  margin-left: ${(props) => (props.isLeft ? "0" : "48px")};
+  margin-right: ${(props) => (props.isLeft ? "48px" : "0")};
+  transition: all 0.2s;
+`;
+
 const CameraIndicatorBox = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
+  const isOn = true;
+  const onText = isSmall ? "on" : "Webcam on";
+  const offText = isSmall ? "off" : "Webcam off";
+  const text = isOn ? onText : offText;
   return (
     <Box
       direction="row"
       border={{ color: "yellow", size: "3px" }}
       height="48px"
+      style={{ position: "relative" }}
+      background="charcoal"
+      className="CameraIndicatorBox"
     >
-      <CameraIcon />
-      <Box background="charcoal" pad={{ horizontal: "20px", vertical: "8px" }}>
-        <Text size="xsmall" color="grayLight">
-          {isSmall ? "off" : "Webcam off"}
-        </Text>
+      <AnimatePosition isLeft={!isOn} width="42px">
+        <CameraIcon isOn={isOn} />
+      </AnimatePosition>
+      <Box pad={{ horizontal: "20px", vertical: "8px" }}>
+        <AnimateMargin isLeft={isOn}>
+          <Text size="xsmall" color="grayLight">
+            {text}
+          </Text>
+        </AnimateMargin>
       </Box>
     </Box>
   );
