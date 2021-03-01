@@ -1,7 +1,13 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext } from "react";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import styled from "styled-components";
 import {
-  CameraIndicator,
+  CameraIndicatorBox,
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
@@ -11,7 +17,7 @@ import { Cover1 } from "./Cover1";
 
 export const Cover = () => {
   return (
-    <Box fill background="black">
+    <Box fill background="grey">
       <CoverContainer>
         <CoverContent />
       </CoverContainer>
@@ -20,81 +26,34 @@ export const Cover = () => {
 };
 
 const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
-  const size = useContext(ResponsiveContext) as
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge";
-
-  if (size === "small" || size === "medium") {
-    return <CoverContainerSmallMedium>{children}</CoverContainerSmallMedium>;
-  } else {
-    return <CoverContainerLargeXLarge>{children}</CoverContainerLargeXLarge>;
-  }
-};
-
-const CoverContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <>
-      <CameraIndicator showBorder={false} backgroundColor="black" />
-      <Box className="cover container" margin="16px">
-        <Grid
-          responsive={false}
-          areas={[
-            { name: "cover", start: [0, 0], end: [0, 0] },
-            {
-              name: "timeline",
-              start: [0, 1],
-              end: [0, 1],
-            },
-          ]}
-          fill
-          columns={["full"]}
-          rows={["flex", "auto"]}
-          gap="15px"
-        >
-          <Box gridArea="cover">
-            <CoverFrame
-              textColor={colorTheme.black}
-              frameColor={colorTheme.yellow}
-              heading="Discriminator"
-            >
-              {children}
-            </CoverFrame>
-          </Box>
-          <Timeline gridArea="timeline" showScrubber={false} />
-        </Grid>
-      </Box>
-    </>
-  );
-};
-
-const CoverContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box className="cover container" margin="16px">
-      <CoverFrame
-        textColor={colorTheme.black}
-        frameColor={colorTheme.yellow}
-        heading="Discriminator"
+      <Grid
+        responsive={false}
+        areas={[
+          { name: "cover", start: [0, 0], end: [0, 0] },
+          {
+            name: "timeline",
+            start: [0, 1],
+            end: [0, 1],
+          },
+        ]}
+        fill
+        columns={["full"]}
+        rows={["flex", "auto"]}
+        gap="16px"
       >
-        <Grid
-          responsive={false}
-          areas={[
-            { name: "cover", start: [0, 0], end: [0, 0] },
-            {
-              name: "timeline",
-              start: [0, 1],
-              end: [0, 1],
-            },
-          ]}
-          fill
-          columns={["full"]}
-          rows={["flex", "auto"]}
-        >
-          <Box gridArea="cover">{children}</Box>
-          <Timeline gridArea="timeline" showScrubber={false} />
-        </Grid>
-      </CoverFrame>
+        <Box gridArea="cover">
+          <CoverFrame
+            textColor={colorTheme.black}
+            frameColor={colorTheme.yellow}
+            heading="Discriminator"
+          >
+            {children}
+          </CoverFrame>
+        </Box>
+        <Timeline gridArea="timeline" showScrubber={false} />
+      </Grid>
     </Box>
   );
 };
@@ -126,9 +85,27 @@ const CoverContent = () => {
   );
 };
 
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
+
 const WebcamNotification = () => {
+  const [isShown, setIsShown] = useState(true);
+  useEffect(() => {
+    const timeout =
+      isShown &&
+      setTimeout(() => {
+        setIsShown(false);
+      }, 3000);
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [isShown]);
+
   return (
-    <Box
+    <FadeOutBox
+      isShown={isShown}
       flex={false}
       style={{
         position: "absolute",
@@ -145,7 +122,7 @@ const WebcamNotification = () => {
       <Text size="xsmall" color="offWhite">
         To make this sequence interactive, turn on your webcam
       </Text>
-    </Box>
+    </FadeOutBox>
   );
 };
 
@@ -208,11 +185,10 @@ const CoverHeadingBlock = ({
       >
         {children}
       </Box>
-      {!isSmallOrMedium && (
-        <Box justify="end">
-          <ChapterCameraIndicator />
-        </Box>
-      )}
+      <Box justify="end">
+        {isSmallOrMedium && <CameraIndicatorBox />}
+        {!isSmallOrMedium && <ChapterCameraIndicator />}
+      </Box>
     </Box>
   );
 };

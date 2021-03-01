@@ -1,5 +1,5 @@
 import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { colorTheme } from "./../theme";
 
@@ -96,9 +96,27 @@ export const ChapterCameraIndicator = () => {
   );
 };
 
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
+
 const WebcamNotification = () => {
+  const [isShown, setIsShown] = useState(true);
+  useEffect(() => {
+    const timeout =
+      isShown &&
+      setTimeout(() => {
+        setIsShown(false);
+      }, 3000);
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [isShown]);
+
   return (
-    <Box
+    <FadeOutBox
+      isShown={isShown}
       flex={false}
       style={{
         position: "absolute",
@@ -112,7 +130,7 @@ const WebcamNotification = () => {
       <Text size="xsmall" color="offWhite">
         To make this sequence interactive, turn on your webcam
       </Text>
-    </Box>
+    </FadeOutBox>
   );
 };
 
