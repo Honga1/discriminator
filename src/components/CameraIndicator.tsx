@@ -47,7 +47,7 @@ const CameraIndicatorBox = () => {
         pad={{ right: "17px", left: "20px", vertical: "7px" }}
       >
         <Text size="small" color="grayLight">
-          Webcam off
+          off
         </Text>
       </Box>
     </Box>
