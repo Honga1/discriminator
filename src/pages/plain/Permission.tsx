@@ -3,14 +3,18 @@ import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../theme";
 import { CameraIndicator } from "./../../components/CameraIndicator";
 import { CustomRoutedButton } from "./CustomButton";
-import { PageFrame } from "./../../components/Frames";
+import {
+  PageFrame,
+  PageFrameWithCameraIndicator,
+} from "./../../components/Frames";
 import { Links } from "./Links";
 
 export const Permission = () => {
   const [showBorder, setShowBorder] = useState(false);
+  const isSmall = useContext(ResponsiveContext) === "small";
   return (
     <Box fill>
-      <CameraIndicator showBorder={showBorder} />
+      {!isSmall && <CameraIndicator showBorder={showBorder} />}
       <Box
         overflow="auto"
         onScroll={(event) =>
@@ -37,7 +41,7 @@ const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
   switch (size) {
     case "small":
       props = {
-        margin: { horizontal: "32px", top: "16px", bottom: "32px" },
+        margin: { horizontal: "16px", top: "16px", bottom: "32px" },
         gap: "48px",
       };
       break;
@@ -61,15 +65,17 @@ const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
   }
 
+  const Frame = size === "small" ? PageFrameWithCameraIndicator : PageFrame;
+
   return (
     <Box className="permission container" {...props}>
-      <PageFrame
+      <Frame
         textColor={colorTheme.yellow}
         frameColor={colorTheme.black}
         heading="Discriminator"
       >
         {children}
-      </PageFrame>
+      </Frame>
       <Links />
     </Box>
   );
@@ -83,8 +89,31 @@ const PermissionContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "56px" : "48px";
+  const marginTop = isSmall ? "104px" : "48px";
   const marginHorizontal = isSmall ? "32px" : "64px";
+
+  const DeclineText = () =>
+    isSmall ? (
+      <span>
+        <span style={{ textDecoration: "underline" }}>Do not use</span> webcam
+      </span>
+    ) : (
+      <span>
+        Continue <span style={{ textDecoration: "underline" }}>without</span>{" "}
+        webcam
+      </span>
+    );
+  const AcceptText = () =>
+    isSmall ? (
+      <span>
+        <span style={{ textDecoration: "underline" }}>Use</span> webcam
+      </span>
+    ) : (
+      <span>
+        Continue <span style={{ textDecoration: "underline" }}>with</span>{" "}
+        webcam
+      </span>
+    );
 
   return (
     <Box
@@ -99,22 +128,12 @@ const PermissionContent = () => {
 
       <CustomRoutedButton
         color={"red"}
-        textContent={
-          <span>
-            Continue{" "}
-            <span style={{ textDecoration: "underline" }}>without</span> webcam
-          </span>
-        }
+        textContent={<DeclineText />}
         href="/cover"
       />
       <CustomRoutedButton
         color={"green"}
-        textContent={
-          <span>
-            Continue <span style={{ textDecoration: "underline" }}>with</span>{" "}
-            webcam
-          </span>
-        }
+        textContent={<AcceptText />}
         href="/cover"
       />
     </Box>

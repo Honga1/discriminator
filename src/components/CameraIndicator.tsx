@@ -52,7 +52,11 @@ const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
   transition: all 0.2s;
 `;
 
-const CameraIndicatorBox = () => {
+export const CameraIndicatorBox = ({
+  borderColor = "yellow",
+}: {
+  borderColor?: "yellow" | "black";
+}) => {
   const isSmall = useContext(ResponsiveContext) === "small";
   const isOn = true;
   const onText = isSmall ? "on" : "Webcam on";
@@ -61,7 +65,7 @@ const CameraIndicatorBox = () => {
   return (
     <Box
       direction="row"
-      border={{ color: "yellow", size: "3px" }}
+      border={{ color: borderColor, size: "3px" }}
       height="48px"
       style={{ position: "relative" }}
       background="charcoal"

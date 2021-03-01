@@ -23,7 +23,7 @@ const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   let props: BoxProps;
   switch (size) {
     case "small":
-      props = { margin: "32px", gap: "48px" };
+      props = { margin: "16px", gap: "48px" };
       break;
     case "medium":
       props = {
