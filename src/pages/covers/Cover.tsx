@@ -66,9 +66,9 @@ const CoverContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "3px" : "3px";
-  const marginHorizontal = isSmall ? "3px" : "3px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0" : "3px";
+  const marginTop = isSmall ? "0px" : "0px";
+  const marginHorizontal = isSmall ? "0px" : "0px";
+  const marginBottom = size === "large" || size === "xlarge" ? "0" : "0px";
 
   return (
     <Box

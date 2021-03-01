@@ -19,7 +19,7 @@ import { useIsActive } from "./useIsActive";
 
 export const Chapter = () => {
   return (
-    <Box background="black" overflow="hidden">
+    <Box fill background="black" overflow="hidden">
       <ChapterContainer>
         <ChapterContent />
       </ChapterContainer>
@@ -122,9 +122,9 @@ const ChapterContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "3px" : "0px";
-  const marginHorizontal = isSmall ? "3px" : "0px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0px" : "3px";
+  const marginTop = isSmall ? "0px" : "0px";
+  const marginHorizontal = isSmall ? "0px" : "0px";
+  const marginBottom = size === "large" || size === "xlarge" ? "0px" : "0px";
 
   return (
     <Box
