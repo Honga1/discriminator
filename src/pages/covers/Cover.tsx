@@ -107,9 +107,9 @@ const CoverContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "4px" : "4px";
-  const marginHorizontal = isSmall ? "4px" : "4px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0" : "4px";
+  const marginTop = isSmall ? "3px" : "3px";
+  const marginHorizontal = isSmall ? "3px" : "3px";
+  const marginBottom = size === "large" || size === "xlarge" ? "0" : "3px";
 
   return (
     <Box
@@ -160,8 +160,8 @@ const CoverFrame = ({
   heading: string;
 }>) => {
   const style = {
-    outlineOffset: `-4px`,
-    outline: `4px ${frameColor} solid`,
+    outlineOffset: `-3px`,
+    outline: `3px ${frameColor} solid`,
   };
 
   const size = useContext(ResponsiveContext) as "small" | string;

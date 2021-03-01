@@ -35,7 +35,7 @@ export const customTheme: ThemeType = {
       family: "Roboto, sans-serif",
     },
     borderSize: {
-      medium: "5px",
+      medium: "3px",
       small: "1px",
     },
 

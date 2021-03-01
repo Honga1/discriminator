@@ -186,8 +186,8 @@ const ScrollableFrame = ({
   heading: string;
 }>) => {
   const style: CSSProperties = {
-    outlineOffset: `-4px`,
-    outline: `4px ${frameColor} solid`,
+    outlineOffset: `-3px`,
+    outline: `3px ${frameColor} solid`,
   };
 
   const [showBorder, setShowBorder] = useState(false);
@@ -236,8 +236,8 @@ const ScrollableFrameLarge = ({
   heading: string;
 }>) => {
   const style: CSSProperties = {
-    outlineOffset: `-4px`,
-    outline: `4px ${frameColor} solid`,
+    outlineOffset: `-3px`,
+    outline: `3px ${frameColor} solid`,
   };
   const isSmall = useContext(ResponsiveContext) === "small";
 
@@ -302,8 +302,8 @@ const ScrollingHeadingBlock = ({
   let bottomBorderStyle = {};
   if (size === "small" || size === "medium") {
     bottomBorderStyle = showBorder
-      ? { borderBottom: `4px solid ${colorTheme.yellowAlternative}` }
-      : { borderBottom: `4px solid ${colorTheme.yellow}` };
+      ? { borderBottom: `3px solid ${colorTheme.yellowAlternative}` }
+      : { borderBottom: `3px solid ${colorTheme.yellow}` };
   }
   const isSmall = useContext(ResponsiveContext) === "small";
 

@@ -145,9 +145,9 @@ const ChapterContent = () => {
     | "xlarge";
 
   const isSmall = size === "small";
-  const marginTop = isSmall ? "4px" : "0px";
-  const marginHorizontal = isSmall ? "4px" : "0px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0px" : "4px";
+  const marginTop = isSmall ? "3px" : "0px";
+  const marginHorizontal = isSmall ? "3px" : "0px";
+  const marginBottom = size === "large" || size === "xlarge" ? "0px" : "3px";
 
   return (
     <Box
@@ -166,9 +166,9 @@ const ChapterContent = () => {
 
 const FadingOutline = styled(Box)<{ outlineColor: string }>`
   outline-color: ${(props) => props.outlineColor};
-  outline-offset: -4px;
+  outline-offset: -3px;
   outline-style: solid;
-  outline-width: 4px;
+  outline-width: 3px;
 
   transition: outline-color 0.4s;
 `;

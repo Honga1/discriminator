@@ -12,8 +12,8 @@ export const PageFrame = ({
   heading: string;
 }>) => {
   const style = {
-    outlineOffset: `-4px`,
-    outline: `4px ${frameColor} solid`,
+    outlineOffset: `-3px`,
+    outline: `3px ${frameColor} solid`,
   };
 
   const size = useContext(ResponsiveContext) as "small" | string;
