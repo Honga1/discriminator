@@ -37,17 +37,17 @@ export const CameraIndicator = ({
 };
 
 const CameraIndicatorBox = () => {
+  const isSmall = useContext(ResponsiveContext) === "small";
   return (
-    <Box direction="row" border={{ color: "yellow", size: "3px" }}>
-      <Box background="redLight">
-        <CameraIcon />
-      </Box>
-      <Box
-        background="charcoal"
-        pad={{ right: "17px", left: "20px", vertical: "7px" }}
-      >
-        <Text size="small" color="grayLight">
-          off
+    <Box
+      direction="row"
+      border={{ color: "yellow", size: "3px" }}
+      height="48px"
+    >
+      <CameraIcon />
+      <Box background="charcoal" pad={{ horizontal: "20px", vertical: "8px" }}>
+        <Text size="xsmall" color="grayLight">
+          {isSmall ? "off" : "Webcam off"}
         </Text>
       </Box>
     </Box>
@@ -85,28 +85,68 @@ const WebcamNotification = () => {
   );
 };
 
-const CameraIcon = () => {
+const CameraIcon = ({ isOn = false }: { isOn?: boolean }) => {
+  if (isOn) {
+    return <CameraIconOn />;
+  } else {
+    return <CameraIconOff />;
+  }
+};
+
+const CameraIconOn = () => {
   return (
-    <Box background="redLight">
-      <svg
-        width="49"
-        height="49"
-        viewBox="0 0 52 52"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M16 17.7002C14.8954 17.7002 14 18.5956 14 19.7002V34.9002C14 36.0048 14.8954 36.9002 16 36.9002H36C37.1046 36.9002 38 36.0048 38 34.9002V19.7002C38 18.5956 37.1046 17.7002 36 17.7002H16ZM26 33.0002C29.3137 33.0002 32 30.3139 32 27.0002C32 23.6865 29.3137 21.0002 26 21.0002C22.6863 21.0002 20 23.6865 20 27.0002C20 30.3139 22.6863 33.0002 26 33.0002Z"
-          fill="#202122"
-        />
-        <path
-          d="M20 18C20 15.7909 21.7909 14 24 14H28C30.2091 14 32 15.7909 32 18H20Z"
-          fill="#202122"
-        />
-        <circle cx="26" cy="27" r="4" fill="#202122" />
-      </svg>
-    </Box>
+    <svg
+      width="42"
+      height="42"
+      viewBox="0 0 42 42"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="42" height="42" fill="#20BF00" />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M11 12.7C9.89543 12.7 9 13.5954 9 14.7V29.9C9 31.0046 9.89543 31.9 11 31.9H31C32.1046 31.9 33 31.0046 33 29.9V14.7C33 13.5954 32.1046 12.7 31 12.7H11ZM21 28C24.3137 28 27 25.3137 27 22C27 18.6863 24.3137 16 21 16C17.6863 16 15 18.6863 15 22C15 25.3137 17.6863 28 21 28Z"
+        fill="#202122"
+      />
+      <path
+        d="M15 13C15 10.7909 16.7909 9 19 9H23C25.2091 9 27 10.7909 27 13H15Z"
+        fill="#202122"
+      />
+      <circle cx="21" cy="22" r="4" fill="#202122" />
+    </svg>
+  );
+};
+
+const CameraIconOff = () => {
+  return (
+    <svg
+      width="42"
+      height="42"
+      viewBox="0 0 42 42"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="42" height="42" fill="#FF5959" />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M11 12.7C9.89543 12.7 9 13.5954 9 14.7V29.9C9 31.0045 9.89543 31.9 11 31.9H31C32.1046 31.9 33 31.0045 33 29.9V14.7C33 13.5954 32.1046 12.7 31 12.7H11ZM21 28C24.3137 28 27 25.3137 27 22C27 18.6862 24.3137 16 21 16C17.6863 16 15 18.6862 15 22C15 25.3137 17.6863 28 21 28Z"
+        fill="#202122"
+      />
+      <path
+        d="M15 13C15 10.7909 16.7909 9 19 9H23C25.2091 9 27 10.7909 27 13H15Z"
+        fill="#202122"
+      />
+      <circle cx="21" cy="22" r="4" fill="#202122" />
+      <line
+        x1="8.58579"
+        y1="34.0416"
+        x2="34.0416"
+        y2="8.58575"
+        stroke="#202122"
+        stroke-width="4"
+      />
+    </svg>
   );
 };
