@@ -7,7 +7,6 @@ import {
   ResponsiveContext,
   Text,
 } from "grommet";
-import { Pause, Play, Rewind } from "grommet-icons";
 import React, {
   useCallback,
   useContext,

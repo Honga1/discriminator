@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
+import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import {
@@ -224,9 +224,6 @@ const ChapterFrame = ({
   textColor: string;
   heading: string;
 }>) => {
-  const size = useContext(ResponsiveContext) as "small" | string;
-  const isSmall = size === "small";
-
   const isActive = useIsActive();
 
   return (

@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, ResponsiveContext, Text } from "grommet";
+import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import {
   CameraIndicator,
