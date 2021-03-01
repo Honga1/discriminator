@@ -1,8 +1,8 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { ReactNode, useContext } from "react";
-import { colorTheme } from "../../theme";
-import { QueryButton, RoutedButton } from "../../components/RoutedAnchor";
+import { Box, Text } from "grommet";
+import React, { ReactNode } from "react";
+import { RoutedButton } from "../../components/RoutedAnchor";
 import { Routes } from "../../Routes";
+import { colorTheme } from "../../theme";
 
 export const CustomRoutedButton = ({
   color,
@@ -13,12 +13,6 @@ export const CustomRoutedButton = ({
   textContent: ReactNode;
   href: Routes;
 }) => {
-  const size = useContext(ResponsiveContext) as
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge";
-
   return (
     <Box className="custom button" direction="row">
       <RoutedButton
@@ -26,9 +20,9 @@ export const CustomRoutedButton = ({
         label={
           <Box
             border={{ color, style: "solid", size: "3px" }}
-            pad={{ horizontal: "27px", vertical: "7px" }}
+            pad={{ horizontal: "24px", vertical: "9px" }}
           >
-            <Text size={size === "small" ? "small" : "medium"} color={color}>
+            <Text size="24px" style={{ lineHeight: "100%" }} color={color}>
               {textContent}
             </Text>
           </Box>
