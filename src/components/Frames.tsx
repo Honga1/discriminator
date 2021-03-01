@@ -1,4 +1,4 @@
-import { Box, Heading, ResponsiveContext } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 
 export const PageFrame = ({
@@ -18,21 +18,23 @@ export const PageFrame = ({
 
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
+
+  const textSize = isSmall ? "24px" : "48px";
+
   return (
     <Box className="frame" style={style} flex={false}>
       <Box className="heading-block" direction="row">
         <Box
           background={frameColor}
-          pad={{ horizontal: "20px", vertical: "12px" }}
+          pad={{ horizontal: isSmall ? "16px" : "20px", vertical: "12px" }}
         >
-          <Heading
-            level={1}
+          <Text
+            size={textSize}
             color={textColor}
-            margin="0"
-            size={isSmall ? "small" : "medium"}
+            style={{ lineHeight: "100%" }}
           >
             {heading}
-          </Heading>
+          </Text>
         </Box>
       </Box>
 
