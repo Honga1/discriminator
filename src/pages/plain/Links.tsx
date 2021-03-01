@@ -1,5 +1,6 @@
 import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { CSSProperties, PropsWithChildren, useContext } from "react";
+import styled from "styled-components";
 import { colorTheme } from "../../theme";
 import { QueryButton } from "./../../components/RoutedAnchor";
 
@@ -145,6 +146,14 @@ const LinksFloating = ({
   );
 };
 
+const OnHoverBox = styled(Box)`
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  transition: all 0.2s;
+`;
+
 const LinkFrame = ({
   children,
   frameColor,
@@ -156,7 +165,7 @@ const LinkFrame = ({
   heading: string;
 }>) => {
   return (
-    <Box
+    <OnHoverBox
       className="link frame"
       style={{
         outlineOffset: `-3px`,
@@ -170,7 +179,7 @@ const LinkFrame = ({
         heading={heading}
       />
       {children}
-    </Box>
+    </OnHoverBox>
   );
 };
 
