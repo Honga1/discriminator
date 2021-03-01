@@ -174,14 +174,9 @@ const CoverFrame = ({
         <CoverHeadingBlock frameColor={frameColor}>
           {isSmallOrMedium && <WebcamNotification />}
 
-          <Heading
-            level={2}
-            color={textColor}
-            margin="0"
-            size={isSmall ? "small" : "medium"}
-          >
+          <Text size={"24px"} color={textColor} style={{ lineHeight: "100%" }}>
             {heading}
-          </Heading>
+          </Text>
         </CoverHeadingBlock>
       </FullWidthStack>
     </Box>
@@ -209,7 +204,7 @@ const CoverHeadingBlock = ({
     >
       <Box
         background={frameColor}
-        pad={{ horizontal: "20px", vertical: "12px" }}
+        pad={{ horizontal: "16px", vertical: "12px" }}
       >
         {children}
       </Box>
