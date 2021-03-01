@@ -238,14 +238,13 @@ const ChapterFrame = ({
             frameColor={colorTheme.yellow}
             isActive={isActive}
           >
-            <Heading
-              level={2}
+            <Text
+              size={"24px"}
               color={textColor}
-              margin="0"
-              size={isSmall ? "small" : "medium"}
+              style={{ lineHeight: "100%" }}
             >
               {heading}
-            </Heading>
+            </Text>
           </ChapterHeadingBlock>
         </FullWidthStack>
       </StackLayerGuiding>
@@ -289,7 +288,7 @@ const ChapterHeadingBlock = ({
         {isSmallOrMedium && <WebcamNotification />}
 
         <OpacityFade
-          pad={{ horizontal: "20px", vertical: "12px" }}
+          pad={{ horizontal: "16px", vertical: "12px" }}
           background={frameColor}
           isShown={isActive}
         >
