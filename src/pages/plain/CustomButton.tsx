@@ -25,11 +25,18 @@ export const CustomRoutedButton = ({
   color,
   textContent,
   href,
+  size = "small",
 }: {
   color: keyof typeof colorTheme;
   textContent: ReactNode;
   href: Routes;
+  size?: "large" | "small";
 }) => {
+  const pad =
+    size === "small"
+      ? { horizontal: "24px", vertical: "9px" }
+      : { horizontal: "30px", vertical: "13px" };
+
   return (
     <Box className="custom button" direction="row">
       <RoutedButton
@@ -37,7 +44,7 @@ export const CustomRoutedButton = ({
         label={
           <OnHoverBox
             border={{ color, style: "solid", size: "3px" }}
-            pad={{ horizontal: "24px", vertical: "9px" }}
+            pad={pad}
             fillColor={colorTheme[color]}
           >
             <Text size="24px" style={{ lineHeight: "100%" }} color={color}>

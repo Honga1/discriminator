@@ -89,6 +89,7 @@ const HomeContent = () => {
         color="blue"
         textContent="Start"
         href="/permissions"
+        size={isSmall ? "small" : "large"}
       />
     </Box>
   );
