@@ -1,8 +1,13 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext } from "react";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import styled from "styled-components";
 import {
-  CameraIndicator,
+  CameraIndicatorBox,
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
@@ -40,65 +45,37 @@ const ChapterContainer = ({ children }: PropsWithChildren<{}>) => {
   }
 };
 
-const AspectRatioBox = styled(Box)`
-  & {
-  }
-  &::before {
-    content: "";
-    float: left;
-    height: 0;
-    padding-top: calc(10 / 14 * 100%);
-  }
-  &::after {
-    /* to clear float */
-    content: "";
-    display: table;
-    clear: both;
-  }
-`;
-
 const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
-  const isSmall = useContext(ResponsiveContext) === "small";
+  const size = useContext(ResponsiveContext);
+  const isSmall = size === "small";
+  const isSmallOrMedium = isSmall || size === "medium";
+
   return (
     <>
-      <CameraIndicator showBorder={false} backgroundColor="black" />
       <Box className="cover container" margin="16px">
         <Grid
           responsive={false}
           areas={[
             { name: "cover", start: [0, 0], end: [0, 0] },
+            { name: "notification", start: [0, 1], end: [0, 1] },
             {
               name: "timeline",
-              start: [0, 1],
-              end: [0, 1],
+              start: [0, 2],
+              end: [0, 2],
             },
           ]}
           fill
           columns={["full"]}
-          rows={["flex", "auto"]}
-          gap="15px"
+          rows={["flex", "auto", "auto"]}
+          gap="16px"
         >
           <Box gridArea="cover">
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
-              <AspectRatioBox
-                responsive={false}
-                flex={false}
-                height={{
-                  min: 360 + "px",
-                }}
-              >
-                <Box
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                  justify="center"
-                >
-                  {children}
-                </Box>
-              </AspectRatioBox>
+              {children}
             </ChapterFrame>
+          </Box>
+          <Box gridArea="notification">
+            {isSmallOrMedium && <WebcamNotification />}
           </Box>
           <Timeline gridArea="timeline" />
         </Grid>
@@ -193,26 +170,35 @@ const StackLayerNotGuiding = styled.div`
   pointer-events: none;
 `;
 
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
+
 const WebcamNotification = () => {
+  const [isShown, setIsShown] = useState(true);
+  useEffect(() => {
+    const timeout =
+      isShown &&
+      setTimeout(() => {
+        setIsShown(false);
+      }, 3000);
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [isShown]);
+
   return (
-    <Box
+    <FadeOutBox
+      isShown={isShown}
       flex={false}
-      style={{
-        position: "absolute",
-        minHeight: "100%",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1,
-      }}
-      background={"black"}
       pad="10px"
       border={{ color: "red", size: "3px" }}
     >
       <Text size="xsmall" color="offWhite">
         To make this sequence interactive, turn on your webcam
       </Text>
-    </Box>
+    </FadeOutBox>
   );
 };
 
@@ -282,8 +268,6 @@ const ChapterHeadingBlock = ({
       align="start"
     >
       <Box>
-        {isSmallOrMedium && <WebcamNotification />}
-
         <OpacityFade
           pad={{ horizontal: "16px", vertical: "12px" }}
           background={frameColor}
@@ -292,6 +276,8 @@ const ChapterHeadingBlock = ({
           {children}
         </OpacityFade>
       </Box>
+
+      {isSmallOrMedium && <CameraIndicatorBox />}
       {!isSmallOrMedium && (
         <Box justify="end">
           <ChapterCameraIndicator />
