@@ -46,7 +46,7 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
         <Box gridArea="cover">
           <CoverFrame
             textColor={colorTheme.black}
-            frameColor={colorTheme.yellow}
+            frameColor={"yellow"}
             heading="Discriminator"
           >
             {children}
@@ -126,26 +126,39 @@ const WebcamNotification = () => {
   );
 };
 
+const FrameBox = styled(Box)<{
+  frameColor: keyof typeof colorTheme;
+}>`
+  & {
+    position: relative;
+  }
+  &:after {
+    outline-offset: -3px;
+    outline: 3px ${(props) => colorTheme[props.frameColor]} solid;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+`;
+
 const CoverFrame = ({
   children,
   frameColor,
   textColor,
   heading,
 }: PropsWithChildren<{
-  frameColor: string;
+  frameColor: keyof typeof colorTheme;
   textColor: string;
   heading: string;
 }>) => {
-  const style = {
-    outlineOffset: `-3px`,
-    outline: `3px ${frameColor} solid`,
-  };
-
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
   const isSmallOrMedium = isSmall || size === "medium";
   return (
-    <Box className="cover-frame" style={style}>
+    <FrameBox className="cover-frame" frameColor={frameColor}>
       <FullWidthStack fill anchor="top-fill">
         <Box fill>{children}</Box>
         <CoverHeadingBlock frameColor={frameColor}>
@@ -156,7 +169,7 @@ const CoverFrame = ({
           </Text>
         </CoverHeadingBlock>
       </FullWidthStack>
-    </Box>
+    </FrameBox>
   );
 };
 
