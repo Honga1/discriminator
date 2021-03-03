@@ -153,8 +153,8 @@ const CameraIconOn = () => {
     >
       <rect width="42" height="42" fill="#20BF00" />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M11 12.7C9.89543 12.7 9 13.5954 9 14.7V29.9C9 31.0046 9.89543 31.9 11 31.9H31C32.1046 31.9 33 31.0046 33 29.9V14.7C33 13.5954 32.1046 12.7 31 12.7H11ZM21 28C24.3137 28 27 25.3137 27 22C27 18.6863 24.3137 16 21 16C17.6863 16 15 18.6863 15 22C15 25.3137 17.6863 28 21 28Z"
         fill="#202122"
       />
@@ -178,8 +178,8 @@ const CameraIconOff = () => {
     >
       <rect width="42" height="42" fill="#FF5959" />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M11 12.7C9.89543 12.7 9 13.5954 9 14.7V29.9C9 31.0045 9.89543 31.9 11 31.9H31C32.1046 31.9 33 31.0045 33 29.9V14.7C33 13.5954 32.1046 12.7 31 12.7H11ZM21 28C24.3137 28 27 25.3137 27 22C27 18.6862 24.3137 16 21 16C17.6863 16 15 18.6862 15 22C15 25.3137 17.6863 28 21 28Z"
         fill="#202122"
       />
@@ -194,7 +194,7 @@ const CameraIconOff = () => {
         x2="34.0416"
         y2="8.58575"
         stroke="#202122"
-        stroke-width="4"
+        strokeWidth="4"
       />
     </svg>
   );

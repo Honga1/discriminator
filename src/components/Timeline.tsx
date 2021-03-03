@@ -201,11 +201,11 @@ const RewindButton = () => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g clip-path="url(#clip0)">
+          <g clipPath="url(#clip0)">
             <path
               d="M16 6C21.5228 6 26 10.4772 26 16C26 21.5228 21.5228 26 16 26C10.4772 26 6 21.5228 6 16C6 13.239 7.11898 10.7393 8.92817 8.92969"
               stroke={offWhite}
-              stroke-width="3"
+              strokeWidth="3"
             />
             <path
               d="M10.006 5.32348L17.5519 1.86969L15.9737 11.0902L10.006 5.32348Z"
@@ -287,8 +287,8 @@ const ChapterSelectDropdown = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M6 19.9646L8.98938 22.954L16 15.9434L23.0106 22.954L26 19.9646L16.0354 10L16 10.0354L15.9646 10L6 19.9646Z"
                 fill={colorTheme.offWhite}
               />
@@ -302,8 +302,8 @@ const ChapterSelectDropdown = () => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M26 12.9894L23.0106 10L16 17.0106L8.98938 10L6 12.9894L15.9646 22.954L16 22.9186L16.0354 22.954L26 12.9894Z"
                 fill="#F8F9FA"
               />
