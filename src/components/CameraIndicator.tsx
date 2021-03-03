@@ -76,7 +76,7 @@ export const CameraIndicatorBox = ({
       </AnimatePosition>
       <Box pad={{ horizontal: "20px", vertical: "8px" }}>
         <AnimateMargin isLeft={isOn}>
-          <Text size="xsmall" color="grayLight">
+          <Text size="xsmall" color="grayLight" style={{ userSelect: "none" }}>
             {text}
           </Text>
         </AnimateMargin>

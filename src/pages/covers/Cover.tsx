@@ -168,7 +168,11 @@ const CoverFrame = ({
         <CoverHeadingBlock frameColor={frameColor}>
           {isSmallOrMedium && <WebcamNotification />}
 
-          <Text size={"24px"} color={textColor} style={{ lineHeight: "100%" }}>
+          <Text
+            size={"24px"}
+            color={textColor}
+            style={{ lineHeight: "100%", userSelect: "none" }}
+          >
             {heading}
           </Text>
         </CoverHeadingBlock>

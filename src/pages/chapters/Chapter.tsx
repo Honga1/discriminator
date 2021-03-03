@@ -229,7 +229,7 @@ const ChapterFrame = ({
             <Text
               size={"24px"}
               color={textColor}
-              style={{ lineHeight: "100%" }}
+              style={{ lineHeight: "100%", userSelect: "none" }}
             >
               {heading}
             </Text>
