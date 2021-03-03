@@ -11,6 +11,7 @@ import {
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
+import { NextButton } from "../../components/NextButton";
 import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
 import { Cover1 } from "./Cover1";
@@ -43,7 +44,7 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
         rows={["flex", "auto"]}
         gap="16px"
       >
-        <Box gridArea="cover">
+        <Box gridArea="cover" style={{ position: "relative" }}>
           <CoverFrame
             textColor={colorTheme.black}
             frameColor={"yellow"}
@@ -51,6 +52,9 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
           >
             {children}
           </CoverFrame>
+          <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
+            <NextButton />
+          </Box>
         </Box>
         <Timeline gridArea="timeline" showScrubber={false} />
       </Grid>
