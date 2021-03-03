@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { colorTheme } from "../theme";
 import { RoutedButton } from "./RoutedAnchor";
 
-const AnimatedBackground = styled(Box)<{ width: number }>`
+const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
   transition: all 1s linear;
   position: absolute;
   top: 0;
   left: 0;
-  right: ${(props) => (1 - props.width) * 100}%;
+  right: ${(props) => (1 - props.styledWidth) * 100}%;
   bottom: 0;
   z-index: -1;
 `;
@@ -42,7 +42,7 @@ export const NextButton = () => {
         >
           <AnimatedBackground
             background="blue"
-            width={progress / 5}
+            styledWidth={progress / 5}
           ></AnimatedBackground>
           <Box direction="row" align="center" gap="10px" overflow="hidden">
             <Box flex={false} width="32px" height="32px">
