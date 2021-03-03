@@ -19,11 +19,9 @@ import { useIsActive } from "./useIsActive";
 
 export const Chapter = () => {
   return (
-    <Box fill background="black" overflow="hidden">
-      <ChapterContainer>
-        <ChapterContent />
-      </ChapterContainer>
-    </Box>
+    <ChapterContainer>
+      <ChapterContent />
+    </ChapterContainer>
   );
 };
 
@@ -36,11 +34,15 @@ const ChapterContainer = ({ children }: PropsWithChildren<{}>) => {
 
   if (size === "small" || size === "medium") {
     return (
-      <ChapterContainerSmallMedium>{children}</ChapterContainerSmallMedium>
+      <Box background="black" overflow="vertical">
+        <ChapterContainerSmallMedium>{children}</ChapterContainerSmallMedium>
+      </Box>
     );
   } else {
     return (
-      <ChapterContainerLargeXLarge>{children}</ChapterContainerLargeXLarge>
+      <Box fill background="black" overflow="hidden">
+        <ChapterContainerLargeXLarge>{children}</ChapterContainerLargeXLarge>
+      </Box>
     );
   }
 };
@@ -52,7 +54,7 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <>
-      <Box className="chapter container" margin="16px">
+      <Box flex={false} className="chapter container" margin="16px">
         <Grid
           responsive={false}
           areas={[
@@ -66,10 +68,13 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           ]}
           fill
           columns={["full"]}
-          rows={["flex", "auto", "auto"]}
+          rows={["auto", "auto", "auto"]}
           gap="16px"
         >
-          <Box gridArea="chapter" fill>
+          <Box
+            gridArea="chapter"
+            // height={{ min: (9 / 16) * window.innerWidth + "px" }}
+          >
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
               {children}
             </ChapterFrame>

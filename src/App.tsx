@@ -24,16 +24,22 @@ const routeToComponent: { url: PlainPageRoutes; component: ReactElement }[] = [
 function App() {
   return (
     <HashRouter basename={"/"}>
-      <PageContainer>
-        <Switch>
-          {routeToComponent.map(({ url, component }) => (
+      <Switch>
+        {routeToComponent.map(({ url, component }) => {
+          const backgroundColor =
+            url.includes("chapter") || url.includes("cover")
+              ? "black"
+              : "yellow";
+          return (
             <Route exact path={url} key={url}>
-              {component}
+              <PageContainer backgroundColor={backgroundColor}>
+                {component}
+              </PageContainer>
             </Route>
-          ))}
-          <Route>Missing Route</Route>
-        </Switch>
-      </PageContainer>
+          );
+        })}
+        <Route>Missing Route</Route>
+      </Switch>
     </HashRouter>
   );
 }
