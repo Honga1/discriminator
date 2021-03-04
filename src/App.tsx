@@ -59,15 +59,15 @@ function App() {
 }
 
 const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
-  // Validate page number
-  const param = (match.params as any)["chapterNumber"] as string | undefined;
-  const isValidChapterNumber = validateChapterNumber(param);
+  const maybeChapterNumber = (match.params as any)["chapterNumber"] as
+    | string
+    | undefined;
+  const isValidChapterNumber = validateChapterNumber(maybeChapterNumber);
 
   if (!isValidChapterNumber) {
     history.push(`/chapter/1?type=cover`);
   }
 
-  // Validate query
   const query = new URLSearchParams(location.search);
   const isValidQuery = validatePageTypeQuery(query);
 
@@ -77,7 +77,7 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
 
   if (!isValidQuery || !isValidChapterNumber) return null;
 
-  const chapterNumber = parseChapterNumber(param);
+  const chapterNumber = parseChapterNumber(maybeChapterNumber);
   const type = parsePageTypeQuery(query);
   return (
     <>

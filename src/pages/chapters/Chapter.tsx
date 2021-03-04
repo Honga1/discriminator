@@ -10,38 +10,38 @@ import {
   CameraIndicatorBox,
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
+import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
 import { FullWidthStack } from "../../components/FullWidthStack";
+import { Timeline } from "../../components/timeline/Timeline";
+import { useIsActive } from "../../hooks/useIsActive";
 import { colorTheme } from "../../theme";
 import { LinksSmall } from "../plain/Links";
-import { ChapterX } from "./ChapterX";
-import { useIsActive } from "../../hooks/useIsActive";
-import { Timeline } from "../../components/timeline/Timeline";
-import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
+import { Chapter1 } from "./Chapter1";
+import { Chapter2 } from "./Chapter2";
+import { Chapter3 } from "./Chapter3";
+import { Chapter4 } from "./Chapter4";
 
 export const Chapter = ({
   hidden,
   chapterNumber,
 }: {
   hidden: boolean;
-  chapterNumber: number;
+  chapterNumber: 1 | 2 | 3 | 4;
 }) => {
   let chapter;
 
   switch (chapterNumber) {
     case 1:
-      chapter = <ChapterX />;
+      chapter = <Chapter1 />;
       break;
     case 2:
-      chapter = <ChapterX />;
+      chapter = <Chapter2 />;
       break;
     case 3:
-      chapter = <ChapterX />;
+      chapter = <Chapter3 />;
       break;
     case 4:
-      chapter = <ChapterX />;
-      break;
-    default:
-      chapter = <ChapterX />;
+      chapter = <Chapter4 />;
       break;
   }
   return (
