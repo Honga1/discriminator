@@ -121,31 +121,31 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
 const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box className="cover container" margin="16px">
-      <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
-        <Grid
-          responsive={false}
-          areas={[
-            { name: "cover", start: [0, 0], end: [0, 0] },
-            {
-              name: "timeline",
-              start: [0, 1],
-              end: [0, 1],
-            },
-          ]}
-          fill
-          columns={["full"]}
-          rows={["flex", "auto"]}
-          gap="12px"
-        >
-          <Box gridArea="cover" fill style={{ position: "relative" }}>
+      <Grid
+        responsive={false}
+        areas={[
+          { name: "cover", start: [0, 0], end: [0, 0] },
+          {
+            name: "timeline",
+            start: [0, 1],
+            end: [0, 1],
+          },
+        ]}
+        fill
+        columns={["full"]}
+        rows={["flex", "auto"]}
+        gap="16px"
+      >
+        <Box gridArea="cover" fill style={{ position: "relative" }}>
+          <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
             {children}
-            <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
-              <FinishedPlayingToNextButton />
-            </Box>
+          </ChapterFrame>
+          <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
+            <FinishedPlayingToNextButton />
           </Box>
-          <Timeline gridArea="timeline" />
-        </Grid>
-      </ChapterFrame>
+        </Box>
+        <Timeline gridArea="timeline" />
+      </Grid>
     </Box>
   );
 };
