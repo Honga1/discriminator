@@ -8,8 +8,8 @@ import {
 } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { InteractiveStack } from "../../components/InteractiveStack";
-import { QueryButton } from "../../components/RoutedAnchor";
+import { InteractiveStack } from "./InteractiveStack";
+import { ModalButton } from "../../components/ModalButton";
 import { useQuery } from "../../hooks/useQuery";
 import { useStore } from "../../store/store";
 import { colorTheme } from "../../theme";
@@ -321,9 +321,8 @@ const ScrollingHeadingBlock = ({
 const CloseButtonSmall = () => {
   return (
     <Box pad={{ right: "11px", top: "10px" }}>
-      <QueryButton
-        query={{ key: "modal", value: "credits", operation: "close" }}
-        href="/credits"
+      <ModalButton
+        query={{ key: "modal", operation: "close" }}
         plain
         fill
         label={
@@ -360,9 +359,8 @@ const CloseButtonSmall = () => {
 const CloseButtonNotSmall = () => {
   return (
     <Box pad={{ right: "6px", top: "4px" }}>
-      <QueryButton
-        query={{ key: "modal", value: "credits", operation: "close" }}
-        href="/credits"
+      <ModalButton
+        query={{ key: "modal", operation: "close" }}
         plain
         fill
         label={

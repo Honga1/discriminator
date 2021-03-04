@@ -11,17 +11,45 @@ import {
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
-import { Timeline } from "../../components/Timeline";
 import { colorTheme } from "../../theme";
 import { LinksSmall } from "../plain/Links";
 import { ChapterX } from "./ChapterX";
-import { useIsActive } from "./useIsActive";
+import { useIsActive } from "../../hooks/useIsActive";
+import { Timeline } from "../../components/timeline/Timeline";
+import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
 
-export const Chapter = () => {
+export const Chapter = ({
+  hidden,
+  chapterNumber,
+}: {
+  hidden: boolean;
+  chapterNumber: number;
+}) => {
+  let chapter;
+
+  switch (chapterNumber) {
+    case 1:
+      chapter = <ChapterX />;
+      break;
+    case 2:
+      chapter = <ChapterX />;
+      break;
+    case 3:
+      chapter = <ChapterX />;
+      break;
+    case 4:
+      chapter = <ChapterX />;
+      break;
+    default:
+      chapter = <ChapterX />;
+      break;
+  }
   return (
-    <ChapterContainer>
-      <ChapterContent />
-    </ChapterContainer>
+    <Box style={hidden ? { display: "none" } : {}}>
+      <ChapterContainer>
+        <ChapterContent>{chapter}</ChapterContent>
+      </ChapterContainer>
+    </Box>
   );
 };
 
@@ -71,13 +99,13 @@ const ChapterContainerSmallMedium = ({ children }: PropsWithChildren<{}>) => {
           rows={["auto", "auto", "auto"]}
           gap="16px"
         >
-          <Box
-            gridArea="chapter"
-            // height={{ min: (9 / 16) * window.innerWidth + "px" }}
-          >
+          <Box gridArea="chapter" style={{ position: "relative" }}>
             <ChapterFrame textColor={colorTheme.black} heading="Discriminator">
               {children}
             </ChapterFrame>
+            <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
+              <FinishedPlayingToNextButton />
+            </Box>
           </Box>
           <Box gridArea="notification">
             {isSmallOrMedium && <WebcamNotification />}
@@ -109,8 +137,11 @@ const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
           rows={["flex", "auto"]}
           gap="12px"
         >
-          <Box gridArea="cover" fill>
+          <Box gridArea="cover" fill style={{ position: "relative" }}>
             {children}
+            <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
+              <FinishedPlayingToNextButton />
+            </Box>
           </Box>
           <Timeline gridArea="timeline" />
         </Grid>
@@ -119,7 +150,7 @@ const ChapterContainerLargeXLarge = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-const ChapterContent = () => {
+const ChapterContent = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -141,7 +172,7 @@ const ChapterContent = () => {
       }}
       className="cover content"
     >
-      <ChapterX />
+      {children}
     </Box>
   );
 };

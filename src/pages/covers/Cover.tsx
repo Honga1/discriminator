@@ -11,16 +11,36 @@ import {
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
-import { NextButton } from "../../components/NextButton";
-import { Timeline } from "../../components/Timeline";
+import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
+import { Timeline } from "../../components/timeline/Timeline";
 import { colorTheme } from "../../theme";
 import { Cover1 } from "./Cover1";
 
-export const Cover = () => {
+export const Cover = ({ chapterNumber }: { chapterNumber: number }) => {
+  let cover;
+
+  switch (chapterNumber) {
+    case 1:
+      cover = <Cover1 />;
+      break;
+    case 2:
+      cover = <Cover1 />;
+      break;
+    case 3:
+      cover = <Cover1 />;
+      break;
+    case 4:
+      cover = <Cover1 />;
+      break;
+    default:
+      cover = <Cover1 />;
+      break;
+  }
+
   return (
     <Box fill background="black" height={{ min: "396px" }}>
       <CoverContainer>
-        <CoverContent />
+        <CoverContent>{cover}</CoverContent>
       </CoverContainer>
     </Box>
   );
@@ -53,16 +73,16 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
             {children}
           </CoverFrame>
           <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
-            <NextButton />
+            <FinishedPlayingToNextButton />
           </Box>
         </Box>
-        <Timeline gridArea="timeline" showScrubber={false} />
+        <Timeline gridArea="timeline" />
       </Grid>
     </Box>
   );
 };
 
-const CoverContent = () => {
+const CoverContent = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -84,7 +104,7 @@ const CoverContent = () => {
       }}
       className="cover content"
     >
-      <Cover1 />
+      {children}
     </Box>
   );
 };

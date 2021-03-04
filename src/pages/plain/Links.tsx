@@ -2,7 +2,7 @@ import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { CSSProperties, PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import { colorTheme } from "../../theme";
-import { QueryButton } from "./../../components/RoutedAnchor";
+import { ModalButton } from "./../../components/ModalButton";
 
 export const Links = () => {
   const size = useContext(ResponsiveContext);
@@ -24,7 +24,7 @@ export function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
   const text = !isOnDark ? colorTheme.white : colorTheme.black;
   return (
     <Box className="links" gap="24px">
-      <QueryButton
+      <ModalButton
         query={{ key: "modal", value: "about", operation: "open" }}
         plain
         label={
@@ -33,7 +33,7 @@ export function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
           </LinkFrame>
         }
       />
-      <QueryButton
+      <ModalButton
         query={{ key: "modal", value: "privacy", operation: "open" }}
         plain
         label={
@@ -42,7 +42,7 @@ export function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
           </LinkFrame>
         }
       />
-      <QueryButton
+      <ModalButton
         query={{ key: "modal", value: "credits", operation: "open" }}
         plain
         label={
@@ -73,7 +73,7 @@ const LinksFloating = ({
             top: "64px",
           }}
         >
-          <QueryButton
+          <ModalButton
             query={{ key: "modal", value: "about", operation: "open" }}
             plain
             fill
@@ -94,7 +94,7 @@ const LinksFloating = ({
             left: "204px",
           }}
         >
-          <QueryButton
+          <ModalButton
             query={{ key: "modal", value: "privacy", operation: "open" }}
             href="/privacy"
             plain
@@ -117,7 +117,7 @@ const LinksFloating = ({
             top: "84px",
           }}
         >
-          <QueryButton
+          <ModalButton
             query={{ key: "modal", value: "credits", operation: "open" }}
             href="/credits"
             plain

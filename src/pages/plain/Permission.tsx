@@ -132,12 +132,12 @@ const PermissionContent = () => {
       <CustomRoutedButton
         color={"red"}
         textContent={<DeclineText />}
-        href="/cover"
+        href="/chapter/1"
       />
       <CustomRoutedButton
         color={"green"}
         textContent={<AcceptText />}
-        href="/cover"
+        href="/chapter/1"
       />
     </Box>
   );

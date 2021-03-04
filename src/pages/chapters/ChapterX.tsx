@@ -76,7 +76,6 @@ function useChapter(ref: React.RefObject<HTMLVideoElement>) {
           setProgress,
           seekTimeDelta,
           progress: getProgress(),
-          chapterNumber: 1,
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
         },
       });

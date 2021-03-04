@@ -16,7 +16,6 @@ type State = {
         getIsPlaying: () => boolean;
         getProgress: () => number;
         seekTimeDelta: (delta: number) => void;
-        chapterNumber: number;
         intention: "PLAY" | "PAUSE";
         progress: number;
       }
@@ -28,6 +27,7 @@ const initialState: NonFunctionProperties<State> = {
   nextVideoToPlay: undefined,
   chapter: undefined,
 };
+
 export const store = create<State>((set, get) => {
   const setWithLog: SetState<State> = (partial, replace) => {
     console.log("Changed state with partial:");
