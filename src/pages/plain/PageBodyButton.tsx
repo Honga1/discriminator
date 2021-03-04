@@ -21,12 +21,14 @@ const OnHoverBox = styled(Box)<{ fillColor: string }>`
   transition: all 0.2s;
 `;
 
-export const CustomRoutedButton = ({
+export const PageBodyButton = ({
   color,
   textContent,
   href,
+  onClick,
   size = "small",
 }: {
+  onClick?: () => void;
   color: keyof typeof colorTheme;
   textContent: ReactNode;
   href: Routes;
@@ -40,6 +42,7 @@ export const CustomRoutedButton = ({
   return (
     <Box className="custom button" direction="row">
       <RoutedButton
+        onClick={onClick}
         plain
         label={
           <OnHoverBox

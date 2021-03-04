@@ -2,11 +2,6 @@ import createStoreHook from "zustand";
 import create, { SetState } from "zustand/vanilla";
 type State = {
   webcamStream: MediaStream | undefined;
-  nextVideoToPlay: HTMLVideoElement | undefined;
-  setWebcamStream(
-    webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED" | undefined
-  ): void;
-  setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined): void;
   chapter:
     | {
         play: () => void;
@@ -20,11 +15,12 @@ type State = {
         progress: number;
       }
     | undefined;
+  toggleCamera: () => void;
+  turnOnCamera: () => void;
 };
 
 const initialState: NonFunctionProperties<State> = {
   webcamStream: undefined,
-  nextVideoToPlay: undefined,
   chapter: undefined,
 };
 
@@ -36,11 +32,37 @@ export const store = create<State>((set, get) => {
   };
   return {
     ...initialState,
-    setWebcamStream(webcamStream: MediaStream | undefined) {
-      setWithLog({ webcamStream });
+    toggleCamera: () => {
+      const maybeStream = get().webcamStream;
+      const isOn = maybeStream !== undefined;
+      if (isOn) {
+        const stream = maybeStream!;
+        stream.getTracks().forEach((track) => track.stop());
+        set({ webcamStream: undefined });
+      } else {
+        get().turnOnCamera();
+      }
     },
-    setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined) {
-      setWithLog({ nextVideoToPlay });
+    turnOnCamera: () => {
+      if (
+        navigator.mediaDevices.getUserMedia &&
+        get().webcamStream === undefined
+      ) {
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then((stream) => {
+            set({ webcamStream: stream });
+            stream.getTracks().forEach((track) => {
+              track.addEventListener("ended", () => {
+                set({ webcamStream: undefined });
+              });
+            });
+          })
+          .catch((error) => {
+            console.log("Something went wrong accessing webcam!");
+            console.log(error);
+          });
+      }
     },
   };
 });

@@ -161,6 +161,7 @@ const FrameBox = styled(Box)<{
     outline: 3px ${(props) => colorTheme[props.frameColor]} solid;
     content: "";
     position: absolute;
+    pointer-events: none;
     top: 0;
     left: 0;
     right: 0;

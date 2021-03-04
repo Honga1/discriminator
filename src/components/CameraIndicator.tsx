@@ -43,30 +43,11 @@ export const CameraIndicatorBox = ({
   const text = isOn ? onText : offText;
   const width = isOn ? "186px" : "186px";
 
-  const toggleCamera = () => {
-    const maybeStream = store.getState().webcamStream;
-    const isOn = maybeStream !== undefined;
-    if (isOn) {
-      const stream = maybeStream!;
-      stream.getTracks().forEach((track) => track.stop());
-      store.setState({ webcamStream: undefined });
-    } else if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          store.setState({ webcamStream: stream });
-        })
-        .catch((error) => {
-          console.log("Something went wrong accessing webcam!");
-          console.log(error);
-        });
-    }
-  };
-
   return (
     <Button
+      style={{ pointerEvents: "all" }}
       plain
-      onClick={toggleCamera}
+      onClick={store.getState().toggleCamera}
       label={
         <AnimateWidthAndHover
           currentWidth={!isActive ? "48px" : width}
@@ -178,7 +159,6 @@ const CameraIcon = ({ isOn = false }: { isOn?: boolean }) => {
 };
 
 const TwoElementCrossFade = styled(Box)<{ isFirstShown: boolean }>`
-  background-color: red;
   & > .first {
     position: relative;
     transition: opacity 0.2s;

@@ -1,13 +1,14 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../theme";
-import { CustomRoutedButton } from "./CustomButton";
+import { PageBodyButton } from "./PageBodyButton";
 import {
   PageFrame,
   PageFrameWithCameraIndicator,
 } from "./../../components/Frames";
 import { Links } from "./Links";
 import { CameraIndicatorBox } from "../../components/CameraIndicator";
+import { store } from "../../store/store";
 
 export const Permission = () => {
   const [showBorder, setShowBorder] = useState(false);
@@ -129,13 +130,15 @@ const PermissionContent = () => {
         policy). If you choose to not enable your webcam you will see xyz.
       </Text>
 
-      <CustomRoutedButton
+      <PageBodyButton
         color={"red"}
+        onClick={() => store.setState({ webcamStream: undefined })}
         textContent={<DeclineText />}
         href="/chapter/1"
       />
-      <CustomRoutedButton
+      <PageBodyButton
         color={"green"}
+        onClick={store.getState().turnOnCamera}
         textContent={<AcceptText />}
         href="/chapter/1"
       />

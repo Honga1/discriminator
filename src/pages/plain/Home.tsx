@@ -1,7 +1,7 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
 import { colorTheme } from "../../theme";
-import { CustomRoutedButton } from "./CustomButton";
+import { PageBodyButton } from "./PageBodyButton";
 import { PageFrame } from "../../components/Frames";
 import { Links } from "./Links";
 
@@ -85,7 +85,7 @@ const HomeContent = () => {
         morbi bibendum. Tellus euismod metus, id feugiat amet.
       </Text>
 
-      <CustomRoutedButton
+      <PageBodyButton
         color="blue"
         textContent="Start"
         href="/permissions"
