@@ -1,5 +1,6 @@
-import { Box, DropButton, Text } from "grommet";
-import React, { useState } from "react";
+import { Box, DropButton, ResponsiveContext, Text } from "grommet";
+import React, { useContext, useState } from "react";
+import { useChapterNumber } from "../../hooks/useChapterNumber";
 import { colorTheme } from "../../theme";
 import { RoutedButton } from "../RoutedAnchor";
 
@@ -12,6 +13,12 @@ export const ChapterSelectDropdown = () => {
     setIsOpen(false);
   };
 
+  const isSmall = useContext(ResponsiveContext) === "small";
+  const chapterNumber = useChapterNumber();
+  const buttonText = isSmall
+    ? chapterNumber + "/4"
+    : `Chapter ${chapterNumber}`;
+
   return (
     <DropButton
       plain
@@ -22,7 +29,7 @@ export const ChapterSelectDropdown = () => {
       label={
         <Box direction="row">
           <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
-            1/4
+            {buttonText}
           </Text>
           {!isOpen ? (
             <svg

@@ -1,12 +1,10 @@
-import { Box, Button, Grid, Text } from "grommet";
+import { Box, Button, Grid } from "grommet";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { useIsActive } from "../../hooks/useIsActive";
 import { useChapterNumber } from "../../hooks/useChapterNumber";
 import { usePageType } from "../../hooks/usePageType";
 import { store, useStore } from "../../store/store";
-import { colorTheme } from "../../theme";
 
 export const ChapterIndicators = () => {
   return (
@@ -55,20 +53,7 @@ const ClickableBox = styled(Box)`
     z-index: -1;
   }
 `;
-const LeftInsetOutline = styled.div`
-  & {
-    position: relative;
-  }
-  &:before {
-    position: absolute;
-    content: "";
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border-left: 2px solid ${colorTheme.yellow};
-  }
-`;
+
 const ChapterIndicator = ({ chapter }: { chapter: number }) => {
   const currentChapter = useChapterNumber();
   const ref = useRef<HTMLDivElement>(null);
@@ -86,11 +71,10 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
     const rect = (event.target as HTMLDivElement).getBoundingClientRect();
     const relativeX = Math.min(Math.max((x - rect.x) / rect.width, 0), 1);
 
-    if (pageType !== "chapter") {
-      history.push(`/chapter/${currentChapter}?isChapter`);
-    }
-
     store.getState().chapter?.setProgress(relativeX);
+    if (pageType !== "chapter") {
+      history.push(`/chapter/${currentChapter}?type=chapter`);
+    }
   };
   const thisIsTheCurrentChapter = currentChapter === chapter;
   return (
