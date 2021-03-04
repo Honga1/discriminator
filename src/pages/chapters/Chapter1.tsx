@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import videoSrc from "./../../720p.mp4";
 import { useChapter } from "../../hooks/useChapter";
-export const Chapter1 = () => {
+export default function Chapter1() {
   const ref = useRef<HTMLVideoElement>(null);
   useChapter(ref);
 
@@ -19,4 +19,4 @@ export const Chapter1 = () => {
       src={videoSrc}
     ></video>
   );
-};
+}

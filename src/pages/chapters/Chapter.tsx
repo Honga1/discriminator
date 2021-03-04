@@ -1,6 +1,7 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import React, {
   PropsWithChildren,
+  Suspense,
   useContext,
   useEffect,
   useState,
@@ -16,10 +17,6 @@ import { Timeline } from "../../components/timeline/Timeline";
 import { useIsActive } from "../../hooks/useIsActive";
 import { colorTheme } from "../../theme";
 import { LinksSmall } from "../plain/Links";
-import { Chapter1 } from "./Chapter1";
-import { Chapter2 } from "./Chapter2";
-import { Chapter3 } from "./Chapter3";
-import { Chapter4 } from "./Chapter4";
 
 export const Chapter = ({
   hidden,
@@ -32,22 +29,28 @@ export const Chapter = ({
 
   switch (chapterNumber) {
     case 1:
+      const Chapter1 = React.lazy(async () => import("./Chapter1"));
       chapter = <Chapter1 />;
       break;
     case 2:
+      const Chapter2 = React.lazy(async () => import("./Chapter2"));
       chapter = <Chapter2 />;
       break;
     case 3:
+      const Chapter3 = React.lazy(async () => import("./Chapter3"));
       chapter = <Chapter3 />;
       break;
     case 4:
+      const Chapter4 = React.lazy(async () => import("./Chapter4"));
       chapter = <Chapter4 />;
       break;
   }
   return (
     <Box style={hidden ? { display: "none" } : {}}>
       <ChapterContainer>
-        <ChapterContent>{chapter}</ChapterContent>
+        <ChapterContent>
+          <Suspense fallback={<Text>Loading ...</Text>}>{chapter}</Suspense>
+        </ChapterContent>
       </ChapterContainer>
     </Box>
   );
