@@ -1,6 +1,7 @@
-import { Box, ResponsiveContext, Text } from "grommet";
+import { Box, Button, ResponsiveContext, Text } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useIsActive } from "../hooks/useIsActive";
 
 const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
   position: absolute;
@@ -17,36 +18,72 @@ const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
   transition: all 0.2s;
 `;
 
+const AnimateWidthAndHover = styled(Box)<{
+  currentWidth: string;
+  fullWidth: string;
+}>`
+  transition: width 0.2s linear;
+  width: ${(props) => props.currentWidth};
+  &:hover {
+    width: ${(props) => props.fullWidth};
+  }
+`;
+
 export const CameraIndicatorBox = ({
   borderColor = "yellow",
 }: {
   borderColor?: "yellow" | "black";
 }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
-  const isOn = true;
+  const [isOn, setIsOn] = useState(false);
+  const isActive = useIsActive();
   const onText = isSmall ? "on" : "Webcam on";
   const offText = isSmall ? "off" : "Webcam off";
   const text = isOn ? onText : offText;
+  const width = isOn ? "186px" : "186px";
+
   return (
-    <Box
-      direction="row"
-      border={{ color: borderColor, size: "3px" }}
-      height="48px"
-      style={{ position: "relative" }}
-      background="charcoal"
-      className="CameraIndicatorBox"
-    >
-      <AnimatePosition isLeft={!isOn} width="42px">
-        <CameraIcon isOn={isOn} />
-      </AnimatePosition>
-      <Box pad={{ horizontal: "20px", vertical: "8px" }}>
-        <AnimateMargin isLeft={isOn}>
-          <Text size="xsmall" color="grayLight" style={{ userSelect: "none" }}>
-            {text}
-          </Text>
-        </AnimateMargin>
-      </Box>
-    </Box>
+    <Button
+      plain
+      onClick={() => setIsOn((isOn) => !isOn)}
+      label={
+        <AnimateWidthAndHover
+          currentWidth={!isActive ? "48px" : width}
+          fullWidth={width}
+          direction="row"
+          border={{ color: borderColor, size: "3px" }}
+          height="48px"
+          style={{ position: "relative" }}
+          background="charcoal"
+          className="CameraIndicatorBox"
+          align="center"
+          overflow="hidden"
+        >
+          <AnimatePosition flex={false} isLeft={!isOn} width="42px">
+            <CameraIcon isOn={isOn} />
+          </AnimatePosition>
+          <AnimateMargin
+            pad={{ horizontal: "20px", vertical: "8px" }}
+            isLeft={isOn}
+            flex={false}
+            height="18px"
+            justify="center"
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+            }}
+          >
+            <Text
+              size="18px"
+              color="grayLight"
+              style={{ userSelect: "none", lineHeight: "18px" }}
+            >
+              {text}
+            </Text>
+          </AnimateMargin>
+        </AnimateWidthAndHover>
+      }
+    ></Button>
   );
 };
 
@@ -86,7 +123,9 @@ const WebcamNotification = () => {
       style={{
         position: "absolute",
         top: "calc(16px + 100%)",
+        right: 0,
         zIndex: 1,
+        width: "186px",
       }}
       background={"black"}
       pad="10px"
@@ -100,18 +139,48 @@ const WebcamNotification = () => {
 };
 
 const CameraIcon = ({ isOn = false }: { isOn?: boolean }) => {
-  if (isOn) {
-    return <CameraIconOn />;
-  } else {
-    return <CameraIconOff />;
-  }
+  return (
+    <TwoElementCrossFade
+      isFirstShown={isOn}
+      width="42px"
+      height="42px"
+      flex={false}
+    >
+      <Box className="first">
+        <CameraIconOn />
+      </Box>
+      <Box className="last">
+        <CameraIconOff />
+      </Box>
+    </TwoElementCrossFade>
+  );
 };
+
+const TwoElementCrossFade = styled(Box)<{ isFirstShown: boolean }>`
+  background-color: red;
+  & > .first {
+    position: relative;
+    transition: opacity 0.2s;
+    opacity: ${(props) => (props.isFirstShown ? "1" : "0")};
+    width: 100%;
+  }
+
+  & > .last {
+    position: absolute;
+    transition: opacity 0.2s;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    opacity: ${(props) => (props.isFirstShown ? "0" : "1")};
+  }
+`;
 
 const CameraIconOn = () => {
   return (
     <svg
-      width="42"
-      height="42"
+      width="42px"
+      height="42px"
       viewBox="0 0 42 42"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -135,8 +204,8 @@ const CameraIconOn = () => {
 const CameraIconOff = () => {
   return (
     <svg
-      width="42"
-      height="42"
+      width="42px"
+      height="42px"
       viewBox="0 0 42 42"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
