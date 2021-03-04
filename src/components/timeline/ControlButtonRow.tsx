@@ -1,5 +1,6 @@
-import { Box, ResponsiveContext } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
+import styled from "styled-components";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
 import { colorTheme } from "../../theme";
@@ -8,7 +9,11 @@ import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
 import { NextChapterButton } from "./NextChapterButton";
 import { PlayPauseButton } from "./PlayPauseButton";
 import { RewindButton } from "./RewindButton";
-import { FadeColorText } from "./Timeline";
+
+const FadeColorText = styled(Text)<{ textColor: string }>`
+  color: ${(props) => props.textColor};
+  transition: color 0.4s;
+`;
 
 export const ControlButtonRow = () => {
   const isActive = useIsActive();

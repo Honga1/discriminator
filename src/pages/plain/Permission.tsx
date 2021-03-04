@@ -1,13 +1,13 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext, useState } from "react";
 import { colorTheme } from "../../theme";
-import { CameraIndicator } from "./../../components/CameraIndicator";
 import { CustomRoutedButton } from "./CustomButton";
 import {
   PageFrame,
   PageFrameWithCameraIndicator,
 } from "./../../components/Frames";
 import { Links } from "./Links";
+import { CameraIndicatorBox } from "../../components/CameraIndicator";
 
 export const Permission = () => {
   const [showBorder, setShowBorder] = useState(false);
@@ -139,6 +139,40 @@ const PermissionContent = () => {
         textContent={<AcceptText />}
         href="/chapter/1"
       />
+    </Box>
+  );
+};
+
+const CameraIndicator = ({
+  showBorder,
+  backgroundColor = "yellow",
+}: {
+  showBorder: boolean;
+  backgroundColor?: "black" | "yellow";
+}) => {
+  const size = useContext(ResponsiveContext) as
+    | "small"
+    | "medium"
+    | "large"
+    | "xlarge";
+
+  const margins =
+    size === "small" || size === "medium"
+      ? { right: "16px", top: "16px", bottom: "12px" }
+      : { right: "13px", top: "12px", bottom: "12px" };
+  const bottomBorderStyle = showBorder
+    ? { borderBottom: `3px solid ${colorTheme.yellowAlternative}` }
+    : {};
+  return (
+    <Box
+      fill="horizontal"
+      background={backgroundColor}
+      flex={false}
+      style={bottomBorderStyle}
+    >
+      <Box direction="row" justify="end" margin={margins}>
+        <CameraIndicatorBox />
+      </Box>
     </Box>
   );
 };
