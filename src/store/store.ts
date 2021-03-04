@@ -1,7 +1,7 @@
 import createStoreHook from "zustand";
 import create, { SetState } from "zustand/vanilla";
 type State = {
-  webcamStream: MediaStream | undefined | "DISCONNECTED" | "NOT_USED";
+  webcamStream: MediaStream | undefined;
   nextVideoToPlay: HTMLVideoElement | undefined;
   setWebcamStream(
     webcamStream: MediaStream | "DISCONNECTED" | "NOT_USED" | undefined
@@ -36,7 +36,7 @@ export const store = create<State>((set, get) => {
   };
   return {
     ...initialState,
-    setWebcamStream(webcamStream: MediaStream | "NOT_USED") {
+    setWebcamStream(webcamStream: MediaStream | undefined) {
       setWithLog({ webcamStream });
     },
     setNextVideoToPlay(nextVideoToPlay: HTMLVideoElement | undefined) {

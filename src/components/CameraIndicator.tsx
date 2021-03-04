@@ -2,6 +2,7 @@ import { Box, Button, ResponsiveContext, Text } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useIsActive } from "../hooks/useIsActive";
+import { store, useStore } from "../store/store";
 
 const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
   position: absolute;
@@ -35,17 +36,37 @@ export const CameraIndicatorBox = ({
   borderColor?: "yellow" | "black";
 }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
-  const [isOn, setIsOn] = useState(false);
+  const isOn = useStore((state) => state.webcamStream !== undefined);
   const isActive = useIsActive();
   const onText = isSmall ? "on" : "Webcam on";
   const offText = isSmall ? "off" : "Webcam off";
   const text = isOn ? onText : offText;
   const width = isOn ? "186px" : "186px";
 
+  const toggleCamera = () => {
+    const maybeStream = store.getState().webcamStream;
+    const isOn = maybeStream !== undefined;
+    if (isOn) {
+      const stream = maybeStream!;
+      stream.getTracks().forEach((track) => track.stop());
+      store.setState({ webcamStream: undefined });
+    } else if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          store.setState({ webcamStream: stream });
+        })
+        .catch((error) => {
+          console.log("Something went wrong accessing webcam!");
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <Button
       plain
-      onClick={() => setIsOn((isOn) => !isOn)}
+      onClick={toggleCamera}
       label={
         <AnimateWidthAndHover
           currentWidth={!isActive ? "48px" : width}
