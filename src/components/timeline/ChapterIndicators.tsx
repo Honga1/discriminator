@@ -93,7 +93,6 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
     store.getState().chapter?.setProgress(relativeX);
   };
   const thisIsTheCurrentChapter = currentChapter === chapter;
-  const isActive = useIsActive();
   return (
     <ClickableBox ref={ref as any} onClick={onClick}>
       {thisIsTheCurrentChapter && <StoreScrubber />}
@@ -101,28 +100,7 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
         background={{ color: "yellowAlternative", opacity: 0.8 }}
         height="8px"
         style={{ pointerEvents: "none" }}
-      >
-        {thisIsTheCurrentChapter && isActive && (
-          <LeftInsetOutline
-            style={{
-              position: "absolute",
-              left: 0,
-              bottom: 0,
-              height: "102px",
-            }}
-          >
-            <Box
-              background="black"
-              pad="10px"
-              border={{ color: "yellow", size: "2px" }}
-            >
-              <Text size="small" color="offWhite">
-                Chapter {chapter}
-              </Text>
-            </Box>
-          </LeftInsetOutline>
-        )}
-      </Box>
+      ></Box>
     </ClickableBox>
   );
 };
