@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export const Cover1 = () => {
+export default function Cover1() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
 
@@ -84,7 +84,7 @@ export const Cover1 = () => {
       ref={canvasRef}
     ></canvas>
   );
-};
+}
 
 function getRelativeTouchPosition(
   event: TouchEvent,
