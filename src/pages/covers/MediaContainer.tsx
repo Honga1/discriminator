@@ -25,6 +25,7 @@ export const Media = ({ children }: PropsWithChildren<{}>) => {
 
 const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
   const isXSmall = window.innerWidth < 500;
+  const isSmall = useContext(ResponsiveContext) === "small";
   return (
     <Box
       className="media container"
@@ -56,7 +57,13 @@ const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
           >
             {children}
           </MediaFrame>
-          <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
+          <Box
+            style={{
+              position: "absolute",
+              bottom: isSmall ? "48px" : "64px",
+              right: 0,
+            }}
+          >
             <FinishedPlayingToNextButton />
           </Box>
         </Box>
