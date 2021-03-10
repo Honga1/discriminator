@@ -60,6 +60,11 @@ const StyleChildrenOnHover = styled(Box)`
     width: 26px;
     height: 26px;
   }
+
+  .scrubber-button:active .scrubber-dot {
+    width: 26px !important;
+    height: 26px !important;
+  }
 `;
 
 const ChapterIndicator = ({ chapter }: { chapter: number }) => {
@@ -176,19 +181,23 @@ const Scrubber = ({
           pointerEvents: "auto",
           top: "50%",
           transform: "translateY(-50%)",
+          width: "auto",
+          height: "auto",
         }}
+        className="scrubber-button"
         ref={buttonRef}
         plain
-      >
-        <Box
-          className="scrubber-dot"
-          style={{ pointerEvents: "none" }}
-          round="100%"
-          background="yellowAlternative"
-          width="20px"
-          height="20px"
-        ></Box>
-      </Button>
+        label={
+          <Box
+            className="scrubber-dot"
+            style={{ pointerEvents: "none" }}
+            round="100%"
+            background="yellowAlternative"
+            width="20px"
+            height="20px"
+          ></Box>
+        }
+      />
     </Box>
   );
 };
