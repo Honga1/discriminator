@@ -1,5 +1,5 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
+import { Box, Text } from "grommet";
+import React from "react";
 import styled from "styled-components";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
@@ -17,24 +17,24 @@ const FadeColorText = styled(Text)<{ textColor: string }>`
 
 export const ControlButtonRow = () => {
   const isActive = useIsActive();
-  const isSmall = useContext(ResponsiveContext) === "small";
   const isCover = usePageType() === "cover";
   return (
-    <Box
-      direction="row"
-      justify="between"
-      flex={false}
-      pad={{ horizontal: "16px", top: "0px", bottom: "8px" }}
-      align="center"
-    >
-      <Box direction="row" gap={"20px"} align="center">
-        <PlayPauseButton disabled={isCover} />
-        <RewindButton disabled={isCover} />
-        <NextChapterButton />
-        <ChapterSelectDropdown />
-      </Box>
-      {!isSmall && (
-        <Box direction="row" gap={"20px"} alignSelf="center">
+    <>
+      <Box
+        direction="row"
+        justify="between"
+        flex={false}
+        wrap
+        pad={{ horizontal: "16px", top: "0px" }}
+        align="center"
+      >
+        <Box flex={false} justify="start" direction="row" gap="20px">
+          <PlayPauseButton disabled={isCover} />
+          <RewindButton disabled={isCover} />
+          <NextChapterButton />
+          <ChapterSelectDropdown />
+        </Box>
+        <Box flex={false} direction="row" gap="20px">
           <ModalButton
             plain
             query={{ key: "modal", value: "about", operation: "open" }}
@@ -86,7 +86,7 @@ export const ControlButtonRow = () => {
             }
           />
         </Box>
-      )}
-    </Box>
+      </Box>
+    </>
   );
 };
