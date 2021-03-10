@@ -68,6 +68,7 @@ export const FinishedPlayingToNextButton = () => {
             pad={{ horizontal: "21px", vertical: "5px" }}
             currentWidth={progress < 2 ? "80px" : width}
             fullWidth={width}
+            background={{ color: "black", opacity: 0.9 }}
           >
             <AnimatedBackground
               background="blue"
