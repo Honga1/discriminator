@@ -34,6 +34,27 @@ export const About = () => {
         scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
         quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
         auctor sed gravida aliquet bibendum.
+        <br />
+        <br />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
+        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
+        auctor sed gravida aliquet bibendum.
+        <br />
+        <br />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
+        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
+        auctor sed gravida aliquet bibendum.
+        <br />
+        <br />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
+        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
+        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
+        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
+        auctor sed gravida aliquet bibendum.
       </Text>
     </>
   );

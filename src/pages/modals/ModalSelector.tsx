@@ -151,25 +151,27 @@ const ModalContainer = ({
     case "large":
       props = {
         margin: { horizontal: "48px", top: "48px", bottom: "-4px" },
+        width: { max: "1080px" },
       };
       break;
     case "xlarge":
       props = {
         margin: { horizontal: "48px", top: "48px", bottom: "-4px" },
+        width: { max: "1080px" },
       };
       break;
   }
 
-  const Frame =
-    size === "small" || size === "medium"
-      ? ScrollableFrame
-      : ScrollableFrameLarge;
   return (
-    <Box fill overflow="hidden">
+    <Box fill overflow="hidden" align="center">
       <Box className="modal container" {...props} background="yellow">
-        <Frame textColor={textColor} frameColor={frameColor} heading={heading}>
+        <ScrollableFrame
+          textColor={textColor}
+          frameColor={frameColor}
+          heading={heading}
+        >
           {children}
-        </Frame>
+        </ScrollableFrame>
       </Box>
     </Box>
   );
@@ -221,51 +223,6 @@ const ScrollableFrame = ({
   );
 };
 
-const ScrollableFrameLarge = ({
-  children,
-  frameColor,
-  textColor,
-  heading,
-}: PropsWithChildren<{
-  frameColor: string;
-  textColor: string;
-  heading: string;
-}>) => {
-  const style: CSSProperties = {
-    outlineOffset: `-3px`,
-    outline: `3px ${frameColor} solid`,
-  };
-
-  return (
-    <Box className="scrollable-frame" style={style} flex={false} fill>
-      <InteractiveStack fill>
-        <Box fill>
-          <CustomScrollbarBox
-            flex={false}
-            overflow={{ horizontal: "hidden", vertical: "auto" }}
-            height="100%"
-            pad={{ top: "76px" }}
-            margin={{ right: "12px", top: "12px" }}
-          >
-            {children}
-          </CustomScrollbarBox>
-        </Box>
-        <Box margin={{ right: "32px" }}>
-          <ScrollingHeadingBlock frameColor={frameColor} showBorder={false}>
-            <Text
-              size={"48px"}
-              color={textColor}
-              style={{ lineHeight: "100%" }}
-            >
-              {heading}
-            </Text>
-          </ScrollingHeadingBlock>
-        </Box>
-      </InteractiveStack>
-    </Box>
-  );
-};
-
 const CustomScrollbarBox = styled(Box)`
   &::-webkit-scrollbar {
     width: 20px;
@@ -289,14 +246,10 @@ const ScrollingHeadingBlock = ({
   frameColor: string;
   showBorder: boolean;
 }>) => {
-  const size = useContext(ResponsiveContext);
+  let bottomBorderStyle = showBorder
+    ? { borderBottom: `3px solid ${colorTheme.yellowAlternative}` }
+    : { borderBottom: `3px solid ${colorTheme.yellow}` };
 
-  let bottomBorderStyle = {};
-  if (size === "small" || size === "medium") {
-    bottomBorderStyle = showBorder
-      ? { borderBottom: `3px solid ${colorTheme.yellowAlternative}` }
-      : { borderBottom: `3px solid ${colorTheme.yellow}` };
-  }
   const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
@@ -401,6 +354,8 @@ const ModalContent = ({ children }: PropsWithChildren<{}>) => {
     | "large"
     | "xlarge";
 
+  console.log(size);
+
   let props: BoxProps;
   switch (size) {
     case "small":
@@ -412,21 +367,21 @@ const ModalContent = ({ children }: PropsWithChildren<{}>) => {
     case "medium":
       props = {
         margin: { left: "60px", right: "28px", top: "48px" },
-        width: { max: "768px" },
+        width: { max: "600px" },
         pad: { bottom: "132px" },
       };
       break;
     case "large":
       props = {
-        margin: { left: "168px", right: "136px", top: "48px" },
-        width: { max: "768px" },
+        margin: { top: "48px", left: "192px", right: 192 - 32 + "px" },
+        width: { max: "600px" },
         pad: { bottom: "132px" },
       };
       break;
     case "xlarge":
       props = {
-        margin: { left: "288px", right: "256px", top: "48px" },
-        width: { max: "768px" },
+        margin: { top: "48px", left: "240px", right: 240 - 32 + "px" },
+        width: { max: "600px" },
         pad: { bottom: "132px" },
       };
       break;
