@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import videoSrc from "./../../720p.mp4";
+import videoSrc from "./../../p4.mp4";
 import { useChapter } from "../../hooks/useChapter";
 
 export default function Chapter4() {
