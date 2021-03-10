@@ -41,7 +41,7 @@ export const CameraIndicatorBox = ({
   const onText = isSmall ? "on" : "Webcam on";
   const offText = isSmall ? "off" : "Webcam off";
   const text = isOn ? onText : offText;
-  const width = isOn ? "186px" : "186px";
+  const width = isSmall ? "109px" : "186px";
 
   return (
     <Button
