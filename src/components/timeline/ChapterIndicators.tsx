@@ -39,18 +39,26 @@ function getClickCoordinates(
     return { x, y };
   }
 }
-const ClickableBox = styled(Box)`
+
+const StyleChildrenOnHover = styled(Box)`
   & {
     position: relative;
+    height: 16px;
   }
-  &:after {
-    content: "";
-    position: absolute;
-    top: -10px;
-    bottom: -10px;
-    left: -10px;
-    right: -10px;
-    z-index: -1;
+  &:hover > :first-child {
+    height: 16px;
+  }
+
+  & > :first-child {
+    transition: all 0.1s;
+  }
+  & .scrubber-dot {
+    transition: all 0.1s;
+  }
+
+  &:hover .scrubber-dot {
+    width: 26px;
+    height: 26px;
   }
 `;
 
@@ -62,8 +70,8 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
   const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const clickWasOnIndicator = event.target === ref.current;
     if (!clickWasOnIndicator) return;
-    const thisIsTheCurrentChapter = currentChapter === chapter;
-    if (!thisIsTheCurrentChapter) {
+    const isThisTheCurrentChapter = currentChapter === chapter;
+    if (!isThisTheCurrentChapter) {
       history.push(`/chapter/${chapter}`);
       return;
     }
@@ -76,16 +84,25 @@ const ChapterIndicator = ({ chapter }: { chapter: number }) => {
       history.push(`/chapter/${currentChapter}?type=chapter`);
     }
   };
-  const thisIsTheCurrentChapter = currentChapter === chapter;
+  const isThisTheCurrentChapter = currentChapter === chapter;
   return (
-    <ClickableBox ref={ref as any} onClick={onClick}>
-      {thisIsTheCurrentChapter && <StoreScrubber />}
+    <StyleChildrenOnHover ref={ref as any} onClick={onClick} align="center">
       <Box
+        className="indicator-bar"
         background={{ color: "yellowAlternative", opacity: 0.8 }}
         height="8px"
-        style={{ pointerEvents: "none" }}
-      ></Box>
-    </ClickableBox>
+        style={{
+          pointerEvents: "none",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          margin: "auto",
+        }}
+      />
+      {isThisTheCurrentChapter && <StoreScrubber />}
+    </StyleChildrenOnHover>
   );
 };
 
@@ -152,23 +169,24 @@ const Scrubber = ({
   );
 
   return (
-    <Box
-      fill="horizontal"
-      ref={containerRef}
-      style={{ pointerEvents: "none", transform: "translateY(-50%)" }}
-    >
+    <Box fill="horizontal" ref={containerRef} style={{ pointerEvents: "none" }}>
       <Button
-        style={{ position: "absolute", pointerEvents: "auto" }}
+        style={{
+          position: "absolute",
+          pointerEvents: "auto",
+          top: "50%",
+          transform: "translateY(-50%)",
+        }}
         ref={buttonRef}
         plain
-        margin={{ top: "-7px", left: "-13px" }}
       >
         <Box
+          className="scrubber-dot"
           style={{ pointerEvents: "none" }}
           round="100%"
           background="yellowAlternative"
-          width="26px"
-          height="26px"
+          width="20px"
+          height="20px"
         ></Box>
       </Button>
     </Box>
@@ -194,7 +212,7 @@ function useDraggableElement(
 
     const setTransform = (clippedX: number) => {
       if (!element.current) return;
-      element.current.style.transform = `translateX(${clippedX}px)`;
+      element.current.style.transform = `translate(${clippedX}px, -50%)`;
     };
 
     setTransform(startPosition);
