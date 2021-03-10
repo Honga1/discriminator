@@ -30,6 +30,38 @@ const AnimateWidthAndHover = styled(Box)<{
   }
 `;
 
+const CameraIndicatorBoxSmall = ({
+  borderColor = "yellow",
+}: {
+  borderColor?: "yellow" | "black";
+}) => {
+  const isOn = useStore((state) => state.webcamStream !== undefined);
+
+  return (
+    <Button
+      style={{ pointerEvents: "all" }}
+      plain
+      onClick={store.getState().toggleCamera}
+      label={
+        <Box
+          direction="row"
+          border={{ color: borderColor, size: "3px" }}
+          height="48px"
+          style={{ position: "relative" }}
+          background="charcoal"
+          className="CameraIndicatorBox"
+          align="center"
+          overflow="hidden"
+        >
+          <Box flex={false} width="42px">
+            <CameraIcon isOn={isOn} />
+          </Box>
+        </Box>
+      }
+    ></Button>
+  );
+};
+
 export const CameraIndicatorBox = ({
   borderColor = "yellow",
 }: {
@@ -38,10 +70,15 @@ export const CameraIndicatorBox = ({
   const isSmall = useContext(ResponsiveContext) === "small";
   const isOn = useStore((state) => state.webcamStream !== undefined);
   const isActive = useIsActive();
-  const onText = isSmall ? "on" : "Webcam on";
-  const offText = isSmall ? "off" : "Webcam off";
+
+  if (isSmall) {
+    return <CameraIndicatorBoxSmall borderColor={borderColor} />;
+  }
+
+  const onText = "Webcam on";
+  const offText = "Webcam off";
   const text = isOn ? onText : offText;
-  const width = isSmall ? "109px" : "186px";
+  const width = "186px";
 
   return (
     <Button
