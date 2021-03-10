@@ -79,7 +79,7 @@ const HomeContent = () => {
       gap={"40px"}
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
-      <Text size={textSize} style={{ lineHeight: lineHeight }}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
         Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
         Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.
         Lacus vitae amet aliquam id leo. Interdum vulputate eu et aliquet elit

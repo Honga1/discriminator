@@ -13,7 +13,7 @@ export const Privacy = () => {
   const lineHeight = isSmall ? "30px" : "36px";
   return (
     <>
-      <Text size={textSize} style={{ lineHeight: lineHeight }}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
         neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
         scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,

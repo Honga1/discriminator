@@ -130,7 +130,7 @@ const PermissionContent = () => {
       gap={"40px"}
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
-      <Text size={textSize} style={{ lineHeight: lineHeight }}>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
         To get out the best out of this experience, we recommend to enable your
         webcam. We do not store any of your information (see our privacy
         policy). If you choose to not enable your webcam you will see xyz.
