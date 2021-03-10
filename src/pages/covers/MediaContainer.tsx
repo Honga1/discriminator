@@ -23,7 +23,7 @@ export const Media = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-export const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
+const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box
       className="media container"
@@ -64,7 +64,7 @@ export const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
     </Box>
   );
 };
-export const MediaContent = ({ children }: PropsWithChildren<{}>) => {
+const MediaContent = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Box className="media content" align="center" height="100%">
       {children}

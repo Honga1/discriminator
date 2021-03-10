@@ -17,7 +17,7 @@ export const Links = () => {
   }
 };
 
-export function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
+function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
   const blue = !isOnDark ? colorTheme.blue : colorTheme.blueLight;
   const red = !isOnDark ? colorTheme.red : colorTheme.redLight;
   const green = !isOnDark ? colorTheme.green : colorTheme.greenLight;

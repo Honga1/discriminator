@@ -8,7 +8,6 @@ import {
 } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { InteractiveStack } from "./InteractiveStack";
 import { ModalButton } from "../../components/ModalButton";
 import { useQuery } from "../../hooks/useQuery";
 import { useStore } from "../../store/store";

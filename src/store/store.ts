@@ -1,5 +1,5 @@
 import createStoreHook from "zustand";
-import create, { SetState } from "zustand/vanilla";
+import create from "zustand/vanilla";
 type State = {
   webcamStream: MediaStream | undefined;
   chapter:
@@ -25,11 +25,6 @@ const initialState: NonFunctionProperties<State> = {
 };
 
 export const store = create<State>((set, get) => {
-  const setWithLog: SetState<State> = (partial, replace) => {
-    console.log("Changed state with partial:");
-    console.table(partial);
-    set(partial, replace);
-  };
   return {
     ...initialState,
     toggleCamera: () => {
