@@ -41,8 +41,14 @@ const PermissionContainer = ({ children }: PropsWithChildren<{}>) => {
   let props: BoxProps;
   switch (size) {
     case "small":
+      const isXSmall = window.innerWidth < 500;
+
       props = {
-        margin: { horizontal: "16px", top: "16px", bottom: "32px" },
+        margin: {
+          horizontal: isXSmall ? "8px" : "16px",
+          top: isXSmall ? "8px" : "16px",
+          bottom: "32px",
+        },
         gap: "48px",
       };
       break;

@@ -24,10 +24,11 @@ export const Media = ({ children }: PropsWithChildren<{}>) => {
 };
 
 const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
+  const isXSmall = window.innerWidth < 500;
   return (
     <Box
       className="media container"
-      pad="16px"
+      pad={isXSmall ? "8px" : "16px"}
       fill="vertical"
       background="black"
       height={{ min: "396px" }}

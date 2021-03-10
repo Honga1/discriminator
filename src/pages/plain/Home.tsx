@@ -23,7 +23,8 @@ const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   let props: BoxProps;
   switch (size) {
     case "small":
-      props = { margin: "16px", gap: "48px" };
+      const isXSmall = window.innerWidth < 500;
+      props = { margin: isXSmall ? "8px" : "16px", gap: "48px" };
       break;
     case "medium":
       props = {
