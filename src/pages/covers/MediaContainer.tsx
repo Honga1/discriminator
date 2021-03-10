@@ -14,45 +14,28 @@ import { FullWidthStack } from "../../components/FullWidthStack";
 import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
 import { Timeline } from "../../components/timeline/Timeline";
 import { colorTheme } from "../../theme";
-import { Cover1 } from "./Cover1";
 
-export const Cover = ({ chapterNumber }: { chapterNumber: number }) => {
-  let cover;
-
-  switch (chapterNumber) {
-    case 1:
-      cover = <Cover1 />;
-      break;
-    case 2:
-      cover = <Cover1 />;
-      break;
-    case 3:
-      cover = <Cover1 />;
-      break;
-    case 4:
-      cover = <Cover1 />;
-      break;
-    default:
-      cover = <Cover1 />;
-      break;
-  }
-
+export const Media = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box fill background="black" height={{ min: "396px" }}>
-      <CoverContainer>
-        <CoverContent>{cover}</CoverContent>
-      </CoverContainer>
-    </Box>
+    <MediaContainer>
+      <MediaContent>{children}</MediaContent>
+    </MediaContainer>
   );
 };
 
-const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
+export const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box className="cover container" margin="16px">
+    <Box
+      className="media container"
+      pad="16px"
+      fill="vertical"
+      background="black"
+      height={{ min: "396px" }}
+    >
       <Grid
         responsive={false}
         areas={[
-          { name: "cover", start: [0, 0], end: [0, 0] },
+          { name: "media", start: [0, 0], end: [0, 0] },
           {
             name: "timeline",
             start: [0, 1],
@@ -64,14 +47,14 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
         rows={["flex", "auto"]}
         gap="16px"
       >
-        <Box gridArea="cover" style={{ position: "relative" }}>
-          <CoverFrame
+        <Box gridArea="media" style={{ position: "relative" }}>
+          <MediaFrame
             textColor={colorTheme.black}
             frameColor={"yellow"}
             heading="Discriminator"
           >
             {children}
-          </CoverFrame>
+          </MediaFrame>
           <Box style={{ position: "absolute", bottom: "10%", right: 0 }}>
             <FinishedPlayingToNextButton />
           </Box>
@@ -81,39 +64,17 @@ const CoverContainer = ({ children }: PropsWithChildren<{}>) => {
     </Box>
   );
 };
-
-const CoverContent = ({ children }: PropsWithChildren<{}>) => {
-  const size = useContext(ResponsiveContext) as
-    | "small"
-    | "medium"
-    | "large"
-    | "xlarge";
-
-  const isSmall = size === "small";
-  const marginTop = isSmall ? "0px" : "0px";
-  const marginHorizontal = isSmall ? "0px" : "0px";
-  const marginBottom = size === "large" || size === "xlarge" ? "0" : "0px";
-
+export const MediaContent = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box
-      gap={"40px"}
-      margin={{
-        horizontal: marginHorizontal,
-        top: marginTop,
-        bottom: marginBottom,
-      }}
-      className="cover content"
-    >
+    <Box className="media content" align="center" height="100%">
       {children}
     </Box>
   );
 };
-
 const FadeOutBox = styled(Box)<{ isShown: boolean }>`
   opacity: ${(props) => (props.isShown ? "1" : "0")};
   transition: opacity 0.6s;
 `;
-
 const WebcamNotification = () => {
   const [isShown, setIsShown] = useState(true);
   useEffect(() => {
@@ -149,12 +110,12 @@ const WebcamNotification = () => {
     </FadeOutBox>
   );
 };
-
 const FrameBox = styled(Box)<{
   frameColor: keyof typeof colorTheme;
 }>`
   & {
     position: relative;
+    height: 100%;
   }
   &:after {
     outline-offset: -3px;
@@ -168,8 +129,7 @@ const FrameBox = styled(Box)<{
     bottom: 0;
   }
 `;
-
-const CoverFrame = ({
+const MediaFrame = ({
   children,
   frameColor,
   textColor,
@@ -183,10 +143,10 @@ const CoverFrame = ({
   const isSmall = size === "small";
   const isSmallOrMedium = isSmall || size === "medium";
   return (
-    <FrameBox className="cover-frame" frameColor={frameColor}>
+    <FrameBox className="media-frame" frameColor={frameColor}>
       <FullWidthStack fill anchor="top-fill">
         <Box fill>{children}</Box>
-        <CoverHeadingBlock frameColor={frameColor}>
+        <MediaHeadingBlock frameColor={frameColor}>
           {isSmallOrMedium && <WebcamNotification />}
 
           <Text
@@ -196,13 +156,12 @@ const CoverFrame = ({
           >
             {heading}
           </Text>
-        </CoverHeadingBlock>
+        </MediaHeadingBlock>
       </FullWidthStack>
     </FrameBox>
   );
 };
-
-const CoverHeadingBlock = ({
+const MediaHeadingBlock = ({
   frameColor,
   children,
 }: PropsWithChildren<{

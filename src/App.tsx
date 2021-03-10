@@ -7,8 +7,8 @@ import {
   Switch,
 } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { Chapter } from "./pages/chapters/Chapter";
-import { Cover } from "./pages/covers/Cover";
+import { Chapter } from "./pages/chapters/Chapters";
+import { Cover } from "./pages/covers/Covers";
 import { Home } from "./pages/plain/Home";
 import { Permission } from "./pages/plain/Permission";
 import {
