@@ -25,7 +25,7 @@ export const ChapterSelectDropdown = () => {
       onOpen={onOpen}
       onClose={onClose}
       open={isOpen}
-      dropProps={{ align: { top: "bottom" } }}
+      dropAlign={{ bottom: "top" }}
       label={
         <Box direction="row">
           <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
