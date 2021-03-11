@@ -110,7 +110,7 @@ const AnimateEverything = styled(Box)`
 `;
 
 const StackedBoxes = ({ amount }: { amount: number }) => {
-  const [[width, height], setDimensions] = useState([0, 0]);
+  const [[width, height], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
 
   const columnCount = Math.ceil(amount / cellsPerColumn);
