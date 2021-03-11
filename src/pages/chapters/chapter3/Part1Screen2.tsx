@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid, ResponsiveContext } from "grommet";
+import { Box, BoxProps, Grid, ResponsiveContext, Text } from "grommet";
 import {
   PropsWithChildren,
   useContext,
@@ -15,33 +15,57 @@ export const Part1Screen2 = () => {
     <Grid
       fill="vertical"
       areas={[
-        { name: "a2006", start: [0, 0], end: [0, 0] },
-        { name: "a2007", start: [1, 0], end: [1, 0] },
-        { name: "a2010", start: [2, 0], end: [3, 0] },
-        { name: "a2011", start: [4, 0], end: [5, 0] },
-        { name: "a2012", start: [6, 0], end: [6, 0] },
-        { name: "a2013", start: [7, 0], end: [7, 0] },
+        { name: "stackedBoxes2006", start: [0, 0], end: [0, 0] },
+        { name: "stackedBoxes2007", start: [1, 0], end: [1, 0] },
+        { name: "stackedBoxes2010", start: [2, 0], end: [3, 0] },
+        { name: "stackedBoxes2011", start: [4, 0], end: [5, 0] },
+        { name: "stackedBoxes2012", start: [6, 0], end: [6, 0] },
+        { name: "stackedBoxes2013", start: [7, 0], end: [7, 0] },
+        { name: "text2006", start: [0, 1], end: [0, 1] },
+        { name: "text2007", start: [1, 1], end: [1, 1] },
+        { name: "text2010", start: [2, 1], end: [3, 1] },
+        { name: "text2011", start: [4, 1], end: [5, 1] },
+        { name: "text2012", start: [6, 1], end: [6, 1] },
+        { name: "text2013", start: [7, 1], end: [7, 1] },
       ]}
       columns={["flex", "flex", "flex", "flex", "flex", "flex", "flex", "flex"]}
-      rows={["fit"]}
+      rows={["flex", "auto"]}
     >
-      <Box gridArea="a2006" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2006" margin="16px" align="center">
         <StackedBoxes amount={3} />
       </Box>
-      <Box gridArea="a2007" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2007" margin="16px" align="center">
         <StackedBoxes amount={6} />
       </Box>
-      <Box gridArea="a2010" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2010" margin="16px" align="center">
         <StackedBoxes amount={15} />
       </Box>
-      <Box gridArea="a2011" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2011" margin="16px" align="center">
         <StackedBoxes amount={16} />
       </Box>
-      <Box gridArea="a2012" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2012" margin="16px" align="center">
         <StackedBoxes amount={1} />
       </Box>
-      <Box gridArea="a2013" margin="16px" justify="end">
+      <Box gridArea="stackedBoxes2013" margin="16px" align="center">
         <StackedBoxes amount={5} />
+      </Box>
+      <Box gridArea="text2006" align="center">
+        <Text color="white">2006</Text>
+      </Box>
+      <Box gridArea="text2007" align="center">
+        <Text color="white">2007</Text>
+      </Box>
+      <Box gridArea="text2010" align="center">
+        <Text color="white">2010</Text>
+      </Box>
+      <Box gridArea="text2011" align="center">
+        <Text color="white">2011</Text>
+      </Box>
+      <Box gridArea="text2012" align="center">
+        <Text color="white">2012</Text>
+      </Box>
+      <Box gridArea="text2013" align="center">
+        <Text color="white">2013</Text>
       </Box>
     </Grid>
   );
@@ -50,19 +74,6 @@ export const Part1Screen2 = () => {
     <Box flex={false} height="100%" width="100%" justify="center" pad="48px">
       {isSmall ? NormalLayout : NormalLayout}
     </Box>
-  );
-};
-
-const AspectRatioBox = ({
-  children,
-  ...props
-}: PropsWithChildren<BoxProps>) => {
-  return (
-    <Box
-      className="aspect ratio box"
-      style={{ height: "20%" }}
-      {...props}
-    ></Box>
   );
 };
 
@@ -151,18 +162,21 @@ const StackedBoxes = ({ amount }: { amount: number }) => {
           direction="row"
           gap={columnGap + "px"}
           align="start"
+          justify="center"
         >
           <Box flex={false} gap={rowGap + "px"} justify="end">
             {boxesLeft}
           </Box>
-          <Box
-            flex={false}
-            gap={rowGap + "px"}
-            justify="start"
-            direction="column-reverse"
-          >
-            {boxesRight}
-          </Box>
+          {columnCount !== 1 && (
+            <Box
+              flex={false}
+              gap={rowGap + "px"}
+              justify="start"
+              direction="column-reverse"
+            >
+              {boxesRight}
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>
