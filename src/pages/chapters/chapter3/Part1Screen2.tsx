@@ -97,7 +97,7 @@ const AnimateEverything = styled(Box)`
   transform: matrix(1, 0, 0, 1, 0, 0);
   border-width: 2px;
   /* matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY()) */
-  &:hover {
+  /* &:hover {
     transform: matrix(3, 0, 0, 3, 0, -200);
   }
 
@@ -106,7 +106,7 @@ const AnimateEverything = styled(Box)`
   }
   &:hover * {
     border-width: calc(2px / 3);
-  }
+  } */
 `;
 
 const StackedBoxes = ({ amount }: { amount: number }) => {
