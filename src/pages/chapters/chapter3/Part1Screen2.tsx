@@ -1,9 +1,9 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import { useContext, useEffect, useRef, useState } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useResize } from "../../../hooks/useResize";
 
-export const Part1Screen2 = () => {
+export const Part1Screen2 = memo(() => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   const NormalLayout = (
@@ -91,7 +91,7 @@ export const Part1Screen2 = () => {
       </AnimateEverything>
     </Box>
   );
-};
+});
 
 const AnimateEverything = styled(Box)`
   transition: all 0.5s;

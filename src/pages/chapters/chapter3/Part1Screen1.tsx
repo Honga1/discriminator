@@ -456,7 +456,7 @@ const BrettFaceCircle = () => {
         rx="124.5"
         fill="url(#pattern0)"
         stroke="#168500"
-        stroke-width="35"
+        strokeWidth="35"
       />
       <defs>
         <pattern
