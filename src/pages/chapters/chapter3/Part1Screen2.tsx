@@ -80,46 +80,46 @@ export const Part1Screen2 = () => {
 const StackedBoxes = ({ amount }: { amount: number }) => {
   const [[width, height], setDimensions] = useState([0, 0]);
   const cellsPerColumn = 8;
-  const rowGap = 8;
+  const rowGap = 16;
   const columnGap = 8;
   const columnCount = Math.ceil(amount / cellsPerColumn);
 
   const dimensions = useResize();
-
-  const boxesLeft = [...new Array(Math.min(amount, cellsPerColumn))].map(
-    (_, index) => {
-      return (
-        <Box
-          flex={false}
-          width={width + "px"}
-          height={height + "px"}
-          key={index}
-          border={{ size: "2px", color: "#FF4E4E" }}
-          background="rgba(255, 89, 89, 0.2)"
-        ></Box>
-      );
-    }
-  );
-  const boxesRight = [
-    ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
-  ].map((_, index) => {
-    return (
+  const RotatedBox = () => (
+    <Box
+      flex={false}
+      width={width + "px"}
+      height={height + "px"}
+      style={{ position: "relative" }}
+    >
       <Box
-        flex={false}
-        width={width + "px"}
-        height={height + "px"}
-        key={index}
+        style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          position: "absolute",
+          transform: `rotate(${Math.random() * 180 - 90}deg)`,
+        }}
         border={{ size: "2px", color: "#FF4E4E" }}
         background="rgba(255, 89, 89, 0.2)"
       ></Box>
-    );
-  });
+    </Box>
+  );
+
+  const boxesLeft = [
+    ...new Array(Math.min(amount, cellsPerColumn)),
+  ].map((_, index) => <RotatedBox key={index} />);
+  const boxesRight = [
+    ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
+  ].map((_, index) => <RotatedBox key={index} />);
+
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!ref.current) return;
     const containerDimensions = ref.current.getBoundingClientRect();
     const maxHeight = containerDimensions.height / cellsPerColumn;
-    const desiredAspect = 16 / 9;
+    const desiredAspect = 4 / 3;
 
     // First try fit by scaling width
     const columnWidth = maxHeight * desiredAspect;
