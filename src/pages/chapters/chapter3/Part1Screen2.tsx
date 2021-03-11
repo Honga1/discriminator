@@ -1,11 +1,6 @@
-import { Box, BoxProps, Grid, ResponsiveContext, Text } from "grommet";
-import {
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Box, Grid, ResponsiveContext, Text } from "grommet";
+import { useContext, useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { useResize } from "../../../hooks/useResize";
 
 export const Part1Screen2 = () => {
@@ -14,6 +9,7 @@ export const Part1Screen2 = () => {
   const NormalLayout = (
     <Grid
       fill="vertical"
+      pad={"32px"}
       areas={[
         { name: "stackedBoxes2006", start: [0, 0], end: [0, 0] },
         { name: "stackedBoxes2007", start: [1, 0], end: [1, 0] },
@@ -30,23 +26,24 @@ export const Part1Screen2 = () => {
       ]}
       columns={["flex", "flex", "flex", "flex", "flex", "flex", "flex", "flex"]}
       rows={["flex", "auto"]}
+      gap={"16px"}
     >
-      <Box gridArea="stackedBoxes2006" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2006" align="center">
         <StackedBoxes amount={3} />
       </Box>
-      <Box gridArea="stackedBoxes2007" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2007" align="center">
         <StackedBoxes amount={6} />
       </Box>
-      <Box gridArea="stackedBoxes2010" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2010" align="center">
         <StackedBoxes amount={15} />
       </Box>
-      <Box gridArea="stackedBoxes2011" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2011" align="center">
         <StackedBoxes amount={16} />
       </Box>
-      <Box gridArea="stackedBoxes2012" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2012" align="center">
         <StackedBoxes amount={1} />
       </Box>
-      <Box gridArea="stackedBoxes2013" margin="16px" align="center">
+      <Box gridArea="stackedBoxes2013" align="center">
         <StackedBoxes amount={5} />
       </Box>
       <Box gridArea="text2006" align="center">
@@ -71,25 +68,47 @@ export const Part1Screen2 = () => {
   );
 
   return (
-    <Box flex={false} height="100%" width="100%" justify="center" pad="48px">
-      {isSmall ? NormalLayout : NormalLayout}
+    <Box
+      flex={false}
+      height="100%"
+      width="100%"
+      justify="center"
+      pad="48px"
+      style={{ position: "relative" }}
+    >
+      <AnimateEverything
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "hidden",
+          transform: "scale(1)",
+        }}
+      >
+        {isSmall ? NormalLayout : NormalLayout}
+      </AnimateEverything>
     </Box>
   );
 };
 
+const AnimateEverything = styled(Box)`
+  transition: all 0.5s;
+`;
+
 const StackedBoxes = ({ amount }: { amount: number }) => {
   const [[width, height], setDimensions] = useState([0, 0]);
   const cellsPerColumn = 8;
-  const rowGap = 16;
-  const columnGap = 8;
+
   const columnCount = Math.ceil(amount / cellsPerColumn);
 
   const dimensions = useResize();
   const RotatedBox = () => (
     <Box
       flex={false}
-      width={width + "px"}
-      height={height + "px"}
+      width={width * 100 + "%"}
+      height={height * 100 + "%"}
       style={{ position: "relative" }}
     >
       <Box
@@ -118,31 +137,36 @@ const StackedBoxes = ({ amount }: { amount: number }) => {
   useEffect(() => {
     if (!ref.current) return;
     const containerDimensions = ref.current.getBoundingClientRect();
-    const maxHeight = containerDimensions.height / cellsPerColumn;
+    const maxHeight = 1 / cellsPerColumn;
     const desiredAspect = 4 / 3;
 
     // First try fit by scaling width
-    const columnWidth = maxHeight * desiredAspect;
-    const maxWidth = containerDimensions.width / columnCount;
+    const columnWidth =
+      (maxHeight * desiredAspect * containerDimensions.height) /
+      (containerDimensions.width / columnCount);
+    const maxWidth = 1;
 
     const isColumnTooWide = maxWidth <= columnWidth;
 
     if (isColumnTooWide) {
-      const reducedHeight = maxWidth / desiredAspect;
+      const reducedHeight =
+        ((maxWidth / desiredAspect) * containerDimensions.width) /
+        containerDimensions.height /
+        columnCount;
 
       const reducedWithGap = shrinkAndMaintainAspectRatio(
         maxWidth,
         reducedHeight,
-        columnGap,
-        rowGap
+        0,
+        0
       );
       setDimensions(reducedWithGap);
     } else {
       const reducedWithGap = shrinkAndMaintainAspectRatio(
         columnWidth,
         maxHeight,
-        columnGap,
-        rowGap
+        0,
+        0
       );
 
       setDimensions(reducedWithGap);
@@ -153,26 +177,28 @@ const StackedBoxes = ({ amount }: { amount: number }) => {
     <Box
       width="100%"
       height="100%"
+      align="end"
       pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
     >
-      <Box ref={ref} flex={false} width="100%" height="100%" justify="end">
+      <Box ref={ref} width="100%" height="100%" align="end">
         <Box
           width="100%"
-          flex={false}
           direction="row"
-          gap={columnGap + "px"}
-          align="start"
+          height="100%"
           justify="center"
+          align="end"
+          gap="10px"
         >
-          <Box flex={false} gap={rowGap + "px"} justify="end">
+          <Box height="100%" width="100%" align={"center"} justify="end">
             {boxesLeft}
           </Box>
-          {columnCount !== 1 && (
+          {columnCount === 2 && (
             <Box
-              flex={false}
-              gap={rowGap + "px"}
-              justify="start"
-              direction="column-reverse"
+              direction="column"
+              height="100%"
+              width="100%"
+              align="center"
+              justify="end"
             >
               {boxesRight}
             </Box>
