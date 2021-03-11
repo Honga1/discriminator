@@ -74,7 +74,7 @@ export const Part1Screen2 = memo(() => {
       width="100%"
       justify="center"
       pad="48px"
-      style={{ position: "relative" }}
+      style={{ position: "relative", overflow: "hidden" }}
     >
       <AnimateEverything
         style={{
@@ -84,7 +84,6 @@ export const Part1Screen2 = memo(() => {
           right: 0,
           bottom: 0,
           overflow: "hidden",
-          transform: "scale(1)",
         }}
       >
         {isSmall ? NormalLayout : NormalLayout}
@@ -94,7 +93,13 @@ export const Part1Screen2 = memo(() => {
 });
 
 const AnimateEverything = styled(Box)`
-  transition: all 0.5s;
+  transition: all 5s ease-in-out;
+  transform: matrix(1, 0, 0, 1, 0, 0);
+
+  /* matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY()) */
+  &:hover {
+    transform: matrix(3, 0, 0, 3, 0, 0);
+  }
 `;
 
 const StackedBoxes = ({ amount }: { amount: number }) => {
