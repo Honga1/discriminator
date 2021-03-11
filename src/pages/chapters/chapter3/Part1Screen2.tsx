@@ -1,70 +1,84 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import { memo, useContext, useEffect, useRef, useState } from "react";
+import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import { useResize } from "../../../hooks/useResize";
+import { useTimer } from "../../../hooks/useTimer";
 
 export const Part1Screen2 = memo(() => {
   const isSmall = useContext(ResponsiveContext) === "small";
+  const [seconds] = useTimer();
 
-  const NormalLayout = (
-    <Grid
-      fill="vertical"
-      pad={"32px"}
-      areas={[
-        { name: "stackedBoxes2006", start: [0, 0], end: [0, 0] },
-        { name: "stackedBoxes2007", start: [1, 0], end: [1, 0] },
-        { name: "stackedBoxes2010", start: [2, 0], end: [3, 0] },
-        { name: "stackedBoxes2011", start: [4, 0], end: [5, 0] },
-        { name: "stackedBoxes2012", start: [6, 0], end: [6, 0] },
-        { name: "stackedBoxes2013", start: [7, 0], end: [7, 0] },
-        { name: "text2006", start: [0, 1], end: [0, 1] },
-        { name: "text2007", start: [1, 1], end: [1, 1] },
-        { name: "text2010", start: [2, 1], end: [3, 1] },
-        { name: "text2011", start: [4, 1], end: [5, 1] },
-        { name: "text2012", start: [6, 1], end: [6, 1] },
-        { name: "text2013", start: [7, 1], end: [7, 1] },
-      ]}
-      columns={["flex", "flex", "flex", "flex", "flex", "flex", "flex", "flex"]}
-      rows={["flex", "auto"]}
-      gap={"16px"}
-    >
-      <Box gridArea="stackedBoxes2006" align="center">
-        <StackedBoxes amount={3} />
-      </Box>
-      <Box gridArea="stackedBoxes2007" align="center">
-        <StackedBoxes amount={6} />
-      </Box>
-      <Box gridArea="stackedBoxes2010" align="center">
-        <StackedBoxes amount={15} />
-      </Box>
-      <Box gridArea="stackedBoxes2011" align="center">
-        <StackedBoxes amount={16} />
-      </Box>
-      <Box gridArea="stackedBoxes2012" align="center">
-        <StackedBoxes amount={1} />
-      </Box>
-      <Box gridArea="stackedBoxes2013" align="center">
-        <StackedBoxes amount={5} />
-      </Box>
-      <Box gridArea="text2006" align="center">
-        <Text color="white">2006</Text>
-      </Box>
-      <Box gridArea="text2007" align="center">
-        <Text color="white">2007</Text>
-      </Box>
-      <Box gridArea="text2010" align="center">
-        <Text color="white">2010</Text>
-      </Box>
-      <Box gridArea="text2011" align="center">
-        <Text color="white">2011</Text>
-      </Box>
-      <Box gridArea="text2012" align="center">
-        <Text color="white">2012</Text>
-      </Box>
-      <Box gridArea="text2013" align="center">
-        <Text color="white">2013</Text>
-      </Box>
-    </Grid>
+  const NormalLayout = useMemo(
+    () => (
+      <Grid
+        fill="vertical"
+        pad={"32px"}
+        areas={[
+          { name: "stackedBoxes2006", start: [0, 0], end: [0, 0] },
+          { name: "stackedBoxes2007", start: [1, 0], end: [1, 0] },
+          { name: "stackedBoxes2010", start: [2, 0], end: [3, 0] },
+          { name: "stackedBoxes2011", start: [4, 0], end: [5, 0] },
+          { name: "stackedBoxes2012", start: [6, 0], end: [6, 0] },
+          { name: "stackedBoxes2013", start: [7, 0], end: [7, 0] },
+          { name: "text2006", start: [0, 1], end: [0, 1] },
+          { name: "text2007", start: [1, 1], end: [1, 1] },
+          { name: "text2010", start: [2, 1], end: [3, 1] },
+          { name: "text2011", start: [4, 1], end: [5, 1] },
+          { name: "text2012", start: [6, 1], end: [6, 1] },
+          { name: "text2013", start: [7, 1], end: [7, 1] },
+        ]}
+        columns={[
+          "flex",
+          "flex",
+          "flex",
+          "flex",
+          "flex",
+          "flex",
+          "flex",
+          "flex",
+        ]}
+        rows={["flex", "auto"]}
+        gap={"16px"}
+      >
+        <Box gridArea="stackedBoxes2006" align="center">
+          <StackedBoxes amount={3} />
+        </Box>
+        <Box gridArea="stackedBoxes2007" align="center">
+          <StackedBoxes amount={6} />
+        </Box>
+        <Box gridArea="stackedBoxes2010" align="center">
+          <StackedBoxes amount={15} />
+        </Box>
+        <Box gridArea="stackedBoxes2011" align="center">
+          <StackedBoxes amount={16} />
+        </Box>
+        <Box gridArea="stackedBoxes2012" align="center">
+          <StackedBoxes amount={1} />
+        </Box>
+        <Box gridArea="stackedBoxes2013" align="center">
+          <StackedBoxes amount={5} />
+        </Box>
+        <Box gridArea="text2006" align="center">
+          <Text color="white">2006</Text>
+        </Box>
+        <Box gridArea="text2007" align="center">
+          <Text color="white">2007</Text>
+        </Box>
+        <Box gridArea="text2010" align="center">
+          <Text color="white">2010</Text>
+        </Box>
+        <Box gridArea="text2011" align="center">
+          <Text color="white">2011</Text>
+        </Box>
+        <Box gridArea="text2012" align="center">
+          <Text color="white">2012</Text>
+        </Box>
+        <Box gridArea="text2013" align="center">
+          <Text color="white">2013</Text>
+        </Box>
+      </Grid>
+    ),
+    []
   );
 
   return (
@@ -85,6 +99,7 @@ export const Part1Screen2 = memo(() => {
           bottom: 0,
           overflow: "hidden",
         }}
+        isZoomed={seconds % 10 > 5}
       >
         {isSmall ? NormalLayout : NormalLayout}
       </AnimateEverything>
@@ -92,9 +107,10 @@ export const Part1Screen2 = memo(() => {
   );
 });
 
-const AnimateEverything = styled(Box)`
-  transition: all 5s ease-out;
-  transform: matrix(1, 0, 0, 1, 0, 0);
+const AnimateEverything = styled(Box)<{ isZoomed: boolean }>`
+  transition: all 1s ease-out;
+  transform: ${(props) =>
+    props.isZoomed ? `matrix(2, 0, 0, 2, 0, 0)` : `matrix(1, 0, 0, 1, 0, 0)`};
   border-width: 2px;
   /* matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY()) */
   /* &:hover {
