@@ -65,14 +65,14 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
   const isValidChapterNumber = validateChapterNumber(maybeChapterNumber);
 
   if (!isValidChapterNumber) {
-    history.push(`/chapter/1?type=cover`);
+    history.replace(`/chapter/1?type=cover`);
   }
 
   const query = new URLSearchParams(location.search);
   const isValidQuery = validatePageTypeQuery(query);
 
   if (!isValidQuery) {
-    history.push(`${match.url}?type=cover`);
+    history.replace(`${match.url}?type=cover`);
   }
 
   if (!isValidQuery || !isValidChapterNumber) return null;
