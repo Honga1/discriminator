@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import videoSrc from "./../../720p.mp4";
-import { useChapter } from "../../hooks/useChapter";
+import videoSrc from "./../../../720p.mp4";
+import { useChapter } from "../../../hooks/useChapter";
 export default function Chapter3() {
   const ref = useRef<HTMLVideoElement>(null);
   useChapter(ref);
