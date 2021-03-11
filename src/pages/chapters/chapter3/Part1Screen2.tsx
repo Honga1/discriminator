@@ -93,12 +93,19 @@ export const Part1Screen2 = memo(() => {
 });
 
 const AnimateEverything = styled(Box)`
-  transition: all 5s ease-in-out;
+  transition: all 5s ease-out;
   transform: matrix(1, 0, 0, 1, 0, 0);
-
+  border-width: 2px;
   /* matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY()) */
   &:hover {
-    transform: matrix(3, 0, 0, 3, 0, 0);
+    transform: matrix(3, 0, 0, 3, 0, -200);
+  }
+
+  & * {
+    transition: all 5s ease-out;
+  }
+  &:hover * {
+    border-width: calc(2px / 3);
   }
 `;
 
