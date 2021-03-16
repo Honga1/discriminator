@@ -293,7 +293,7 @@ export const Part1Screen2 = memo(() => {
 
 const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   width: 100%;
-  object-fit: "cover";
+  object-fit: cover;
   height: 100%;
   transition: opacity 1s;
   opacity: ${(props) => (props.isShown ? 1 : 0)};
@@ -416,30 +416,45 @@ const RotatedBox = memo(
     width: number;
     height: number;
     image: ReactElement;
-  }) => (
-    <Box
-      className="rotated-box"
-      flex={false}
-      width={width * 100 + "%"}
-      height={height * 100 + "%"}
-      style={{ position: "relative" }}
-    >
+  }) => {
+    const rotation = `rotate(${Math.random() * 130 - 65}deg)`;
+    return (
       <Box
-        style={{
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          position: "absolute",
-          transform: `rotate(${Math.random() * 180 - 90}deg)`,
-        }}
-        border={{ size: "2px", color: "#FF4E4E" }}
-        background="rgba(255, 89, 89, 0.2)"
+        className="rotated-box"
+        flex={false}
+        width={width * 100 + "%"}
+        height={height * 100 + "%"}
+        style={{ position: "relative" }}
       >
-        {image}
+        <Box
+          style={{
+            top: "1px",
+            left: "1px",
+            right: "1px",
+            bottom: "1px",
+            position: "absolute",
+            transform: rotation,
+            outline: "2px #FF4E4E solid",
+            outlineOffset: "-2px",
+            zIndex: -1,
+          }}
+          background="#502B2D"
+        ></Box>
+        <Box
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: "absolute",
+            transform: rotation,
+          }}
+        >
+          {image}
+        </Box>
       </Box>
-    </Box>
-  )
+    );
+  }
 );
 
 const shrinkAndMaintainAspectRatio = (
