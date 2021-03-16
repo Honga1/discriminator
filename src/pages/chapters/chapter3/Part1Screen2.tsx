@@ -1,5 +1,13 @@
-import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Grid, Image, ResponsiveContext, Text } from "grommet";
+import {
+  memo,
+  ReactElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
 import { useTimer } from "../../../hooks/useTimer";
@@ -36,7 +44,6 @@ export const Part1Screen2 = memo(() => {
         x: -translationX,
         y: -translationY,
       });
-      choice.style.backgroundColor = "green";
     }
   }, [seconds]);
 
@@ -91,22 +98,90 @@ const NormalLayout = memo(() => (
     gap={"16px"}
   >
     <Box gridArea="stackedBoxes2006" align="center">
-      <StackedBoxes amount={3} />
+      <StackedBoxes
+        amount={3}
+        images={[
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+        ]}
+      />
     </Box>
     <Box gridArea="stackedBoxes2007" align="center">
-      <StackedBoxes amount={6} />
+      <StackedBoxes
+        amount={6}
+        images={[
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+        ]}
+      />
     </Box>
     <Box gridArea="stackedBoxes2010" align="center">
-      <StackedBoxes amount={15} />
+      <StackedBoxes
+        amount={15}
+        images={[
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+        ]}
+      />
     </Box>
     <Box gridArea="stackedBoxes2011" align="center">
-      <StackedBoxes amount={16} />
+      <StackedBoxes
+        amount={16}
+        images={[
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+        ]}
+      />
     </Box>
     <Box gridArea="stackedBoxes2012" align="center">
-      <StackedBoxes amount={1} />
+      <StackedBoxes
+        amount={1}
+        images={[<RevealableImage src="https://picsum.photos/200/300" />]}
+      />
     </Box>
     <Box gridArea="stackedBoxes2013" align="center">
-      <StackedBoxes amount={5} />
+      <StackedBoxes
+        amount={5}
+        images={[
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+          <RevealableImage src="https://picsum.photos/100/100" />,
+          <RevealableImage src="https://picsum.photos/200/300" />,
+        ]}
+      />
     </Box>
     <Box gridArea="text2006" align="center">
       <Text color="white">2006</Text>
@@ -129,11 +204,22 @@ const NormalLayout = memo(() => (
   </Grid>
 ));
 
+const RevealableImage = styled(Image)<{ isShown?: boolean }>`
+  width: 100%;
+  object-fit: "cover";
+  height: 100%;
+  transition: opacity 1s;
+  opacity: ${(props) => (props.isShown ? 1 : 0)};
+
+  :hover {
+    opacity: 1;
+  }
+`;
+
 const AnimateEverything = styled(Box)<{
   isZoomed: boolean;
   target: { x: number; y: number };
 }>`
-  // transform-origin: center center;
   transition: all 1s ease-out;
   transform: ${(props) =>
     !props.isZoomed
@@ -141,106 +227,141 @@ const AnimateEverything = styled(Box)<{
       : `scale(2) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
-const StackedBoxes = memo(({ amount }: { amount: number }) => {
-  const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
-  const cellsPerColumn = 8;
-  console.log("render2");
+const StackedBoxes = memo(
+  ({
+    amount: fakeAmount,
+    images,
+  }: {
+    amount: number;
+    images?: ReactElement[];
+  }) => {
+    const amount = images?.length ?? fakeAmount;
+    const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
+    const cellsPerColumn = 8;
 
-  const columnCount = Math.ceil(amount / cellsPerColumn);
+    const columnCount = Math.ceil(amount / cellsPerColumn);
 
-  const ref = useRef<HTMLDivElement>(null);
-  const { width = 1, height = 1 } = useResizeObserver<HTMLDivElement>({ ref });
+    const ref = useRef<HTMLDivElement>(null);
+    const { width = 1, height = 1 } = useResizeObserver<HTMLDivElement>({
+      ref,
+    });
 
-  const boxesLeft = useMemo(
-    () =>
-      [...new Array(Math.min(amount, cellsPerColumn))].map((_, index) => (
-        <RotatedBox width={boxWidth} height={boxHeight} key={index} />
-      )),
-    [amount, boxHeight, boxWidth]
-  );
-  const boxesRight = useMemo(
-    () =>
-      [
-        ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
-      ].map((_, index) => (
-        <RotatedBox width={boxWidth} height={boxHeight} key={index} />
-      )),
-    [amount, boxHeight, boxWidth]
-  );
+    const boxesLeft = useMemo(
+      () =>
+        [...new Array(Math.min(amount, cellsPerColumn))].map((_, index) => {
+          const image = images?.[index];
+          return (
+            <RotatedBox
+              width={boxWidth}
+              height={boxHeight}
+              key={index}
+              image={image}
+            />
+          );
+        }),
+      [amount, boxHeight, boxWidth, images]
+    );
+    const boxesRight = useMemo(
+      () =>
+        [
+          ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
+        ].map((_, index) => {
+          const image = images?.[index];
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const maxHeight = 1 / cellsPerColumn;
-    const desiredAspect = 4 / 3;
+          return (
+            <RotatedBox
+              width={boxWidth}
+              height={boxHeight}
+              key={index}
+              image={image}
+            />
+          );
+        }),
+      [amount, boxHeight, boxWidth, images]
+    );
 
-    // First try fit by scaling width
-    const columnWidth =
-      (maxHeight * desiredAspect * height) / (width / columnCount);
-    const maxWidth = 1;
+    useEffect(() => {
+      if (!ref.current) return;
+      const maxHeight = 1 / cellsPerColumn;
+      const desiredAspect = 4 / 3;
 
-    const isColumnTooWide = maxWidth <= columnWidth;
+      // First try fit by scaling width
+      const columnWidth =
+        (maxHeight * desiredAspect * height) / (width / columnCount);
+      const maxWidth = 1;
 
-    if (isColumnTooWide) {
-      const reducedHeight =
-        ((maxWidth / desiredAspect) * width) / height / columnCount;
+      const isColumnTooWide = maxWidth <= columnWidth;
 
-      const reducedWithGap = shrinkAndMaintainAspectRatio(
-        maxWidth,
-        reducedHeight,
-        0,
-        0
-      );
-      setDimensions(reducedWithGap);
-    } else {
-      const reducedWithGap = shrinkAndMaintainAspectRatio(
-        columnWidth,
-        maxHeight,
-        0,
-        0
-      );
+      if (isColumnTooWide) {
+        const reducedHeight =
+          ((maxWidth / desiredAspect) * width) / height / columnCount;
 
-      setDimensions(reducedWithGap);
-    }
-  }, [columnCount, height, ref, width]);
+        const reducedWithGap = shrinkAndMaintainAspectRatio(
+          maxWidth,
+          reducedHeight,
+          0,
+          0
+        );
+        setDimensions(reducedWithGap);
+      } else {
+        const reducedWithGap = shrinkAndMaintainAspectRatio(
+          columnWidth,
+          maxHeight,
+          0,
+          0
+        );
 
-  return (
-    <Box
-      width="100%"
-      height="100%"
-      align="end"
-      pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
-    >
-      <Box ref={ref} width="100%" height="100%" align="end">
-        <Box
-          width="100%"
-          direction="row"
-          height="100%"
-          justify="center"
-          align="end"
-          gap="10px"
-        >
-          <Box height="100%" width="100%" align={"center"} justify="end">
-            {boxesLeft}
-          </Box>
-          {columnCount === 2 && (
-            <Box
-              direction="column"
-              height="100%"
-              width="100%"
-              align="center"
-              justify="end"
-            >
-              {boxesRight}
+        setDimensions(reducedWithGap);
+      }
+    }, [columnCount, height, ref, width]);
+
+    return (
+      <Box
+        width="100%"
+        height="100%"
+        align="end"
+        pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
+      >
+        <Box ref={ref} width="100%" height="100%" align="end">
+          <Box
+            width="100%"
+            direction="row"
+            height="100%"
+            justify="center"
+            align="end"
+            gap="10px"
+          >
+            <Box height="100%" width="100%" align={"center"} justify="end">
+              {boxesLeft}
             </Box>
-          )}
+            {columnCount === 2 && (
+              <Box
+                direction="column"
+                height="100%"
+                width="100%"
+                align="center"
+                justify="end"
+              >
+                {boxesRight}
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
-    </Box>
-  );
-});
+    );
+  }
+);
 
 const RotatedBox = memo(
-  ({ width, height }: { width: number; height: number }) => (
+  ({
+    width,
+    height,
+    image,
+  }: {
+    width: number;
+    height: number;
+    image?: ReactElement;
+  }) => (
     <Box
       className="rotated-box"
       flex={false}
@@ -259,7 +380,9 @@ const RotatedBox = memo(
         }}
         border={{ size: "2px", color: "#FF4E4E" }}
         background="rgba(255, 89, 89, 0.2)"
-      ></Box>
+      >
+        {image}
+      </Box>
     </Box>
   )
 );
