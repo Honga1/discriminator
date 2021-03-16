@@ -293,10 +293,12 @@ export const Part1Screen2 = memo(() => {
 
 const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   width: 100%;
-  object-fit: cover;
+  /* object-fit: cover; */
   height: 100%;
   transition: opacity 1s;
   opacity: ${(props) => (props.isShown ? 1 : 0)};
+  backface-visibility: hidden;
+  /* transform: scale(1) translateZ(0); */
 
   &.auto-pickable {
   }
@@ -309,10 +311,11 @@ const RevealableImage = styled(Image)<{ isShown?: boolean }>`
 const AnimateEverything = styled(Box)<{
   target?: { x: number; y: number };
 }>`
+  backface-visibility: hidden;
   transition: all 1s ease-out;
   transform: ${(props) =>
     !props.target
-      ? `matrix(1, 0, 0, 1, 0, 0)`
+      ? `translateZ(0) scale(1)`
       : `scale(3) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
@@ -428,16 +431,16 @@ const RotatedBox = memo(
       >
         <Box
           style={{
-            top: "1px",
-            left: "1px",
-            right: "1px",
-            bottom: "1px",
+            top: 1,
+            left: 1,
+            right: 1,
+            bottom: 1,
             position: "absolute",
             transform: rotation,
-            outline: "2px #FF4E4E solid",
-            outlineOffset: "-2px",
+            backfaceVisibility: "hidden",
             zIndex: -1,
           }}
+          border={{ color: "#FF4E4E", size: " 2px" }}
           background="#502B2D"
         ></Box>
         <Box
@@ -448,6 +451,7 @@ const RotatedBox = memo(
             bottom: 0,
             position: "absolute",
             transform: rotation,
+            overflow: "hidden",
           }}
         >
           {image}
