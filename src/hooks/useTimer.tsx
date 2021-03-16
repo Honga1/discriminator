@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-export const useTimer = (options?: { loopAt: number | undefined }) => {
+export const useTimer = (options?: {
+  loopAt?: number;
+  onTick?: (second: number, reset: () => void) => void;
+}) => {
   const [second, setSecond] = useState(0);
+
+  const loopAt = useMemo(() => options?.loopAt, [options?.loopAt]);
+  const onTick = useMemo(() => options?.onTick, [options?.onTick]);
 
   const reset = useCallback(() => {
     setSecond(0);
@@ -9,10 +15,14 @@ export const useTimer = (options?: { loopAt: number | undefined }) => {
   }, []);
 
   useEffect(() => {
+    onTick?.(second, reset);
+  }, [onTick, reset, second]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setSecond((second) => {
-        if (options?.loopAt) {
-          return (second + 1) % options.loopAt;
+        if (loopAt) {
+          return (second + 1) % loopAt;
         }
 
         return second + 1;
@@ -22,7 +32,7 @@ export const useTimer = (options?: { loopAt: number | undefined }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [options?.loopAt]);
+  }, [loopAt]);
 
   return [second, reset] as const;
 };

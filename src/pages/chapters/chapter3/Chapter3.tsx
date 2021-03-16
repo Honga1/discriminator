@@ -11,35 +11,27 @@ export default function Chapter3() {
   const nextStep = useNextStep();
 
   let part = 1;
-  let screen: 1 | 2 = 1 as 1 | 2;
+  let screen: 1 | 2 = 2 as 1 | 2;
 
   if (second > 40) {
-    nextStep();
+    // nextStep();
   } else if (second > 20) {
     screen = 2;
   }
 
-  console.log(second);
-
   useChapter(ref);
 
-  let Component;
   switch (part) {
     case 1:
       switch (screen) {
         case 1:
-          Component = Part1Screen1;
-          break;
+          return <Part1Screen1 />;
         case 2:
-          Component = Part1Screen2;
-          break;
+          return <Part1Screen2 />;
         default:
-          Component = Part1Screen1;
+          return <Part1Screen1 />;
       }
-      break;
     default:
-      Component = Part1Screen1;
+      return <Part1Screen1 />;
   }
-
-  return <Component />;
 }
