@@ -15,6 +15,8 @@ import { useTimer } from "../../../hooks/useTimer";
 
 export const Part1Screen2 = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
+  const scrollContainer = useRef<HTMLDivElement>(null);
+
   const isSmall = useContext(ResponsiveContext) === "small";
 
   const [state, setState] = useState<
@@ -139,16 +141,27 @@ export const Part1Screen2 = memo(() => {
         const onClick = (event: MouseEvent): void => {
           if ((event.target as HTMLElement).tagName === "IMG") {
             const choice = event.target as HTMLElement;
-            const position = choice.getBoundingClientRect();
-            const parentPosition = container.getBoundingClientRect();
+            const elementBoundingBox = choice.getBoundingClientRect();
+            const parentBoundingBox = container.getBoundingClientRect();
+
+            const scrollLeft = scrollContainer.current?.scrollLeft ?? 0;
+            const scrollTop = scrollContainer.current?.scrollTop ?? 0;
+
+            const elementCenterX =
+              elementBoundingBox.x + elementBoundingBox.width / 2;
+            const elementCenterY =
+              elementBoundingBox.y + elementBoundingBox.height / 2;
+
+            const screenCenterX =
+              parentBoundingBox.x + parentBoundingBox.width / 2;
+            const screenCenterY =
+              parentBoundingBox.y + parentBoundingBox.height / 2;
+
             const translationX =
-              position.x +
-              position.width / 2 -
-              (parentPosition.x + parentPosition.width / 2);
+              elementCenterX - screenCenterX - scrollLeft / zoomFactor;
             const translationY =
-              position.y +
-              position.height / 2 -
-              (parentPosition.y + parentPosition.height / 2);
+              elementCenterY - screenCenterY - scrollTop / zoomFactor;
+
             setTarget({
               x: -translationX,
               y: -translationY,
@@ -198,7 +211,71 @@ export const Part1Screen2 = memo(() => {
     images2013,
   } = useImages();
 
-  return (
+  return isSmall ? (
+    <Box
+      flex={false}
+      height="100%"
+      width="100%"
+      justify="center"
+      style={{
+        position: `relative`,
+        overflow: `${state.includes("USER") ? "auto" : "hidden"}`,
+      }}
+      ref={scrollContainer}
+    >
+      <AnimateEverything
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: "visible",
+        }}
+        target={target}
+        ref={ref}
+        gap="24px"
+        pad="16px"
+      >
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2006
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2006} />
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2007
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2007} />
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2010
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2010} />
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2011
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2011} />
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2012
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2012} />
+        <Box flex={false}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+            2013
+          </Text>
+        </Box>
+        <StackedBoxesHorizontal images={images2013} />
+      </AnimateEverything>
+    </Box>
+  ) : (
     <Box
       flex={false}
       height="100%"
@@ -293,7 +370,7 @@ export const Part1Screen2 = memo(() => {
 
 const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   width: 100%;
-  /* object-fit: cover; */
+  object-fit: cover;
   height: 100%;
   transition: opacity 1s;
   opacity: ${(props) => (props.isShown ? 1 : 0)};
@@ -308,6 +385,7 @@ const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   }
 `;
 
+const zoomFactor = 3;
 const AnimateEverything = styled(Box)<{
   target?: { x: number; y: number };
 }>`
@@ -316,7 +394,7 @@ const AnimateEverything = styled(Box)<{
   transform: ${(props) =>
     !props.target
       ? `translateZ(0) scale(1)`
-      : `scale(3) translate(${props.target.x}px, ${props.target.y}px)`};
+      : `scale(${zoomFactor}) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
 const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
@@ -409,8 +487,53 @@ const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
     </Box>
   );
 };
+const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
+  const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
 
-const RotatedBox = memo(
+  const ref = useRef<HTMLDivElement>(null);
+  const { width = 1, height = 1 } = useResizeObserver<HTMLDivElement>({
+    ref,
+  });
+
+  const boxes = useMemo(
+    () =>
+      images.map((image, index) => {
+        return (
+          <AbsoluteRotatedBox
+            width={boxWidth + "px"}
+            height={boxHeight + "px"}
+            key={index}
+            image={image}
+          />
+        );
+      }),
+    [boxHeight, boxWidth, images]
+  );
+  useEffect(() => {
+    if (!ref.current) return;
+    const maxHeight = 0.71 * height;
+    const desiredAspect = 4 / 3;
+    const boxWidth = desiredAspect * maxHeight;
+
+    setDimensions([boxWidth, maxHeight]);
+  }, [height, ref, width]);
+
+  return (
+    <Box
+      margin={{ left: "8px" }}
+      ref={ref}
+      flex={false}
+      responsive={false}
+      height="100px"
+      direction="row"
+    >
+      {boxes}
+      <Box flex={false} width="32px"></Box>
+    </Box>
+  );
+};
+
+const RelativeRotatedBox = memo(
   ({
     width,
     height,
@@ -420,7 +543,7 @@ const RotatedBox = memo(
     height: number;
     image: ReactElement;
   }) => {
-    const rotation = `rotate(${Math.random() * 130 - 65}deg)`;
+    const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
     return (
       <Box
         className="rotated-box"
@@ -441,6 +564,56 @@ const RotatedBox = memo(
             zIndex: -1,
           }}
           border={{ color: "#FF4E4E", size: " 2px" }}
+          background="#502B2D"
+        ></Box>
+        <Box
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: "absolute",
+            transform: rotation,
+            overflow: "hidden",
+          }}
+        >
+          {image}
+        </Box>
+      </Box>
+    );
+  }
+);
+const AbsoluteRotatedBox = memo(
+  ({
+    width,
+    height,
+    image,
+  }: {
+    width: string;
+    height: string;
+    image: ReactElement;
+  }) => {
+    const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
+    return (
+      <Box
+        className="rotated-box"
+        flex={false}
+        width={width}
+        height={height}
+        style={{ position: "relative" }}
+      >
+        <Box
+          style={{
+            top: 1,
+            left: 1,
+            right: 1,
+            bottom: 1,
+            position: "absolute",
+            transform: rotation,
+            backfaceVisibility: "hidden",
+            zIndex: -1,
+          }}
+          border={{ color: "#FF4E4E", size: " 3px" }}
           background="#502B2D"
         ></Box>
         <Box
@@ -492,7 +665,7 @@ function useBoxes(
       (_, index) => {
         const image = images?.[index];
         return (
-          <RotatedBox
+          <RelativeRotatedBox
             width={boxWidth}
             height={boxHeight}
             key={index}
@@ -508,7 +681,7 @@ function useBoxes(
       const image = images?.[index];
 
       return (
-        <RotatedBox
+        <RelativeRotatedBox
           width={boxWidth}
           height={boxHeight}
           key={index}
