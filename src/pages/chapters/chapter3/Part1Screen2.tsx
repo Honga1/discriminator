@@ -13,18 +13,30 @@ export const Part1Screen2 = memo(() => {
   useEffect(() => {
     if (!ref.current) return;
     const elements = ref.current.getElementsByClassName("rotated-box");
-    // Math.floor(Math.random() * elements.length)
-    const choice = elements[0] as HTMLDivElement | undefined;
+
+    const choice = elements[Math.floor(Math.random() * elements.length)] as
+      | HTMLDivElement
+      | undefined;
 
     if (!choice) return;
     const position = choice.getBoundingClientRect();
 
-    choice.style.backgroundColor = "green";
+    const parentPosition = ref.current.getBoundingClientRect();
+    const translationX =
+      position.x +
+      position.width / 2 -
+      (parentPosition.x + parentPosition.width / 2);
+    const translationY =
+      position.y +
+      position.height / 2 -
+      (parentPosition.y + parentPosition.height / 2);
+
     if (seconds % 10 === 7) {
       setTarget({
-        x: -position.x,
-        y: 0,
+        x: -translationX,
+        y: -translationY,
       });
+      choice.style.backgroundColor = "green";
     }
   }, [seconds]);
 
@@ -121,11 +133,12 @@ const AnimateEverything = styled(Box)<{
   isZoomed: boolean;
   target: { x: number; y: number };
 }>`
+  // transform-origin: center center;
   transition: all 1s ease-out;
   transform: ${(props) =>
     !props.isZoomed
       ? `matrix(1, 0, 0, 1, 0, 0)`
-      : `matrix(2, 0, 0, 2, ${props.target.x}, ${props.target.y})`};
+      : `scale(2) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
 const StackedBoxes = memo(({ amount }: { amount: number }) => {
