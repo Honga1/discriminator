@@ -11,11 +11,11 @@ export default function Chapter3() {
   const nextStep = useNextStep();
 
   let part = 1;
-  let screen: 1 | 2 = 2 as 1 | 2;
+  let screen: 1 | 2 = 1 as 1 | 2;
 
-  if (second > 40) {
-    // nextStep();
-  } else if (second > 20) {
+  if (second > 60) {
+    nextStep();
+  } else if (second > 5) {
     screen = 2;
   }
 
