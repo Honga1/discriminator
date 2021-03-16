@@ -17,9 +17,20 @@ export const Part1Screen2 = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const isSmall = useContext(ResponsiveContext) === "small";
 
+  const [state, setState] = useState<
+    | "IDLE"
+    | "ZOOMING_IN"
+    | "ZOOMED_IN"
+    | "ZOOMING_OUT"
+    | "USER_IDLE"
+    | "USER_ZOOMING"
+    | "USER_ZOOMED"
+    | "USER_ZOOMING_OUT"
+  >("IDLE");
+
   useTimer({
-    loopAt: 10,
-    onTick: useCallback((second, reset) => {
+    initialTime: 0,
+    onTick: useCallback((second, reset, stop) => {
       switch (second) {
         case 0:
           setState("IDLE");
@@ -39,12 +50,48 @@ export const Part1Screen2 = memo(() => {
         case 8:
           setState("IDLE");
           break;
+
+        case 13:
+          setState("ZOOMING_IN");
+          break;
+
+        case 14:
+          setState("ZOOMED_IN");
+          break;
+
+        case 19:
+          setState("ZOOMING_OUT");
+          break;
+
+        case 20:
+          setState("IDLE");
+          break;
+
+        case 23:
+          setState("ZOOMING_IN");
+          break;
+
+        case 24:
+          setState("ZOOMED_IN");
+          break;
+
+        case 29:
+          setState("ZOOMING_OUT");
+          break;
+
+        case 30:
+          setState("IDLE");
+          break;
+
+        case 31:
+          stop();
+          setState("USER_IDLE");
+          break;
       }
     }, []),
   });
-  const [state, setState] = useState<
-    "IDLE" | "ZOOMING_IN" | "ZOOMED_IN" | "ZOOMING_OUT"
-  >("IDLE");
+
+  console.log(state);
 
   const [target, setTarget] = useState<
     { x: number; y: number; target: HTMLElement } | undefined
@@ -54,7 +101,7 @@ export const Part1Screen2 = memo(() => {
     if (!ref.current) return;
 
     switch (state) {
-      case "ZOOMING_IN":
+      case "ZOOMING_IN": {
         const elements = ref.current.getElementsByClassName("auto-pickable");
         const choice = elements[Math.floor(Math.random() * elements.length)] as
           | HTMLDivElement
@@ -77,6 +124,7 @@ export const Part1Screen2 = memo(() => {
         });
         choice.classList.add("is-picked");
         break;
+      }
 
       case "ZOOMING_OUT":
         target?.target.classList.remove("is-picked");
@@ -84,6 +132,59 @@ export const Part1Screen2 = memo(() => {
         break;
       default:
         break;
+
+      case "USER_IDLE":
+        if (!ref.current) return;
+        const container = ref.current;
+        const onClick = (event: MouseEvent): void => {
+          if ((event.target as HTMLElement).tagName === "IMG") {
+            const choice = event.target as HTMLElement;
+            const position = choice.getBoundingClientRect();
+            const parentPosition = container.getBoundingClientRect();
+            const translationX =
+              position.x +
+              position.width / 2 -
+              (parentPosition.x + parentPosition.width / 2);
+            const translationY =
+              position.y +
+              position.height / 2 -
+              (parentPosition.y + parentPosition.height / 2);
+            setTarget({
+              x: -translationX,
+              y: -translationY,
+              target: choice,
+            });
+
+            setState("USER_ZOOMING");
+            const onTransitionEnd = () => {
+              setState("USER_ZOOMED");
+              container.removeEventListener("transitionend", onTransitionEnd);
+            };
+            container.addEventListener("transitionend", onTransitionEnd);
+            choice.classList.add("is-picked");
+          }
+        };
+        container.addEventListener("click", onClick);
+        return () => {
+          container.removeEventListener("click", onClick);
+        };
+      case "USER_ZOOMED": {
+        const container = ref.current;
+        const onClick = (event: MouseEvent): void => {
+          target?.target.classList.remove("is-picked");
+          setTarget(undefined);
+          setState("USER_ZOOMING_OUT");
+          const onTransitionEnd = () => {
+            setState("USER_IDLE");
+            container.removeEventListener("transitionend", onTransitionEnd);
+          };
+          container.addEventListener("transitionend", onTransitionEnd);
+        };
+        container.addEventListener("click", onClick);
+        return () => {
+          container.removeEventListener("click", onClick);
+        };
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
@@ -203,10 +304,6 @@ const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   &.is-picked {
     opacity: 1;
   }
-
-  :hover {
-    opacity: 1;
-  }
 `;
 
 const AnimateEverything = styled(Box)<{
@@ -216,7 +313,7 @@ const AnimateEverything = styled(Box)<{
   transform: ${(props) =>
     !props.target
       ? `matrix(1, 0, 0, 1, 0, 0)`
-      : `scale(2) translate(${props.target.x}px, ${props.target.y}px)`};
+      : `scale(3) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
 const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
