@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
 
-export function useChapter(ref: React.RefObject<HTMLVideoElement>) {
+export function useChapter(
+  ref: React.RefObject<HTMLVideoElement | HTMLAudioElement>
+) {
   const play = useCallback(() => ref.current?.play(), [ref]);
   const pause = useCallback(() => ref.current?.pause(), [ref]);
   const rewind = useCallback(() => {
