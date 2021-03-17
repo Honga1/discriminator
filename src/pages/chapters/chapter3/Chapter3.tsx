@@ -1,15 +1,7 @@
-import {
-  memo,
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { IMediaElement } from "../../../hooks/IMediaElement";
-import { MultipleMediaElementChain } from "../../../hooks/MultipleMediaElementChain";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { IMediaElement } from "../../../IMediaElement";
 import { useChapter } from "../../../hooks/useChapter";
+import { ChainedAudio } from "./ChainedAudio";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
@@ -95,48 +87,3 @@ export default function Chapter3() {
     </>
   );
 }
-
-const ChainedAudio = memo(
-  ({
-    srcArray,
-    forwardRef,
-    onTimeUpdate,
-  }: {
-    onTimeUpdate?: (event: Event) => void;
-    forwardRef: MutableRefObject<IMediaElement | null> | null;
-    srcArray: string[];
-  }) => {
-    const elementRefs = useRef<(IMediaElement | null)[]>([]);
-    useEffect(() => {
-      if (!forwardRef) return;
-      const elements = elementRefs.current.flatMap((element) =>
-        element ? [element] : []
-      );
-      forwardRef.current = new MultipleMediaElementChain(elements);
-    }, [forwardRef]);
-
-    useEffect(() => {
-      if (onTimeUpdate) {
-        forwardRef?.current?.addEventListener("timeupdate", onTimeUpdate);
-        return () => {
-          forwardRef?.current?.removeEventListener("timeupdate", onTimeUpdate);
-        };
-      }
-    }, [forwardRef, onTimeUpdate]);
-
-    const elements = useMemo(
-      () =>
-        srcArray.map((src, index) => (
-          <audio
-            ref={(ref) => (elementRefs.current[index] = ref)}
-            src={src}
-            key={index}
-            controls={false}
-            hidden
-          />
-        )),
-      [srcArray]
-    );
-    return <>{elements}</>;
-  }
-);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
-import { IMediaElement } from "./IMediaElement";
+import { IMediaElement } from "../IMediaElement";
 
 export function useChapter(ref: React.RefObject<IMediaElement>) {
   const play = useCallback(() => ref.current?.play(), [ref]);
