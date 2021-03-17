@@ -68,6 +68,7 @@ export default function Chapter3() {
         stage = "ZOOMED_OUT";
       } else {
         stage = "USER_CONTROL";
+        ref.current?.pause();
       }
 
       return <Part1Screen2 stage={stage} />;
