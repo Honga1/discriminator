@@ -14,10 +14,12 @@ export function useIsActive() {
       }, 4000) as unknown) as number;
     };
     window.addEventListener("mousemove", onActivity);
+    window.addEventListener("touchstart", onActivity);
 
     return () => {
       timeout && clearTimeout(timeout);
       window.removeEventListener("mousemove", onActivity);
+      window.removeEventListener("touchstart", onActivity);
     };
   }, []);
 
