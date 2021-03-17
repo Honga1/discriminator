@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useSingleMediaChapter } from "../../../hooks/useSingleMediaChapter";
+import { useMultipleMediaChapter } from "../../../hooks/useMultipleMediaChapter";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 
 export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
-  useSingleMediaChapter(ref);
+  useMultipleMediaChapter([ref]);
 
   const [seconds, setSeconds] = useState(0);
 
@@ -32,7 +32,7 @@ export default function Chapter3() {
         stage = "2011";
       } else if (seconds < 45) {
         stage = "2010";
-      } else if (seconds < 47) {
+      } else if (seconds < 48) {
         stage = "2007";
       } else if (seconds < 52) {
         stage = "2013";
