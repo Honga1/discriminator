@@ -2,7 +2,6 @@ import { Box, Grid, Image, ResponsiveContext, Text } from "grommet";
 import React, {
   memo,
   ReactElement,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -11,196 +10,113 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
-import { useTimer } from "../../../hooks/useTimer";
 
-export const Part1Screen2 = memo(() => {
+export interface Part1Screen2Props {
+  stage: 0 | 1 | 2 | 3 | 4 | "ZOOMED_OUT" | "USER_CONTROL";
+}
+
+export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const [state, setState] = useState<
-    | "IDLE"
-    | "ZOOMING_IN"
-    | "ZOOMED_IN"
-    | "ZOOMING_OUT"
-    | "USER_IDLE"
-    | "USER_ZOOMING"
-    | "USER_ZOOMED"
-    | "USER_ZOOMING_OUT"
-  >("IDLE");
-
-  useTimer({
-    initialTime: 0,
-    onTick: useCallback((second, reset, stop) => {
-      switch (second) {
-        case 0:
-          setState("IDLE");
-          break;
-        case 1:
-          setState("ZOOMING_IN");
-          break;
-
-        case 2:
-          setState("ZOOMED_IN");
-          break;
-
-        case 7:
-          setState("ZOOMING_OUT");
-          break;
-
-        case 8:
-          setState("IDLE");
-          break;
-
-        case 13:
-          setState("ZOOMING_IN");
-          break;
-
-        case 14:
-          setState("ZOOMED_IN");
-          break;
-
-        case 19:
-          setState("ZOOMING_OUT");
-          break;
-
-        case 20:
-          setState("IDLE");
-          break;
-
-        case 23:
-          setState("ZOOMING_IN");
-          break;
-
-        case 24:
-          setState("ZOOMED_IN");
-          break;
-
-        case 29:
-          setState("ZOOMING_OUT");
-          break;
-
-        case 30:
-          setState("IDLE");
-          break;
-
-        case 31:
-          stop();
-          setState("USER_IDLE");
-          break;
-      }
-    }, []),
-  });
-
-  console.log(state);
-
   const [target, setTarget] = useState<
     { x: number; y: number; target: HTMLElement } | undefined
   >(undefined);
 
+  const isAnimating = useRef(false);
+
   useEffect(() => {
     if (!ref.current) return;
 
-    switch (state) {
-      case "ZOOMING_IN": {
-        const elements = ref.current.getElementsByClassName("auto-pickable");
-        const choice = elements[Math.floor(Math.random() * elements.length)] as
-          | HTMLDivElement
-          | undefined;
-        if (!choice) return;
-        const position = choice.getBoundingClientRect();
-        const parentPosition = ref.current.getBoundingClientRect();
-        const translationX =
-          position.x +
-          position.width / 2 -
-          (parentPosition.x + parentPosition.width / 2);
-        const translationY =
-          position.y +
-          position.height / 2 -
-          (parentPosition.y + parentPosition.height / 2);
-        setTarget({
-          x: -translationX,
-          y: -translationY,
-          target: choice,
-        });
-        choice.classList.add("is-picked");
-        break;
+    const container = ref.current;
+    const onTransitionStart = () => {
+      isAnimating.current = true;
+    };
+    container.addEventListener("transitionstart", onTransitionStart);
+    const onTransitionEnd = () => {
+      isAnimating.current = false;
+    };
+    container.addEventListener("transitionend", onTransitionEnd);
+    return () => {
+      container.removeEventListener("transitionstart", onTransitionStart);
+      container.removeEventListener("transitionend", onTransitionEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const container = ref.current;
+    if (typeof stage === "number") {
+      const image = stage;
+      const elements = ref.current.getElementsByClassName("auto-pickable");
+      const choice = elements[image] as HTMLDivElement | undefined;
+      if (!choice) {
+        throw new Error(
+          `Could not find image: ${image} from elements: ${elements}`
+        );
       }
 
-      case "ZOOMING_OUT":
-        target?.target.classList.remove("is-picked");
-        setTarget(undefined);
-        break;
-      default:
-        break;
+      const { translationX, translationY } = getTranslation(
+        choice,
+        container,
+        scrollContainer
+      );
+      setTarget({
+        x: -translationX,
+        y: -translationY,
+        target: choice,
+      });
+      choice.classList.add("is-picked");
+      return;
+    }
 
-      case "USER_IDLE":
-        if (!ref.current) return;
-        const container = ref.current;
-        const onClick = (event: MouseEvent): void => {
-          if ((event.target as HTMLElement).tagName === "IMG") {
-            const choice = event.target as HTMLElement;
-            const elementBoundingBox = choice.getBoundingClientRect();
-            const parentBoundingBox = container.getBoundingClientRect();
-
-            const scrollLeft = scrollContainer.current?.scrollLeft ?? 0;
-            const scrollTop = scrollContainer.current?.scrollTop ?? 0;
-
-            const elementCenterX =
-              elementBoundingBox.x + elementBoundingBox.width / 2;
-            const elementCenterY =
-              elementBoundingBox.y + elementBoundingBox.height / 2;
-
-            const screenCenterX =
-              parentBoundingBox.x + parentBoundingBox.width / 2;
-            const screenCenterY =
-              parentBoundingBox.y + parentBoundingBox.height / 2;
-
-            const translationX =
-              elementCenterX - screenCenterX - scrollLeft / zoomFactor;
-            const translationY =
-              elementCenterY - screenCenterY - scrollTop / zoomFactor;
-
-            setTarget({
-              x: -translationX,
-              y: -translationY,
-              target: choice,
-            });
-
-            setState("USER_ZOOMING");
-            const onTransitionEnd = () => {
-              setState("USER_ZOOMED");
-              container.removeEventListener("transitionend", onTransitionEnd);
-            };
-            container.addEventListener("transitionend", onTransitionEnd);
-            choice.classList.add("is-picked");
-          }
-        };
-        container.addEventListener("click", onClick);
-        return () => {
-          container.removeEventListener("click", onClick);
-        };
-      case "USER_ZOOMED": {
-        const container = ref.current;
-        const onClick = (event: MouseEvent): void => {
-          target?.target.classList.remove("is-picked");
-          setTarget(undefined);
-          setState("USER_ZOOMING_OUT");
-          const onTransitionEnd = () => {
-            setState("USER_IDLE");
-            container.removeEventListener("transitionend", onTransitionEnd);
-          };
-          container.addEventListener("transitionend", onTransitionEnd);
-        };
-        container.addEventListener("click", onClick);
-        return () => {
-          container.removeEventListener("click", onClick);
-        };
-      }
+    if (stage === "ZOOMED_OUT") {
+      target?.target.classList.remove("is-picked");
+      setTarget(undefined);
+      return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [stage]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (stage !== "USER_CONTROL") return;
+    const container = ref.current;
+
+    const onClick = (event: MouseEvent): void => {
+      if (isAnimating.current) return;
+      const isZoomed = target !== undefined;
+
+      if (isZoomed) {
+        target?.target.classList.remove("is-picked");
+        setTarget(undefined);
+        return;
+      }
+
+      if ((event.target as HTMLElement).tagName !== "IMG") return;
+
+      const choice = event.target as HTMLElement;
+      const { translationX, translationY } = getTranslation(
+        choice,
+        container,
+        scrollContainer
+      );
+
+      setTarget({
+        x: -translationX,
+        y: -translationY,
+        target: choice,
+      });
+      choice.classList.add("is-picked");
+    };
+
+    container.addEventListener("click", onClick);
+    return () => {
+      container.removeEventListener("click", onClick);
+    };
+  }, [stage, target]);
 
   const {
     images2006,
@@ -219,7 +135,11 @@ export const Part1Screen2 = memo(() => {
       justify="center"
       style={{
         position: `relative`,
-        overflow: `${state.includes("USER") ? "auto" : "hidden"}`,
+        overflow: `${
+          typeof stage === "string" && stage.includes("USER")
+            ? "auto"
+            : "hidden"
+        }`,
       }}
       ref={scrollContainer}
     >
@@ -390,7 +310,7 @@ const AnimateEverything = styled(Box)<{
   target?: { x: number; y: number };
 }>`
   backface-visibility: hidden;
-  transition: all 1s ease-out;
+  transition: all 1s ease-in-out;
   transform: ${(props) =>
     !props.target
       ? `translateZ(0) scale(1)`
@@ -652,6 +572,24 @@ const shrinkAndMaintainAspectRatio = (
     return [reducedWidth, reducedWidth / originalAspectRatio];
   }
 };
+
+function getTranslation(
+  choice: HTMLElement,
+  container: HTMLDivElement,
+  scrollContainer: React.RefObject<HTMLDivElement>
+) {
+  const elementBoundingBox = choice.getBoundingClientRect();
+  const parentBoundingBox = container.getBoundingClientRect();
+  const scrollLeft = scrollContainer.current?.scrollLeft ?? 0;
+  const scrollTop = scrollContainer.current?.scrollTop ?? 0;
+  const elementCenterX = elementBoundingBox.x + elementBoundingBox.width / 2;
+  const elementCenterY = elementBoundingBox.y + elementBoundingBox.height / 2;
+  const screenCenterX = parentBoundingBox.x + parentBoundingBox.width / 2;
+  const screenCenterY = parentBoundingBox.y + parentBoundingBox.height / 2;
+  const translationX = elementCenterX - screenCenterX - scrollLeft / zoomFactor;
+  const translationY = elementCenterY - screenCenterY - scrollTop / zoomFactor;
+  return { translationX, translationY };
+}
 
 function useBoxes(
   amount: number,

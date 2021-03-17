@@ -1,37 +1,76 @@
-import { useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useChapter } from "../../../hooks/useChapter";
-import { useNextStep } from "../../../hooks/useNextStep";
-import { useTimer } from "../../../hooks/useTimer";
+import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
-import { Part1Screen2 } from "./Part1Screen2";
+import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
+
 export default function Chapter3() {
-  const ref = useRef<HTMLVideoElement>(null);
-
-  const [second, reset] = useTimer();
-  const nextStep = useNextStep();
-
-  let part = 1;
-  let screen: 1 | 2 = 1 as 1 | 2;
-
-  if (second > 60) {
-    nextStep();
-  } else if (second > 5) {
-    screen = 2;
-  }
-
+  const ref = useRef<HTMLAudioElement>(null);
   useChapter(ref);
 
-  switch (part) {
-    case 1:
-      switch (screen) {
-        case 1:
-          return <Part1Screen1 />;
-        case 2:
-          return <Part1Screen2 />;
-        default:
-          return <Part1Screen1 />;
-      }
-    default:
+  const [seconds, setSeconds] = useState(0);
+
+  const onTimeUpdate: React.ReactEventHandler<HTMLAudioElement> = useCallback(
+    (event) => {
+      const audio: HTMLAudioElement = event.target as HTMLAudioElement;
+      const seconds = Math.round(audio.currentTime);
+      setSeconds(seconds);
+    },
+    []
+  );
+
+  const render = useMemo(() => {
+    if (seconds < 30) {
       return <Part1Screen1 />;
-  }
+    } else {
+      let stage: Part1Screen2Props["stage"];
+
+      // Start at the time above it, ends at the if statement.
+      if (seconds < 57) {
+        stage = "ZOOMED_OUT";
+      } else if (seconds < 60) {
+        //  I see you
+        stage = 0;
+      } else if (seconds < 61) {
+        stage = "ZOOMED_OUT";
+      } else if (seconds < 65) {
+        // "A kid with a pumpkin" ZOOMIN 1
+        stage = 1;
+      } else if (seconds < 66) {
+        stage = "ZOOMED_OUT";
+      } else if (seconds < 70) {
+        // "I see, looks like you" ZOOMIN 2
+        stage = 2;
+      } else if (seconds < 72) {
+        stage = "ZOOMED_OUT";
+      } else if (seconds < 76) {
+        // "There's a woman" ZOOMIN 3
+        stage = 3;
+      } else if (seconds < 77) {
+        stage = "ZOOMED_OUT";
+      } else if (seconds < 93) {
+        //  "There's you" ZOOMIN 4
+        stage = 4;
+      } else if (seconds < 94) {
+        stage = "ZOOMED_OUT";
+      } else {
+        stage = "USER_CONTROL";
+      }
+
+      return <Part1Screen2 stage={stage} />;
+    }
+  }, [seconds]);
+
+  return (
+    <>
+      <audio
+        onTimeUpdate={onTimeUpdate}
+        ref={ref}
+        style={{ display: "hidden" }}
+        controls={false}
+        src={part1AudioSrc}
+      />
+      {render}
+    </>
+  );
 }
