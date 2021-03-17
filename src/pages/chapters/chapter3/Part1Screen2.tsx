@@ -12,7 +12,21 @@ import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
 
 export interface Part1Screen2Props {
-  stage: 0 | 1 | 2 | 3 | 4 | "ZOOMED_OUT" | "USER_CONTROL";
+  stage:
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | "ZOOMED_OUT"
+    | "USER_CONTROL"
+    | "NO_YEARS"
+    | "2006"
+    | "2007"
+    | "2010"
+    | "2011"
+    | "2012"
+    | "2013";
 }
 
 export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
@@ -72,7 +86,73 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       return;
     }
 
-    if (stage === "ZOOMED_OUT") {
+    container.querySelectorAll(".stacked-boxes").forEach((element) => {
+      (element as HTMLDivElement).style.opacity = "1";
+    });
+    switch (stage) {
+      case "NO_YEARS":
+        container.querySelectorAll(".stacked-boxes").forEach((element) => {
+          (element as HTMLDivElement).style.opacity = "0";
+        });
+        break;
+      case "2011":
+        container
+          .querySelectorAll(".stacked-boxes:not(.year2011)")
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+
+      case "2010":
+        container
+          .querySelectorAll(".stacked-boxes:not(.year2011):not(.year2010)")
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+
+      case "2007":
+        container
+          .querySelectorAll(
+            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007)"
+          )
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+
+      case "2013":
+        container
+          .querySelectorAll(
+            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013)"
+          )
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+
+      case "2006":
+        container
+          .querySelectorAll(
+            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013):not(.year2006)"
+          )
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+
+      case "2012":
+        container
+          .querySelectorAll(
+            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013):not(.year2006):not(.year2012)"
+          )
+          .forEach((element) => {
+            (element as HTMLDivElement).style.opacity = "0";
+          });
+        break;
+    }
+
+    if (typeof stage === "string" && stage !== "USER_CONTROL") {
       target?.target.classList.remove("is-picked");
       setTarget(undefined);
       return;
@@ -162,37 +242,55 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
             2006
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2006} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2006"}
+          images={images2006}
+        />
         <Box flex={false}>
           <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2007
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2007} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2007"}
+          images={images2007}
+        />
         <Box flex={false}>
           <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2010
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2010} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2010"}
+          images={images2010}
+        />
         <Box flex={false}>
           <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2011
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2011} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2011"}
+          images={images2011}
+        />
         <Box flex={false}>
           <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2012
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2012} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2012"}
+          images={images2012}
+        />
         <Box flex={false}>
           <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2013
           </Text>
         </Box>
-        <StackedBoxesHorizontal images={images2013} />
+        <StackedBoxesHorizontal
+          className={"stacked-boxes year2013"}
+          images={images2013}
+        />
       </AnimateEverything>
     </Box>
   ) : (
@@ -247,22 +345,40 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           gap={"16px"}
         >
           <Box gridArea="stackedBoxes2006" align="center">
-            <StackedBoxes images={images2006} />
+            <StackedBoxes
+              className={"stacked-boxes year2006"}
+              images={images2006}
+            />
           </Box>
           <Box gridArea="stackedBoxes2007" align="center">
-            <StackedBoxes images={images2007} />
+            <StackedBoxes
+              className={"stacked-boxes year2007"}
+              images={images2007}
+            />
           </Box>
           <Box gridArea="stackedBoxes2010" align="center">
-            <StackedBoxes images={images2010} />
+            <StackedBoxes
+              className={"stacked-boxes year2010"}
+              images={images2010}
+            />
           </Box>
           <Box gridArea="stackedBoxes2011" align="center">
-            <StackedBoxes images={images2011} />
+            <StackedBoxes
+              className={"stacked-boxes year2011"}
+              images={images2011}
+            />
           </Box>
           <Box gridArea="stackedBoxes2012" align="center">
-            <StackedBoxes images={images2012} />
+            <StackedBoxes
+              className={"stacked-boxes year2012"}
+              images={images2012}
+            />
           </Box>
           <Box gridArea="stackedBoxes2013" align="center">
-            <StackedBoxes images={images2013} />
+            <StackedBoxes
+              className={"stacked-boxes year2013"}
+              images={images2013}
+            />
           </Box>
           <Box gridArea="text2006" align="center">
             <Text color="white">2006</Text>
@@ -317,7 +433,13 @@ const AnimateEverything = styled(Box)<{
       : `scale(${zoomFactor}) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
-const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
+const StackedBoxes = ({
+  className,
+  images,
+}: {
+  images: ReactElement[];
+  className: string;
+}) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
@@ -374,10 +496,12 @@ const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
 
   return (
     <Box
+      className={className}
       width="100%"
       height="100%"
       align="end"
       pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
+      style={{ transition: "opacity 0.2s linear" }}
     >
       <Box ref={ref} width="100%" height="100%" align="end">
         <Box
@@ -407,7 +531,13 @@ const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
     </Box>
   );
 };
-const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
+const StackedBoxesHorizontal = ({
+  images,
+  className,
+}: {
+  images: ReactElement[];
+  className: string;
+}) => {
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -440,12 +570,14 @@ const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
 
   return (
     <Box
+      className={className}
       margin={{ left: "8px" }}
       ref={ref}
       flex={false}
       responsive={false}
       height="100px"
       direction="row"
+      style={{ transition: "opacity 0.2s linear" }}
     >
       {boxes}
       <Box flex={false} width="32px"></Box>
