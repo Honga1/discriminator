@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
 
-export function useChapter(
+export function useSingleMediaChapter(
   ref: React.RefObject<HTMLVideoElement | HTMLAudioElement>
 ) {
   const play = useCallback(() => ref.current?.play(), [ref]);

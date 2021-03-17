@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useChapter } from "../../../hooks/useChapter";
+import { useSingleMediaChapter } from "../../../hooks/useSingleMediaChapter";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 
 export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
-  useChapter(ref);
+  useSingleMediaChapter(ref);
 
   const [seconds, setSeconds] = useState(0);
 
