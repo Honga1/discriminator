@@ -30,8 +30,8 @@ function getClickCoordinates(
   event: TouchEvent | MouseEvent
 ): { x: number; y: number } {
   if (isTouchEvent(event)) {
-    const x = event.changedTouches[0].clientX;
-    const y = event.changedTouches[0].clientY;
+    const x = event.changedTouches[0]?.clientX ?? 0;
+    const y = event.changedTouches[0]?.clientY ?? 0;
     return { x, y };
   } else {
     const x = event.clientX;

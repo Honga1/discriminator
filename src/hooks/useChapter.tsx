@@ -1,49 +1,42 @@
 import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
+import { IMediaElement } from "./IMediaElement";
 
-export function useMultipleMediaChapter(
-  ref: [
-    React.RefObject<HTMLVideoElement | HTMLAudioElement>,
-    ...React.RefObject<HTMLVideoElement | HTMLAudioElement>[]
-  ]
-) {
-  const play = useCallback(() => ref[0].current?.play(), [ref]);
-  const pause = useCallback(() => ref[0].current?.pause(), [ref]);
+export function useChapter(ref: React.RefObject<IMediaElement>) {
+  const play = useCallback(() => ref.current?.play(), [ref]);
+  const pause = useCallback(() => ref.current?.pause(), [ref]);
   const rewind = useCallback(() => {
-    if (ref[0].current) ref[0].current.currentTime = 0;
+    if (ref.current) ref.current.currentTime = 0;
   }, [ref]);
   const getIsPlaying = useCallback(() => {
-    if (!ref[0].current) return false;
+    if (!ref.current) return false;
     return !!(
-      ref[0].current.currentTime > 0 &&
-      !ref[0].current.paused &&
-      !ref[0].current.ended &&
-      ref[0].current.readyState > 2
+      ref.current.currentTime > 0 &&
+      !ref.current.paused &&
+      !ref.current.ended &&
+      ref.current.readyState > 2
     );
   }, [ref]);
 
   const getProgress = useCallback(() => {
-    if (!ref[0].current) return 0;
-    return ref[0].current.currentTime / ref[0].current.duration;
+    if (!ref.current) return 0;
+    return ref.current.currentTime / ref.current.duration;
   }, [ref]);
 
   const setProgress = useCallback(
     (progress: number) => {
-      if (!ref[0].current) return;
-      ref[0].current.currentTime = progress * ref[0].current.duration;
+      if (!ref.current) return;
+      ref.current.currentTime = progress * ref.current.duration;
     },
     [ref]
   );
 
   const seekTimeDelta = useCallback(
     (delta: number) => {
-      if (!ref[0].current) return;
-      const target = ref[0].current.currentTime + delta;
-      const clippedTarget = Math.min(
-        Math.max(0, target),
-        ref[0].current.duration
-      );
-      ref[0].current.currentTime = clippedTarget;
+      if (!ref.current) return;
+      const target = ref.current.currentTime + delta;
+      const clippedTarget = Math.min(Math.max(0, target), ref.current.duration);
+      ref.current.currentTime = clippedTarget;
     },
     [ref]
   );
@@ -70,12 +63,12 @@ export function useMultipleMediaChapter(
       });
     };
 
-    const video = ref[0].current;
+    const video = ref.current;
 
-    ref[0].current?.addEventListener("click", onClick);
-    ref[0].current?.addEventListener("playing", updateStore);
-    ref[0].current?.addEventListener("pause", updateStore);
-    ref[0].current?.addEventListener("timeupdate", updateStore);
+    ref.current?.addEventListener("click", onClick);
+    ref.current?.addEventListener("playing", updateStore);
+    ref.current?.addEventListener("pause", updateStore);
+    ref.current?.addEventListener("timeupdate", updateStore);
     updateStore();
     return () => {
       video?.removeEventListener("click", onClick);
@@ -92,7 +85,7 @@ export function useMultipleMediaChapter(
     rewind,
     setProgress,
     seekTimeDelta,
-    onClick,
     ref,
+    onClick,
   ]);
 }

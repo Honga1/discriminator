@@ -1,23 +1,30 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { useMultipleMediaChapter } from "../../../hooks/useMultipleMediaChapter";
+import {
+  memo,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { IMediaElement } from "../../../hooks/IMediaElement";
+import { MultipleMediaElementChain } from "../../../hooks/MultipleMediaElementChain";
+import { useChapter } from "../../../hooks/useChapter";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 
 export default function Chapter3() {
-  const ref = useRef<HTMLAudioElement>(null);
-  useMultipleMediaChapter([ref]);
+  const ref = useRef<IMediaElement>(null);
+  useChapter(ref);
 
   const [seconds, setSeconds] = useState(0);
 
-  const onTimeUpdate: React.ReactEventHandler<HTMLAudioElement> = useCallback(
-    (event) => {
-      const audio: HTMLAudioElement = event.target as HTMLAudioElement;
-      const seconds = Math.round(audio.currentTime);
-      setSeconds(seconds);
-    },
-    []
-  );
+  const onTimeUpdate = useCallback((event: Event) => {
+    const audio = event.target as IMediaElement;
+    const seconds = Math.round(audio.currentTime);
+    setSeconds(seconds);
+  }, []);
 
   const render = useMemo(() => {
     if (seconds < 30) {
@@ -75,16 +82,61 @@ export default function Chapter3() {
     }
   }, [seconds]);
 
+  const srcArray = useMemo(() => [part1AudioSrc, part1AudioSrc], []);
   return (
     <>
-      <audio
+      <ChainedAudio
+        forwardRef={ref}
+        srcArray={srcArray}
         onTimeUpdate={onTimeUpdate}
-        ref={ref}
-        style={{ display: "hidden" }}
-        controls={false}
-        src={part1AudioSrc}
       />
+
       {render}
     </>
   );
 }
+
+const ChainedAudio = memo(
+  ({
+    srcArray,
+    forwardRef,
+    onTimeUpdate,
+  }: {
+    onTimeUpdate?: (event: Event) => void;
+    forwardRef: MutableRefObject<IMediaElement | null> | null;
+    srcArray: string[];
+  }) => {
+    const elementRefs = useRef<(IMediaElement | null)[]>([]);
+    useEffect(() => {
+      if (!forwardRef) return;
+      const elements = elementRefs.current.flatMap((element) =>
+        element ? [element] : []
+      );
+      forwardRef.current = new MultipleMediaElementChain(elements);
+    }, [forwardRef]);
+
+    useEffect(() => {
+      if (onTimeUpdate) {
+        forwardRef?.current?.addEventListener("timeupdate", onTimeUpdate);
+        return () => {
+          forwardRef?.current?.removeEventListener("timeupdate", onTimeUpdate);
+        };
+      }
+    }, [forwardRef, onTimeUpdate]);
+
+    const elements = useMemo(
+      () =>
+        srcArray.map((src, index) => (
+          <audio
+            ref={(ref) => (elementRefs.current[index] = ref)}
+            src={src}
+            key={index}
+            controls={false}
+            hidden
+          />
+        )),
+      [srcArray]
+    );
+    return <>{elements}</>;
+  }
+);

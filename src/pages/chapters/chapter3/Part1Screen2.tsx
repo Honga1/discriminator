@@ -733,7 +733,12 @@ function useBoxes(
   const result = useMemo(() => {
     const boxesLeft = [...new Array(Math.min(amount, cellsPerColumn))].map(
       (_, index) => {
-        const image = images?.[index];
+        const image = images[index];
+        if (!image) {
+          throw new Error(
+            `Could not get image with index ${index} from ${images}`
+          );
+        }
         return (
           <RelativeRotatedBox
             width={boxWidth}
@@ -749,7 +754,11 @@ function useBoxes(
       ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
     ].map((_, index) => {
       const image = images?.[index];
-
+      if (!image) {
+        throw new Error(
+          `Could not get image with index ${index} from ${images}`
+        );
+      }
       return (
         <RelativeRotatedBox
           width={boxWidth}

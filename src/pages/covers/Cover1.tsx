@@ -90,8 +90,8 @@ function getRelativeTouchPosition(
   event: TouchEvent,
   target: HTMLCanvasElement
 ): { relativeX: number; relativeY: number } {
-  const screenX = event.changedTouches[0].clientX;
-  const screenY = event.changedTouches[0].clientY;
+  const screenX = event.changedTouches[0]?.clientX ?? 0;
+  const screenY = event.changedTouches[0]?.clientY ?? 0;
   const rect = target.getBoundingClientRect();
 
   const clip = (value: number, min: number, max: number) =>
