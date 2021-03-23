@@ -1,6 +1,26 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
 import { useSimulatedTypingTimer } from "../../../hooks/useSimulatedTypingTimer";
+import { colorTheme } from "../../../theme";
+
+const StrikeOnlyText = styled.span`
+  color: rgba(0, 0, 0, 0);
+
+  position: relative;
+
+  &::after {
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: min(2px, 100%) solid wheat;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+  }
+`;
 
 function TextRow({
   year,
@@ -73,9 +93,17 @@ function TextRow({
             key={entryNumber}
           >
             &nbsp;&nbsp;{shownCharacters}
-            <span style={{ opacity: 0 }}>{hiddenCharacters}</span>
+            <span
+              style={{
+                color: colorTheme.offWhite,
+                textDecoration: "line-through",
+              }}
+            >
+              <span style={{ color: `rgba(0, 0, 0, 0)` }}>
+                {hiddenCharacters}
+              </span>
+            </span>
             &nbsp;&nbsp;•••
-            {/* &nbsp;&nbsp;–––––––––––&nbsp;&nbsp;••• */}
           </Text>
         );
       })}
