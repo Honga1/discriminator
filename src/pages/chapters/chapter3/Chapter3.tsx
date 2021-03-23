@@ -3,6 +3,7 @@ import { IMediaElement } from "../../../IMediaElement";
 import { useChapter } from "../../../hooks/useChapter";
 import { ChainedAudio } from "./ChainedAudio";
 import part1AudioSrc from "./Chapter3Part1.mp3";
+import part2AudioSrc from "./Chapter3Part2.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
@@ -21,6 +22,7 @@ export default function Chapter3() {
     setSeconds(seconds);
   }, []);
 
+  console.log(seconds);
   const render = useMemo(() => {
     if (seconds < 15) {
       store.setState({ isHeadingShown: true });
@@ -29,7 +31,7 @@ export default function Chapter3() {
     }
     if (seconds < 30) {
       return <Part1Screen1 />;
-    } else if (seconds < 114) {
+    } else if (seconds < 96) {
       let stage: Part1Screen2Props["stage"];
 
       // Start at the time above it, ends at the if statement.
@@ -80,14 +82,14 @@ export default function Chapter3() {
       }
 
       return <Part1Screen2 stage={stage} />;
-    } else if (seconds < 120) {
+    } else if (seconds < 123) {
       return <Part2Screen1 />;
     } else {
       return <Part2Screen2 />;
     }
   }, [seconds]);
 
-  const srcArray = useMemo(() => [part1AudioSrc, part1AudioSrc], []);
+  const srcArray = useMemo(() => [part1AudioSrc, part2AudioSrc], []);
   return (
     <>
       <ChainedAudio
