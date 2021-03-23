@@ -5,6 +5,7 @@ import { ChainedAudio } from "./ChainedAudio";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
+import { Part2Screen1 } from "./Part2Screen1";
 
 export default function Chapter3() {
   const ref = useRef<IMediaElement>(null);
@@ -21,7 +22,7 @@ export default function Chapter3() {
   const render = useMemo(() => {
     if (seconds < 30) {
       return <Part1Screen1 />;
-    } else {
+    } else if (seconds < 114) {
       let stage: Part1Screen2Props["stage"];
 
       // Start at the time above it, ends at the if statement.
@@ -72,6 +73,8 @@ export default function Chapter3() {
       }
 
       return <Part1Screen2 stage={stage} />;
+    } else {
+      return <Part2Screen1 />;
     }
   }, [seconds]);
 
