@@ -1,5 +1,88 @@
-import { Box, Grid, ResponsiveContext, Text } from "grommet";
+import { Box, Grid, ResponsiveContext } from "grommet";
 import { useContext } from "react";
+import styled from "styled-components";
+
+const StyledRainDrop = styled(Box)<{
+  animationDelay: number;
+  position: string;
+}>`
+  & {
+    position: absolute;
+    animation-name: ChangeHeight;
+    animation-delay: ${({ animationDelay }) => animationDelay * 2}s;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    transform: translate(-50%, -100%);
+
+    left: ${({ position }) => position};
+  }
+
+  @keyframes ChangeHeight {
+    from {
+      transform: translate(-50%, -100%);
+    }
+
+    to {
+      transform: translate(-50%, 100vh);
+    }
+  }
+`;
+
+function RainDrop() {
+  return (
+    <StyledRainDrop
+      width="32px"
+      height="32px"
+      animationDelay={Math.random()}
+      position={Math.random() * 100 + "%"}
+    >
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M7 17L16 27L25 17L21 17L21 7L11 7L11 17L7 17Z"
+          fill="#F8F9FA"
+        />
+      </svg>
+    </StyledRainDrop>
+  );
+}
+
+function RainDrops() {
+  const amount = 50;
+  return (
+    <Box
+      width="100%"
+      height="100%"
+      style={{
+        position: "absolute",
+        zIndex: 0,
+      }}
+      justify="center"
+    >
+      <Box
+        width="100%"
+        height="100%"
+        style={{
+          position: "relative",
+        }}
+        overflow="hidden"
+      >
+        {Array.from({ length: amount }).map(() => (
+          <RainDrop></RainDrop>
+        ))}
+      </Box>
+    </Box>
+  );
+}
 
 export const Part2Screen1 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
@@ -44,8 +127,17 @@ export const Part2Screen1 = () => {
   );
 
   return (
-    <Box height="100%" width="100%" justify="center" pad="48px">
-      {isSmall ? SmallLayout : NormalLayout}
+    <Box height="100%" width="100%" style={{ position: "relative" }}>
+      <Box
+        height="100%"
+        width="100%"
+        justify="center"
+        pad="48px"
+        style={{ zIndex: 1 }}
+      >
+        {isSmall ? SmallLayout : NormalLayout}
+      </Box>
+      <RainDrops></RainDrops>
     </Box>
   );
 };
