@@ -6,12 +6,14 @@ import part1AudioSrc from "./Chapter3Part1.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
+import { Part2Screen2 } from "./Part2Screen2";
+import { store } from "../../../store/store";
 
 export default function Chapter3() {
   const ref = useRef<IMediaElement>(null);
   useChapter(ref);
 
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(121);
 
   const onTimeUpdate = useCallback((event: Event) => {
     const audio = event.target as IMediaElement;
@@ -20,6 +22,11 @@ export default function Chapter3() {
   }, []);
 
   const render = useMemo(() => {
+    if (seconds < 15) {
+      store.setState({ isHeadingShown: true });
+    } else {
+      store.setState({ isHeadingShown: false });
+    }
     if (seconds < 30) {
       return <Part1Screen1 />;
     } else if (seconds < 114) {
@@ -73,8 +80,10 @@ export default function Chapter3() {
       }
 
       return <Part1Screen2 stage={stage} />;
-    } else {
+    } else if (seconds < 120) {
       return <Part2Screen1 />;
+    } else {
+      return <Part2Screen2 />;
     }
   }, [seconds]);
 

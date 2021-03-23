@@ -14,6 +14,7 @@ import { FullWidthStack } from "../../components/FullWidthStack";
 import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
 import { Timeline } from "../../components/timeline/Timeline";
 import { colorTheme } from "../../theme";
+import { useStore } from "../../store/store";
 
 export const Media = ({ children }: PropsWithChildren<{}>) => {
   return (
@@ -169,6 +170,7 @@ const MediaFrame = ({
     </FrameBox>
   );
 };
+
 const MediaHeadingBlock = ({
   frameColor,
   children,
@@ -178,7 +180,7 @@ const MediaHeadingBlock = ({
   const size = useContext(ResponsiveContext) as "small" | string;
   const isSmall = size === "small";
   const isSmallOrMedium = isSmall || size === "medium";
-
+  const isHeadingShown = useStore((state) => state.isHeadingShown);
   return (
     <Box
       className="heading-block"
@@ -188,12 +190,13 @@ const MediaHeadingBlock = ({
       align="start"
       style={{ userSelect: "none", pointerEvents: "none" }}
     >
-      <Box
+      <FadeOutBox
+        isShown={isHeadingShown}
         background={frameColor}
         pad={{ horizontal: "16px", vertical: "12px" }}
       >
         {children}
-      </Box>
+      </FadeOutBox>
       <Box justify="end">
         {isSmallOrMedium && <CameraIndicatorBox />}
         {!isSmallOrMedium && <ChapterCameraIndicator />}
