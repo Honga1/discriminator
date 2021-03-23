@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export const useTimer = (options?: {
+export const useSimulatedTypingTimer = (options?: {
   initialTime?: number;
   loopAt?: number;
   onTick?: (second: number, reset: () => void, stop: () => void) => void;
 }) => {
-  const [second, setSecond] = useState(options?.initialTime ?? 0);
+  const [stroke, setSecond] = useState(options?.initialTime ?? 0);
   const [state, setState] = useState<"RUNNING" | "STOPPED">("RUNNING");
 
   const loopAt = useMemo(() => options?.loopAt, [options?.loopAt]);
@@ -27,8 +27,8 @@ export const useTimer = (options?: {
   }, []);
 
   useEffect(() => {
-    onTick?.(second, reset, stop);
-  }, [onTick, reset, second, stop]);
+    onTick?.(stroke, reset, stop);
+  }, [onTick, reset, stroke, stop]);
 
   useEffect(() => {
     if (state === "RUNNING") {
@@ -40,12 +40,12 @@ export const useTimer = (options?: {
 
           return second + 1;
         });
-      }, 1000);
+      }, 100);
       return () => {
         clearInterval(interval);
       };
     }
   }, [loopAt, state]);
 
-  return [second, reset, stop, start] as const;
+  return [stroke, reset, stop, start] as const;
 };

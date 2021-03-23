@@ -13,7 +13,7 @@ export default function Chapter3() {
   const ref = useRef<IMediaElement>(null);
   useChapter(ref);
 
-  const [seconds, setSeconds] = useState(121);
+  const [seconds, setSeconds] = useState(0);
 
   const onTimeUpdate = useCallback((event: Event) => {
     const audio = event.target as IMediaElement;
@@ -76,7 +76,7 @@ export default function Chapter3() {
         stage = "ZOOMED_OUT";
       } else {
         stage = "USER_CONTROL";
-        ref.current?.pause();
+        // ref.current?.pause();
       }
 
       return <Part1Screen2 stage={stage} />;

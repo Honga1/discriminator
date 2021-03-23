@@ -1,5 +1,5 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import styled from "styled-components";
 
 const StyledRainDrop = styled(Box)<{
@@ -30,7 +30,7 @@ const StyledRainDrop = styled(Box)<{
   }
 `;
 
-function RainDrop() {
+const RainDrop = memo(() => {
   return (
     <StyledRainDrop
       width="32px"
@@ -54,9 +54,9 @@ function RainDrop() {
       </svg>
     </StyledRainDrop>
   );
-}
+});
 
-function RainDrops() {
+const RainDrops = memo(() => {
   const amount = 50;
   return (
     <Box
@@ -82,7 +82,7 @@ function RainDrops() {
       </Box>
     </Box>
   );
-}
+});
 
 export const Part2Screen1 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
