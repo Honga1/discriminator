@@ -46,8 +46,8 @@ const RainDrop = memo(() => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M7 17L16 27L25 17L21 17L21 7L11 7L11 17L7 17Z"
           fill="#F8F9FA"
         />

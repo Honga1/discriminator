@@ -10,6 +10,7 @@ export const Part2Screen3 = () => {
   const [hideScrollBanner, setHideScrollBanner] = useState(false);
 
   const [currentYear, setCurrentYear] = useState<Years>(2015);
+  const [downloads, setDownloads] = useState(0);
   const scrollBox = useRef<HTMLDivElement>(null);
 
   const onNavigationClicked = useCallback((year: Years): void => {
@@ -22,27 +23,26 @@ export const Part2Screen3 = () => {
     if (!yearElement) return;
 
     yearElement.scrollIntoView();
-    console.log(year);
     setCurrentYear(year);
   }, []);
 
   return (
-    <Box
-      flex={false}
-      height="100%"
-      width="100%"
-      style={{ position: "relative" }}
-    >
-      <Box flex={false} height="100%" width="100%" pad="4px">
-        <ScrollBanner isShown={!hideScrollBanner} />
+    <Box flex={false} height="100%" width="100%">
+      <Box
+        flex={false}
+        height="100%"
+        width="100%"
+        pad="4px"
+        style={{ position: "relative" }}
+      >
         <HeaderBar
           isShown={hideScrollBanner}
-          downloads={1040}
+          downloads={downloads}
           year={currentYear}
           onNavigationClicked={onNavigationClicked}
         />
+        <ScrollBanner isShown={!hideScrollBanner} />
         <CustomScrollbarBox
-          flex={false}
           height="100%"
           width="100%"
           overflow="auto"
@@ -56,25 +56,70 @@ export const Part2Screen3 = () => {
             const yearElements = (event.target as HTMLElement).querySelectorAll(
               ".TextRow"
             ) as NodeListOf<HTMLDivElement> | undefined;
+            if (!yearElements) return;
 
+            const validYears = new Set([
+              "2015",
+              "2016",
+              "2017",
+              "2018",
+              "2019",
+            ]);
+
+            type Entries = [
+              "2015" | "2016" | "2017" | "2018" | "2019",
+              DOMRect
+            ];
+
+            const getValidBoundingBoxes = (
+              element: HTMLDivElement
+            ): Entries | undefined => {
+              const maybeYear = element.attributes.getNamedItem("data-year")
+                ?.value;
+              if (!maybeYear) return undefined;
+              if (!validYears.has(maybeYear)) return undefined;
+
+              return [maybeYear, element.getBoundingClientRect()] as Entries;
+            };
+
+            const filterInvalid = (
+              value: Entries | undefined
+            ): value is Entries => value !== undefined;
+
+            const yearToBoundingBox = Object.fromEntries(
+              [...yearElements.values()]
+                .map(getValidBoundingBoxes)
+                .filter(filterInvalid)
+            );
+
+            // Set banner year
             let nextYear: Years = 2015;
-            yearElements?.forEach((element) => {
-              const top = element.getBoundingClientRect().top;
-              const heightOfOneLine = 72;
-              if (top < heightOfOneLine) {
-                const maybeYearString = element.attributes.getNamedItem(
-                  "data-year"
-                )?.value;
-                if (!maybeYearString) return;
-
-                const maybeYear = parseInt(maybeYearString);
-                const validYears = new Set([2015, 2016, 2017, 2018, 2019]);
-                if (!validYears.has(maybeYear)) return;
-                nextYear = Math.max(maybeYear, nextYear) as Years;
-              }
+            const heightOfOneLine = 72;
+            Object.entries(yearToBoundingBox).forEach(([year, { top }]) => {
+              if (top >= heightOfOneLine) return;
+              const maybeYear = parseInt(year);
+              nextYear = Math.max(maybeYear, nextYear) as Years;
             });
-
             currentYear !== nextYear && setCurrentYear(nextYear);
+
+            // Set banner downloads
+            const currentYearRect = yearToBoundingBox[currentYear];
+            if (!currentYearRect) return;
+            const { top, height } = currentYearRect;
+            const progress = (-top + heightOfOneLine) / height;
+            const dataYearIndex = currentYear - 2015;
+            const downloadsBeforeThisYear = data
+              .slice(0, dataYearIndex)
+              .flatMap(({ entries }) => Array.from({ length: entries.length }))
+              .length;
+            const estimatedDownloadsUpToScrollPoint = Math.max(
+              data[dataYearIndex]!.entries.length * progress,
+              0
+            );
+            const downloads = Math.floor(
+              estimatedDownloadsUpToScrollPoint + downloadsBeforeThisYear
+            );
+            setDownloads(downloads);
           }}
         >
           <Data />
@@ -133,10 +178,12 @@ const HeaderBar = ({
     <SlideInBox
       flex={false}
       width="100%"
+      height="48px"
       justify="between"
       isShown={isShown}
       direction="row"
       background="black"
+      className="TEST"
       align="center"
       border={{ side: "bottom", size: "4px", color: "offWhiteOpaque" }}
       pad={{ left: "8px", right: "59px" }}
@@ -168,8 +215,8 @@ const HeaderBar = ({
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M10.0106 20L13 17.0106L5.98938 10L13 2.98938L10.0106 -1.3067e-07L0.0460182 9.9646L0.0814233 10L0.046022 10.0354L10.0106 20Z"
                   fill="#FF4E4E"
                 />
@@ -193,8 +240,8 @@ const HeaderBar = ({
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M2.98938 -3.94537e-06L-7.43558e-07 2.98938L7.01062 10L3.36986e-06 17.0106L2.98938 20L12.954 10.0354L12.9186 10L12.954 9.96459L2.98938 -3.94537e-06Z"
                   fill="#FF4E4E"
                 />
@@ -243,7 +290,7 @@ const SlideInBox = styled(Box)<{ isShown: boolean }>`
   overflow: hidden;
   height: ${(props) => (props.isShown ? "48px" : "0px")};
   border-width: ${(props) => (props.isShown ? "4px" : "0px")};
-  transition: all 0.2s;
+  transition: height 0.2s, border-width 0.2s;
 `;
 
 const ChevronDown = memo(() => {
@@ -257,8 +304,8 @@ const ChevronDown = memo(() => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M22.4739 25.5L15.0005 32.9734L39.912 57.8849L39.9999 57.797L40.0879 57.885L64.9994 32.9735L57.5259 25.5L39.9999 43.026L22.4739 25.5Z"
           fill="#20BF00"
         />
