@@ -153,7 +153,7 @@ const MediaFrame = ({
   const isSmallOrMedium = isSmall || size === "medium";
   return (
     <FrameBox className="media-frame" frameColor={frameColor}>
-      <FullWidthStack fill anchor="top-fill">
+      <FullWidthStack fill anchor="top-fill" interactiveChild="first">
         <Box fill>{children}</Box>
         <MediaHeadingBlock frameColor={frameColor}>
           {isSmallOrMedium && <WebcamNotification />}

@@ -14,6 +14,11 @@ export const CameraIndicatorBox = ({
   const isOn = useStore((state) => state.webcamStream !== undefined);
   const isActive = useIsActive();
 
+  const isCameraEnabled = useStore((state) => state.isCameraEnabled);
+
+  if (!isCameraEnabled) {
+    return <DisabledCameraBox />;
+  }
   if (isSmall) {
     return <CameraIndicatorBoxSmall borderColor={borderColor} />;
   }
@@ -99,6 +104,16 @@ const CameraIndicatorBoxSmall = ({
   );
 };
 
+function DisabledCameraBox() {
+  return (
+    <Box fill="horizontal" flex={false}>
+      <Box justify="end" gap={"16px"}>
+        <CameraIndicatorBoxSmall borderColor={"yellow"} />
+      </Box>
+    </Box>
+  );
+}
+
 export const ChapterCameraIndicator = () => {
   const isCameraEnabled = useStore((state) => state.isCameraEnabled);
 
@@ -112,13 +127,7 @@ export const ChapterCameraIndicator = () => {
       </Box>
     );
   } else {
-    return (
-      <Box fill="horizontal" flex={false}>
-        <Box justify="end" gap={"16px"}>
-          <CameraIndicatorBoxSmall borderColor={"yellow"} />
-        </Box>
-      </Box>
-    );
+    return <DisabledCameraBox />;
   }
 };
 

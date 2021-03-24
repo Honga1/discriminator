@@ -1,11 +1,92 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import { useContext, useState } from "react";
+import { Box, Button, ResponsiveContext, Text } from "grommet";
+import { memo, useCallback, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 
+type Years = 2015 | 2016 | 2017 | 2019 | 2019;
+
+export const Part2Screen3 = () => {
+  const isSmall = useContext(ResponsiveContext) === "small";
+  const [hideScrollBanner, setHideScrollBanner] = useState(false);
+
+  const [currentYear, setCurrentYear] = useState<Years>(2015);
+  const scrollBox = useRef<HTMLDivElement>(null);
+
+  const onNavigationClicked = useCallback((year: Years): void => {
+    if (!scrollBox.current) return;
+
+    const yearElement = scrollBox.current.querySelector(`.year${year}`) as
+      | HTMLDivElement
+      | undefined;
+
+    if (!yearElement) return;
+
+    yearElement.scrollIntoView();
+    console.log(year);
+    setCurrentYear(year);
+  }, []);
+
+  return (
+    <Box
+      flex={false}
+      height="100%"
+      width="100%"
+      style={{ position: "relative" }}
+    >
+      <Box flex={false} height="100%" width="100%" pad="4px">
+        <ScrollBanner isShown={!hideScrollBanner} />
+        <HeaderBar
+          isShown={hideScrollBanner}
+          downloads={1040}
+          year={currentYear}
+          onNavigationClicked={onNavigationClicked}
+        />
+        <CustomScrollbarBox
+          flex={false}
+          height="100%"
+          width="100%"
+          overflow="auto"
+          pad={"8px"}
+          ref={scrollBox}
+          onScroll={(event) => {
+            setHideScrollBanner(
+              (event.target as HTMLElement).scrollTop !== 0 || hideScrollBanner
+            );
+
+            const yearElements = (event.target as HTMLElement).querySelectorAll(
+              ".TextRow"
+            ) as NodeListOf<HTMLDivElement> | undefined;
+
+            let nextYear: Years = 2015;
+            yearElements?.forEach((element) => {
+              const top = element.getBoundingClientRect().top;
+              const heightOfOneLine = 72;
+              if (top < heightOfOneLine) {
+                const maybeYearString = element.attributes.getNamedItem(
+                  "data-year"
+                )?.value;
+                if (!maybeYearString) return;
+
+                const maybeYear = parseInt(maybeYearString);
+                const validYears = new Set([2015, 2016, 2017, 2018, 2019]);
+                if (!validYears.has(maybeYear)) return;
+                nextYear = Math.max(maybeYear, nextYear) as Years;
+              }
+            });
+
+            currentYear !== nextYear && setCurrentYear(nextYear);
+          }}
+        >
+          <Data />
+        </CustomScrollbarBox>
+      </Box>
+    </Box>
+  );
+};
+
 function TextRow({ year, entries }: { year: number; entries: string[] }) {
   return (
-    <Text>
+    <Text className={`TextRow year${year}`} data-year={year}>
       <Text
         weight={"bold"}
         color={"redLight"}
@@ -37,37 +118,98 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
   );
 }
 
-export const Part2Screen3 = () => {
-  const isSmall = useContext(ResponsiveContext) === "small";
-  const [showScrollBanner, setShowScrollBanner] = useState(false);
-
+const HeaderBar = ({
+  isShown,
+  year,
+  downloads,
+  onNavigationClicked,
+}: {
+  isShown: boolean;
+  year: Years;
+  downloads: number;
+  onNavigationClicked: (destinationYear: Years) => void;
+}) => {
   return (
-    <Box
+    <SlideInBox
       flex={false}
-      height="100%"
       width="100%"
-      style={{ position: "relative" }}
+      justify="between"
+      isShown={isShown}
+      direction="row"
+      background="black"
+      align="center"
+      border={{ side: "bottom", size: "4px", color: "offWhiteOpaque" }}
+      pad={{ left: "8px", right: "59px" }}
     >
-      <Box flex={false} height="100%" width="100%" pad="4px">
-        <ScrollBanner isShown={showScrollBanner} />
-        <CustomScrollbarBox
-          flex={false}
-          height="100%"
-          width="100%"
-          overflow="auto"
-          pad={"8px"}
-          onScroll={(event) =>
-            setShowScrollBanner((event.target as HTMLElement).scrollTop === 0)
-          }
+      <Box flex={false} direction="row" gap="16px">
+        <Text size="24px" style={{ lineHeight: "24px" }} color="yellow">
+          Discriminator
+        </Text>
+
+        <Text
+          size="24px"
+          style={{ lineHeight: "24px" }}
+          color="redLight"
+          weight="bold"
         >
-          <Text>
-            {data.map(({ year, entries }) => {
-              return <TextRow year={year} entries={entries}></TextRow>;
-            })}
-          </Text>
-        </CustomScrollbarBox>
+          <Button
+            style={{ pointerEvents: "all", paddingRight: "10px" }}
+            onClick={() => {
+              const destinationYear = Math.max(2015, year - 1) as Years;
+              onNavigationClicked(destinationYear);
+            }}
+            plain
+            label={
+              <svg
+                width="13"
+                height="20"
+                viewBox="0 0 13 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10.0106 20L13 17.0106L5.98938 10L13 2.98938L10.0106 -1.3067e-07L0.0460182 9.9646L0.0814233 10L0.046022 10.0354L10.0106 20Z"
+                  fill="#FF4E4E"
+                />
+              </svg>
+            }
+          />
+          {year}
+          <Button
+            style={{ pointerEvents: "all", paddingLeft: "10px" }}
+            onClick={() => {
+              const destinationYear = Math.min(2019, year + 1) as Years;
+              onNavigationClicked(destinationYear);
+            }}
+            plain
+            label={
+              <svg
+                width="13"
+                height="20"
+                viewBox="0 0 13 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M2.98938 -3.94537e-06L-7.43558e-07 2.98938L7.01062 10L3.36986e-06 17.0106L2.98938 20L12.954 10.0354L12.9186 10L12.954 9.96459L2.98938 -3.94537e-06Z"
+                  fill="#FF4E4E"
+                />
+              </svg>
+            }
+          />
+        </Text>
       </Box>
-    </Box>
+
+      <Box direction="row" justify="end">
+        <Text size="24px" style={{ lineHeight: "24px" }} color="offWhite">
+          {downloads} Downloads
+        </Text>
+      </Box>
+    </SlideInBox>
   );
 };
 
@@ -75,23 +217,19 @@ const ScrollBanner = ({ isShown }: { isShown: boolean }) => {
   return (
     <FadeOutBox
       width="100%"
-      height="100%"
-      style={{ position: "absolute", pointerEvents: "none" }}
-      justify="end"
+      height="135px"
+      style={{
+        position: "absolute",
+        pointerEvents: "none",
+        background:
+          "linear-gradient(180deg, rgba(32, 33, 34, 0) 0%, #202122 100%)",
+        bottom: 0,
+      }}
+      align="center"
+      justify="center"
       isShown={isShown}
     >
-      <Box
-        width="100%"
-        height="135px"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(32, 33, 34, 0) 0%, #202122 100%)",
-        }}
-        align="center"
-        justify="center"
-      >
-        <ChevronDown />
-      </Box>
+      <ChevronDown />
     </FadeOutBox>
   );
 };
@@ -101,7 +239,14 @@ const FadeOutBox = styled(Box)<{ isShown: boolean }>`
   transition: opacity 0.2s;
 `;
 
-const ChevronDown = () => {
+const SlideInBox = styled(Box)<{ isShown: boolean }>`
+  overflow: hidden;
+  height: ${(props) => (props.isShown ? "48px" : "0px")};
+  border-width: ${(props) => (props.isShown ? "4px" : "0px")};
+  transition: all 0.2s;
+`;
+
+const ChevronDown = memo(() => {
   return (
     <Box width="80px" height="80px" flex={false}>
       <svg
@@ -120,7 +265,17 @@ const ChevronDown = () => {
       </svg>
     </Box>
   );
-};
+});
+
+const Data = memo(() => {
+  return (
+    <Text>
+      {data.map(({ year, entries }) => {
+        return <TextRow key={year} year={year} entries={entries}></TextRow>;
+      })}
+    </Text>
+  );
+});
 
 const data = [
   {

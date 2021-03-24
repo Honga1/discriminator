@@ -4,6 +4,7 @@ export const colorTheme = {
   black: "#202122",
   white: "#FFFFFF",
   offWhite: "#F8F9FA",
+  offWhiteOpaque: "rgba(248, 249, 250, 0.2)",
   lightGrey: "#A2A9B1",
   darkGrey: "#202122",
   red: "#E01010",
