@@ -344,8 +344,6 @@ const ModalContent = ({ children }: PropsWithChildren<{}>) => {
     | "large"
     | "xlarge";
 
-  console.log(size);
-
   let props: BoxProps;
   switch (size) {
     case "small":
