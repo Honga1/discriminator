@@ -1,5 +1,6 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import { useContext, useState } from "react";
+import styled from "styled-components";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 
 function TextRow({ year, entries }: { year: number; entries: string[] }) {
@@ -38,26 +39,85 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
 
 export const Part2Screen3 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
-
-  const [currentRow, setCurrentRow] = useState<
-    2015 | 2016 | 2017 | 2018 | 2019 | "DONE"
-  >(2015);
+  const [showScrollBanner, setShowScrollBanner] = useState(false);
 
   return (
-    <Box flex={false} height="100%" width="100%" pad="4px">
-      <CustomScrollbarBox
-        flex={false}
-        height="100%"
+    <Box
+      flex={false}
+      height="100%"
+      width="100%"
+      style={{ position: "relative" }}
+    >
+      <Box flex={false} height="100%" width="100%" pad="4px">
+        <ScrollBanner isShown={showScrollBanner} />
+        <CustomScrollbarBox
+          flex={false}
+          height="100%"
+          width="100%"
+          overflow="auto"
+          pad={"8px"}
+          onScroll={(event) =>
+            setShowScrollBanner((event.target as HTMLElement).scrollTop === 0)
+          }
+        >
+          <Text>
+            {data.map(({ year, entries }) => {
+              return <TextRow year={year} entries={entries}></TextRow>;
+            })}
+          </Text>
+        </CustomScrollbarBox>
+      </Box>
+    </Box>
+  );
+};
+
+const ScrollBanner = ({ isShown }: { isShown: boolean }) => {
+  return (
+    <FadeOutBox
+      width="100%"
+      height="100%"
+      style={{ position: "absolute", pointerEvents: "none" }}
+      justify="end"
+      isShown={isShown}
+    >
+      <Box
         width="100%"
-        overflow="auto"
-        pad={"8px"}
+        height="135px"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(32, 33, 34, 0) 0%, #202122 100%)",
+        }}
+        align="center"
+        justify="center"
       >
-        <Text>
-          {data.map(({ year, entries }) => {
-            return <TextRow year={year} entries={entries}></TextRow>;
-          })}
-        </Text>
-      </CustomScrollbarBox>
+        <ChevronDown />
+      </Box>
+    </FadeOutBox>
+  );
+};
+
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.2s;
+`;
+
+const ChevronDown = () => {
+  return (
+    <Box width="80px" height="80px" flex={false}>
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 80 81"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M22.4739 25.5L15.0005 32.9734L39.912 57.8849L39.9999 57.797L40.0879 57.885L64.9994 32.9735L57.5259 25.5L39.9999 43.026L22.4739 25.5Z"
+          fill="#20BF00"
+        />
+      </svg>
     </Box>
   );
 };
