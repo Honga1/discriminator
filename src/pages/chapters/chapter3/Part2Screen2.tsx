@@ -1,5 +1,6 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import { useContext, useEffect, useState } from "react";
+import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { useSimulatedTypingTimer } from "../../../hooks/useSimulatedTypingTimer";
 import { colorTheme } from "../../../theme";
 
@@ -111,52 +112,100 @@ export const Part2Screen2 = () => {
   >(2015);
 
   return (
-    <Box flex={false} height="100%" width="100%" pad={"12px"}>
-      <TextRow
-        year={2015}
-        downloads={7}
-        entries={["MegaFace launched", "||||||||||| Super Neuro"]}
-        shouldType={currentRow === 2015}
-        onFinished={() => setCurrentRow(2016)}
-      ></TextRow>
-      <TextRow
-        year={2016}
-        downloads={266}
-        entries={[
-          "||||||||||| Portland State University, Portland, United States",
-          "||||||||||| Megvii, City city, China",
-        ]}
-        shouldType={currentRow === 2016}
-        onFinished={() => setCurrentRow(2017)}
-      ></TextRow>
-      <TextRow
-        year={2017}
-        downloads={365}
-        entries={["||||||||||| AliBaba, City city, China"]}
-        shouldType={currentRow === 2017}
-        onFinished={() => setCurrentRow(2018)}
-      ></TextRow>
-      <TextRow
-        year={2018}
-        downloads={411}
-        entries={[
-          "||||||||||| AliBaba, City city, China",
-          "||||||||||| ByteDance, City city, China",
-          "||||||||||| Panasonic, City city, United States",
-        ]}
-        shouldType={currentRow === 2018}
-        onFinished={() => setCurrentRow(2019)}
-      ></TextRow>
-      <TextRow
-        year={2019}
-        downloads={366}
-        entries={[
-          "||||||||||| Google, Mountain View, United States",
-          "||||||||||| AliBaba, City city, China",
-        ]}
-        shouldType={currentRow === 2019}
-        onFinished={() => setCurrentRow("DONE")}
-      ></TextRow>
+    <Box flex={false} height="100%" width="100%" pad="4px">
+      <CustomScrollbarBox
+        flex={false}
+        height="100%"
+        width="100%"
+        overflow="auto"
+        pad={"8px"}
+      >
+        <TextRow
+          year={2015}
+          downloads={7}
+          entries={["MegaFace launched", "||||||||||| Super Neuro"]}
+          shouldType={currentRow === 2015}
+          onFinished={() => setCurrentRow(2016)}
+        ></TextRow>
+        <TextRow
+          year={2016}
+          downloads={266}
+          entries={[
+            "||||||||||| Portland State University, Portland, United States",
+            "||||||||||| Megvii, City city, China",
+          ]}
+          shouldType={currentRow === 2016}
+          onFinished={() => setCurrentRow(2017)}
+        ></TextRow>
+        <TextRow
+          year={2017}
+          downloads={365}
+          entries={["||||||||||| AliBaba, City city, China"]}
+          shouldType={currentRow === 2017}
+          onFinished={() => setCurrentRow(2018)}
+        ></TextRow>
+        <TextRow
+          year={2018}
+          downloads={411}
+          entries={[
+            "||||||||||| AliBaba, City city, China",
+            "||||||||||| ByteDance, City city, China",
+            "||||||||||| Panasonic, City city, United States",
+          ]}
+          shouldType={currentRow === 2018}
+          onFinished={() => setCurrentRow(2019)}
+        ></TextRow>
+        <TextRow
+          year={2019}
+          downloads={366}
+          entries={[
+            "||||||||||| Google, Mountain View, United States",
+            "||||||||||| AliBaba, City city, China",
+          ]}
+          shouldType={currentRow === 2019}
+          onFinished={() => setCurrentRow("DONE")}
+        ></TextRow>
+        <TextRow
+          year={2019}
+          downloads={366}
+          entries={[
+            "||||||||||| Google, Mountain View, United States",
+            "||||||||||| AliBaba, City city, China",
+          ]}
+          shouldType={currentRow === 2019}
+          onFinished={() => setCurrentRow("DONE")}
+        ></TextRow>
+        <TextRow
+          year={2019}
+          downloads={366}
+          entries={[
+            "||||||||||| Google, Mountain View, United States",
+            "||||||||||| AliBaba, City city, China",
+          ]}
+          shouldType={currentRow === 2019}
+          onFinished={() => setCurrentRow("DONE")}
+        ></TextRow>
+        <TextRow
+          year={2019}
+          downloads={366}
+          entries={[
+            "||||||||||| Google, Mountain View, United States",
+            "||||||||||| AliBaba, City city, China",
+          ]}
+          shouldType={currentRow === 2019}
+          onFinished={() => setCurrentRow("DONE")}
+        ></TextRow>
+        <TextRow
+          year={2019}
+          downloads={366}
+          entries={[
+            "||||||||||| Google, Mountain View, United States",
+            "||||||||||| AliBaba, City city, China",
+          ]}
+          shouldType={currentRow === 2019}
+          onFinished={() => setCurrentRow("DONE")}
+        ></TextRow>
+      </CustomScrollbarBox>
     </Box>
   );
 };

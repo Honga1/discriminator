@@ -17,6 +17,7 @@ type State = {
     | undefined;
   toggleCamera: () => void;
   turnOnCamera: () => void;
+  isCameraEnabled: boolean;
   isHeadingShown: boolean;
 };
 
@@ -24,6 +25,7 @@ const initialState: NonFunctionProperties<State> = {
   webcamStream: undefined,
   chapter: undefined,
   isHeadingShown: true,
+  isCameraEnabled: true,
 };
 
 export const store = create<State>((set, get) => {

@@ -4,7 +4,7 @@ import { useChapter } from "../../hooks/useChapter";
 import { IMediaElement } from "../../IMediaElement";
 export default function Chapter1() {
   const ref = useRef<IMediaElement>(null);
-  useChapter(ref);
+  useChapter(ref, false);
 
   return (
     <video

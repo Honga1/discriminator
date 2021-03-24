@@ -3,64 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useIsActive } from "../hooks/useIsActive";
 import { store, useStore } from "../store/store";
-
-const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
-  position: absolute;
-  left: ${(props) => (props.isLeft ? "0" : "100%")};
-  right: ${(props) => (props.isLeft ? "100%" : "0")};
-  transform: translateX(${(props) => (!props.isLeft ? "-100%" : "0%")});
-  top: 0;
-  transition: all 0.2s;
-`;
-
-const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
-  margin-left: ${(props) => (props.isLeft ? "0" : "48px")};
-  margin-right: ${(props) => (props.isLeft ? "48px" : "0")};
-  transition: all 0.2s;
-`;
-
-const AnimateWidthAndHover = styled(Box)<{
-  currentWidth: string;
-  fullWidth: string;
-}>`
-  transition: width 0.2s linear;
-  width: ${(props) => props.currentWidth};
-  &:hover {
-    width: ${(props) => props.fullWidth};
-  }
-`;
-
-const CameraIndicatorBoxSmall = ({
-  borderColor = "yellow",
-}: {
-  borderColor?: "yellow" | "black";
-}) => {
-  const isOn = useStore((state) => state.webcamStream !== undefined);
-
-  return (
-    <Button
-      style={{ pointerEvents: "all" }}
-      plain
-      onClick={store.getState().toggleCamera}
-      label={
-        <Box
-          direction="row"
-          border={{ color: borderColor, size: "3px" }}
-          height="48px"
-          style={{ position: "relative" }}
-          background="charcoal"
-          className="CameraIndicatorBox"
-          align="center"
-          overflow="hidden"
-        >
-          <Box flex={false} width="42px">
-            <CameraIcon isOn={isOn} />
-          </Box>
-        </Box>
-      }
-    ></Button>
-  );
-};
+import { colorTheme } from "../theme";
 
 export const CameraIndicatorBox = ({
   borderColor = "yellow",
@@ -99,7 +42,7 @@ export const CameraIndicatorBox = ({
           overflow="hidden"
         >
           <AnimatePosition flex={false} isLeft={!isOn} width="42px">
-            <CameraIcon isOn={isOn} />
+            <CameraIcon />
           </AnimatePosition>
           <AnimateMargin
             pad={{ horizontal: "20px", vertical: "8px" }}
@@ -122,25 +65,62 @@ export const CameraIndicatorBox = ({
           </AnimateMargin>
         </AnimateWidthAndHover>
       }
+    />
+  );
+};
+
+const CameraIndicatorBoxSmall = ({
+  borderColor = "yellow",
+}: {
+  borderColor?: "yellow" | "black";
+}) => {
+  return (
+    <Button
+      style={{ pointerEvents: "all" }}
+      plain
+      onClick={store.getState().toggleCamera}
+      label={
+        <Box
+          direction="row"
+          border={{ color: borderColor, size: "3px" }}
+          height="48px"
+          style={{ position: "relative" }}
+          background="charcoal"
+          className="CameraIndicatorBox"
+          align="center"
+          overflow="hidden"
+        >
+          <Box flex={false} width="42px">
+            <CameraIcon />
+          </Box>
+        </Box>
+      }
     ></Button>
   );
 };
 
 export const ChapterCameraIndicator = () => {
-  return (
-    <Box fill="horizontal" flex={false}>
-      <Box justify="end" gap={"16px"}>
-        <CameraIndicatorBox />
-        <WebcamNotification />
-      </Box>
-    </Box>
-  );
-};
+  const isCameraEnabled = useStore((state) => state.isCameraEnabled);
 
-const FadeOutBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.6s;
-`;
+  if (isCameraEnabled) {
+    return (
+      <Box fill="horizontal" flex={false}>
+        <Box justify="end" gap={"16px"}>
+          <CameraIndicatorBox />
+          <WebcamNotification />
+        </Box>
+      </Box>
+    );
+  } else {
+    return (
+      <Box fill="horizontal" flex={false}>
+        <Box justify="end" gap={"16px"}>
+          <CameraIndicatorBoxSmall borderColor={"yellow"} />
+        </Box>
+      </Box>
+    );
+  }
+};
 
 const WebcamNotification = () => {
   const [isShown, setIsShown] = useState(true);
@@ -177,7 +157,10 @@ const WebcamNotification = () => {
   );
 };
 
-const CameraIcon = ({ isOn = false }: { isOn?: boolean }) => {
+const CameraIcon = () => {
+  const isCameraEnabled = useStore((state) => state.isCameraEnabled);
+  const isOn = useStore((state) => state.webcamStream !== undefined);
+
   return (
     <TwoElementCrossFade
       isFirstShown={isOn}
@@ -186,35 +169,16 @@ const CameraIcon = ({ isOn = false }: { isOn?: boolean }) => {
       flex={false}
     >
       <Box className="first">
-        <CameraIconOn />
+        <CameraIconOn disabled={!isCameraEnabled} />
       </Box>
       <Box className="last">
-        <CameraIconOff />
+        <CameraIconOff disabled={!isCameraEnabled} />
       </Box>
     </TwoElementCrossFade>
   );
 };
 
-const TwoElementCrossFade = styled(Box)<{ isFirstShown: boolean }>`
-  & > .first {
-    position: relative;
-    transition: opacity 0.2s;
-    opacity: ${(props) => (props.isFirstShown ? "1" : "0")};
-    width: 100%;
-  }
-
-  & > .last {
-    position: absolute;
-    transition: opacity 0.2s;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    opacity: ${(props) => (props.isFirstShown ? "0" : "1")};
-  }
-`;
-
-const CameraIconOn = () => {
+const CameraIconOn = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <svg
       width="42px"
@@ -223,7 +187,11 @@ const CameraIconOn = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="42" height="42" fill="#20BF00" />
+      <rect
+        width="42"
+        height="42"
+        fill={disabled ? colorTheme.lightGrey : "#20BF00"}
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -239,7 +207,7 @@ const CameraIconOn = () => {
   );
 };
 
-const CameraIconOff = () => {
+const CameraIconOff = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <svg
       width="42px"
@@ -248,7 +216,11 @@ const CameraIconOff = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="42" height="42" fill="#FF5959" />
+      <rect
+        width="42"
+        height="42"
+        fill={disabled ? colorTheme.lightGrey : "#FF5959"}
+      />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -271,3 +243,53 @@ const CameraIconOff = () => {
     </svg>
   );
 };
+
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
+
+const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
+  position: absolute;
+  left: ${(props) => (props.isLeft ? "0" : "100%")};
+  right: ${(props) => (props.isLeft ? "100%" : "0")};
+  transform: translateX(${(props) => (!props.isLeft ? "-100%" : "0%")});
+  top: 0;
+  transition: all 0.2s;
+`;
+
+const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
+  margin-left: ${(props) => (props.isLeft ? "0" : "48px")};
+  margin-right: ${(props) => (props.isLeft ? "48px" : "0")};
+  transition: all 0.2s;
+`;
+
+const AnimateWidthAndHover = styled(Box)<{
+  currentWidth: string;
+  fullWidth: string;
+}>`
+  transition: width 0.2s linear;
+  width: ${(props) => props.currentWidth};
+  &:hover {
+    width: ${(props) => props.fullWidth};
+  }
+`;
+
+const TwoElementCrossFade = styled(Box)<{ isFirstShown: boolean }>`
+  & > .first {
+    position: relative;
+    transition: opacity 0.2s;
+    opacity: ${(props) => (props.isFirstShown ? "1" : "0")};
+    width: 100%;
+  }
+
+  & > .last {
+    position: absolute;
+    transition: opacity 0.2s;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    opacity: ${(props) => (props.isFirstShown ? "0" : "1")};
+  }
+`;

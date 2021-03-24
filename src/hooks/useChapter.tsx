@@ -2,7 +2,12 @@ import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
 import { IMediaElement } from "../IMediaElement";
 
-export function useChapter(ref: React.RefObject<IMediaElement>) {
+export function useChapter(
+  ref: React.RefObject<IMediaElement>,
+  needsCamera: boolean
+) {
+  store.setState({ isCameraEnabled: needsCamera });
+
   const play = useCallback(() => ref.current?.play(), [ref]);
   const pause = useCallback(() => ref.current?.pause(), [ref]);
   const rewind = useCallback(() => {

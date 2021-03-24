@@ -7,13 +7,13 @@ import {
   useState,
 } from "react";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import { ModalButton } from "../../components/ModalButton";
 import { useQuery } from "../../hooks/useQuery";
 import { useStore } from "../../store/store";
 import { colorTheme } from "../../theme";
 import { About } from "./About";
 import { Credits } from "./Credits";
+import { CustomScrollbarBox } from "../../components/CustomScrollbarBox";
 import { Privacy } from "./Privacy";
 
 export const ModalSelector = () => {
@@ -227,21 +227,6 @@ const ScrollableFrame = ({
     </Box>
   );
 };
-
-const CustomScrollbarBox = styled(Box)`
-  &::-webkit-scrollbar {
-    width: 20px;
-  }
-
-  &::-webkit-scrollbar-track {
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colorTheme.yellowAlternative};
-    outline-offset: -2px;
-    outline: 2px solid ${colorTheme.black};
-  }
-`;
 
 const ScrollingHeadingBlock = ({
   frameColor,

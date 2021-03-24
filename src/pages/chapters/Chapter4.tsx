@@ -4,7 +4,7 @@ import { useChapter } from "../../hooks/useChapter";
 
 export default function Chapter4() {
   const ref = useRef<HTMLVideoElement>(null);
-  useChapter(ref);
+  useChapter(ref, false);
 
   return (
     <video

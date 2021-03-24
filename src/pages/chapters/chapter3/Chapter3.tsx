@@ -12,7 +12,7 @@ import { store } from "../../../store/store";
 
 export default function Chapter3() {
   const ref = useRef<IMediaElement>(null);
-  useChapter(ref);
+  useChapter(ref, false);
 
   const [seconds, setSeconds] = useState(0);
 
