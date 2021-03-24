@@ -8,6 +8,7 @@ import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
+import { Part2Screen3 } from "./Part2Screen3";
 import { store } from "../../../store/store";
 
 export default function Chapter3() {
@@ -84,8 +85,10 @@ export default function Chapter3() {
       return <Part1Screen2 stage={stage} />;
     } else if (seconds < 123) {
       return <Part2Screen1 />;
-    } else {
+    } else if (seconds < 130) {
       return <Part2Screen2 />;
+    } else {
+      return <Part2Screen3 />;
     }
   }, [seconds]);
 

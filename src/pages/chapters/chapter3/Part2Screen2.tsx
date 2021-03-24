@@ -85,7 +85,7 @@ function TextRow({
                 {hiddenCharacters.join("")}
               </span>
             </span>
-            &nbsp;&nbsp;•••
+            &nbsp;&nbsp;&nbsp;•••
           </Text>
         );
       })}
