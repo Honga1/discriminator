@@ -75,7 +75,12 @@ const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
 };
 const MediaContent = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <Box className="media content" align="center" height="100%">
+    <Box
+      className="media content"
+      align="center"
+      height="100%"
+      overflow="hidden"
+    >
       {children}
     </Box>
   );
