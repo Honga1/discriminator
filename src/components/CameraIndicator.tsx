@@ -264,13 +264,13 @@ const AnimatePosition = styled(Box)<{ isLeft: boolean }>`
   right: ${(props) => (props.isLeft ? "100%" : "0")};
   transform: translateX(${(props) => (!props.isLeft ? "-100%" : "0%")});
   top: 0;
-  transition: all 0.2s;
+  transition: left 0.2s, right 0.2s, transform 0.2s;
 `;
 
 const AnimateMargin = styled(Box)<{ isLeft: boolean }>`
   margin-left: ${(props) => (props.isLeft ? "0" : "48px")};
   margin-right: ${(props) => (props.isLeft ? "48px" : "0")};
-  transition: all 0.2s;
+  transition: margin-left 0.2s, margin-right 0.2s;
 `;
 
 const AnimateWidthAndHover = styled(Box)<{

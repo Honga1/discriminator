@@ -18,7 +18,7 @@ const OnHoverBox = styled(Box)<{ fillColor: string }>`
     color: ${(props) => props.fillColor};
   }
 
-  transition: all 0.2s;
+  transition: color 0.2s, background-color 0.2s;
 `;
 
 export const PageBodyButton = ({

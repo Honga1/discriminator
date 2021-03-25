@@ -9,7 +9,7 @@ import { useIsActive } from "../hooks/useIsActive";
 import { useStore } from "../store/store";
 
 const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
-  transition: all 1s linear;
+  transition: right 1s linear;
   position: absolute;
   top: 0;
   left: 0;

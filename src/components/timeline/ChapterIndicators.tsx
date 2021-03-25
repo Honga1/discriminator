@@ -50,10 +50,10 @@ const StyleChildrenOnHover = styled(Box)`
   }
 
   & > :first-child {
-    transition: all 0.1s;
+    transition: height 0.1s;
   }
   & .scrubber-dot {
-    transition: all 0.1s;
+    transition: width 0.1s, height 0.1s;
   }
 
   &:hover .scrubber-dot {

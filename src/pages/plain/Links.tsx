@@ -143,7 +143,7 @@ const OnHoverBox = styled(Box)`
     transform: translateY(-4px);
   }
 
-  transition: all 0.2s;
+  transition: transform 0.2s;
 `;
 
 const LinkFrame = ({
