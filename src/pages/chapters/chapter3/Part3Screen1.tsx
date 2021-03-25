@@ -74,7 +74,6 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         break;
 
       case "FAMILY":
-        console.log("here");
         container
           .querySelectorAll(
             ".tint:not(.type-WEDDING):not(.type-PARTY):not(.type-FAMILY)"
@@ -148,7 +147,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
       }}
       ref={scrollContainer}
     >
-      <AnimateEverything
+      <AnimateTransform
         style={{
           position: "absolute",
           top: 0,
@@ -216,7 +215,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
           className={"stacked-boxes year2013"}
           images={images2013}
         />
-      </AnimateEverything>
+      </AnimateTransform>
     </Box>
   ) : (
     <Box
@@ -227,7 +226,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
       pad="48px"
       style={{ position: "relative", overflow: "hidden" }}
     >
-      <AnimateEverything
+      <AnimateTransform
         style={{
           position: "absolute",
           top: 0,
@@ -239,6 +238,12 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         target={target}
         ref={ref}
       >
+        <div style={{ position: "relative", width: "100%" }}>
+          <div style={{ position: "absolute", width: "100%" }}>
+            {" "}
+            A cat went here
+          </div>
+        </div>
         <Grid
           fill="vertical"
           pad={"32px"}
@@ -324,7 +329,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
             <Text color="white">2013</Text>
           </Box>
         </Grid>
-      </AnimateEverything>
+      </AnimateTransform>
     </Box>
   );
 });
@@ -376,11 +381,11 @@ const TintableImage = ({
 };
 
 const zoomFactor = 3;
-const AnimateEverything = styled(Box)<{
+const AnimateTransform = styled(Box)<{
   target?: { x: number; y: number };
 }>`
   backface-visibility: hidden;
-  transition: all 1s ease-in-out;
+  transition: transform 1s ease-in-out;
   transform: ${(props) =>
     !props.target
       ? `translateZ(0) scale(1)`
