@@ -33,6 +33,24 @@ function stageIsAfter(
   return stageIndex > pointIndex;
 }
 
+export const Part3Screen1Selector = ({ seconds }: { seconds: number }) => {
+  let stage: Part3Screen1Props["stage"];
+
+  if (seconds < 200) {
+    stage = "NO_TINTING";
+  } else if (seconds < 204) {
+    stage = "WEDDING";
+  } else if (seconds < 208) {
+    stage = "PARTY";
+  } else if (seconds < 230) {
+    stage = "FAMILY";
+  } else {
+    stage = "FAMILY";
+  }
+
+  return <Part3Screen1 stage={stage} />;
+};
+
 export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);

@@ -1,66 +1,42 @@
-import { Box, Text } from "grommet";
+import { Box, Button, Text } from "grommet";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { usePageType } from "../hooks/usePageType";
 import { colorTheme } from "../theme";
-import { NextStepButton } from "./NextStepButton";
-import { useNextStep } from "../hooks/useNextStep";
-import { useIsActive } from "../hooks/useIsActive";
-import { useStore } from "../store/store";
 
-const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
-  transition: right 1s linear;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: ${(props) => (1 - props.styledWidth) * 100}%;
-  bottom: 0;
-  z-index: -1;
-`;
-
-const AnimateWidthAndHover = styled(Box)<{
-  currentWidth: string;
-  fullWidth: string;
-}>`
-  transition: width 1s linear, transform 0.2s;
-  width: ${(props) => props.currentWidth};
-  &:hover {
-    transition: width 0.6s;
-    width: ${(props) => props.fullWidth};
-  }
-`;
-
-export const FinishedPlayingToNextButton = () => {
+export const FinishedButton = (props: {
+  text: string;
+  textWidth: string;
+  shouldShow: boolean;
+  shouldProgress: boolean;
+  toProgress: () => void;
+}) => {
   const [progress, setProgress] = useState(0);
-  const pageType = usePageType();
-  const nextStep = useNextStep();
-  const isActive = useIsActive();
-  const isChapterComplete = useStore((state) => state.chapter?.progress === 1);
-  const shouldShow = pageType === "cover" || isChapterComplete;
+  const shouldShow = props.shouldShow;
 
   useEffect(() => {
-    if (isActive || !shouldShow) return;
+    if (!props.shouldProgress) return;
     if (progress >= 6) {
       return;
     }
     const timeout = setTimeout(() => {
       if (progress >= 5) {
         setProgress(0);
-        nextStep();
+        props.toProgress();
       } else {
         setProgress(progress + 1);
       }
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [progress, nextStep, isActive, shouldShow]);
+  }, [progress, props.toProgress, props]);
 
-  const text = pageType === "cover" ? "Go to chapter" : "Go to next chapter";
-  const width = pageType === "cover" ? "235px" : "286px";
+  const text = props.text;
+  const width = props.textWidth;
 
   return (
     <Box style={shouldShow ? {} : { display: "none" }}>
-      <NextStepButton
+      <Button
         plain
+        onClick={props.toProgress}
         label={
           <AnimateWidthAndHover
             border={{ size: "3px", color: colorTheme.white }}
@@ -99,3 +75,25 @@ export const FinishedPlayingToNextButton = () => {
     </Box>
   );
 };
+
+export const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
+  transition: right 1s linear;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: ${(props) => (1 - props.styledWidth) * 100}%;
+  bottom: 0;
+  z-index: -1;
+`;
+
+export const AnimateWidthAndHover = styled(Box)<{
+  currentWidth: string;
+  fullWidth: string;
+}>`
+  transition: width 1s linear, transform 0.2s;
+  width: ${(props) => props.currentWidth};
+  &:hover {
+    transition: width 0.6s;
+    width: ${(props) => props.fullWidth};
+  }
+`;

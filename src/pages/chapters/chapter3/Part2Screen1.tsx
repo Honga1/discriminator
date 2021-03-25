@@ -76,8 +76,8 @@ const RainDrops = memo(() => {
         }}
         overflow="hidden"
       >
-        {Array.from({ length: amount }).map(() => (
-          <RainDrop></RainDrop>
+        {Array.from({ length: amount }).map((_, index) => (
+          <RainDrop key={index} />
         ))}
       </Box>
     </Box>

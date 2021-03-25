@@ -1,125 +1,134 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { Box, ResponsiveContext } from "grommet";
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { FinishedButton } from "../../../components/FinishedButton";
 import { useChapter } from "../../../hooks/useChapter";
+import { useIsActive } from "../../../hooks/useIsActive";
 import { IMediaElement } from "../../../IMediaElement";
 import { store } from "../../../store/store";
-import { ChainedAudio } from "./ChainedAudio";
-import part1AudioSrc from "./Chapter3Part1.mp3";
-import part2AudioSrc from "./Chapter3Part2.mp3";
-import part3AudioSrc from "./Chapter3Part3.mp3";
+import audioSrc from "./Chapter3.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
-import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
+import { Part1Screen2Selector } from "./Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3";
-import { Part3Screen1, Part3Screen1Props } from "./Part3Screen1";
+import { Part3Screen1Selector } from "./Part3Screen1";
 
 export default function Chapter3() {
-  const ref = useRef<IMediaElement>(null);
+  const ref = useRef<HTMLAudioElement>(null);
   useChapter(ref, false);
-
+  const isSmall = useContext(ResponsiveContext) === "small";
   const [seconds, setSeconds] = useState(0);
 
-  const onTimeUpdate = useCallback((event: Event) => {
+  const [allowAutoPause, setAllowAutoPause] = useState(false);
+  const [isAutoPaused, setIsAutoPaused] = useState(false);
+
+  const [part, setPart] = useState<
+    | "PART_1_SCREEN_1"
+    | "PART_1_SCREEN_2"
+    | "PART_2_SCREEN_1"
+    | "PART_2_SCREEN_2"
+    | "PART_2_SCREEN_3"
+    | "PART_3_SCREEN_1"
+  >("PART_1_SCREEN_1");
+
+  const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
     const audio = event.target as IMediaElement;
     const seconds = Math.round(audio.currentTime);
     setSeconds(seconds);
-  }, []);
-
-  console.log(seconds);
-  const render = useMemo(() => {
     if (seconds < 15) {
       store.setState({ isHeadingShown: true });
     } else {
       store.setState({ isHeadingShown: false });
     }
+
     if (seconds < 30) {
-      return <Part1Screen1 />;
+      setAllowAutoPause(true);
+      setPart("PART_1_SCREEN_1");
     } else if (seconds < 96) {
-      let stage: Part1Screen2Props["stage"];
-
-      // Start at the time above it, ends at the if statement.
-      if (seconds < 38) {
-        stage = "NO_YEARS";
-      } else if (seconds < 42) {
-        stage = "2011";
-      } else if (seconds < 45) {
-        stage = "2010";
-      } else if (seconds < 48) {
-        stage = "2007";
-      } else if (seconds < 52) {
-        stage = "2013";
-      } else if (seconds < 54) {
-        stage = "2006";
-      } else if (seconds < 56) {
-        stage = "2012";
-      } else if (seconds < 57) {
-        stage = "ZOOMED_OUT";
-      } else if (seconds < 60) {
-        //  I see you
-        stage = 0;
-      } else if (seconds < 61) {
-        stage = "ZOOMED_OUT";
-      } else if (seconds < 65) {
-        // "A kid with a pumpkin" ZOOMIN 1
-        stage = 1;
-      } else if (seconds < 66) {
-        stage = "ZOOMED_OUT";
-      } else if (seconds < 70) {
-        // "I see, looks like you" ZOOMIN 2
-        stage = 2;
-      } else if (seconds < 72) {
-        stage = "ZOOMED_OUT";
-      } else if (seconds < 76) {
-        // "There's a woman" ZOOMIN 3
-        stage = 3;
-      } else if (seconds < 77) {
-        stage = "ZOOMED_OUT";
-      } else if (seconds < 93) {
-        //  "There's you" ZOOMIN 4
-        stage = 4;
-      } else if (seconds < 94) {
-        stage = "ZOOMED_OUT";
+      if (seconds >= 94) {
+        if (allowAutoPause && !isAutoPaused) {
+          ref.current?.pause();
+          setIsAutoPaused(true);
+          setAllowAutoPause(false);
+        }
       } else {
-        stage = "USER_CONTROL";
-        // ref.current?.pause();
+        setAllowAutoPause(true);
       }
-
-      return <Part1Screen2 stage={stage} />;
+      setPart("PART_1_SCREEN_2");
     } else if (seconds < 123) {
-      return <Part2Screen1 />;
-    } else if (seconds < 130) {
-      return <Part2Screen2 />;
-    } else if (seconds < 186) {
-      return <Part2Screen3 />;
-    } else if (seconds < 233) {
-      let stage: Part3Screen1Props["stage"];
+      setAllowAutoPause(true);
 
-      if (seconds < 200) {
-        stage = "NO_TINTING";
-      } else if (seconds < 204) {
-        stage = "WEDDING";
-      } else if (seconds < 208) {
-        stage = "PARTY";
+      setPart("PART_2_SCREEN_1");
+    } else if (seconds < 168) {
+      setAllowAutoPause(true);
+
+      setPart("PART_2_SCREEN_2");
+    } else if (seconds < 187) {
+      if (seconds >= 185) {
+        if (allowAutoPause && !isAutoPaused) {
+          ref.current?.pause();
+          setIsAutoPaused(true);
+          setAllowAutoPause(false);
+        }
       } else {
-        stage = "FAMILY";
+        setAllowAutoPause(true);
       }
-      return <Part3Screen1 stage={stage} />;
+      setPart("PART_2_SCREEN_3");
+    } else {
+      setAllowAutoPause(true);
+      setPart("PART_3_SCREEN_1");
     }
-  }, [seconds]);
+  };
 
-  const srcArray = useMemo(
-    () => [part1AudioSrc, part2AudioSrc, part3AudioSrc],
-    []
-  );
+  console.log(seconds);
+  const isActive = useIsActive();
+
   return (
     <>
-      <ChainedAudio
-        forwardRef={ref}
-        srcArray={srcArray}
+      <audio
+        ref={ref}
+        src={audioSrc}
         onTimeUpdate={onTimeUpdate}
+        onPlay={() => setIsAutoPaused(false)}
       />
 
-      {render}
+      <Box style={{ position: "relative" }} width="100%" height="100%">
+        <Box
+          style={{
+            position: "absolute",
+            bottom: isSmall ? "48px" : "64px",
+            right: 0,
+          }}
+        >
+          {isAutoPaused && (
+            <FinishedButton
+              shouldProgress={!isActive}
+              shouldShow={isAutoPaused}
+              text="Continue"
+              textWidth="200px"
+              toProgress={() => {
+                ref.current?.play();
+              }}
+            />
+          )}
+        </Box>
+        {part === "PART_1_SCREEN_1" && <Part1Screen1 />}
+        {part === "PART_1_SCREEN_2" && (
+          <Part1Screen2Selector seconds={seconds} />
+        )}
+        {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
+        {part === "PART_2_SCREEN_2" && <Part2Screen2 />}
+        {part === "PART_2_SCREEN_3" && <Part2Screen3 />}
+        {part === "PART_3_SCREEN_1" && (
+          <Part3Screen1Selector seconds={seconds} />
+        )}
+      </Box>
     </>
   );
 }

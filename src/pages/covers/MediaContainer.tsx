@@ -11,7 +11,7 @@ import {
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
 import { FullWidthStack } from "../../components/FullWidthStack";
-import { FinishedPlayingToNextButton } from "../../components/FinishedPlayingToNextButton";
+import { ChapterAndCoverNextButton } from "../../components/ChapterAndCoverFinishedButton";
 import { Timeline } from "../../components/timeline/Timeline";
 import { colorTheme } from "../../theme";
 import { useStore } from "../../store/store";
@@ -65,7 +65,7 @@ const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
               right: 0,
             }}
           >
-            <FinishedPlayingToNextButton />
+            <ChapterAndCoverNextButton />
           </Box>
         </Box>
         <Timeline gridArea="timeline" />

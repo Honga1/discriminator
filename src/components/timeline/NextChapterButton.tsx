@@ -1,11 +1,14 @@
+import { Button } from "grommet";
 import React from "react";
+import { useNextStep } from "../../hooks/useNextStep";
 import { colorTheme } from "../../theme";
-import { NextStepButton } from "../NextStepButton";
 
 export const NextChapterButton = () => {
   const offWhite = colorTheme.offWhite;
+  const nextStep = useNextStep();
   return (
-    <NextStepButton
+    <Button
+      onClick={nextStep}
       plain
       icon={
         <svg
