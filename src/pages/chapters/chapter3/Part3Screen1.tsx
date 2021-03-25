@@ -380,6 +380,13 @@ function CategoryLabels(props: { stage: Part3Screen1Props["stage"] }) {
   );
 }
 
+const HoverJiggle = styled.div`
+  transform: scale(1);
+  &:hover {
+    transform: scale(1.1);
+    z-index: 10;
+  }
+`;
 const TintableImage = ({
   type,
   src,
@@ -590,6 +597,15 @@ const StackedBoxesHorizontal = ({
   );
 };
 
+const HoverBox = styled(Box)<{ rotation: number }>`
+  transform: scale(1) rotate(${({ rotation }) => rotation}deg);
+  transition: transform 0.2s linear;
+  &:hover {
+    z-index: 1;
+    transform: scale(1.05) rotate(${({ rotation }) => rotation}deg);
+  }
+`;
+
 const RelativeRotatedBox = memo(
   ({
     width,
@@ -600,29 +616,18 @@ const RelativeRotatedBox = memo(
     height: number;
     image: ReactElement;
   }) => {
-    const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
+    const rotation = Math.random() * 84 - 42;
     return (
-      <Box
+      <HoverBox
         className="rotated-box"
         flex={false}
         width={width * 100 + "%"}
         height={height * 100 + "%"}
-        style={{ position: "relative" }}
+        rotation={rotation}
+        // style={ transform: rotation }}
       >
-        <Box
-          style={{
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            position: "absolute",
-            transform: rotation,
-            overflow: "hidden",
-          }}
-        >
-          {image}
-        </Box>
-      </Box>
+        {image}
+      </HoverBox>
     );
   }
 );
