@@ -1,15 +1,17 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import { IMediaElement } from "../../../IMediaElement";
 import { useChapter } from "../../../hooks/useChapter";
+import { IMediaElement } from "../../../IMediaElement";
+import { store } from "../../../store/store";
 import { ChainedAudio } from "./ChainedAudio";
 import part1AudioSrc from "./Chapter3Part1.mp3";
 import part2AudioSrc from "./Chapter3Part2.mp3";
+import part3AudioSrc from "./Chapter3Part3.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2, Part1Screen2Props } from "./Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3";
-import { store } from "../../../store/store";
+import { Part3Screen1, Part3Screen1Props } from "./Part3Screen1";
 
 export default function Chapter3() {
   const ref = useRef<IMediaElement>(null);
@@ -87,12 +89,28 @@ export default function Chapter3() {
       return <Part2Screen1 />;
     } else if (seconds < 130) {
       return <Part2Screen2 />;
-    } else {
+    } else if (seconds < 202) {
       return <Part2Screen3 />;
+    } else if (seconds < 233) {
+      let stage: Part3Screen1Props["stage"];
+
+      if (seconds < 210) {
+        stage = "NO_TINTING";
+      } else if (seconds < 215) {
+        stage = "WEDDING";
+      } else if (seconds < 220) {
+        stage = "PARTY";
+      } else {
+        stage = "FAMILY";
+      }
+      return <Part3Screen1 stage={stage} />;
     }
   }, [seconds]);
 
-  const srcArray = useMemo(() => [part1AudioSrc, part2AudioSrc], []);
+  const srcArray = useMemo(
+    () => [part1AudioSrc, part2AudioSrc, part3AudioSrc],
+    []
+  );
   return (
     <>
       <ChainedAudio
