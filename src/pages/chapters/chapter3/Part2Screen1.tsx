@@ -2,21 +2,15 @@ import { Box, Grid, ResponsiveContext } from "grommet";
 import { memo, useContext } from "react";
 import styled from "styled-components";
 
-const StyledRainDrop = styled(Box)<{
-  animationDelay: number;
-  position: string;
-}>`
+const StyledRainDrop = styled.div`
   & {
     position: absolute;
     animation-name: ChangeHeight;
-    animation-delay: ${({ animationDelay }) => animationDelay * 2}s;
     animation-duration: 2s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: normal;
     transform: translate(-50%, -100%);
-
-    left: ${({ position }) => position};
   }
 
   @keyframes ChangeHeight {
@@ -30,13 +24,15 @@ const StyledRainDrop = styled(Box)<{
   }
 `;
 
-const RainDrop = memo(() => {
+const RainDrop = () => {
   return (
     <StyledRainDrop
-      width="32px"
-      height="32px"
-      animationDelay={Math.random()}
-      position={Math.random() * 100 + "%"}
+      style={{
+        width: "32px",
+        height: "32px",
+        animationDelay: Math.random() * 2 + "s",
+        left: Math.random() * 100 + "%",
+      }}
     >
       <svg
         width="100%"
@@ -54,7 +50,7 @@ const RainDrop = memo(() => {
       </svg>
     </StyledRainDrop>
   );
-});
+};
 
 const RainDrops = memo(() => {
   const amount = 50;
@@ -87,45 +83,6 @@ const RainDrops = memo(() => {
 export const Part2Screen1 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const NormalLayout = (
-    <Grid
-      fill
-      areas={[
-        { name: "left-text", start: [0, 0], end: [0, 0] },
-        { name: "left-center", start: [0, 1], end: [0, 1] },
-        { name: "center", start: [1, 1], end: [1, 1] },
-        { name: "right-center", start: [2, 1], end: [2, 1] },
-        { name: "right-text", start: [2, 2], end: [2, 2] },
-      ]}
-      columns={["flex", "flex", "flex"]}
-      rows={["96px", "flex", "96px"]}
-      gap="48px"
-    >
-      <Box gridArea="center" justify="center" align="center">
-        <AdamFaceCircle />
-      </Box>
-    </Grid>
-  );
-
-  const SmallLayout = (
-    <Grid
-      fill
-      areas={[
-        { name: "top", start: [0, 0], end: [0, 0] },
-        { name: "middle", start: [0, 1], end: [0, 1] },
-        { name: "bottom", start: [0, 2], end: [0, 2] },
-      ]}
-      columns={["flex"]}
-      rows={["flex", "1/4", "flex"]}
-      gap="32px"
-      pad={{ horizontal: "16px", vertical: "32px" }}
-    >
-      <Box gridArea="middle" justify="center" align="center">
-        <AdamFaceCircle />
-      </Box>
-    </Grid>
-  );
-
   return (
     <Box height="100%" width="100%" style={{ position: "relative" }}>
       <Box
@@ -135,9 +92,44 @@ export const Part2Screen1 = () => {
         pad="48px"
         style={{ zIndex: 1 }}
       >
-        {isSmall ? SmallLayout : NormalLayout}
+        {isSmall ? (
+          <Grid
+            fill
+            areas={[
+              { name: "top", start: [0, 0], end: [0, 0] },
+              { name: "middle", start: [0, 1], end: [0, 1] },
+              { name: "bottom", start: [0, 2], end: [0, 2] },
+            ]}
+            columns={["flex"]}
+            rows={["flex", "1/4", "flex"]}
+            gap="32px"
+            pad={{ horizontal: "16px", vertical: "32px" }}
+          >
+            <Box gridArea="middle" justify="center" align="center">
+              <AdamFaceCircle />
+            </Box>
+          </Grid>
+        ) : (
+          <Grid
+            fill
+            areas={[
+              { name: "left-text", start: [0, 0], end: [0, 0] },
+              { name: "left-center", start: [0, 1], end: [0, 1] },
+              { name: "center", start: [1, 1], end: [1, 1] },
+              { name: "right-center", start: [2, 1], end: [2, 1] },
+              { name: "right-text", start: [2, 2], end: [2, 2] },
+            ]}
+            columns={["flex", "flex", "flex"]}
+            rows={["96px", "flex", "96px"]}
+            gap="48px"
+          >
+            <Box gridArea="center" justify="center" align="center">
+              <AdamFaceCircle />
+            </Box>
+          </Grid>
+        )}
       </Box>
-      <RainDrops></RainDrops>
+      <RainDrops />
     </Box>
   );
 };
