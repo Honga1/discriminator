@@ -1,5 +1,10 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { colorTheme } from "../../theme";
 import { PageBodyButton } from "./PageBodyButton";
 import {
@@ -11,6 +16,9 @@ import { CameraIndicatorBox } from "../../components/CameraIndicator";
 import { store } from "../../store/store";
 
 export const Permission = () => {
+  useEffect(() => {
+    store.setState({ isCameraEnabled: true });
+  }, []);
   const [showBorder, setShowBorder] = useState(false);
   const isSmall = useContext(ResponsiveContext) === "small";
   return (

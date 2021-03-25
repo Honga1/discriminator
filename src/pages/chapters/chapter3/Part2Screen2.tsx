@@ -65,46 +65,6 @@ export const Part2Screen2 = () => {
           shouldType={currentRow === 2019}
           onFinished={() => setCurrentRow("DONE")}
         ></TextRow>
-        <TextRow
-          year={2019}
-          downloads={366}
-          entries={[
-            "||||||||||| Google, Mountain View, United States",
-            "||||||||||| AliBaba, City city, China",
-          ]}
-          shouldType={currentRow === 2019}
-          onFinished={() => setCurrentRow("DONE")}
-        ></TextRow>
-        <TextRow
-          year={2019}
-          downloads={366}
-          entries={[
-            "||||||||||| Google, Mountain View, United States",
-            "||||||||||| AliBaba, City city, China",
-          ]}
-          shouldType={currentRow === 2019}
-          onFinished={() => setCurrentRow("DONE")}
-        ></TextRow>
-        <TextRow
-          year={2019}
-          downloads={366}
-          entries={[
-            "||||||||||| Google, Mountain View, United States",
-            "||||||||||| AliBaba, City city, China",
-          ]}
-          shouldType={currentRow === 2019}
-          onFinished={() => setCurrentRow("DONE")}
-        ></TextRow>
-        <TextRow
-          year={2019}
-          downloads={366}
-          entries={[
-            "||||||||||| Google, Mountain View, United States",
-            "||||||||||| AliBaba, City city, China",
-          ]}
-          shouldType={currentRow === 2019}
-          onFinished={() => setCurrentRow("DONE")}
-        ></TextRow>
       </CustomScrollbarBox>
     </Box>
   );

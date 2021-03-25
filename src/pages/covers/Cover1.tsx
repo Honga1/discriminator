@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
+import { store } from "../../store/store";
 
 export default function Cover1() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
 
   useEffect(() => {
+    store.setState({ isCameraEnabled: true });
     const canvas = canvasRef.current;
     if (!canvas) return;
     const maybeContext = canvas.getContext("2d");

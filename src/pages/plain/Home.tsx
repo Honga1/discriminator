@@ -1,11 +1,16 @@
 import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext } from "react";
+import React, { PropsWithChildren, useContext, useEffect } from "react";
 import { colorTheme } from "../../theme";
 import { PageBodyButton } from "./PageBodyButton";
 import { PageFrame } from "../../components/Frames";
 import { Links } from "./Links";
+import { store } from "../../store/store";
 
 export const Home = () => {
+  useEffect(() => {
+    store.setState({ isCameraEnabled: true });
+  }, []);
+
   return (
     <HomeContainer>
       <HomeContent />
