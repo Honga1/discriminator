@@ -15,6 +15,24 @@ export interface Part3Screen1Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
 }
 
+const stageProgress = [
+  "NO_TINTING",
+  "WEDDING",
+  "PARTY",
+  "FAMILY",
+  "USER_CONTROL",
+] as const;
+
+function stageIsAfter(
+  stage: Part3Screen1Props["stage"],
+  point: Part3Screen1Props["stage"]
+) {
+  const stageIndex = stageProgress.findIndex((test) => test === stage);
+  const pointIndex = stageProgress.findIndex((test) => test === point);
+
+  return stageIndex > pointIndex;
+}
+
 export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);
@@ -48,41 +66,31 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   useEffect(() => {
     if (!ref.current) return;
     const container = ref.current;
-    container.querySelectorAll(".tint").forEach((element) => {
-      (element as HTMLDivElement).style.opacity = "1";
-    });
-    switch (stage) {
-      case "NO_TINTING":
-        container.querySelectorAll(".tint").forEach((element) => {
+    const tintableElements = container.querySelectorAll(".tint");
+
+    tintableElements.forEach((element) => {
+      const currentStageIndex = stageProgress.findIndex(
+        (test) => test === stage
+      );
+
+      const stagesBelow = stageProgress.slice(0, currentStageIndex + 1);
+      const stagesAbove = stageProgress.slice(
+        currentStageIndex + 1,
+        stageProgress.length
+      );
+
+      stagesBelow.forEach((stage) => {
+        if (element.classList.contains(`type-${stage}`)) {
+          (element as HTMLDivElement).style.opacity = "1";
+        }
+      });
+
+      stagesAbove.forEach((stage) => {
+        if (element.classList.contains(`type-${stage}`)) {
           (element as HTMLDivElement).style.opacity = "0";
-        });
-        break;
-      case "WEDDING":
-        container
-          .querySelectorAll(".tint:not(.type-WEDDING)")
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
-        break;
-
-      case "PARTY":
-        container
-          .querySelectorAll(".tint:not(.type-WEDDING):not(.type-PARTY)")
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
-        break;
-
-      case "FAMILY":
-        container
-          .querySelectorAll(
-            ".tint:not(.type-WEDDING):not(.type-PARTY):not(.type-FAMILY)"
-          )
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
-        break;
-    }
+        }
+      });
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
@@ -238,12 +246,50 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         target={target}
         ref={ref}
       >
-        <div style={{ position: "relative", width: "100%" }}>
-          <div style={{ position: "absolute", width: "100%" }}>
-            {" "}
-            A cat went here
-          </div>
-        </div>
+        <Box style={{ position: "relative", width: "100%" }}>
+          <Box
+            style={{
+              position: "absolute",
+              width: "200px",
+              top: "21px",
+              left: "32px",
+            }}
+          >
+            <Text
+              size="48px"
+              style={{
+                lineHeight: "48px",
+                opacity: stageIsAfter(stage, "NO_TINTING") ? 1 : 0,
+                transition: "opacity 1s",
+              }}
+              color={"redLight"}
+            >
+              Wedding
+            </Text>
+            <Text
+              size="48px"
+              style={{
+                lineHeight: "48px",
+                opacity: stageIsAfter(stage, "WEDDING") ? 1 : 0,
+                transition: "opacity 1s",
+              }}
+              color="blueLight"
+            >
+              Party
+            </Text>
+            <Text
+              size="48px"
+              style={{
+                lineHeight: "48px",
+                opacity: stageIsAfter(stage, "PARTY") ? 1 : 0,
+                transition: "opacity 1s",
+              }}
+              color="greenLight"
+            >
+              Family & Friends
+            </Text>
+          </Box>
+        </Box>
         <Grid
           fill="vertical"
           pad={"32px"}
