@@ -89,16 +89,16 @@ export default function Chapter3() {
       return <Part2Screen1 />;
     } else if (seconds < 130) {
       return <Part2Screen2 />;
-    } else if (seconds < 202) {
+    } else if (seconds < 186) {
       return <Part2Screen3 />;
     } else if (seconds < 233) {
       let stage: Part3Screen1Props["stage"];
 
-      if (seconds < 210) {
+      if (seconds < 200) {
         stage = "NO_TINTING";
-      } else if (seconds < 215) {
+      } else if (seconds < 204) {
         stage = "WEDDING";
-      } else if (seconds < 220) {
+      } else if (seconds < 208) {
         stage = "PARTY";
       } else {
         stage = "FAMILY";

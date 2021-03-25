@@ -51,7 +51,6 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     container.querySelectorAll(".tint").forEach((element) => {
       (element as HTMLDivElement).style.opacity = "1";
     });
-    console.log(stage);
     switch (stage) {
       case "NO_TINTING":
         container.querySelectorAll(".tint").forEach((element) => {
@@ -75,6 +74,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         break;
 
       case "FAMILY":
+        console.log("here");
         container
           .querySelectorAll(
             ".tint:not(.type-WEDDING):not(.type-PARTY):not(.type-FAMILY)"
@@ -351,14 +351,6 @@ const TintableImage = ({
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      <Image
-        fit="cover"
-        width="100%"
-        height="100%"
-        style={{ backfaceVisibility: "hidden" }}
-        src={src}
-      />
-
       <div
         className={`tint type-${type}`}
         style={{
@@ -371,6 +363,14 @@ const TintableImage = ({
           backfaceVisibility: "hidden",
         }}
       ></div>
+
+      <Image
+        fit="cover"
+        width="100%"
+        height="100%"
+        style={{ backfaceVisibility: "hidden" }}
+        src={src}
+      />
     </div>
   );
 };
