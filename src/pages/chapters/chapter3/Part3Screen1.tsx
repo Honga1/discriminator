@@ -147,11 +147,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
       justify="center"
       style={{
         position: `relative`,
-        overflow: `${
-          typeof stage === "string" && stage.includes("USER")
-            ? "auto"
-            : "hidden"
-        }`,
+        overflow: "auto",
       }}
       ref={scrollContainer}
     >
@@ -169,56 +165,32 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         gap="24px"
         pad="16px"
       >
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2006
-          </Text>
-        </Box>
+        <YearLabelSmall year={2006} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2006"}
           images={images2006}
         />
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2007
-          </Text>
-        </Box>
+        <YearLabelSmall year={2007} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2007"}
           images={images2007}
         />
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2010
-          </Text>
-        </Box>
+        <YearLabelSmall year={2010} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2010"}
           images={images2010}
         />
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2011
-          </Text>
-        </Box>
+        <YearLabelSmall year={2011} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2011"}
           images={images2011}
         />
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2012
-          </Text>
-        </Box>
+        <YearLabelSmall year={2012} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2012"}
           images={images2012}
         />
-        <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2013
-          </Text>
-        </Box>
+        <YearLabelSmall year={2013} />
         <StackedBoxesHorizontal
           className={"stacked-boxes year2013"}
           images={images2013}
@@ -246,50 +218,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         target={target}
         ref={ref}
       >
-        <Box style={{ position: "relative", width: "100%" }}>
-          <Box
-            style={{
-              position: "absolute",
-              width: "200px",
-              top: "21px",
-              left: "32px",
-            }}
-          >
-            <Text
-              size="48px"
-              style={{
-                lineHeight: "48px",
-                opacity: stageIsAfter(stage, "NO_TINTING") ? 1 : 0,
-                transition: "opacity 1s",
-              }}
-              color={"redLight"}
-            >
-              Wedding
-            </Text>
-            <Text
-              size="48px"
-              style={{
-                lineHeight: "48px",
-                opacity: stageIsAfter(stage, "WEDDING") ? 1 : 0,
-                transition: "opacity 1s",
-              }}
-              color="blueLight"
-            >
-              Party
-            </Text>
-            <Text
-              size="48px"
-              style={{
-                lineHeight: "48px",
-                opacity: stageIsAfter(stage, "PARTY") ? 1 : 0,
-                transition: "opacity 1s",
-              }}
-              color="greenLight"
-            >
-              Family & Friends
-            </Text>
-          </Box>
-        </Box>
+        <CategoryLabels stage={stage} />
         <Grid
           fill="vertical"
           pad={"32px"}
@@ -356,6 +285,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
               images={images2013}
             />
           </Box>
+
           <Box gridArea="text2006" align="center">
             <Text color="white">2006</Text>
           </Box>
@@ -379,6 +309,76 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     </Box>
   );
 });
+
+function YearLabelSmall({ year }: { year: number }) {
+  return (
+    <Box flex={false}>
+      <Text
+        size="20px"
+        style={{
+          lineHeight: "30px",
+        }}
+        color="white"
+      >
+        {year}
+      </Text>
+    </Box>
+  );
+}
+
+function CategoryLabels(props: { stage: Part3Screen1Props["stage"] }) {
+  return (
+    <Box
+      style={{
+        position: "relative",
+        width: "100%",
+      }}
+    >
+      <Box
+        style={{
+          position: "absolute",
+          width: "200px",
+          top: "21px",
+          left: "32px",
+        }}
+      >
+        <Text
+          size="48px"
+          style={{
+            lineHeight: "48px",
+            opacity: stageIsAfter(props.stage, "NO_TINTING") ? 1 : 0,
+            transition: "opacity 1s",
+          }}
+          color={"redLight"}
+        >
+          Wedding
+        </Text>
+        <Text
+          size="48px"
+          style={{
+            lineHeight: "48px",
+            opacity: stageIsAfter(props.stage, "WEDDING") ? 1 : 0,
+            transition: "opacity 1s",
+          }}
+          color="blueLight"
+        >
+          Party
+        </Text>
+        <Text
+          size="48px"
+          style={{
+            lineHeight: "48px",
+            opacity: stageIsAfter(props.stage, "PARTY") ? 1 : 0,
+            transition: "opacity 1s",
+          }}
+          color="greenLight"
+        >
+          Family & Friends
+        </Text>
+      </Box>
+    </Box>
+  );
+}
 
 const TintableImage = ({
   type,
