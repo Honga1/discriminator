@@ -426,7 +426,7 @@ const AnimateEverything = styled(Box)<{
   target?: { x: number; y: number };
 }>`
   backface-visibility: hidden;
-  transition: all 1s ease-in-out;
+  transition: transform 1s ease-in-out;
   transform: ${(props) =>
     !props.target
       ? `translateZ(0) scale(1)`
