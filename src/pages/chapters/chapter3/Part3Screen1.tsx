@@ -15,24 +15,6 @@ export interface Part3Screen1Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
 }
 
-const stageProgress = [
-  "NO_TINTING",
-  "WEDDING",
-  "PARTY",
-  "FAMILY",
-  "USER_CONTROL",
-] as const;
-
-function stageIsAfter(
-  stage: Part3Screen1Props["stage"],
-  point: Part3Screen1Props["stage"]
-) {
-  const stageIndex = stageProgress.findIndex((test) => test === stage);
-  const pointIndex = stageProgress.findIndex((test) => test === point);
-
-  return stageIndex > pointIndex;
-}
-
 export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);
@@ -130,6 +112,9 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     };
   }, [stage, target]);
 
+  const years = [2006, 2007, 2010, 2011, 2012, 2013] as const;
+
+  const images = useImages();
   const {
     images2006,
     images2007,
@@ -137,8 +122,7 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     images2011,
     images2012,
     images2013,
-  } = useImages();
-
+  } = images;
   return isSmall ? (
     <Box
       flex={false}
@@ -165,36 +149,17 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
         gap="24px"
         pad="16px"
       >
-        <YearLabelSmall year={2006} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2006"}
-          images={images2006}
-        />
-        <YearLabelSmall year={2007} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2007"}
-          images={images2007}
-        />
-        <YearLabelSmall year={2010} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2010"}
-          images={images2010}
-        />
-        <YearLabelSmall year={2011} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2011"}
-          images={images2011}
-        />
-        <YearLabelSmall year={2012} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2012"}
-          images={images2012}
-        />
-        <YearLabelSmall year={2013} />
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2013"}
-          images={images2013}
-        />
+        {years.map((year) => {
+          return (
+            <>
+              <YearLabelSmall year={year} />
+              <StackedBoxesHorizontal
+                className={`stacked-boxes year${year}`}
+                images={images[`images${year}` as keyof typeof images]}
+              />
+            </>
+          );
+        })}
       </AnimateTransform>
     </Box>
   ) : (
@@ -309,6 +274,24 @@ export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     </Box>
   );
 });
+
+const stageProgress = [
+  "NO_TINTING",
+  "WEDDING",
+  "PARTY",
+  "FAMILY",
+  "USER_CONTROL",
+] as const;
+
+function stageIsAfter(
+  stage: Part3Screen1Props["stage"],
+  point: Part3Screen1Props["stage"]
+) {
+  const stageIndex = stageProgress.findIndex((test) => test === stage);
+  const pointIndex = stageProgress.findIndex((test) => test === point);
+
+  return stageIndex > pointIndex;
+}
 
 function YearLabelSmall({ year }: { year: number }) {
   return (
