@@ -1,4 +1,11 @@
-import { Box, Grid, Image, ResponsiveContext, Text } from "grommet";
+import {
+  Box,
+  CheckBoxGroup,
+  Grid,
+  Image,
+  ResponsiveContext,
+  Text,
+} from "grommet";
 import React, {
   memo,
   ReactElement,
@@ -52,6 +59,7 @@ export const Part3Screen1Selector = ({ seconds }: { seconds: number }) => {
 };
 
 export const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
+  console.log("render");
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);
 
@@ -464,14 +472,52 @@ const StackedBoxes = ({
   className: string;
 }) => {
   const amount = images.length;
-  const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
+  const [boxHeight, setHeight] = useState(1 / 8);
+  const [boxWidth, setWidth] = useState(1);
   const cellsPerColumn = 8;
-
   const columnCount = Math.ceil(amount / cellsPerColumn);
 
   const ref = useRef<HTMLDivElement>(null);
-  const { width = 1, height = 1 } = useResizeObserver<HTMLDivElement>({
+  useResizeObserver<HTMLDivElement>({
     ref,
+    onResize: ({ width, height }) => {
+      if (!ref.current) return;
+      if (!width || !height) return;
+      const maxHeight = 1 / cellsPerColumn;
+      const desiredAspect = 4 / 3;
+
+      // First try fit by scaling width
+      const columnWidth =
+        (maxHeight * desiredAspect * height) / (width / columnCount);
+      const maxWidth = 1;
+
+      const isColumnTooWide = maxWidth <= columnWidth;
+
+      if (isColumnTooWide) {
+        const reducedHeight =
+          ((maxWidth / desiredAspect) * width) / height / columnCount;
+
+        const reducedWithGap = shrinkAndMaintainAspectRatio(
+          maxWidth,
+          reducedHeight,
+          0,
+          0
+        );
+
+        setWidth(reducedWithGap[0]);
+        setHeight(reducedWithGap[1]);
+      } else {
+        const reducedWithGap = shrinkAndMaintainAspectRatio(
+          columnWidth,
+          maxHeight,
+          0,
+          0
+        );
+
+        setWidth(reducedWithGap[0]);
+        setHeight(reducedWithGap[1]);
+      }
+    },
   });
 
   const { boxesLeft, boxesRight } = useBoxes(
@@ -482,49 +528,18 @@ const StackedBoxes = ({
     boxHeight
   );
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const maxHeight = 1 / cellsPerColumn;
-    const desiredAspect = 4 / 3;
-
-    // First try fit by scaling width
-    const columnWidth =
-      (maxHeight * desiredAspect * height) / (width / columnCount);
-    const maxWidth = 1;
-
-    const isColumnTooWide = maxWidth <= columnWidth;
-
-    if (isColumnTooWide) {
-      const reducedHeight =
-        ((maxWidth / desiredAspect) * width) / height / columnCount;
-
-      const reducedWithGap = shrinkAndMaintainAspectRatio(
-        maxWidth,
-        reducedHeight,
-        0,
-        0
-      );
-      setDimensions(reducedWithGap);
-    } else {
-      const reducedWithGap = shrinkAndMaintainAspectRatio(
-        columnWidth,
-        maxHeight,
-        0,
-        0
-      );
-
-      setDimensions(reducedWithGap);
-    }
-  }, [columnCount, height, ref, width]);
-
+  const pad = useMemo(() => ({ horizontal: (columnCount - 1) * 16 + "px" }), [
+    columnCount,
+  ]);
+  const style = useMemo(() => ({ transition: "opacity 0.2s linear" }), []);
   return (
     <Box
       className={className}
       width="100%"
       height="100%"
       align="end"
-      pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
-      style={{ transition: "opacity 0.2s linear" }}
+      pad={pad}
+      style={style}
     >
       <Box ref={ref} width="100%" height="100%" align="end">
         <Box
@@ -608,63 +623,65 @@ const StackedBoxesHorizontal = ({
   );
 };
 
-const HoverBox = styled(Box)<{ rotation: number }>`
-  transform: scale(1) rotate(${({ rotation }) => rotation}deg);
-  transition: transform 0.2s linear;
+const HoverBox = styled(Box)`
+  z-index: 1;
   &:hover {
     z-index: 1;
-    transform: scale(1.05) rotate(${({ rotation }) => rotation}deg);
+    transform: scale(1.05);
   }
 `;
 
-const RelativeRotatedBox = memo(
-  ({
-    width,
-    height,
-    image,
-  }: {
-    width: number;
-    height: number;
-    image: ReactElement;
-  }) => {
-    const rotation = Math.random() * 84 - 42;
-    return (
-      <HoverBox
-        className="rotated-box"
-        flex={false}
-        width={width * 100 + "%"}
-        height={height * 100 + "%"}
-        rotation={rotation}
-      >
-        {image}
-      </HoverBox>
-    );
-  }
-);
-const AbsoluteRotatedBox = memo(
-  ({
-    width,
-    height,
-    image,
-  }: {
-    width: string;
-    height: string;
-    image: ReactElement;
-  }) => {
-    const rotation = Math.random() * 84 - 42;
-    return (
-      <HoverBox
-        className="rotated-box"
-        flex={false}
-        width={width}
-        height={height}
-        rotation={rotation}
-      >
-        {image}
-      </HoverBox>
-    );
-  }
-);
+const RelativeRotatedBox = ({
+  width,
+  height,
+  image,
+}: {
+  width: number;
+  height: number;
+  image: ReactElement;
+}) => {
+  const rotation = useMemo(() => Math.random() * 84 - 42, []);
+  const style = useMemo(
+    () => ({
+      transform: `rotate(${rotation}deg)`,
+      width: width * 100 + "%",
+      height: height * 100 + "%",
+    }),
+    [height, rotation, width]
+  );
+  return (
+    <HoverBox className="rotated-box" flex={false} style={style}>
+      {image}
+    </HoverBox>
+  );
+};
+
+const AbsoluteRotatedBox = ({
+  width,
+  height,
+  image,
+}: {
+  width: string;
+  height: string;
+  image: ReactElement;
+}) => {
+  const style = useMemo(
+    () => ({ transform: `rotate(${Math.random() * 84 - 42}deg)` }),
+    []
+  );
+
+  return (
+    <HoverBox
+      className="rotated-box"
+      flex={false}
+      width={width}
+      height={height}
+      style={style}
+    >
+      {image}
+    </HoverBox>
+  );
+};
 
 const shrinkAndMaintainAspectRatio = (
   width: number,

@@ -8,7 +8,7 @@ export const FinishedButton = (props: {
   textWidth: string;
   shouldShow: boolean;
   shouldProgress: boolean;
-  toProgress: () => void;
+  toProgress?: () => void;
 }) => {
   const [progress, setProgress] = useState(0);
   const shouldShow = props.shouldShow;
@@ -21,7 +21,7 @@ export const FinishedButton = (props: {
     const timeout = setTimeout(() => {
       if (progress >= 5) {
         setProgress(0);
-        props.toProgress();
+        props.toProgress?.();
       } else {
         setProgress(progress + 1);
       }

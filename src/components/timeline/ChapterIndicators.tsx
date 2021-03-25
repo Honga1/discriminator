@@ -1,5 +1,11 @@
 import { Box, Button, Grid } from "grommet";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useChapterNumber } from "../../hooks/useChapterNumber";
@@ -173,17 +179,21 @@ const Scrubber = ({
     onDragEnd
   );
 
+  const buttonStyle: React.CSSProperties = useMemo(
+    () => ({
+      position: "absolute",
+      pointerEvents: "auto",
+      top: "50%",
+      transform: "translateY(-50%)",
+      width: "auto",
+      height: "auto",
+    }),
+    []
+  );
   return (
     <Box fill="horizontal" ref={containerRef} style={{ pointerEvents: "none" }}>
       <Button
-        style={{
-          position: "absolute",
-          pointerEvents: "auto",
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: "auto",
-          height: "auto",
-        }}
+        style={buttonStyle}
         className="scrubber-button"
         ref={buttonRef}
         plain

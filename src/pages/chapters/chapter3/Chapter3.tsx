@@ -1,11 +1,5 @@
 import { Box, ResponsiveContext } from "grommet";
-import React, {
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FinishedButton } from "../../../components/FinishedButton";
 import { useChapter } from "../../../hooks/useChapter";
 import { useIsActive } from "../../../hooks/useIsActive";
@@ -19,10 +13,34 @@ import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3";
 import { Part3Screen1Selector } from "./Part3Screen1";
 
+function ContinueButton(props: { isAutoPaused: boolean; play?: () => void }) {
+  const isSmall = useContext(ResponsiveContext) === "small";
+  const isActive = useIsActive();
+
+  return (
+    <Box
+      style={{
+        position: "absolute",
+        bottom: isSmall ? "48px" : "64px",
+        right: 0,
+      }}
+    >
+      {props.isAutoPaused && (
+        <FinishedButton
+          shouldProgress={!isActive}
+          shouldShow={props.isAutoPaused}
+          text="Continue"
+          textWidth="200px"
+          toProgress={props.play}
+        />
+      )}
+    </Box>
+  );
+}
+
 export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
   useChapter(ref, false);
-  const isSmall = useContext(ResponsiveContext) === "small";
   const [seconds, setSeconds] = useState(0);
 
   const [allowAutoPause, setAllowAutoPause] = useState(false);
@@ -86,9 +104,6 @@ export default function Chapter3() {
     }
   };
 
-  console.log(seconds);
-  const isActive = useIsActive();
-
   return (
     <>
       <audio
@@ -99,25 +114,11 @@ export default function Chapter3() {
       />
 
       <Box style={{ position: "relative" }} width="100%" height="100%">
-        <Box
-          style={{
-            position: "absolute",
-            bottom: isSmall ? "48px" : "64px",
-            right: 0,
-          }}
-        >
-          {isAutoPaused && (
-            <FinishedButton
-              shouldProgress={!isActive}
-              shouldShow={isAutoPaused}
-              text="Continue"
-              textWidth="200px"
-              toProgress={() => {
-                ref.current?.play();
-              }}
-            />
-          )}
-        </Box>
+        <ContinueButton
+          play={() => ref.current?.play()}
+          isAutoPaused={isAutoPaused}
+        />
+
         {part === "PART_1_SCREEN_1" && <Part1Screen1 />}
         {part === "PART_1_SCREEN_2" && (
           <Part1Screen2Selector seconds={seconds} />
