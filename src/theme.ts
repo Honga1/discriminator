@@ -103,11 +103,6 @@ export const customTheme: ThemeType = {
       height: "48px",
       maxWidth: undefined,
     },
-    "2xl?": {},
-    "3xl?": {},
-    "4xl?": {},
-    "5xl?": {},
-    "6xl?": {},
   },
   button: {
     border: {
