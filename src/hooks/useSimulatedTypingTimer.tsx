@@ -2,11 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const useSimulatedTypingTimer = (options?: {
   initialTime?: number;
+  startPaused?: boolean;
   loopAt?: number;
   onTick?: (second: number, reset: () => void, stop: () => void) => void;
+  typeRate?: number;
 }) => {
   const [stroke, setSecond] = useState(options?.initialTime ?? 0);
-  const [state, setState] = useState<"RUNNING" | "STOPPED">("RUNNING");
+  const [state, setState] = useState<"RUNNING" | "STOPPED">(
+    !!options?.startPaused ? "STOPPED" : "RUNNING"
+  );
 
   const loopAt = useMemo(() => options?.loopAt, [options?.loopAt]);
   const onTick = useMemo(() => options?.onTick, [options?.onTick]);
@@ -40,12 +44,12 @@ export const useSimulatedTypingTimer = (options?: {
 
           return second + 1;
         });
-      }, 100);
+      }, options?.typeRate ?? 100);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [loopAt, state]);
+  }, [loopAt, options?.typeRate, state]);
 
   return [stroke, reset, stop, start] as const;
 };

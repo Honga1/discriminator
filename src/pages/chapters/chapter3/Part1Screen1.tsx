@@ -1,5 +1,6 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef, useState } from "react";
+import { useSimulatedTypingTimer } from "../../../hooks/useSimulatedTypingTimer";
 import { useAnimationFrame } from "./Chapter3";
 
 export const Part1Screen1 = ({
@@ -13,7 +14,18 @@ export const Part1Screen1 = ({
 
   const [personTalking, setPersonTalking] = useState<"ADAM" | "BRETT">("BRETT");
 
+  const [stroke, reset, stop, start] = useSimulatedTypingTimer({
+    startPaused: true,
+    typeRate: 500,
+  });
+
   useEffect(() => {
+    if (seconds > 23) {
+      start();
+    } else {
+      stop();
+      reset();
+    }
     if (seconds < 22) {
       setPersonTalking("BRETT");
     } else if (seconds < 29) {
@@ -21,8 +33,9 @@ export const Part1Screen1 = ({
     } else {
       setPersonTalking("BRETT");
     }
-  }, [seconds]);
+  }, [reset, seconds, start, stop]);
 
+  const etherWorksText = [..."  E T H E R...\n  W O R K S."];
   const NormalLayout = (
     <Grid
       fill
@@ -37,8 +50,10 @@ export const Part1Screen1 = ({
       rows={["96px", "flex", "96px"]}
       gap="48px"
     >
-      <Box gridArea="brett-text" justify="center" align="center">
-        <Text textAlign="center">ETHER WORKS ETHER WORKS</Text>
+      <Box gridArea="brett-text" justify="end" align="center">
+        <Text textAlign="start" size={"48px"} style={{ lineHeight: "48px" }}>
+          Yep.
+        </Text>
       </Box>
       <Box gridArea="brett" justify="center" align="center">
         <BrettFaceCircleTemp isTalking={personTalking === "BRETT"} />
@@ -49,8 +64,20 @@ export const Part1Screen1 = ({
       <Box gridArea="adam" justify="center" align="center">
         <AdamFaceCircle isTalking={personTalking === "ADAM"} />
       </Box>
-      <Box gridArea="adam-text" justify="center" align="center">
-        <Text textAlign="center">Yes this is a lot of text</Text>
+      <Box gridArea="adam-text" justify="start" align="center">
+        <Text textAlign="start" size={"48px"} style={{ lineHeight: "48px" }}>
+          {etherWorksText
+            .map((character) => {
+              if (character === " ") return <>&nbsp;</>;
+              if (character === "\n") return <br></br>;
+              return character;
+            })
+            .map((element, index) => (
+              <span key={index} style={{ opacity: index > stroke ? 0 : 1 }}>
+                {element}
+              </span>
+            ))}
+        </Text>
       </Box>
     </Grid>
   );

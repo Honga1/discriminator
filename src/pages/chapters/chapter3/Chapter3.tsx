@@ -54,6 +54,7 @@ export default function Chapter3() {
 
   useChapter(ref, false);
   const [seconds, setSeconds] = useState(0);
+  console.log(seconds);
 
   const [allowAutoPause, setAllowAutoPause] = useState(false);
   const [isAutoPaused, setIsAutoPaused] = useState(false);
