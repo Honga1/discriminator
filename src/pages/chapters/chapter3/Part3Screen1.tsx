@@ -1,11 +1,4 @@
-import {
-  Box,
-  CheckBoxGroup,
-  Grid,
-  Image,
-  ResponsiveContext,
-  Text,
-} from "grommet";
+import { Box, Grid, Image, ResponsiveContext, Text } from "grommet";
 import React, {
   memo,
   ReactElement,

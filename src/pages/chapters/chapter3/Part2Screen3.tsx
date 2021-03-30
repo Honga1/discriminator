@@ -2,7 +2,7 @@ import { Box, Button, ResponsiveContext, Text } from "grommet";
 import { memo, useCallback, useContext, useRef, useState } from "react";
 import styled from "styled-components";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
-import { MapBox } from "./MapBox";
+import { ButtonCornerMapBox, FullScreenMapBox } from "./MapBox";
 
 type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 
@@ -13,6 +13,8 @@ export const Part2Screen3 = () => {
   const [currentYear, setCurrentYear] = useState<Years>(2015);
   const [downloads, setDownloads] = useState(0);
   const scrollBox = useRef<HTMLDivElement>(null);
+
+  const [showFullScreenMap, setShowFullScreenMap] = useState(false);
 
   const onNavigationClicked = useCallback((year: Years): void => {
     if (!scrollBox.current) return;
@@ -90,11 +92,15 @@ export const Part2Screen3 = () => {
   };
   return (
     <Box flex={false} height="100%" width="100%">
+      {showFullScreenMap && isSmall && (
+        <FullScreenMapBox onClose={() => setShowFullScreenMap(false)} />
+      )}
       <Box
         flex={false}
         height="100%"
         width="100%"
         pad="4px"
+        hidden={!showFullScreenMap || !isSmall}
         style={{ position: "relative" }}
       >
         <HeaderBar
@@ -102,9 +108,10 @@ export const Part2Screen3 = () => {
           downloads={downloads}
           year={currentYear}
           onNavigationClicked={onNavigationClicked}
+          onMapClicked={() => setShowFullScreenMap(true)}
         />
         <ScrollBanner isShown={!hideScrollBanner} />
-        {!isSmall && <MapBox isShown={hideScrollBanner} />}
+        {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
         {isSmall ? (
           <Box
             height="100%"
@@ -170,11 +177,13 @@ const HeaderBar = ({
   year,
   downloads,
   onNavigationClicked,
+  onMapClicked,
 }: {
   isShown: boolean;
   year: Years;
   downloads: number;
   onNavigationClicked: (destinationYear: Years) => void;
+  onMapClicked: () => void;
 }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
@@ -232,7 +241,7 @@ const HeaderBar = ({
             label={<ChevronRight />}
           />
         </Text>
-        {isSmall && <Button label={<MapIcon />} plain />}
+        {isSmall && <Button onClick={onMapClicked} label={<MapIcon />} plain />}
       </Box>
 
       {!isSmall && (
