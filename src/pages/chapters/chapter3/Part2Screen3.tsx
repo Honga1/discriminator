@@ -5,6 +5,7 @@ import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { ButtonCornerMapBox, FullScreenMapBox } from "./MapBox";
 
 type Years = 2015 | 2016 | 2017 | 2019 | 2019;
+const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
 
 export const Part2Screen3 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
@@ -39,8 +40,6 @@ export const Part2Screen3 = () => {
     ) as NodeListOf<HTMLDivElement> | undefined;
     if (!yearElements) return;
 
-    const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
-
     type Entries = ["2015" | "2016" | "2017" | "2018" | "2019", DOMRect];
 
     const getValidBoundingBoxes = (
@@ -73,6 +72,7 @@ export const Part2Screen3 = () => {
     currentYear !== nextYear && setCurrentYear(nextYear);
 
     // Set banner downloads
+    if (isSmall) return;
     const currentYearRect = yearToBoundingBox[nextYear];
     if (!currentYearRect) return;
     const { top, height } = currentYearRect;
