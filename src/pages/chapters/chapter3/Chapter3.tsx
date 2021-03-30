@@ -107,8 +107,6 @@ export default function Chapter3() {
       setIsAutoPaused(false);
       setPart("PART_3_SCREEN_1");
     }
-
-    console.log("Here");
   };
 
   return (
