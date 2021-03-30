@@ -107,7 +107,6 @@ export const Part2Screen3 = () => {
         {!isSmall && <MapBox isShown={hideScrollBanner} />}
         {isSmall ? (
           <Box
-            flex={false}
             height="100%"
             width="100%"
             overflow="auto"
