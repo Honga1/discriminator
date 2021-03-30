@@ -553,7 +553,7 @@ const StackedBoxes = ({
       height="100%"
       align="end"
       pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
-      style={{ transition: "opacity 0.2s linear" }}
+      style={{ transition: "opacity 0.2s linear", opacity: 0 }}
     >
       <Box ref={ref} width="100%" height="100%" align="end">
         <Box
@@ -629,7 +629,7 @@ const StackedBoxesHorizontal = ({
       responsive={false}
       height="100px"
       direction="row"
-      style={{ transition: "opacity 0.2s linear" }}
+      style={{ transition: "opacity 0.2s linear", opacity: 0 }}
     >
       {boxes}
       <Box flex={false} width="32px"></Box>

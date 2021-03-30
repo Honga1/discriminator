@@ -78,7 +78,7 @@ export default function Chapter3() {
         store.setState({ isHeadingShown: false });
       }
 
-      if (seconds < 30) {
+      if (seconds < 33) {
         setAllowAutoPause(true);
         setPart("PART_1_SCREEN_1");
         setIsAutoPaused(false);
@@ -137,7 +137,7 @@ export default function Chapter3() {
         />
 
         {part === "PART_1_SCREEN_1" && (
-          <Part1Screen1 getByteData={getByteData} />
+          <Part1Screen1 getByteData={getByteData} seconds={seconds} />
         )}
         {part === "PART_1_SCREEN_2" && (
           <Part1Screen2Selector seconds={seconds} />
