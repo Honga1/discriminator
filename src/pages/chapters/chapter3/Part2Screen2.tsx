@@ -16,6 +16,7 @@ export const Part2Screen2 = () => {
       data.map(({ year, downloads, entries }) => {
         return (
           <TextRow
+            key={year}
             year={year}
             downloads={downloads}
             entries={entries}
@@ -77,8 +78,6 @@ const TextRow = ({
     initialTime: 0,
   });
 
-  console.log(stroke);
-
   useEffect(() => {
     if (stroke === entries.flatMap((entry) => [...entry]).length + 1) {
       onFinished();
@@ -93,7 +92,7 @@ const TextRow = ({
     }
   }, [shouldType, start, stop]);
 
-  const isSmall = useContext(ResponsiveContext);
+  const isSmall = useContext(ResponsiveContext) === "small";
 
   const text = entries.map((entry, entryNumber) => {
     const charactersUntilThisPoint = entries

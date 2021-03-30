@@ -131,15 +131,15 @@ export const Part2Screen3 = () => {
 };
 
 function TextRow({ year, entries }: { year: number; entries: string[] }) {
+  const isSmall = useContext(ResponsiveContext) === "small";
+
   return (
     <Text className={`TextRow year${year}`} data-year={year}>
       <Text
         weight={"bold"}
         color={"offWhite"}
-        size="24px"
-        style={{
-          lineHeight: "72px",
-        }}
+        size={isSmall ? "20px" : "24px"}
+        style={{ lineHeight: isSmall ? "40px" : "72px" }}
       >
         {year}
       </Text>
@@ -147,11 +147,9 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
       {entries.map((entry, entryNumber) => {
         return (
           <Text
-            size="24px"
             color="offWhite"
-            style={{
-              lineHeight: "72px",
-            }}
+            size={isSmall ? "20px" : "24px"}
+            style={{ lineHeight: isSmall ? "40px" : "72px" }}
             key={entryNumber}
           >
             &nbsp;&nbsp;{entry}
