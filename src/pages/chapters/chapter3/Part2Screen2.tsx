@@ -101,15 +101,15 @@ function TextRow({
     }
   }, [shouldType, start, stop]);
 
+  const isSmall = useContext(ResponsiveContext);
+
   return (
     <Text>
       <Text
         weight={"bold"}
         color={"redLight"}
-        size="24px"
-        style={{
-          lineHeight: "72px",
-        }}
+        size={isSmall ? "20px" : "24px"}
+        style={{ lineHeight: isSmall ? "40px" : "72px" }}
       >
         {year}
       </Text>
@@ -133,11 +133,9 @@ function TextRow({
 
         return (
           <Text
-            size="24px"
             color="offWhite"
-            style={{
-              lineHeight: "72px",
-            }}
+            size={isSmall ? "20px" : "24px"}
+            style={{ lineHeight: isSmall ? "40px" : "72px" }}
             key={entryNumber}
           >
             &nbsp;&nbsp;{shownCharacters.join("")}
@@ -157,12 +155,18 @@ function TextRow({
       })}
       &nbsp;&nbsp;
       <Text
-        size="24px"
         color="yellow"
-        style={{
-          lineHeight: "72px",
-          textDecoration: "underline",
-        }}
+        size={isSmall ? "20px" : "24px"}
+        style={
+          isSmall
+            ? {
+                lineHeight: "40px",
+              }
+            : {
+                lineHeight: "72px",
+                textDecoration: "underline",
+              }
+        }
       >
         {downloads}&nbsp;more&nbsp;downloads
       </Text>
