@@ -68,6 +68,7 @@ export default function Chapter3() {
     if (seconds < 30) {
       setAllowAutoPause(true);
       setPart("PART_1_SCREEN_1");
+      setIsAutoPaused(false);
     } else if (seconds < 96) {
       if (seconds >= 94) {
         if (allowAutoPause && !isAutoPaused) {
@@ -77,14 +78,16 @@ export default function Chapter3() {
         }
       } else {
         setAllowAutoPause(true);
+        setIsAutoPaused(false);
       }
       setPart("PART_1_SCREEN_2");
     } else if (seconds < 123) {
       setAllowAutoPause(true);
-
+      setIsAutoPaused(false);
       setPart("PART_2_SCREEN_1");
     } else if (seconds < 168) {
       setAllowAutoPause(true);
+      setIsAutoPaused(false);
 
       setPart("PART_2_SCREEN_2");
     } else if (seconds < 187) {
@@ -96,12 +99,16 @@ export default function Chapter3() {
         }
       } else {
         setAllowAutoPause(true);
+        setIsAutoPaused(false);
       }
       setPart("PART_2_SCREEN_3");
     } else {
       setAllowAutoPause(true);
+      setIsAutoPaused(false);
       setPart("PART_3_SCREEN_1");
     }
+
+    console.log("Here");
   };
 
   return (
