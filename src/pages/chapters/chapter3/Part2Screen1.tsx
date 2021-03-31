@@ -6,7 +6,6 @@ const StyledRainDrop = styled.div`
   & {
     position: absolute;
     animation-name: ChangeHeight;
-    animation-duration: 2s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: normal;
@@ -25,13 +24,18 @@ const StyledRainDrop = styled.div`
 `;
 
 const RainDrop = () => {
+  const distanceFactor = 1 - Math.random() / 3;
+  const size = distanceFactor * 32;
   return (
     <StyledRainDrop
       style={{
-        width: "32px",
-        height: "32px",
+        width: `${size}px`,
+        height: `${size}px`,
         animationDelay: Math.random() * 2 + "s",
         left: Math.random() * 100 + "%",
+        opacity: distanceFactor,
+        animationDuration: (1 / distanceFactor) * 2 + "s",
+        zIndex: distanceFactor > 0.9 ? 1 : 0,
       }}
     >
       <svg
@@ -60,7 +64,7 @@ const RainDrops = memo(() => {
       height="100%"
       style={{
         position: "absolute",
-        zIndex: 0,
+        // zIndex: 0,
       }}
       justify="center"
     >
