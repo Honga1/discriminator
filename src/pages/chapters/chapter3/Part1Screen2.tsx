@@ -81,6 +81,27 @@ export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   return <Part1Screen2 stage={stage} />;
 };
 
+const years = new Set([2006, 2007, 2010, 2011, 2012, 2013] as const);
+
+const FadeInBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 1s;
+`;
+const SlideDownBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 1s, transform 1s;
+
+  transform: ${({ isShown }) =>
+    !isShown ? `translateY(-100%)` : "translateY(0)"};
+`;
+const SlideLeftBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 1s, transform 1s;
+
+  transform: ${({ isShown }) =>
+    !isShown ? `translateX(100%)` : "translateX(0)"};
+`;
+
 export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const scrollContainer = useRef<HTMLDivElement>(null);
@@ -92,6 +113,8 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   >(undefined);
 
   const isAnimating = useRef(false);
+
+  const [yearsShown, setYearsShown] = useState<typeof years>(new Set());
 
   useEffect(() => {
     if (!ref.current) return;
@@ -138,70 +161,30 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       return;
     }
 
-    container.querySelectorAll(".stacked-boxes").forEach((element) => {
-      (element as HTMLDivElement).style.opacity = "1";
-    });
     switch (stage) {
       case "NO_YEARS":
-        container.querySelectorAll(".stacked-boxes").forEach((element) => {
-          (element as HTMLDivElement).style.opacity = "0";
-        });
+        setYearsShown(new Set());
         break;
       case "2011":
-        container
-          .querySelectorAll(".stacked-boxes:not(.year2011)")
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011]));
         break;
-
       case "2010":
-        container
-          .querySelectorAll(".stacked-boxes:not(.year2011):not(.year2010)")
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011, 2010]));
         break;
-
       case "2007":
-        container
-          .querySelectorAll(
-            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007)"
-          )
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011, 2010, 2007]));
         break;
-
       case "2013":
-        container
-          .querySelectorAll(
-            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013)"
-          )
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011, 2010, 2007, 2013]));
         break;
-
       case "2006":
-        container
-          .querySelectorAll(
-            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013):not(.year2006)"
-          )
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011, 2010, 2007, 2013, 2006]));
         break;
-
       case "2012":
-        container
-          .querySelectorAll(
-            ".stacked-boxes:not(.year2011):not(.year2010):not(.year2007):not(.year2013):not(.year2006):not(.year2012)"
-          )
-          .forEach((element) => {
-            (element as HTMLDivElement).style.opacity = "0";
-          });
+        setYearsShown(new Set([2011, 2010, 2007, 2013, 2006, 2012]));
         break;
+      default:
+        setYearsShown(new Set([2011, 2010, 2007, 2013, 2006, 2012]));
     }
 
     if (typeof stage === "string" && stage !== "USER_CONTROL") {
@@ -289,90 +272,54 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         gap="24px"
         pad="16px"
       >
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px", opacity: 0 }}
-            color="white"
-            className={"stacked-boxes year2006"}
-          >
+        <FadeInBox flex={false} isShown={yearsShown.has(2006)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2006
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2006"}
-          images={images2006}
-        />
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px", opacity: 0 }}
-            color="white"
-            className={"stacked-boxes year2007"}
-          >
+        </FadeInBox>
+        <SlideLeftBox flex={false} isShown={yearsShown.has(2006)}>
+          <StackedBoxesHorizontal images={images2006} />
+        </SlideLeftBox>
+        <FadeInBox flex={false} isShown={yearsShown.has(2007)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2007
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2007"}
-          images={images2007}
-        />
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px", opacity: 0 }}
-            color="white"
-            className={"stacked-boxes year2010"}
-          >
+        </FadeInBox>
+        <SlideLeftBox flex={false} isShown={yearsShown.has(2007)}>
+          <StackedBoxesHorizontal images={images2007} />
+        </SlideLeftBox>
+        <FadeInBox flex={false} isShown={yearsShown.has(2010)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2010
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2010"}
-          images={images2010}
-        />
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px", opacity: 0 }}
-            color="white"
-            className={"stacked-boxes year2011"}
-          >
+        </FadeInBox>
+        <SlideLeftBox flex={false} isShown={yearsShown.has(2010)}>
+          <StackedBoxesHorizontal images={images2010} />
+        </SlideLeftBox>
+        <FadeInBox flex={false} isShown={yearsShown.has(2011)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2011
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2011"}
-          images={images2011}
-        />
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px", opacity: 0 }}
-            color="white"
-            className={"stacked-boxes year2012"}
-          >
+        </FadeInBox>
+        <SlideLeftBox flex={false} isShown={yearsShown.has(2011)}>
+          <StackedBoxesHorizontal images={images2011} />
+        </SlideLeftBox>
+        <FadeInBox flex={false} isShown={yearsShown.has(2012)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2012
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2012"}
-          images={images2012}
-        />
-        <Box flex={false}>
-          <Text
-            size="20px"
-            style={{ lineHeight: "30px" }}
-            color="white"
-            className={"stacked-boxes year2013"}
-          >
+        </FadeInBox>
+        <SlideLeftBox flex={false} isShown={yearsShown.has(2012)}>
+          <StackedBoxesHorizontal images={images2012} />
+        </SlideLeftBox>
+        <FadeInBox flex={false} isShown={yearsShown.has(2013)}>
+          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
             2013
           </Text>
-        </Box>
-        <StackedBoxesHorizontal
-          className={"stacked-boxes year2013"}
-          images={images2013}
-        />
+        </FadeInBox>
+        <SlideLeftBox isShown={yearsShown.has(2013)}>
+          <StackedBoxesHorizontal images={images2013} />
+        </SlideLeftBox>
       </AnimateEverything>
     </Box>
   ) : (
@@ -426,102 +373,102 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           rows={["flex", "auto"]}
           gap={"16px"}
         >
-          <Box gridArea="stackedBoxes2006" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2006"}
-              images={images2006}
-            />
-          </Box>
-          <Box gridArea="stackedBoxes2007" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2007"}
-              images={images2007}
-            />
-          </Box>
-          <Box gridArea="stackedBoxes2010" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2010"}
-              images={images2010}
-            />
-          </Box>
-          <Box gridArea="stackedBoxes2011" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2011"}
-              images={images2011}
-            />
-          </Box>
-          <Box gridArea="stackedBoxes2012" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2012"}
-              images={images2012}
-            />
-          </Box>
-          <Box gridArea="stackedBoxes2013" align="center">
-            <StackedBoxes
-              className={"stacked-boxes year2013"}
-              images={images2013}
-            />
-          </Box>
-          <Box gridArea="text2006" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2006"}
-              color="white"
-            >
+          <SlideDownBox
+            gridArea="stackedBoxes2006"
+            align="center"
+            isShown={yearsShown.has(2006)}
+          >
+            <StackedBoxes images={images2006} />
+          </SlideDownBox>
+          <SlideDownBox
+            gridArea="stackedBoxes2007"
+            align="center"
+            isShown={yearsShown.has(2007)}
+          >
+            <StackedBoxes images={images2007} />
+          </SlideDownBox>
+          <SlideDownBox
+            gridArea="stackedBoxes2010"
+            align="center"
+            isShown={yearsShown.has(2010)}
+          >
+            <StackedBoxes images={images2010} />
+          </SlideDownBox>
+          <SlideDownBox
+            gridArea="stackedBoxes2011"
+            align="center"
+            isShown={yearsShown.has(2011)}
+          >
+            <StackedBoxes images={images2011} />
+          </SlideDownBox>
+          <SlideDownBox
+            gridArea="stackedBoxes2012"
+            align="center"
+            isShown={yearsShown.has(2012)}
+          >
+            <StackedBoxes images={images2012} />
+          </SlideDownBox>
+          <SlideDownBox
+            gridArea="stackedBoxes2013"
+            align="center"
+            isShown={yearsShown.has(2013)}
+          >
+            <StackedBoxes images={images2013} />
+          </SlideDownBox>
+          <FadeInBox
+            gridArea="text2006"
+            align="center"
+            isShown={yearsShown.has(2006)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2006
             </Text>
-          </Box>
-          <Box gridArea="text2007" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2007"}
-              color="white"
-            >
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2007"
+            align="center"
+            isShown={yearsShown.has(2007)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2007
             </Text>
-          </Box>
-          <Box gridArea="text2010" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2010"}
-              color="white"
-            >
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2010"
+            align="center"
+            isShown={yearsShown.has(2010)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2010
             </Text>
-          </Box>
-          <Box gridArea="text2011" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2011"}
-              color="white"
-            >
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2011"
+            align="center"
+            isShown={yearsShown.has(2011)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2011
             </Text>
-          </Box>
-          <Box gridArea="text2012" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2012"}
-              color="white"
-            >
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2012"
+            align="center"
+            isShown={yearsShown.has(2012)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2012
             </Text>
-          </Box>
-          <Box gridArea="text2013" align="center">
-            <Text
-              size="24px"
-              style={{ opacity: 0, lineHeight: "72px" }}
-              className={"stacked-boxes year2013"}
-              color="white"
-            >
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2013"
+            align="center"
+            isShown={yearsShown.has(2013)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
               2013
             </Text>
-          </Box>
+          </FadeInBox>
         </Grid>
       </AnimateEverything>
     </Box>
@@ -557,13 +504,7 @@ const AnimateEverything = styled(Box)<{
       : `scale(${zoomFactor}) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
 
-const StackedBoxes = ({
-  className,
-  images,
-}: {
-  images: ReactElement[];
-  className: string;
-}) => {
+const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
@@ -620,12 +561,10 @@ const StackedBoxes = ({
 
   return (
     <Box
-      className={className}
       width="100%"
       height="100%"
       align="end"
       pad={{ horizontal: (columnCount - 1) * 16 + "px" }}
-      style={{ transition: "opacity 0.2s linear", opacity: 0 }}
     >
       <Box ref={ref} width="100%" height="100%" align="end">
         <Box
@@ -655,13 +594,7 @@ const StackedBoxes = ({
     </Box>
   );
 };
-const StackedBoxesHorizontal = ({
-  images,
-  className,
-}: {
-  images: ReactElement[];
-  className: string;
-}) => {
+const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -694,14 +627,12 @@ const StackedBoxesHorizontal = ({
 
   return (
     <Box
-      className={className}
       margin={{ left: "8px" }}
       ref={ref}
       flex={false}
       responsive={false}
       height="100px"
       direction="row"
-      style={{ transition: "opacity 0.2s linear", opacity: 0 }}
     >
       {boxes}
       <Box flex={false} width="32px"></Box>
