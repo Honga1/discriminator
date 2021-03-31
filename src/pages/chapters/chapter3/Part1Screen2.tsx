@@ -682,14 +682,15 @@ const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
     const maxWidth = 1 / cellsPerRow;
     const desiredAspect = 4 / 3;
 
-    const rowHeight = (maxWidth * desiredAspect * width) / (height / rowCount);
+    const rowHeight =
+      ((maxWidth / desiredAspect) * width) / (height / rowCount);
     const maxHeight = 1;
 
     const isRowTooHigh = maxHeight <= rowHeight;
 
     if (isRowTooHigh) {
       const reducedWidth =
-        ((maxHeight / desiredAspect) * height) / width / rowCount;
+        (maxHeight * desiredAspect * height) / width / rowCount;
 
       const reducedWithGap = shrinkAndMaintainAspectRatio(
         reducedWidth,
