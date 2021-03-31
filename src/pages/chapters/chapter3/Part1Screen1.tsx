@@ -1,6 +1,6 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef, useState } from "react";
-import { useSimulatedTypingTimer } from "../../../hooks/useSimulatedTypingTimer";
+import styled from "styled-components";
 import { useAnimationFrame } from "./Chapter3";
 
 export const Part1Screen1 = ({
@@ -14,18 +14,7 @@ export const Part1Screen1 = ({
 
   const [personTalking, setPersonTalking] = useState<"ADAM" | "BRETT">("BRETT");
 
-  const [stroke, reset, stop, start] = useSimulatedTypingTimer({
-    startPaused: true,
-    typeRate: 500,
-  });
-
   useEffect(() => {
-    if (seconds > 23) {
-      start();
-    } else {
-      stop();
-      reset();
-    }
     if (seconds < 22) {
       setPersonTalking("BRETT");
     } else if (seconds < 29) {
@@ -33,9 +22,8 @@ export const Part1Screen1 = ({
     } else {
       setPersonTalking("BRETT");
     }
-  }, [reset, seconds, start, stop]);
+  }, [seconds]);
 
-  const etherWorksText = [..."  E T H E R...\n  W O R K S."];
   const NormalLayout = (
     <Grid
       fill
@@ -51,7 +39,16 @@ export const Part1Screen1 = ({
       gap="48px"
     >
       <Box gridArea="brett-text" justify="end" align="center">
-        <Text textAlign="start" size={"48px"} style={{ lineHeight: "48px" }}>
+        <Text
+          textAlign="start"
+          size={"48px"}
+          style={{
+            lineHeight: "48px",
+            transition: "opacity 0.1s ease-in-out",
+            opacity: seconds > 29 ? 1 : 0,
+            transitionDelay: "0.18s",
+          }}
+        >
           Yep.
         </Text>
       </Box>
@@ -65,19 +62,7 @@ export const Part1Screen1 = ({
         <AdamFaceCircle isTalking={personTalking === "ADAM"} />
       </Box>
       <Box gridArea="adam-text" justify="start" align="center">
-        <Text textAlign="start" size={"48px"} style={{ lineHeight: "48px" }}>
-          {etherWorksText
-            .map((character) => {
-              if (character === " ") return <>&nbsp;</>;
-              if (character === "\n") return <br></br>;
-              return character;
-            })
-            .map((element, index) => (
-              <span key={index} style={{ opacity: index > stroke ? 0 : 1 }}>
-                {element}
-              </span>
-            ))}
-        </Text>
+        <TypingText isStarted={seconds >= 24} />
       </Box>
     </Grid>
   );
@@ -113,6 +98,104 @@ export const Part1Screen1 = ({
     </Box>
   );
 };
+
+const StyledTypingText = styled(Text)`
+  & .letter {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0;
+  }
+
+  //E
+  & .letter.letter-0 {
+    transition-delay: 0s;
+  }
+
+  & .letter.shown {
+    opacity: 1 !important;
+  }
+
+  & .letter.hidden {
+    opacity: 0;
+    transition-delay: 0s !important;
+  }
+
+  //T
+  & .letter.letter-1 {
+    transition-delay: 1s;
+  }
+
+  //H
+  & .letter.letter-2 {
+    transition-delay: 1.2s;
+  }
+
+  //E
+  & .letter.letter-3 {
+    transition-delay: 1.65s;
+  }
+
+  //R
+  & .letter.letter-4 {
+    transition-delay: 1.75s;
+  }
+
+  // New Line
+  & .letter.letter-5 {
+    transition-delay: 2s;
+  }
+  //W
+  & .letter.letter-6 {
+    transition-delay: 3s;
+  }
+
+  //O
+  & .letter.letter-7 {
+    transition-delay: 3.3s;
+  }
+
+  //R
+  & .letter.letter-8 {
+    transition-delay: 3.6s;
+  }
+
+  //K
+  & .letter.letter-9 {
+    transition-delay: 4.3s;
+  }
+  //S
+  & .letter.letter-10 {
+    transition-delay: 4.6s;
+  }
+`;
+
+function TypingText({ isStarted }: { isStarted: boolean }) {
+  const etherWorksText = [..."ETHER\nWORKS"];
+  return (
+    <StyledTypingText
+      textAlign="start"
+      size={"48px"}
+      style={{
+        lineHeight: "48px",
+      }}
+    >
+      {etherWorksText
+        .map((character) => {
+          if (character === "\n") return <br></br>;
+          return [<>&nbsp;</>, character];
+        })
+        .map((element, index) => (
+          <span
+            key={index}
+            className={`letter letter-${index} ${
+              isStarted ? "shown" : "hidden"
+            }`}
+          >
+            {element}
+          </span>
+        ))}
+    </StyledTypingText>
+  );
+}
 
 const AdamFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
   return (
