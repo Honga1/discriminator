@@ -290,7 +290,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         pad="16px"
       >
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px", opacity: 0 }}
+            color="white"
+            className={"stacked-boxes year2006"}
+          >
             2006
           </Text>
         </Box>
@@ -299,7 +304,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           images={images2006}
         />
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px", opacity: 0 }}
+            color="white"
+            className={"stacked-boxes year2007"}
+          >
             2007
           </Text>
         </Box>
@@ -308,7 +318,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           images={images2007}
         />
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px", opacity: 0 }}
+            color="white"
+            className={"stacked-boxes year2010"}
+          >
             2010
           </Text>
         </Box>
@@ -317,7 +332,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           images={images2010}
         />
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px", opacity: 0 }}
+            color="white"
+            className={"stacked-boxes year2011"}
+          >
             2011
           </Text>
         </Box>
@@ -326,7 +346,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           images={images2011}
         />
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px", opacity: 0 }}
+            color="white"
+            className={"stacked-boxes year2012"}
+          >
             2012
           </Text>
         </Box>
@@ -335,7 +360,12 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           images={images2012}
         />
         <Box flex={false}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
+          <Text
+            size="20px"
+            style={{ lineHeight: "30px" }}
+            color="white"
+            className={"stacked-boxes year2013"}
+          >
             2013
           </Text>
         </Box>
@@ -368,7 +398,7 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       >
         <Grid
           fill="vertical"
-          pad={"32px"}
+          pad={"48px"}
           areas={[
             { name: "stackedBoxes2006", start: [0, 0], end: [0, 0] },
             { name: "stackedBoxes2007", start: [1, 0], end: [1, 0] },
@@ -433,22 +463,64 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
             />
           </Box>
           <Box gridArea="text2006" align="center">
-            <Text color="white">2006</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2006"}
+              color="white"
+            >
+              2006
+            </Text>
           </Box>
           <Box gridArea="text2007" align="center">
-            <Text color="white">2007</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2007"}
+              color="white"
+            >
+              2007
+            </Text>
           </Box>
           <Box gridArea="text2010" align="center">
-            <Text color="white">2010</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2010"}
+              color="white"
+            >
+              2010
+            </Text>
           </Box>
           <Box gridArea="text2011" align="center">
-            <Text color="white">2011</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2011"}
+              color="white"
+            >
+              2011
+            </Text>
           </Box>
           <Box gridArea="text2012" align="center">
-            <Text color="white">2012</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2012"}
+              color="white"
+            >
+              2012
+            </Text>
           </Box>
           <Box gridArea="text2013" align="center">
-            <Text color="white">2013</Text>
+            <Text
+              size="24px"
+              style={{ opacity: 0, lineHeight: "72px" }}
+              className={"stacked-boxes year2013"}
+              color="white"
+            >
+              2013
+            </Text>
           </Box>
         </Grid>
       </AnimateEverything>
