@@ -146,7 +146,6 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           `Could not find image: ${image} from elements: ${elements}`
         );
       }
-
       const { translationX, translationY } = getTranslation(
         choice,
         container,
@@ -199,26 +198,21 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     if (!ref.current) return;
     if (stage !== "USER_CONTROL") return;
     const container = ref.current;
-
     const onClick = (event: MouseEvent): void => {
       if (isAnimating.current) return;
       const isZoomed = target !== undefined;
-
       if (isZoomed) {
         target?.target.classList.remove("is-picked");
         setTarget(undefined);
         return;
       }
-
       if ((event.target as HTMLElement).tagName !== "IMG") return;
-
       const choice = event.target as HTMLElement;
       const { translationX, translationY } = getTranslation(
         choice,
         container,
         scrollContainer
       );
-
       setTarget({
         x: -translationX,
         y: -translationY,
@@ -226,7 +220,6 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       });
       choice.classList.add("is-picked");
     };
-
     container.addEventListener("click", onClick);
     return () => {
       container.removeEventListener("click", onClick);
@@ -248,15 +241,7 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       height="100%"
       width="100%"
       justify="center"
-      style={{
-        position: `relative`,
-        overflow: `${
-          typeof stage === "string" && stage.includes("USER")
-            ? "auto"
-            : "hidden"
-        }`,
-      }}
-      ref={scrollContainer}
+      style={{ position: "relative", overflow: "hidden" }}
     >
       <AnimateEverything
         style={{
@@ -265,61 +250,138 @@ export const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           left: 0,
           right: 0,
           bottom: 0,
-          overflow: "visible",
+          overflow: "hidden",
         }}
         target={target}
         ref={ref}
-        gap="24px"
-        pad="16px"
       >
-        <FadeInBox flex={false} isShown={yearsShown.has(2006)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2006
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox flex={false} isShown={yearsShown.has(2006)}>
-          <StackedBoxesHorizontal images={images2006} />
-        </SlideLeftBox>
-        <FadeInBox flex={false} isShown={yearsShown.has(2007)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2007
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox flex={false} isShown={yearsShown.has(2007)}>
-          <StackedBoxesHorizontal images={images2007} />
-        </SlideLeftBox>
-        <FadeInBox flex={false} isShown={yearsShown.has(2010)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2010
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox flex={false} isShown={yearsShown.has(2010)}>
-          <StackedBoxesHorizontal images={images2010} />
-        </SlideLeftBox>
-        <FadeInBox flex={false} isShown={yearsShown.has(2011)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2011
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox flex={false} isShown={yearsShown.has(2011)}>
-          <StackedBoxesHorizontal images={images2011} />
-        </SlideLeftBox>
-        <FadeInBox flex={false} isShown={yearsShown.has(2012)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2012
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox flex={false} isShown={yearsShown.has(2012)}>
-          <StackedBoxesHorizontal images={images2012} />
-        </SlideLeftBox>
-        <FadeInBox flex={false} isShown={yearsShown.has(2013)}>
-          <Text size="20px" style={{ lineHeight: "30px" }} color="white">
-            2013
-          </Text>
-        </FadeInBox>
-        <SlideLeftBox isShown={yearsShown.has(2013)}>
-          <StackedBoxesHorizontal images={images2013} />
-        </SlideLeftBox>
+        <Grid
+          fill="vertical"
+          pad={"16px"}
+          areas={[
+            { name: "stackedBoxes2006", start: [1, 0], end: [1, 0] },
+            { name: "stackedBoxes2007", start: [1, 1], end: [1, 1] },
+            { name: "stackedBoxes2010", start: [1, 2], end: [1, 3] },
+            { name: "stackedBoxes2011", start: [1, 4], end: [1, 5] },
+            { name: "stackedBoxes2012", start: [1, 6], end: [1, 6] },
+            { name: "stackedBoxes2013", start: [1, 7], end: [1, 7] },
+            { name: "text2006", start: [0, 0], end: [0, 0] },
+            { name: "text2007", start: [0, 1], end: [0, 1] },
+            { name: "text2010", start: [0, 2], end: [0, 3] },
+            { name: "text2011", start: [0, 4], end: [0, 5] },
+            { name: "text2012", start: [0, 6], end: [0, 6] },
+            { name: "text2013", start: [0, 7], end: [0, 7] },
+          ]}
+          rows={[
+            "flex",
+            "flex",
+            "flex",
+            "flex",
+            "flex",
+            "flex",
+            "flex",
+            "flex",
+          ]}
+          columns={["auto", "flex"]}
+          gap={"16px"}
+        >
+          <SlideLeftBox
+            gridArea="stackedBoxes2006"
+            align="center"
+            isShown={yearsShown.has(2006)}
+          >
+            <StackedBoxesHorizontal images={images2006} />
+          </SlideLeftBox>
+          <SlideLeftBox
+            gridArea="stackedBoxes2007"
+            align="center"
+            isShown={yearsShown.has(2007)}
+          >
+            <StackedBoxesHorizontal images={images2007} />
+          </SlideLeftBox>
+          <SlideLeftBox
+            gridArea="stackedBoxes2010"
+            align="center"
+            isShown={yearsShown.has(2010)}
+          >
+            <StackedBoxesHorizontal images={images2010} />
+          </SlideLeftBox>
+          <SlideLeftBox
+            gridArea="stackedBoxes2011"
+            align="center"
+            isShown={yearsShown.has(2011)}
+          >
+            <StackedBoxesHorizontal images={images2011} />
+          </SlideLeftBox>
+          <SlideLeftBox
+            gridArea="stackedBoxes2012"
+            align="center"
+            isShown={yearsShown.has(2012)}
+          >
+            <StackedBoxesHorizontal images={images2012} />
+          </SlideLeftBox>
+          <SlideLeftBox
+            gridArea="stackedBoxes2013"
+            align="center"
+            isShown={yearsShown.has(2013)}
+          >
+            <StackedBoxesHorizontal images={images2013} />
+          </SlideLeftBox>
+          <FadeInBox
+            gridArea="text2006"
+            align="center"
+            isShown={yearsShown.has(2006)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2006
+            </Text>
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2007"
+            align="center"
+            isShown={yearsShown.has(2007)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2007
+            </Text>
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2010"
+            align="center"
+            isShown={yearsShown.has(2010)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2010
+            </Text>
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2011"
+            align="center"
+            isShown={yearsShown.has(2011)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2011
+            </Text>
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2012"
+            align="center"
+            isShown={yearsShown.has(2012)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2012
+            </Text>
+          </FadeInBox>
+          <FadeInBox
+            gridArea="text2013"
+            align="center"
+            isShown={yearsShown.has(2013)}
+          >
+            <Text size="24px" style={{ lineHeight: "72px" }} color="white">
+              2013
+            </Text>
+          </FadeInBox>
+        </Grid>
       </AnimateEverything>
     </Box>
   ) : (
@@ -594,48 +656,98 @@ const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
     </Box>
   );
 };
+
 const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
+  const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
+  const cellsPerRow = 8;
+
+  const rowCount = Math.ceil(amount / cellsPerRow);
 
   const ref = useRef<HTMLDivElement>(null);
   const { width = 1, height = 1 } = useResizeObserver<HTMLDivElement>({
     ref,
   });
 
-  const boxes = useMemo(
-    () =>
-      images.map((image, index) => {
-        return (
-          <AbsoluteRotatedBox
-            width={boxWidth + "px"}
-            height={boxHeight + "px"}
-            key={index}
-            image={image}
-          />
-        );
-      }),
-    [boxHeight, boxWidth, images]
+  const { boxesLeft: boxesUp, boxesRight: boxesDown } = useBoxes(
+    amount,
+    cellsPerRow,
+    images,
+    boxWidth,
+    boxHeight
   );
+
   useEffect(() => {
     if (!ref.current) return;
-    const maxHeight = 0.71 * height;
+    const maxWidth = 1 / cellsPerRow;
     const desiredAspect = 4 / 3;
-    const boxWidth = desiredAspect * maxHeight;
 
-    setDimensions([boxWidth, maxHeight]);
-  }, [height, ref, width]);
+    const rowHeight = (maxWidth * desiredAspect * width) / (height / rowCount);
+    const maxHeight = 1;
+
+    const isRowTooHigh = maxHeight <= rowHeight;
+
+    if (isRowTooHigh) {
+      const reducedWidth =
+        ((maxHeight / desiredAspect) * height) / width / rowCount;
+
+      const reducedWithGap = shrinkAndMaintainAspectRatio(
+        reducedWidth,
+        maxHeight,
+        0,
+        0
+      );
+      setDimensions(reducedWithGap);
+    } else {
+      const reducedWithGap = shrinkAndMaintainAspectRatio(
+        maxWidth,
+        rowHeight,
+        0,
+        0
+      );
+
+      setDimensions(reducedWithGap);
+    }
+  }, [rowCount, height, ref, width]);
 
   return (
     <Box
-      margin={{ left: "8px" }}
-      ref={ref}
-      flex={false}
-      responsive={false}
-      height="100px"
-      direction="row"
+      width="100%"
+      height="100%"
+      align="start"
+      pad={{ vertical: (rowCount - 1) * 16 + "px" }}
     >
-      {boxes}
-      <Box flex={false} width="32px"></Box>
+      <Box ref={ref} width="100%" height="100%" align="start" direction="row">
+        <Box
+          width="100%"
+          direction="column"
+          height="100%"
+          justify="center"
+          align="start"
+          gap="10px"
+        >
+          <Box
+            height="100%"
+            width="100%"
+            align={"center"}
+            justify="start"
+            direction="row"
+          >
+            {boxesUp}
+          </Box>
+          {rowCount === 2 && (
+            <Box
+              direction="row"
+              height="100%"
+              width="100%"
+              align="center"
+              justify="start"
+            >
+              {boxesDown}
+            </Box>
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 };
@@ -671,56 +783,6 @@ const RelativeRotatedBox = memo(
             zIndex: -1,
           }}
           border={{ color: "#FF4E4E", size: " 2px" }}
-          background="#502B2D"
-        ></Box>
-        <Box
-          style={{
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            position: "absolute",
-            transform: rotation,
-            overflow: "hidden",
-          }}
-        >
-          {image}
-        </Box>
-      </Box>
-    );
-  }
-);
-const AbsoluteRotatedBox = memo(
-  ({
-    width,
-    height,
-    image,
-  }: {
-    width: string;
-    height: string;
-    image: ReactElement;
-  }) => {
-    const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
-    return (
-      <Box
-        className="rotated-box"
-        flex={false}
-        width={width}
-        height={height}
-        style={{ position: "relative" }}
-      >
-        <Box
-          style={{
-            top: 1,
-            left: 1,
-            right: 1,
-            bottom: 1,
-            position: "absolute",
-            transform: rotation,
-            backfaceVisibility: "hidden",
-            zIndex: -1,
-          }}
-          border={{ color: "#FF4E4E", size: " 3px" }}
           background="#502B2D"
         ></Box>
         <Box
