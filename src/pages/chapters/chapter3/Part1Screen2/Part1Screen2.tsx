@@ -309,9 +309,7 @@ function GridBoxes({
           align="center"
           isShown={yearsShown.has(year)}
         >
-          <StackedBoxes
-            images={images[`images${year}` as keyof typeof images]}
-          />
+          <StackedBoxes images={images[year].component} />
         </SlideBox>
       ))}
     </>
