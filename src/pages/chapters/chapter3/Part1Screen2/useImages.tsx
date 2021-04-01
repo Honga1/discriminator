@@ -10,6 +10,8 @@ const RevealableImage = styled(Image)<{ isShown?: boolean }>`
   transition: opacity 1s;
   opacity: ${(props) => (props.isShown ? 1 : 0)};
   backface-visibility: hidden;
+  user-select: none;
+  touch-action: none;
 
   &.auto-pickable {
   }
@@ -32,7 +34,11 @@ export function useImages() {
             data: imagesThisYear,
             component: imagesThisYear.map(({ image_url }) => {
               return (
-                <RevealableImage src={image_url} className="auto-pickable" />
+                <RevealableImage
+                  src={image_url}
+                  className="auto-pickable"
+                  draggable={false}
+                />
               );
             }),
           },

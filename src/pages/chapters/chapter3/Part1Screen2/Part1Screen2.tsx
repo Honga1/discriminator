@@ -1,6 +1,9 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
+import { animated, to, useSpring } from "react-spring";
+import { useGesture } from "react-use-gesture";
 import styled from "styled-components";
+import { createJSDocCallbackTag } from "typescript";
 import { StackedBoxes } from "./StackedBoxes";
 import { useImages } from "./useImages";
 
@@ -130,11 +133,13 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         `Could not find image: ${image} from elements: ${elements}`
       );
     }
-    const { translationX, translationY } = getTranslation(
-      choice,
-      container,
-      scrollContainer
-    );
+    const {
+      translationX,
+      translationY,
+      elementCenterX,
+      elementCenterY,
+    } = getTranslation(choice, container, scrollContainer);
+
     setTarget({
       x: -translationX,
       y: -translationY,
@@ -145,48 +150,153 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   }, [stage]);
 
   // Handles user movement
-  const isAnimating = useIsCSSAnimating(ref);
-  useEffect(() => {
-    if (!ref.current) return;
-    if (stage !== "USER_CONTROL") return;
-    const container = ref.current;
-    const onClick = (event: MouseEvent): void => {
-      if (isAnimating.current) return;
-      const isZoomed = target !== undefined;
-      if (isZoomed) {
-        target?.target.classList.remove("is-picked");
-        setTarget(undefined);
-        return;
-      }
-      if ((event.target as HTMLElement).tagName !== "IMG") return;
-      const choice = event.target as HTMLElement;
-      const { translationX, translationY } = getTranslation(
-        choice,
-        container,
-        scrollContainer
+  // const isAnimating = useIsCSSAnimating(ref);
+  // useEffect(() => {
+  //   if (!ref.current) return;
+  //   if (stage !== "USER_CONTROL") return;
+  //   const container = ref.current;
+  //   const onClick = (event: MouseEvent): void => {
+  //     if (isAnimating.current) return;
+  //     const isZoomed = target !== undefined;
+  //     if (isZoomed) {
+  //       target?.target.classList.remove("is-picked");
+  //       setTarget(undefined);
+  //       return;
+  //     }
+  //     if ((event.target as HTMLElement).tagName !== "IMG") return;
+  //     const choice = event.target as HTMLElement;
+  //     const { translationX, translationY } = getTranslation(
+  //       choice,
+  //       container,
+  //       scrollContainer
+  //     );
+  //     setTarget({
+  //       x: -translationX,
+  //       y: -translationY,
+  //       target: choice,
+  //     });
+  //     choice.classList.add("is-picked");
+  //   };
+  //   container.addEventListener("click", onClick);
+  //   return () => {
+  //     container.removeEventListener("click", onClick);
+  //   };
+  // }, [isAnimating, stage, target]);
+
+  const [{ x, y, scale }, set] = useSpring(() => ({
+    x: 0,
+    y: 0,
+    scale: 1,
+    drag: false,
+  }));
+  const bind = useGesture({
+    onDrag: ({ delta: [deltaX, deltaY], event, pinching }) => {
+      event.preventDefault();
+
+      !pinching &&
+        set({
+          x: x.goal + deltaX / scale.goal,
+          y: y.goal + deltaY / scale.goal,
+        });
+    },
+
+    onWheel: ({ delta: [, distance], event: { clientX, clientY, target } }) => {
+      const nextScale = clamp(
+        (scale?.goal ?? 1) * 1.1 ** (-distance / 52),
+        1,
+        4
       );
-      setTarget({
-        x: -translationX,
-        y: -translationY,
-        target: choice,
+
+      // Offset from 0,0 being the center
+      const { resultX, resultY } = getZoomPosition(
+        x.goal,
+        y.goal,
+        target,
+        clientX,
+        clientY,
+        scale.goal,
+        nextScale
+      );
+      set({
+        scale: nextScale,
+        x: resultX,
+        y: resultY,
       });
-      choice.classList.add("is-picked");
-    };
-    container.addEventListener("click", onClick);
-    return () => {
-      container.removeEventListener("click", onClick);
-    };
-  }, [isAnimating, stage, target]);
+    },
+
+    onPinch: ({ vdva: [distance, a], event, _pointerIds }) => {
+      const nextScale = clamp((scale?.goal ?? 1) * 1.1 ** distance, 1, 4);
+      if (event.type.includes("touch")) {
+        const castEvent = event as React.TouchEvent<HTMLElement>;
+        const { touches, target } = castEvent;
+
+        const maybeTouch1 = touches[_pointerIds[0]];
+        const maybeTouch2 = touches[_pointerIds[1]];
+
+        let clientX;
+        let clientY;
+        if (maybeTouch1 && maybeTouch2) {
+          clientX = (maybeTouch1.clientX + maybeTouch2.clientX) / 2;
+          clientY = (maybeTouch1.clientY + maybeTouch2.clientY) / 2;
+        } else if (maybeTouch1) {
+          clientX = maybeTouch1.clientX;
+          clientY = maybeTouch1.clientY;
+        } else if (maybeTouch2) {
+          clientX = maybeTouch2.clientX;
+          clientY = maybeTouch2.clientY;
+        } else {
+          clientX = window.innerWidth / 2;
+          clientY = window.innerHeight / 2;
+        }
+
+        const { resultX, resultY } = getZoomPosition(
+          x.goal,
+          y.goal,
+          target,
+          clientX,
+          clientY,
+          scale.goal,
+          nextScale
+        );
+
+        set({
+          scale: nextScale,
+          x: resultX,
+          y: resultY,
+        });
+      } else {
+        set({
+          scale: nextScale,
+        });
+      }
+    },
+  });
 
   return (
     <Box
       flex={false}
+      ref={ref}
       height="100%"
       width="100%"
       justify="center"
-      style={{ position: "relative", overflow: "hidden" }}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        touchAction: "none",
+        pointerEvents: "auto",
+      }}
+      {...bind()}
     >
-      <AnimateTransform
+      <animated.div
+        style={{
+          translate: to([x, y, scale], (x, y, scale) => [x * scale, y * scale]),
+          scale: to([scale], (s) => s),
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+        }}
+      >
+        {/* <AnimateTransform
         style={{
           position: "absolute",
           top: 0,
@@ -197,7 +307,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         }}
         target={target}
         ref={ref}
-      >
+      > */}
         <Grid
           fill="vertical"
           pad={isSmall ? "16px" : "48px"}
@@ -209,7 +319,8 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           <GridBoxes yearsShown={yearsShown} />
           <GridTextLabels yearsShown={yearsShown} />
         </Grid>
-      </AnimateTransform>
+      </animated.div>
+      {/* </AnimateTransform> */}
     </Box>
   );
 });
@@ -272,6 +383,37 @@ const AnimateTransform = styled(Box)<{
       ? `translateZ(0) scale(1)`
       : `scale(${zoomFactor}) translate(${props.target.x}px, ${props.target.y}px)`};
 `;
+
+function getZoomPosition(
+  xGoal: number,
+  yGoal: number,
+  target: EventTarget | null,
+  clientX: number,
+  clientY: number,
+  scaleGoal: number,
+  nextScale: number
+) {
+  const containerBB = (target as HTMLElement | null)?.getBoundingClientRect();
+
+  const relativeMouseX = clientX - containerBB!.left - containerBB!.width / 2;
+  const relativeMouseY = clientY - containerBB!.top - containerBB!.height / 2;
+
+  const worldMouseX = relativeMouseX / scaleGoal;
+  const worldMouseY = relativeMouseY / scaleGoal;
+
+  const offsetFromCameraX = xGoal - worldMouseX;
+  const offsetFromCameraY = yGoal - worldMouseY;
+
+  const nextMouseOffsetX = xGoal - relativeMouseX / nextScale;
+  const nextMouseOffsetY = yGoal - relativeMouseY / nextScale;
+
+  const deltaMovementX = offsetFromCameraX - nextMouseOffsetX;
+  const deltaMovementY = offsetFromCameraY - nextMouseOffsetY;
+
+  const resultX = xGoal + deltaMovementX;
+  const resultY = yGoal + deltaMovementY;
+  return { resultX, resultY };
+}
 
 function useIsCSSAnimating(ref: React.RefObject<HTMLDivElement>) {
   const isAnimating = useRef(false);
@@ -382,5 +524,8 @@ function getTranslation(
   const screenCenterY = parentBoundingBox.y + parentBoundingBox.height / 2;
   const translationX = elementCenterX - screenCenterX - scrollLeft / zoomFactor;
   const translationY = elementCenterY - screenCenterY - scrollTop / zoomFactor;
-  return { translationX, translationY };
+  return { translationX, translationY, elementCenterX, elementCenterY };
+}
+function clamp(number: number, min: number, max: number) {
+  return Math.max(min, Math.min(number, max));
 }
