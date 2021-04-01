@@ -14,7 +14,7 @@ import { IMediaElement } from "../../../IMediaElement";
 import { store } from "../../../store/store";
 import audioSrc from "./Chapter3.mp3";
 import { Part1Screen1 } from "./Part1Screen1";
-import { Part1Screen2Selector } from "./Part1Screen2";
+import { Part1Screen2Selector } from "./Part1Screen2/Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3";
