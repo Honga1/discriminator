@@ -3,8 +3,10 @@
     "Scrollable",
     "Tintable",
     "nsid",
+    "vdva",
     "webfontloader",
     "xlarge",
+    "xsmall",
     "xxsmall"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"

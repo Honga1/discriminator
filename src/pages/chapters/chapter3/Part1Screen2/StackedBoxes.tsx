@@ -292,6 +292,7 @@ const RelativeRotatedBox = memo(
           }}
         >
           <RevealableImage
+            style={{ willChange: "opacity" }}
             src={image.image_url}
             className="auto-pickable"
             draggable={false}
@@ -377,12 +378,12 @@ function useBoxes(
   return result;
 }
 
-const RevealableImage = styled(Image)<{ isShown?: boolean }>`
+const RevealableImage = styled(Image)`
   width: 100%;
   object-fit: cover;
   height: 100%;
   transition: opacity 1s;
-  opacity: ${(props) => (props.isShown ? 1 : 0)};
+  opacity: 0;
   backface-visibility: hidden;
   user-select: none;
   touch-action: none;
