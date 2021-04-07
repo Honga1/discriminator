@@ -1,16 +1,27 @@
-import { Box, ResponsiveContext } from "grommet";
+import { Box, Image, ResponsiveContext } from "grommet";
 import React, {
   memo,
-  ReactElement,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
 
-export const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
+export const StackedBoxes = ({
+  images,
+}: {
+  images: {
+    image_url: string;
+    path_alias: string;
+    nsid: string;
+    photo_id: number;
+    license: string;
+    date: string;
+  }[];
+}) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   if (isSmall) {
@@ -20,7 +31,18 @@ export const StackedBoxes = ({ images }: { images: ReactElement[] }) => {
   }
 };
 
-const StackedBoxesVertical = ({ images }: { images: ReactElement[] }) => {
+const StackedBoxesVertical = ({
+  images,
+}: {
+  images: {
+    image_url: string;
+    path_alias: string;
+    nsid: string;
+    photo_id: number;
+    license: string;
+    date: string;
+  }[];
+}) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
@@ -111,7 +133,18 @@ const StackedBoxesVertical = ({ images }: { images: ReactElement[] }) => {
   );
 };
 
-const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
+const StackedBoxesHorizontal = ({
+  images,
+}: {
+  images: {
+    image_url: string;
+    path_alias: string;
+    nsid: string;
+    photo_id: number;
+    license: string;
+    date: string;
+  }[];
+}) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerRow = 8;
@@ -206,6 +239,7 @@ const StackedBoxesHorizontal = ({ images }: { images: ReactElement[] }) => {
     </Box>
   );
 };
+
 const RelativeRotatedBox = memo(
   ({
     width,
@@ -214,7 +248,14 @@ const RelativeRotatedBox = memo(
   }: {
     width: number;
     height: number;
-    image: ReactElement;
+    image: {
+      image_url: string;
+      path_alias: string;
+      nsid: string;
+      photo_id: number;
+      license: string;
+      date: string;
+    };
   }) => {
     const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
     return (
@@ -250,7 +291,11 @@ const RelativeRotatedBox = memo(
             overflow: "hidden",
           }}
         >
-          {image}
+          <RevealableImage
+            src={image.image_url}
+            className="auto-pickable"
+            draggable={false}
+          />
         </Box>
       </Box>
     );
@@ -277,7 +322,14 @@ const shrinkAndMaintainAspectRatio = (
 function useBoxes(
   amount: number,
   cellsPerColumn: number,
-  images: ReactElement[],
+  images: {
+    image_url: string;
+    path_alias: string;
+    nsid: string;
+    photo_id: number;
+    license: string;
+    date: string;
+  }[],
   boxWidth: number,
   boxHeight: number
 ) {
@@ -324,3 +376,21 @@ function useBoxes(
 
   return result;
 }
+
+const RevealableImage = styled(Image)<{ isShown?: boolean }>`
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+  transition: opacity 1s;
+  opacity: ${(props) => (props.isShown ? 1 : 0)};
+  backface-visibility: hidden;
+  user-select: none;
+  touch-action: none;
+
+  &.auto-pickable {
+  }
+
+  &.is-picked {
+    opacity: 1;
+  }
+`;

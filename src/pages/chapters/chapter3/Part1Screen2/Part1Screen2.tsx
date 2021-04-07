@@ -3,7 +3,6 @@ import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated, to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
 import styled from "styled-components";
-import { createJSDocCallbackTag } from "typescript";
 import { StackedBoxes } from "./StackedBoxes";
 import { useImages } from "./useImages";
 
@@ -133,12 +132,11 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         `Could not find image: ${image} from elements: ${elements}`
       );
     }
-    const {
-      translationX,
-      translationY,
-      elementCenterX,
-      elementCenterY,
-    } = getTranslation(choice, container, scrollContainer);
+    const { translationX, translationY } = getTranslation(
+      choice,
+      container,
+      scrollContainer
+    );
 
     setTarget({
       x: -translationX,
@@ -373,16 +371,6 @@ const largeGridColumns = smallGridRows;
 const largeGridRows = [...smallGridColumns].reverse();
 
 const zoomFactor = 3;
-const AnimateTransform = styled(Box)<{
-  target?: { x: number; y: number };
-}>`
-  backface-visibility: hidden;
-  transition: transform 1s ease-in-out;
-  transform: ${(props) =>
-    !props.target
-      ? `translateZ(0) scale(1)`
-      : `scale(${zoomFactor}) translate(${props.target.x}px, ${props.target.y}px)`};
-`;
 
 function getZoomPosition(
   xGoal: number,
@@ -415,25 +403,6 @@ function getZoomPosition(
   return { resultX, resultY };
 }
 
-function useIsCSSAnimating(ref: React.RefObject<HTMLDivElement>) {
-  const isAnimating = useRef(false);
-  useEffect(() => {
-    if (!ref.current) return;
-    const container = ref.current;
-
-    const onTransitionStart = () => (isAnimating.current = true);
-    const onTransitionEnd = () => (isAnimating.current = false);
-
-    container.addEventListener("transitionstart", onTransitionStart);
-    container.addEventListener("transitionend", onTransitionEnd);
-    return () => {
-      container.removeEventListener("transitionstart", onTransitionStart);
-      container.removeEventListener("transitionend", onTransitionEnd);
-    };
-  }, [ref]);
-  return isAnimating;
-}
-
 function GridBoxes({
   yearsShown,
 }: {
@@ -451,7 +420,7 @@ function GridBoxes({
           align="center"
           isShown={yearsShown.has(year)}
         >
-          <StackedBoxes images={images[year].component} />
+          <StackedBoxes images={images[year]} />
         </SlideBox>
       ))}
     </>
