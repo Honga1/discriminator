@@ -258,14 +258,15 @@ const HeaderBar = ({
 const ScrollBanner = ({ isShown }: { isShown: boolean }) => {
   return (
     <FadeOutBox
-      width="100%"
-      height="135px"
+      height="145px"
       style={{
         position: "absolute",
         pointerEvents: "none",
         background:
           "linear-gradient(180deg, rgba(32, 33, 34, 0) 0%, #202122 100%)",
         bottom: 0,
+        left: 0,
+        right: 0,
       }}
       align="center"
       justify="center"
