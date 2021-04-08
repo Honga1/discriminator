@@ -20,6 +20,7 @@ export function useImages() {
         photo_id: number;
         license: string;
         date: string;
+        tagged: "family" | "party" | "wedding";
       }[]
     >;
     return result;

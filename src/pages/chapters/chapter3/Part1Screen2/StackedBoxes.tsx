@@ -12,6 +12,7 @@ import useResizeObserver from "use-resize-observer";
 
 export const StackedBoxes = ({
   images,
+  tinting,
 }: {
   images: {
     image_url: string;
@@ -20,19 +21,32 @@ export const StackedBoxes = ({
     photo_id: number;
     license: string;
     date: string;
+    tagged: "wedding" | "family" | "party";
   }[];
+  tinting: { wedding: boolean; family: boolean; party: boolean };
 }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   if (isSmall) {
-    return <StackedBoxesHorizontal images={images}></StackedBoxesHorizontal>;
+    return (
+      <StackedBoxesHorizontal
+        images={images}
+        tinting={tinting}
+      ></StackedBoxesHorizontal>
+    );
   } else {
-    return <StackedBoxesVertical images={images}></StackedBoxesVertical>;
+    return (
+      <StackedBoxesVertical
+        images={images}
+        tinting={tinting}
+      ></StackedBoxesVertical>
+    );
   }
 };
 
 const StackedBoxesVertical = ({
   images,
+  tinting,
 }: {
   images: {
     image_url: string;
@@ -41,7 +55,9 @@ const StackedBoxesVertical = ({
     photo_id: number;
     license: string;
     date: string;
+    tagged: "wedding" | "family" | "party";
   }[];
+  tinting: { wedding: boolean; family: boolean; party: boolean };
 }) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
@@ -59,7 +75,8 @@ const StackedBoxesVertical = ({
     cellsPerColumn,
     images,
     boxWidth,
-    boxHeight
+    boxHeight,
+    tinting
   );
 
   useEffect(() => {
@@ -135,6 +152,7 @@ const StackedBoxesVertical = ({
 
 const StackedBoxesHorizontal = ({
   images,
+  tinting,
 }: {
   images: {
     image_url: string;
@@ -143,7 +161,9 @@ const StackedBoxesHorizontal = ({
     photo_id: number;
     license: string;
     date: string;
+    tagged: "family" | "party" | "wedding";
   }[];
+  tinting: { wedding: boolean; family: boolean; party: boolean };
 }) => {
   const amount = images.length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
@@ -161,7 +181,8 @@ const StackedBoxesHorizontal = ({
     cellsPerRow,
     images,
     boxWidth,
-    boxHeight
+    boxHeight,
+    tinting
   );
 
   useEffect(() => {
@@ -245,7 +266,9 @@ const RelativeRotatedBox = memo(
     width,
     height,
     image,
+    isTinted,
   }: {
+    isTinted: boolean;
     width: number;
     height: number;
     image: {
@@ -255,6 +278,7 @@ const RelativeRotatedBox = memo(
       photo_id: number;
       license: string;
       date: string;
+      tagged: string;
     };
   }) => {
     const rotation = `rotate(${Math.random() * 84 - 42}deg)`;
@@ -280,6 +304,7 @@ const RelativeRotatedBox = memo(
           border={{ color: "#FF4E4E", size: " 2px" }}
           background="#502B2D"
         ></Box>
+
         <Box
           style={{
             top: 0,
@@ -298,10 +323,38 @@ const RelativeRotatedBox = memo(
             draggable={false}
           />
         </Box>
+
+        <TintedDiv
+          className={isTinted ? `tint-${image.tagged}` : ""}
+          style={{ transform: rotation }}
+        />
       </Box>
     );
   }
 );
+
+const TintedDiv = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: background-color 1s linear;
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: background-color;
+
+  &.tint-wedding {
+    background-color: rgba(255, 89, 89, 0.4);
+  }
+
+  &.tint-party {
+    background-color: rgba(117, 122, 255, 0.4);
+  }
+
+  &.tint-family {
+    background-color: rgba(32, 191, 0, 0.4);
+  }
+`;
+
 const shrinkAndMaintainAspectRatio = (
   width: number,
   height: number,
@@ -330,9 +383,11 @@ function useBoxes(
     photo_id: number;
     license: string;
     date: string;
+    tagged: "wedding" | "party" | "family";
   }[],
   boxWidth: number,
-  boxHeight: number
+  boxHeight: number,
+  tinting: { wedding: boolean; family: boolean; party: boolean }
 ) {
   const result = useMemo(() => {
     const boxesLeft = [...new Array(Math.min(amount, cellsPerColumn))].map(
@@ -349,6 +404,7 @@ function useBoxes(
             height={boxHeight}
             key={index}
             image={image}
+            isTinted={tinting[image.tagged]}
           />
         );
       }
@@ -357,7 +413,7 @@ function useBoxes(
     const boxesRight = [
       ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
     ].map((_, index) => {
-      const image = images?.[index];
+      const image = images?.[index + boxesLeft.length];
       if (!image) {
         throw new Error(
           `Could not get image with index ${index} from ${images}`
@@ -369,11 +425,22 @@ function useBoxes(
           height={boxHeight}
           key={index}
           image={image}
+          isTinted={tinting[image.tagged]}
         />
       );
     });
     return { boxesLeft, boxesRight };
-  }, [amount, boxHeight, boxWidth, cellsPerColumn, images]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    amount,
+    boxHeight,
+    boxWidth,
+    cellsPerColumn,
+    images,
+    tinting.family,
+    tinting.wedding,
+    tinting.party,
+  ]);
 
   return result;
 }

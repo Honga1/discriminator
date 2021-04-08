@@ -1,5 +1,5 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import { memo, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useAnimationFrame } from "./Chapter3";
 
@@ -179,9 +179,9 @@ function TypingText({ isStarted }: { isStarted: boolean }) {
       }}
     >
       {etherWorksText
-        .map((character) => {
-          if (character === "\n") return <br></br>;
-          return [<>&nbsp;</>, character];
+        .map((character, index) => {
+          if (character === "\n") return <br key={index}></br>;
+          return [<Fragment key={index}>&nbsp;</Fragment>, character];
         })
         .map((element, index) => (
           <span

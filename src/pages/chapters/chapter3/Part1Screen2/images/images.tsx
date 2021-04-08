@@ -21,6 +21,7 @@ export const images = {
             photo_id: 102631694,
             license: "by-sa",
             date: "Feb 2006",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -31,6 +32,7 @@ export const images = {
             photo_id: 5708843240,
             license: "by-sa",
             date: "May 2011",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -41,6 +43,7 @@ export const images = {
             photo_id: 4760340061,
             license: "by-sa",
             date: "Jul 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -51,6 +54,7 @@ export const images = {
             photo_id: 4761000698,
             license: "by-sa",
             date: "Jul 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -61,6 +65,7 @@ export const images = {
             photo_id: 4760989044,
             license: "by-sa",
             date: "Jul 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -71,6 +76,7 @@ export const images = {
             photo_id: 5181105296,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -81,6 +87,7 @@ export const images = {
             photo_id: 5483477396,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -91,6 +98,7 @@ export const images = {
             photo_id: 5181112588,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -101,6 +109,7 @@ export const images = {
             photo_id: 356458200,
             license: "by-sa",
             date: "Jan 2007",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -111,6 +120,7 @@ export const images = {
             photo_id: 121728236,
             license: "by-sa",
             date: "Apr 2006",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -121,6 +131,7 @@ export const images = {
             photo_id: 121728398,
             license: "by-sa",
             date: "Apr 2006",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -131,6 +142,7 @@ export const images = {
             photo_id: 5294587830,
             license: "by-sa",
             date: "Dec 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -141,6 +153,7 @@ export const images = {
             photo_id: 9432741384,
             license: "by-sa",
             date: "Aug 2013",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -151,6 +164,7 @@ export const images = {
             photo_id: 9432532574,
             license: "by-sa",
             date: "Aug 2013",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -161,6 +175,7 @@ export const images = {
             photo_id: 5293990665,
             license: "by-sa",
             date: "Dec 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -171,6 +186,7 @@ export const images = {
             photo_id: 9429824331,
             license: "by-sa",
             date: "Aug 2013",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -181,6 +197,7 @@ export const images = {
             photo_id: 10090346453,
             license: "by-sa",
             date: "Oct 2013",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -191,6 +208,7 @@ export const images = {
             photo_id: 5431706769,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -201,6 +219,7 @@ export const images = {
             photo_id: 5181078830,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -211,6 +230,7 @@ export const images = {
             photo_id: 5181106232,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -221,6 +241,7 @@ export const images = {
             photo_id: 5294592150,
             license: "by-sa",
             date: "Dec 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -231,6 +252,7 @@ export const images = {
             photo_id: 5432271046,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -241,6 +263,7 @@ export const images = {
             photo_id: 5482917593,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -251,6 +274,7 @@ export const images = {
             photo_id: 4760348817,
             license: "by-sa",
             date: "Jul 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -261,6 +285,7 @@ export const images = {
             photo_id: 5432404966,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -271,6 +296,7 @@ export const images = {
             photo_id: 5483509674,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -281,6 +307,7 @@ export const images = {
             photo_id: 5482919569,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -291,6 +318,7 @@ export const images = {
             photo_id: 5483538802,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -301,6 +329,7 @@ export const images = {
             photo_id: 7178904372,
             license: "by-sa",
             date: "May 2012",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -311,6 +340,7 @@ export const images = {
             photo_id: 5482914785,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -321,6 +351,7 @@ export const images = {
             photo_id: 5204657998,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -331,6 +362,7 @@ export const images = {
             photo_id: 5294593494,
             license: "by-sa",
             date: "Dec 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -341,6 +373,7 @@ export const images = {
             photo_id: 5180507305,
             license: "by-sa",
             date: "Nov 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -351,6 +384,7 @@ export const images = {
             photo_id: 1073107755,
             license: "by-sa",
             date: "Aug 2007",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -361,6 +395,7 @@ export const images = {
             photo_id: 5431693087,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -371,6 +406,7 @@ export const images = {
             photo_id: 541498201,
             license: "by-sa",
             date: "Jun 2007",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -381,6 +417,7 @@ export const images = {
             photo_id: 541580657,
             license: "by-sa",
             date: "Jun 2007",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -391,6 +428,7 @@ export const images = {
             photo_id: 541454120,
             license: "by-sa",
             date: "Jun 2007",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -401,6 +439,7 @@ export const images = {
             photo_id: 5431693889,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -411,6 +450,7 @@ export const images = {
             photo_id: 9432753664,
             license: "by-sa",
             date: "Aug 2013",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -421,6 +461,7 @@ export const images = {
             photo_id: 5431715775,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -431,6 +472,7 @@ export const images = {
             photo_id: 5477736988,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -441,6 +483,7 @@ export const images = {
             photo_id: 5477736726,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -451,6 +494,7 @@ export const images = {
             photo_id: 5080789669,
             license: "by-sa",
             date: "Oct 2010",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -461,6 +505,7 @@ export const images = {
             photo_id: 5477735920,
             license: "by-sa",
             date: "Feb 2011",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -471,6 +516,7 @@ export const images = {
             photo_id: 356480744,
             license: "by-sa",
             date: "Jan 2007",
+            tagged: "family",
           },
         ],
       },
