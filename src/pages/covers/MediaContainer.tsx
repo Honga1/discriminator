@@ -1,4 +1,4 @@
-import { Box, Grid, ResponsiveContext, Text } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import React, {
   PropsWithChildren,
   useContext,
@@ -10,85 +10,97 @@ import {
   CameraIndicatorBox,
   ChapterCameraIndicator,
 } from "../../components/CameraIndicator";
-import { FullWidthStack } from "../../components/FullWidthStack";
 import { ChapterAndCoverNextButton } from "../../components/ChapterAndCoverFinishedButton";
 import { Timeline } from "../../components/timeline/Timeline";
-import { colorTheme } from "../../theme";
+import { useIsActive } from "../../hooks/useIsActive";
 import { useStore } from "../../store/store";
+import { colorTheme } from "../../theme";
 
 export const Media = ({ children }: PropsWithChildren<{}>) => {
   return (
-    <MediaContainer>
-      <MediaContent>{children}</MediaContent>
-    </MediaContainer>
-  );
-};
-
-const MediaContainer = ({ children }: PropsWithChildren<{}>) => {
-  const isXSmall = window.innerWidth < 500;
-  const isSmall = useContext(ResponsiveContext) === "small";
-  return (
-    <Box
-      className="media container"
-      pad={isXSmall ? "8px" : "16px"}
+    <FrameBox
       fill="vertical"
       background="black"
       height={{ min: "396px" }}
-    >
-      <Grid
-        responsive={false}
-        areas={[
-          { name: "media", start: [0, 0], end: [0, 0] },
-          {
-            name: "timeline",
-            start: [0, 1],
-            end: [0, 1],
-          },
-        ]}
-        fill
-        columns={["full"]}
-        rows={["flex", "auto"]}
-        gap="16px"
-      >
-        <Box gridArea="media" style={{ position: "relative" }}>
-          <MediaFrame
-            textColor={colorTheme.black}
-            frameColor={"yellow"}
-            heading="Discriminator"
-          >
-            {children}
-          </MediaFrame>
-          <Box
-            style={{
-              position: "absolute",
-              bottom: isSmall ? "48px" : "64px",
-              right: 0,
-            }}
-          >
-            <ChapterAndCoverNextButton />
-          </Box>
-        </Box>
-        <Timeline gridArea="timeline" />
-      </Grid>
-    </Box>
-  );
-};
-const MediaContent = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <Box
-      className="media content"
+      style={{ position: "relative" }}
+      frameColor="yellow"
       align="center"
-      height="100%"
-      overflow="hidden"
     >
       {children}
-    </Box>
+
+      <NextButton />
+      <Heading />
+      <Timeline />
+    </FrameBox>
   );
 };
-const FadeOutBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.6s;
-`;
+
+function NextButton() {
+  const size = useContext(ResponsiveContext);
+  const isSmall = size === "small";
+  return (
+    <Box
+      style={{
+        position: "absolute",
+        top: isSmall ? "69%" : "77&",
+        right: 0,
+      }}
+    >
+      <ChapterAndCoverNextButton />
+    </Box>
+  );
+}
+
+function Heading() {
+  const isActive = useIsActive();
+  const isHeadingShown = useStore((state) => state.isHeadingShown);
+  const size = useContext(ResponsiveContext);
+  const isSmall = size === "small";
+
+  const isSmallOrMedium = isSmall || size === "medium";
+
+  return (
+    <Box
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        userSelect: "none",
+        pointerEvents: "none",
+      }}
+      direction="row"
+      flex={false}
+      justify="between"
+      align="start"
+    >
+      <FadeOutBox
+        isShown={isHeadingShown && isActive}
+        background={"yellow"}
+        pad={{
+          horizontal: "16px",
+          vertical: "12px",
+        }}
+      >
+        {isSmallOrMedium && <WebcamNotification />}
+        <Text
+          size="24px"
+          color={colorTheme.black}
+          style={{
+            lineHeight: "100%",
+          }}
+        >
+          Discriminator
+        </Text>
+      </FadeOutBox>
+      <Box justify="end">
+        {isSmallOrMedium && <CameraIndicatorBox />}
+        {!isSmallOrMedium && <ChapterCameraIndicator />}
+      </Box>
+    </Box>
+  );
+}
+
 const WebcamNotification = () => {
   const [isShown, setIsShown] = useState(true);
   useEffect(() => {
@@ -124,6 +136,12 @@ const WebcamNotification = () => {
     </FadeOutBox>
   );
 };
+
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
+
 const FrameBox = styled(Box)<{
   frameColor: keyof typeof colorTheme;
 }>`
@@ -143,69 +161,3 @@ const FrameBox = styled(Box)<{
     bottom: 0;
   }
 `;
-const MediaFrame = ({
-  children,
-  frameColor,
-  textColor,
-  heading,
-}: PropsWithChildren<{
-  frameColor: keyof typeof colorTheme;
-  textColor: string;
-  heading: string;
-}>) => {
-  const size = useContext(ResponsiveContext) as "small" | string;
-  const isSmall = size === "small";
-  const isSmallOrMedium = isSmall || size === "medium";
-  return (
-    <FrameBox className="media-frame" frameColor={frameColor}>
-      <FullWidthStack fill anchor="top-fill" interactiveChild="first">
-        <Box fill>{children}</Box>
-        <MediaHeadingBlock frameColor={frameColor}>
-          {isSmallOrMedium && <WebcamNotification />}
-
-          <Text
-            size={"24px"}
-            color={textColor}
-            style={{ lineHeight: "100%", userSelect: "none" }}
-          >
-            {heading}
-          </Text>
-        </MediaHeadingBlock>
-      </FullWidthStack>
-    </FrameBox>
-  );
-};
-
-const MediaHeadingBlock = ({
-  frameColor,
-  children,
-}: PropsWithChildren<{
-  frameColor: string;
-}>) => {
-  const size = useContext(ResponsiveContext) as "small" | string;
-  const isSmall = size === "small";
-  const isSmallOrMedium = isSmall || size === "medium";
-  const isHeadingShown = useStore((state) => state.isHeadingShown);
-  return (
-    <Box
-      className="heading-block"
-      direction="row"
-      flex={false}
-      justify="between"
-      align="start"
-      style={{ userSelect: "none", pointerEvents: "none" }}
-    >
-      <FadeOutBox
-        isShown={isHeadingShown}
-        background={frameColor}
-        pad={{ horizontal: "16px", vertical: "12px" }}
-      >
-        {children}
-      </FadeOutBox>
-      <Box justify="end">
-        {isSmallOrMedium && <CameraIndicatorBox />}
-        {!isSmallOrMedium && <ChapterCameraIndicator />}
-      </Box>
-    </Box>
-  );
-};
