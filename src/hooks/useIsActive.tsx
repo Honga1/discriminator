@@ -43,6 +43,7 @@ const uninstall = () => {
 
 export function useIsActive() {
   const [isActive, setIsActive] = useState(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(addListener(setIsActive), []);
   return isActive;
 }

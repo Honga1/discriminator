@@ -35,7 +35,7 @@ const RainDrop = () => {
         left: Math.random() * 100 + "%",
         opacity: distanceFactor,
         animationDuration: (1 / distanceFactor) * 2 + "s",
-        zIndex: distanceFactor > 0.9 ? 1 : 0,
+        zIndex: distanceFactor > 0.9 ? 0 : -1,
       }}
     >
       <svg
@@ -88,13 +88,13 @@ export const Part2Screen1 = () => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
-    <Box height="100%" width="100%" style={{ position: "relative" }}>
+    <Box height="100%" width="100%" style={{ position: "relative", zIndex: 0 }}>
       <Box
         height="100%"
         width="100%"
         justify="center"
         pad="48px"
-        style={{ zIndex: 1 }}
+        style={{ zIndex: 0 }}
       >
         {isSmall ? (
           <Grid

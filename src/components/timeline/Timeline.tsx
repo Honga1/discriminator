@@ -1,20 +1,13 @@
 import { Box } from "grommet";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useIsActive } from "../../hooks/useIsActive";
 import { ChapterIndicators } from "./ChapterIndicators";
 import { ControlButtonRow } from "./ControlButtonRow";
 
-const FadeOutBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.6s;
-`;
-
 export const Timeline = () => {
-  const isActive = useIsActive();
+  const [isOpen, setIsOpen] = useState(true);
   return (
-    <FadeOutBox
-      isShown={isActive}
+    <Box
       gap="8px"
       pad="16px"
       style={{
@@ -22,12 +15,23 @@ export const Timeline = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        background:
-          "linear-gradient(0deg, rgba(32, 33, 34, 0.5), rgba(32, 33, 34, 0.5))",
+        background: isOpen
+          ? "linear-gradient(0deg, rgba(32, 33, 34, 0.5), rgba(32, 33, 34, 0.5))"
+          : "none",
       }}
     >
-      <ChapterIndicators />
-      <ControlButtonRow />
-    </FadeOutBox>
+      <FadeOutBox
+        isShown={isOpen}
+        style={{ pointerEvents: !isOpen ? "none" : "auto" }}
+      >
+        <ChapterIndicators />
+      </FadeOutBox>
+      <ControlButtonRow onOpenChange={setIsOpen} />
+    </Box>
   );
 };
+
+const FadeOutBox = styled(Box)<{ isShown: boolean }>`
+  opacity: ${(props) => (props.isShown ? "1" : "0")};
+  transition: opacity 0.6s;
+`;
