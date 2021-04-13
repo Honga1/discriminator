@@ -42,7 +42,7 @@ function NextButton() {
     <Box
       style={{
         position: "absolute",
-        top: isSmall ? "69%" : "77&",
+        top: isSmall ? "69%" : "77%",
         right: 0,
       }}
     >
