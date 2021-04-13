@@ -1,12 +1,5 @@
 import { Box, ResponsiveContext } from "grommet";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { FinishedButton } from "../../../components/FinishedButton";
 import { useChapter } from "../../../hooks/useChapter";
 import { useIsActive } from "../../../hooks/useIsActive";
@@ -24,10 +17,10 @@ export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
 
   const [getByteData, audio] = useMemo(() => {
-    const audio = document.createElement("audio");
-    audio.src = audioSrc;
+    const nextAudio = document.createElement("audio");
+    nextAudio.src = audioSrc;
     const context = new AudioContext();
-    const source = context.createMediaElementSource(audio);
+    const source = context.createMediaElementSource(nextAudio);
     const analyser = context.createAnalyser();
     source.connect(analyser);
     analyser.connect(context.destination);
@@ -35,7 +28,7 @@ export default function Chapter3() {
     const bufferLength = analyser.fftSize;
     const dataArray = new Uint8Array(bufferLength);
 
-    audio.addEventListener("play", () => {
+    nextAudio.addEventListener("play", () => {
       if (context.state === "suspended") context.resume();
     });
 
@@ -44,9 +37,13 @@ export default function Chapter3() {
         analyser.getByteTimeDomainData(dataArray);
         return dataArray;
       },
-      audio,
+      nextAudio,
     ];
   }, []);
+
+  useEffect(() => {
+    return () => audio.pause();
+  }, [audio]);
 
   useEffect(() => {
     (ref as any).current = audio;
@@ -153,35 +150,6 @@ export default function Chapter3() {
     </>
   );
 }
-
-export const useAnimationFrame = (
-  frameRate: number,
-  callback: (deltaTime: number) => void
-): void => {
-  const requestRef = useRef<number>();
-  const previousTimeRef = useRef<number>();
-
-  const animate = useCallback(
-    (time: number) => {
-      if (previousTimeRef.current !== undefined) {
-        const deltaTime = time - previousTimeRef.current;
-        callback(deltaTime);
-      }
-      previousTimeRef.current = time;
-    },
-    [callback]
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      requestRef.current = requestAnimationFrame(animate);
-    }, 1000 / frameRate);
-    return () => {
-      requestRef.current && cancelAnimationFrame(requestRef.current);
-      interval && clearInterval(interval);
-    };
-  }, [animate, frameRate]);
-};
 
 function ContinueButton(props: { isAutoPaused: boolean; play?: () => void }) {
   const isSmall = useContext(ResponsiveContext) === "small";

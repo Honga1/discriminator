@@ -1,13 +1,15 @@
-import * as blazeface from "@tensorflow-models/blazeface";
+import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import "@tensorflow/tfjs-backend-webgl";
 import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "react-three-fiber";
 import { BufferAttribute, BufferGeometry, Mesh } from "three";
+import useResizeObserver from "use-resize-observer";
 import { useChapter } from "../../hooks/useChapter";
 import { useStore } from "../../store/store";
 import videoSrc from "./../../p2.mp4";
-import { useAnimationFrame } from "./chapter3/Chapter3";
+import { useAsyncMemo } from "./chapter2/useAsyncMemo";
+import { useAnimationFrame } from "./chapter3/useAnimationFrame";
 
 function Dots(props: { geometry: React.Ref<React.ReactNode> | undefined }) {
   const { size } = useThree();
@@ -33,15 +35,9 @@ function Rect(props: { rectRef: React.Ref<React.ReactNode> | undefined }) {
       position={[-size.width / 2, size.height / 2, -6]}
       scale={[size.width, size.height, 1]}
     >
-      <mesh
-        ref={props.rectRef}
-        // rotation={[0, 0, 0]}
-        frustumCulled={false}
-        // position={[0, 0, -500]}
-        // scale={[100, 100, 1.0]}
-      >
+      <mesh ref={props.rectRef} frustumCulled={false}>
         <planeBufferGeometry />
-        <meshNormalMaterial color={"red"} />
+        <meshNormalMaterial color={"red"} transparent opacity={0.1} />
       </mesh>
     </group>
   );
@@ -52,63 +48,74 @@ export default function Chapter2() {
   const rectRef = useRef<Mesh>();
   const webcamRef = useRef<HTMLVideoElement>(null);
   const geometry = useRef<BufferGeometry>(null);
-  const [canvasAspectRatio, setCanvasAspectRatio] = useState(
-    window.innerWidth / window.innerHeight
-  );
+  const [[canvasWidth, canvasHeight], setCanvasSize] = useState([
+    window.innerWidth,
+    window.innerHeight,
+  ]);
   useChapter(ref, true);
 
   const webcamStream = useStore((state) => state.webcamStream);
-
-  const model = useRef<blazeface.BlazeFaceModel>();
+  const model = useAsyncMemo(
+    async () =>
+      await facemesh.load(facemesh.SupportedPackages.mediapipeFacemesh, {
+        shouldLoadIrisModel: false,
+        maxFaces: 1,
+      }),
+    [],
+    undefined
+  );
+  const { width: videoDivWidth, height: videoDivHeight } = useResizeObserver({
+    ref: ref,
+  });
 
   useEffect(() => {
     if (!webcamStream || !webcamRef.current) return;
     const video = webcamRef.current;
     video.srcObject = webcamStream;
+    video.play();
 
     const track = webcamStream.getVideoTracks()[0]!;
     video.width = track.getSettings().width!;
     video.height = track.getSettings().height!;
+  }, [webcamStream]);
 
-    setCanvasAspectRatio(video.width / video.height);
-
-    video.play();
-
-    const effect = async () => {
-      await new Promise((resolve) => {
-        video.onloadedmetadata = () => {
-          resolve(video);
-        };
-      });
-
-      model.current = await blazeface.load({
-        maxFaces: 1,
-      });
-    };
-
-    effect();
-  }, [model, webcamStream]);
-
-  useAnimationFrame(15, async () => {
+  useEffect(() => {
     if (
       !webcamStream ||
       !webcamRef.current ||
-      !model.current ||
-      !rectRef.current
+      !videoDivWidth ||
+      !videoDivHeight
     )
       return;
     const video = webcamRef.current;
+    const videoAspect = video.width / video.height;
+    const width = Math.min(videoDivWidth, videoDivHeight * videoAspect);
+    const height = Math.min(videoDivWidth / videoAspect, videoDivHeight);
+    setCanvasSize([width, height]);
+  }, [videoDivHeight, videoDivWidth, webcamStream]);
 
-    const predictions = await model.current.estimateFaces(
-      webcamRef.current,
-      false
-    );
+  useAnimationFrame(60, async () => {
+    if (!webcamStream || !webcamRef.current || !model || !rectRef.current)
+      return;
+    const video = webcamRef.current;
+
+    if (video.readyState < HTMLMediaElement.HAVE_METADATA) return;
+
+    const predictions = await model.estimateFaces({
+      input: webcamRef.current,
+      returnTensors: false,
+      flipHorizontal: false,
+      predictIrises: false,
+    });
 
     if (predictions?.length <= 0) return;
 
-    const landmarks = predictions[0]!.landmarks! as [number, number][];
-    const topLeft = predictions[0]!.topLeft! as [number, number];
-    const bottomRight = predictions[0]!.bottomRight! as [number, number];
+    const landmarks = predictions[0]!.scaledMesh as [number, number, number][];
+    const topLeft = predictions[0]!.boundingBox.topLeft as [number, number];
+    const bottomRight = predictions[0]!.boundingBox.bottomRight! as [
+      number,
+      number
+    ];
 
     const positions3d = landmarks.flatMap(([x, y], index) => [
       x / video.videoWidth,
@@ -127,10 +134,10 @@ export default function Chapter2() {
     const width = bottomRight[0] - topLeft[0];
     const height = bottomRight[1] - topLeft[1];
 
-    rectRef.current.scale.setX(width / video.videoWidth);
-    rectRef.current.scale.setY(height / video.videoHeight);
-    rectRef.current.position.setX(centerX / video.videoWidth);
-    rectRef.current.position.setY(-centerY / video.videoHeight);
+    rectRef.current?.scale.setX(width / video.videoWidth);
+    rectRef.current?.scale.setY(height / video.videoHeight);
+    rectRef.current?.position.setX(centerX / video.videoWidth);
+    rectRef.current?.position.setY(-centerY / video.videoHeight);
   });
 
   return (
@@ -148,13 +155,15 @@ export default function Chapter2() {
           height: "100%",
         }}
         ref={webcamRef}
-        // hidden
+        hidden
       ></video>
       <Canvas
         style={{
           position: "absolute",
-          width: Math.min(1 / canvasAspectRatio, 1) * 100 + "%",
-          height: "100%",
+          width: canvasWidth + "px",
+          height: canvasHeight + "px",
+          top: "50%",
+          transform: "translateY(-50%)",
         }}
         orthographic={true}
       >

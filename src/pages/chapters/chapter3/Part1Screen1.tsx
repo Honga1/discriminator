@@ -1,7 +1,7 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { Fragment, memo, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useAnimationFrame } from "./Chapter3";
+import { useAnimationFrame } from "./useAnimationFrame";
 
 export const Part1Screen1 = ({
   getByteData,

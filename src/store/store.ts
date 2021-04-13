@@ -48,7 +48,7 @@ export const store = create<State>((set, get) => {
         get().webcamStream === undefined
       ) {
         navigator.mediaDevices
-          .getUserMedia({ video: true })
+          .getUserMedia({ video: { aspectRatio: 4 / 3 } })
           .then((stream) => {
             set({ webcamStream: stream });
             stream.getTracks().forEach((track) => {

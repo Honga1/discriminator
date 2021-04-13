@@ -2,7 +2,7 @@ import { Box, Grid, ResponsiveContext } from "grommet";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated, to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
-import { useAnimationFrame } from "../Chapter3";
+import { useAnimationFrame } from "../useAnimationFrame";
 import {
   yearsInShownOrder,
   clamp,

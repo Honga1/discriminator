@@ -6,6 +6,7 @@
   "dependencies": {
     "@react-three/drei": "^4.1.6",
     "@tensorflow-models/blazeface": "^0.0.7",
+    "@tensorflow-models/face-landmarks-detection": "^0.0.3",
     "@tensorflow/tfjs-backend-webgl": "^3.3.0",
     "@tensorflow/tfjs-converter": "^3.3.0",
     "@tensorflow/tfjs-core": "^3.3.0",
