@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://honga1.github.io/discriminator",
   "dependencies": {
-    "@react-three/drei": "^4.1.6",
+    "@react-three/drei": "^4.1.8",
     "@tensorflow-models/blazeface": "^0.0.7",
     "@tensorflow-models/face-landmarks-detection": "^0.0.3",
     "@tensorflow/tfjs-backend-webgl": "^3.3.0",
