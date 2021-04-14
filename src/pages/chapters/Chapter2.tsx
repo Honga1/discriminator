@@ -1,21 +1,19 @@
-import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh";
 import "@tensorflow/tfjs-backend-webgl";
 import { Box } from "grommet";
-import React, { useEffect, useRef, useState } from "react";
-import { Canvas, useThree } from "react-three-fiber";
+import React, { PropsWithChildren, useEffect, useRef } from "react";
+import { Canvas, useFrame, useThree } from "react-three-fiber";
 import { BufferAttribute, BufferGeometry, Mesh } from "three";
-import useResizeObserver from "use-resize-observer";
 import { useChapter } from "../../hooks/useChapter";
 import { useStore } from "../../store/store";
 import videoSrc from "./../../p2.mp4";
-import { useAsyncMemo } from "./chapter2/useAsyncMemo";
+import { maskMesh, TRIANGULATION } from "./chapter2/mask";
+import { usePredictions } from "./chapter2/usePredictions";
+import { useWebcamAndCanvas } from "./chapter2/useWebcamAndCanvas";
 import { useAnimationFrame } from "./chapter3/useAnimationFrame";
 
-import { RoundedBox } from "@react-three/drei";
-
-type V3 = [number, number, number];
-type V2 = [number, number];
+export type V3 = [number, number, number];
+export type V2 = [number, number];
 
 export default function Chapter2() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -48,6 +46,7 @@ function WebcamOverlay() {
   const rectRef = useRef<Mesh>();
   const webcamRef = useRef<HTMLVideoElement>(null);
   const geometry = useRef<BufferGeometry>(null);
+  const objectRef = useRef<Mesh>();
 
   const webcamStream = useStore((state) => state.webcamStream);
 
@@ -58,8 +57,7 @@ function WebcamOverlay() {
   const predictions = usePredictions(webcamRef);
 
   useAnimationFrame(60, async () => {
-    if (!webcamRef.current || !rectRef.current) return;
-    const video = webcamRef.current;
+    if (!rectRef.current) return;
 
     if (predictions.current?.length <= 0) return;
 
@@ -67,14 +65,7 @@ function WebcamOverlay() {
     const topLeft = predictions.current[0]!.boundingBox.topLeft as V2;
     const bottomRight = predictions.current[0]!.boundingBox.bottomRight! as V2;
 
-    const positions3d = landmarks.flatMap(
-      ([x, y, z], index) =>
-        [
-          x / video.videoWidth,
-          -y / video.videoHeight,
-          z / video.videoWidth,
-        ] as V3
-    );
+    const positions3d = landmarks.flat();
 
     geometry.current?.setAttribute(
       "position",
@@ -87,10 +78,10 @@ function WebcamOverlay() {
     const width = bottomRight[0] - topLeft[0];
     const height = bottomRight[1] - topLeft[1];
 
-    rectRef.current.scale.setX(width / video.videoWidth);
-    rectRef.current.scale.setY(height / video.videoHeight);
-    rectRef.current.position.setX(centerX / video.videoWidth);
-    rectRef.current.position.setY(-centerY / video.videoHeight);
+    rectRef.current.scale.setX(width);
+    rectRef.current.scale.setY(height);
+    rectRef.current.position.setX(centerX);
+    rectRef.current.position.setY(centerY);
   });
 
   return (
@@ -117,110 +108,24 @@ function WebcamOverlay() {
         }}
         orthographic={false}
       >
-        <Dots geometry={geometry}></Dots>
-        <Rect rectRef={rectRef}></Rect>
+        <mesh ref={objectRef}>
+          <boxBufferGeometry />
+          <meshPhongMaterial color="#f3f3f3" wireframe />
+        </mesh>
+        <WorldOffset>
+          <MaskOnOwnFaceWithImage predictions={predictions} />
+          {/* <Dots geometry={geometry}></Dots> */}
+          <Rect rectRef={rectRef}></Rect>
+        </WorldOffset>
       </Canvas>
     </>
   );
 }
 
-function useWebcamAndCanvas(
-  webcamRef: React.RefObject<HTMLVideoElement>,
-  webcamStream: MediaStream | undefined
-) {
-  const { width: videoDivWidth, height: videoDivHeight } = useResizeObserver({
-    ref: webcamRef,
-  });
-
-  const [[canvasWidth, canvasHeight], setCanvasSize] = useState([
-    window.innerWidth,
-    window.innerHeight,
-  ]);
-
-  useEffect(() => {
-    if (
-      !webcamRef.current ||
-      !videoDivWidth ||
-      !videoDivHeight ||
-      !webcamStream
-    )
-      return;
-    const video = webcamRef.current;
-
-    if (video.srcObject !== webcamStream) {
-      video.srcObject = webcamStream;
-      video.play();
-    }
-
-    const track = webcamStream.getVideoTracks()[0]!;
-    video.width = track.getSettings().width!;
-    video.height = track.getSettings().height!;
-
-    const videoAspect = video.width / video.height;
-    const width = Math.min(videoDivWidth, videoDivHeight * videoAspect);
-    const height = Math.min(videoDivWidth / videoAspect, videoDivHeight);
-    setCanvasSize([width, height]);
-  }, [videoDivHeight, videoDivWidth, webcamRef, webcamStream]);
-
-  return [canvasWidth, canvasHeight];
-}
-
-function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
-  const predictions = useRef<AnnotatedPrediction[]>([]);
-  const model = useModel();
-
-  useAnimationFrame(60, async () => {
-    if (!webcamRef.current || !model) return;
-    const video = webcamRef.current;
-
-    if (video.readyState < HTMLMediaElement.HAVE_METADATA) return;
-
-    predictions.current = await model.estimateFaces({
-      input: webcamRef.current,
-      returnTensors: false,
-      flipHorizontal: false,
-      predictIrises: false,
-    });
-  });
-
-  return predictions;
-}
-
-function useModel() {
-  return useAsyncMemo(
-    async () => {
-      console.log("Loading model");
-      const model = await facemesh.load(
-        facemesh.SupportedPackages.mediapipeFacemesh,
-        {
-          shouldLoadIrisModel: false,
-          maxFaces: 1,
-        }
-      );
-
-      console.log("Loaded model");
-      return model;
-    },
-    [],
-    undefined
-  );
-}
-
-function Dots(props: { geometry: React.Ref<React.ReactNode> | undefined }) {
-  const { viewport } = useThree();
-  return (
-    <points
-      scale={[viewport.width, viewport.height, 1]}
-      position={[-viewport.width / 2, viewport.height / 2, 0]}
-      frustumCulled={false}
-    >
-      <bufferGeometry ref={props.geometry}></bufferGeometry>
-      <pointsMaterial color="#20BF00" size={0.08} />
-    </points>
-  );
-}
-
-function Rect(props: { rectRef: React.Ref<React.ReactNode> | undefined }) {
+/**
+ * Makes world scale 0-1, and position 0-1 for width and height
+ */
+const WorldOffset = ({ children }: PropsWithChildren<{}>) => {
   const { viewport } = useThree();
 
   return (
@@ -228,6 +133,55 @@ function Rect(props: { rectRef: React.Ref<React.ReactNode> | undefined }) {
       scale={[viewport.width, viewport.height, 1]}
       position={[-viewport.width / 2, viewport.height / 2, 0]}
     >
+      {children}
+    </group>
+  );
+};
+
+const MaskOnOwnFaceWithImage = (props: {
+  predictions: { current: AnnotatedPrediction[] };
+}) => {
+  const ref = useRef<Mesh>();
+  // const texture = new TextureLoader().load('');
+  // texture.encoding = sRGBEncoding;
+  // texture.flipY = false;
+
+  useFrame(() => {
+    const geometry = ref.current?.geometry;
+    if (geometry === undefined) return;
+    if (!props.predictions.current || !props.predictions.current[0]) return;
+    const mesh = props.predictions.current[0].scaledMesh as V3[];
+
+    const positions = geometry.getAttribute("position");
+    TRIANGULATION.forEach((vertexIndex, index) => {
+      const vertex = mesh[vertexIndex];
+      if (!vertex) return;
+      const [x, y, z] = vertex;
+      positions.setXYZ(index, x, y, -z);
+    });
+    positions.needsUpdate = true;
+    geometry.computeVertexNormals();
+  });
+
+  return (
+    <mesh ref={ref} geometry={maskMesh.geometry}>
+      <meshNormalMaterial toneMapped={false} />
+    </mesh>
+  );
+};
+
+function Dots(props: { geometry: React.Ref<React.ReactNode> | undefined }) {
+  return (
+    <points frustumCulled={false}>
+      <bufferGeometry ref={props.geometry}></bufferGeometry>
+      <pointsMaterial color="#20BF00" size={0.08} />
+    </points>
+  );
+}
+
+function Rect(props: { rectRef: React.Ref<React.ReactNode> | undefined }) {
+  return (
+    <group>
       <mesh ref={props.rectRef} frustumCulled={false}>
         <planeBufferGeometry />
         <meshNormalMaterial color={"red"} transparent opacity={0.1} />
