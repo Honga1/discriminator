@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useResizeObserver from "use-resize-observer";
+import { V2 } from "./V2";
 
 export function useWebcamAndCanvas(
   webcamRef: React.RefObject<HTMLVideoElement>,
@@ -39,5 +40,5 @@ export function useWebcamAndCanvas(
     setCanvasSize([width, height]);
   }, [videoDivHeight, videoDivWidth, webcamRef, webcamStream]);
 
-  return [canvasWidth, canvasHeight];
+  return [canvasWidth, canvasHeight] as V2;
 }

@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import { Media } from "../covers/MediaContainer";
 
 const Chapter1 = React.lazy(async () => import("./Chapter1"));
-const Chapter2 = React.lazy(async () => import("./Chapter2"));
+const Chapter2 = React.lazy(async () => import("./chapter2/Chapter2"));
 const Chapter3 = React.lazy(async () => import("./chapter3/Chapter3"));
 const Chapter4 = React.lazy(async () => import("./Chapter4"));
 export const Chapter = ({

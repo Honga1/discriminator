@@ -8,4 +8,8 @@ declare module "*.mp3" {
   const content: string;
   export default content;
 }
+declare module "*.gltf" {
+  const content: string;
+  export default content;
+}
 declare module "grommet/components/Stack/StyledStack";
