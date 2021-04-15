@@ -5,6 +5,7 @@ import { useModel } from "./useModel";
 import { V3 } from "./V3";
 import { V2 } from "./V2";
 import { Vector3 } from "three";
+import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
 
 export interface Predictions {
   scaledMesh: V3[];
@@ -18,13 +19,15 @@ export interface Predictions {
     left: Vector3;
     forward: Vector3;
   };
+
+  mouthOpened: number;
 }
 
 export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const predictions = useRef<Predictions[]>([]);
   const model = useModel();
 
-  useAnimationFrame(60, async () => {
+  useAnimationFrame(25, async () => {
     if (!webcamRef.current || !model) return;
     const video = webcamRef.current;
 
@@ -41,10 +44,31 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
       const scaledMesh = getScaledMesh(prediction, video);
       const boundingBox = getBoundingBox(prediction, video);
       const orthoVectors = getOrthoVectors(scaledMesh);
+
+      const topHead = scaledMesh[10]!;
+      const bottomHead = scaledMesh[152]!;
+
+      const topLip = scaledMesh[12]!;
+      const bottomLip = scaledMesh[15]!;
+
+      const headSize = new Vector3(...topHead).distanceTo(
+        new Vector3(...bottomHead)
+      );
+      const mouthGap = new Vector3(...topLip).distanceTo(
+        new Vector3(...bottomLip)
+      );
+
+      const empiricalMouthOpenAmount = clamp(
+        (mouthGap / headSize - 0.03) / 0.15,
+        0,
+        1
+      );
+
       return {
         scaledMesh,
         boundingBox,
         orthoVectors,
+        mouthOpened: empiricalMouthOpenAmount,
       };
     });
   });

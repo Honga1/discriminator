@@ -1,7 +1,7 @@
 import { useAnimations, useFBX, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
-import { LoopRepeat, Mesh, Vector3 } from "three";
+import { LoopRepeat, Mesh, MeshBasicMaterial, Vector3 } from "three";
 import { Predictions } from "../usePredictions";
 import { V3 } from "../V3";
 import vomitModel from "./vomit.gltf";
@@ -22,6 +22,10 @@ export const RainbowVomit = ({
     if (!action) return;
     action.loop = LoopRepeat;
     action.play();
+
+    if ((nodes?.Cube as Mesh | undefined)?.material) {
+      (nodes.Cube as Mesh).material = new MeshBasicMaterial({ color: "red" });
+    }
   });
 
   useFrame(() => {
@@ -38,6 +42,10 @@ export const RainbowVomit = ({
     aRObject.current.getWorldPosition(worldPosition);
     aRObject.current.up.copy(up);
     aRObject.current.lookAt(forward.clone().negate().add(worldPosition));
+
+    if (ref.current) {
+      ref.current.visible = prediction.mouthOpened > 0.5;
+    }
   });
 
   return (
