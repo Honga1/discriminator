@@ -47,20 +47,31 @@ export const store = create<State>((set, get) => {
         navigator.mediaDevices.getUserMedia &&
         get().webcamStream === undefined
       ) {
-        navigator.mediaDevices
-          .getUserMedia({ video: { aspectRatio: 4 / 3 } })
-          .then((stream) => {
-            set({ webcamStream: stream });
-            stream.getTracks().forEach((track) => {
-              track.addEventListener("ended", () => {
-                set({ webcamStream: undefined });
+        try {
+          navigator.mediaDevices
+            .getUserMedia({
+              video: {
+                aspectRatio: 4 / 3,
+                width: 320,
+                height: 240,
+              },
+            })
+            .then((stream) => {
+              set({ webcamStream: stream });
+              stream.getTracks().forEach((track) => {
+                track.addEventListener("ended", () => {
+                  set({ webcamStream: undefined });
+                });
               });
+            })
+            .catch((error) => {
+              console.log("Something went wrong accessing webcam!");
+              console.log(error);
             });
-          })
-          .catch((error) => {
-            console.log("Something went wrong accessing webcam!");
-            console.log(error);
-          });
+        } catch (error) {
+          console.log("Something went wrong accessing webcam!");
+          console.log(error);
+        }
       }
     },
   };
