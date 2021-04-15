@@ -8,6 +8,8 @@ import { useAsyncMemo } from "./useAsyncMemo";
 import { V2 } from "./V2";
 import { V3 } from "./V3";
 
+import * as Fili from "fili";
+
 export interface Predictions {
   scaledMesh: V3[];
   boundingBox: {
@@ -24,29 +26,24 @@ export interface Predictions {
   mouthOpened: number;
 }
 
+const iirCalculator = new Fili.CalcCascades();
+const iirFilterCoeffs = iirCalculator.lowpass({
+  order: 3, // cascade 3 biquad filters (max: 12)
+  characteristic: "butterworth",
+  Fs: 30, // sampling frequency
+  Fc: 10, // cutoff frequency / center frequency for bandpass, bandstop, peak
+  BW: 1, // bandwidth only for bandstop and bandpass filters - optional
+  gain: 0, // gain for peak, lowshelf and highshelf
+  preGain: false, // adds one constant multiplication for highpass and lowpass
+  // k = (1 + cos(omega)) * 0.5 / k = 1 with preGain == false
+});
+
 export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const predictions = useRef<Predictions[]>([]);
   const model = useModel();
-  const velocities = useRef<Vector3[][]>([]);
+  const filters = useRef<any[][]>([]);
 
-  useAnimationFrame(60, (deltaTime) => {
-    predictions.current = predictions.current.map(
-      (prediction, predictionIndex) => {
-        return {
-          ...prediction,
-          scaledMesh: prediction.scaledMesh.map(([x, y, z], meshIndex) => {
-            const v =
-              velocities.current[predictionIndex]?.[meshIndex] ?? new Vector3();
-            v.multiplyScalar(0.4);
-            const delta = v.clone().multiplyScalar(deltaTime);
-            return [x + delta.x, y + delta.y, z + delta.z];
-          }),
-        };
-      }
-    );
-  });
-
-  useAnimationFrame(60, async (deltaTime) => {
+  useAnimationFrame(30, async (deltaTime) => {
     if (!webcamRef.current || !model) return;
     const video = webcamRef.current;
 
@@ -61,51 +58,37 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
 
     predictions.current = pixelScalePredictions.map(
       (prediction, predictionIndex) => {
-        const scaledMesh = getScaledMesh(prediction, video);
-        const boundingBox = getBoundingBox(prediction, video);
-        const orthoVectors = getOrthoVectors(scaledMesh);
+        const scaledMesh = getScaledMesh(prediction, video).map(
+          ([x, y, z], meshIndex) => {
+            const vertexFilters = filters.current[predictionIndex]?.[
+              meshIndex
+            ] ?? [
+              new Fili.IirFilter(iirFilterCoeffs),
+              new Fili.IirFilter(iirFilterCoeffs),
+              new Fili.IirFilter(iirFilterCoeffs),
+            ];
 
-        const topHead = scaledMesh[10]!;
-        const bottomHead = scaledMesh[152]!;
+            filters.current[predictionIndex] =
+              filters.current[predictionIndex] ?? [];
 
-        const topLip = scaledMesh[12]!;
-        const bottomLip = scaledMesh[15]!;
+            filters.current[predictionIndex]![meshIndex] = vertexFilters;
 
-        const headSize = new Vector3(...topHead).distanceTo(
-          new Vector3(...bottomHead)
-        );
-        const mouthGap = new Vector3(...topLip).distanceTo(
-          new Vector3(...bottomLip)
-        );
-
-        const empiricalMouthOpenAmount = clamp(
-          (mouthGap / headSize - 0.03) / 0.15,
-          0,
-          1
-        );
-
-        velocities.current[predictionIndex] = scaledMesh.map(
-          (current, meshIndex) => {
-            const previous =
-              predictions.current[predictionIndex]?.scaledMesh[meshIndex];
-
-            if (previous && deltaTime > 0) {
-              const currentVec = new Vector3(...current);
-              const previousVec = new Vector3(...previous);
-              return new Vector3()
-                .subVectors(currentVec, previousVec)
-                .divideScalar(deltaTime);
-            } else {
-              return new Vector3();
-            }
+            return [
+              vertexFilters[0].singleStep(x),
+              vertexFilters[1].singleStep(y),
+              vertexFilters[2].singleStep(z),
+            ] as V3;
           }
         );
+        const boundingBox = getBoundingBox(prediction, video);
+        const orthoVectors = getOrthoVectors(scaledMesh);
+        const mouthOpened = getMouthPosition(scaledMesh);
 
         return {
           scaledMesh,
           boundingBox,
           orthoVectors,
-          mouthOpened: empiricalMouthOpenAmount,
+          mouthOpened,
         };
       }
     );
@@ -113,6 +96,26 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
 
   return predictions;
 }
+function getMouthPosition(scaledMesh: V3[]) {
+  const topHead = scaledMesh[10]!;
+  const bottomHead = scaledMesh[152]!;
+
+  const topLip = scaledMesh[12]!;
+  const bottomLip = scaledMesh[15]!;
+
+  const headSize = new Vector3(...topHead).distanceTo(
+    new Vector3(...bottomHead)
+  );
+  const mouthGap = new Vector3(...topLip).distanceTo(new Vector3(...bottomLip));
+
+  const empiricalMouthOpenAmount = clamp(
+    (mouthGap / headSize - 0.03) / 0.15,
+    0,
+    1
+  );
+  return empiricalMouthOpenAmount;
+}
+
 function getScaledMesh(
   prediction: AnnotatedPrediction,
   video: HTMLVideoElement

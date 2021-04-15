@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Predictions } from "../usePredictions";
 import { BoundingRectangle } from "./BoundingRectangle";
 import { Dots } from "./Dots";
+import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { SceneContext } from "./SceneContext";
 import { WorldOffset } from "./WorldOffset";
@@ -30,9 +31,9 @@ export const Scene = ({
     <SceneContext.Provider value={{ facemesh: predictions }}>
       <WorldOffset>
         {/* <Gizmo  gizmoHome={4} /> */}
-        <Dots />
-        <BoundingRectangle />
-        {/* <Mask ></Mask> */}
+        {/* <Dots /> */}
+        {/* <BoundingRectangle /> */}
+        <Mask></Mask>
         {/* <ARObject  /> */}
 
         <Suspense fallback={null}>

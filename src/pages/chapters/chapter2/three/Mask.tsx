@@ -1,16 +1,13 @@
-import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import React, { useContext, useRef } from "react";
 import { Mesh } from "three";
-import { maskMesh, TRIANGULATION } from "./mask";
-import { Predictions } from "../usePredictions";
 import { V3 } from "../V3";
+import { maskMesh, TRIANGULATION } from "./mask";
+import { SceneContext } from "./SceneContext";
 
-export const Mask = ({
-  predictions,
-}: {
-  predictions: { current: Predictions[] };
-}) => {
+export const Mask = () => {
   const mask = useRef<Mesh>();
+  const predictions = useContext(SceneContext).facemesh;
 
   useFrame(() => {
     const geometry = mask.current?.geometry;
@@ -25,7 +22,7 @@ export const Mask = ({
       const vertex = mesh[vertexIndex];
       if (!vertex) return;
       const [x, y, z] = vertex;
-      positions.setXYZ(index, x, y, -z);
+      positions.setXYZ(index, x, y, z);
     });
 
     positions.needsUpdate = true;
@@ -34,7 +31,7 @@ export const Mask = ({
 
   return (
     <mesh ref={mask} geometry={maskMesh.geometry}>
-      <meshNormalMaterial toneMapped={false} transparent opacity={0.4} />
+      <meshNormalMaterial toneMapped={false} transparent opacity={1} />
     </mesh>
   );
 };
