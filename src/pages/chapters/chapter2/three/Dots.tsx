@@ -1,15 +1,12 @@
-import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import React, { useContext, useRef } from "react";
 import { BufferAttribute, BufferGeometry } from "three";
-import { Predictions } from "../usePredictions";
 import { V3 } from "../V3";
+import { SceneContext } from "./SceneContext";
 
-export function Dots({
-  predictions,
-}: {
-  predictions: { current: Predictions[] };
-}) {
+export function Dots() {
   const ref = useRef<BufferGeometry>();
+  const predictions = useContext(SceneContext).facemesh;
   useFrame(() => {
     if (predictions.current.length <= 0) return;
     const landmarks = predictions.current[0]!.scaledMesh as V3[];

@@ -45,6 +45,7 @@ function WebcamOverlay() {
     webcamRef,
     webcamStream
   );
+
   const predictions = usePredictions(webcamRef);
 
   return (

@@ -1,15 +1,13 @@
-import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import React, { useContext, useRef } from "react";
 import { Mesh } from "three";
-import { Predictions } from "../usePredictions";
 import { V2 } from "../V2";
+import { SceneContext } from "./SceneContext";
 
-export function BoundingRectangle({
-  predictions,
-}: {
-  predictions: { current: Predictions[] };
-}) {
+export function BoundingRectangle() {
   const ref = useRef<Mesh>();
+
+  const predictions = useContext(SceneContext).facemesh;
 
   useFrame(() => {
     if (predictions.current.length <= 0) return;
@@ -33,7 +31,7 @@ export function BoundingRectangle({
   return (
     <mesh ref={ref} frustumCulled={false}>
       <planeBufferGeometry />
-      <meshNormalMaterial color={"red"} transparent opacity={0.1} />
+      <meshBasicMaterial color={"red"} transparent opacity={0.2} />
     </mesh>
   );
 }

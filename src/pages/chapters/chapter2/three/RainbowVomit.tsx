@@ -1,17 +1,15 @@
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { LoopRepeat, Mesh, MeshBasicMaterial, Vector3 } from "three";
-import { Predictions } from "../usePredictions";
 import { V3 } from "../V3";
+import { SceneContext } from "./SceneContext";
 import vomitModel from "./vomit.gltf";
 
-export const RainbowVomit = ({
-  predictions,
-}: {
-  predictions: { current: Predictions[] };
-}) => {
+export const RainbowVomit = () => {
   const aRObject = useRef<Mesh>();
+
+  const predictions = useContext(SceneContext).facemesh;
 
   const { nodes, materials, animations } = useGLTF(vomitModel);
 

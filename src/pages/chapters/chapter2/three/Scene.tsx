@@ -1,12 +1,25 @@
-import React, { Suspense } from "react";
-import { ARObject } from "./ARObject";
+import { Suspense } from "react";
+import { Predictions } from "../usePredictions";
 import { BoundingRectangle } from "./BoundingRectangle";
 import { Dots } from "./Dots";
-import { Gizmo } from "./Gizmo";
-import { Mask } from "./Mask";
-import { Predictions } from "../usePredictions";
-import { WorldOffset } from "./WorldOffset";
 import { RainbowVomit } from "./RainbowVomit";
+import { SceneContext } from "./SceneContext";
+import { WorldOffset } from "./WorldOffset";
+
+(function () {
+  var script = document.createElement("script");
+  script.onload = function () {
+    // @ts-ignore
+    var stats = new Stats();
+    document.body.appendChild(stats.dom);
+    requestAnimationFrame(function loop() {
+      stats.update();
+      requestAnimationFrame(loop);
+    });
+  };
+  script.src = "//cdn.jsdelivr.net/gh/Kevnz/stats.js/build/stats.min.js";
+  document.head.appendChild(script);
+})();
 
 export const Scene = ({
   predictions,
@@ -14,16 +27,18 @@ export const Scene = ({
   predictions: { current: Predictions[] };
 }) => {
   return (
-    <WorldOffset>
-      {/* <Gizmo predictions={predictions} gizmoHome={4} /> */}
-      <Dots predictions={predictions}></Dots>
-      <BoundingRectangle predictions={predictions}></BoundingRectangle>
-      {/* <Mask predictions={predictions}></Mask> */}
-      {/* <ARObject predictions={predictions} /> */}
+    <SceneContext.Provider value={{ facemesh: predictions }}>
+      <WorldOffset>
+        {/* <Gizmo  gizmoHome={4} /> */}
+        <Dots />
+        <BoundingRectangle />
+        {/* <Mask ></Mask> */}
+        {/* <ARObject  /> */}
 
-      <Suspense fallback={null}>
-        <RainbowVomit predictions={predictions}></RainbowVomit>
-      </Suspense>
-    </WorldOffset>
+        <Suspense fallback={null}>
+          <RainbowVomit />
+        </Suspense>
+      </WorldOffset>
+    </SceneContext.Provider>
   );
 };

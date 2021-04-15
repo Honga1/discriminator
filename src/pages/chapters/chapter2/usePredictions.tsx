@@ -1,9 +1,10 @@
+import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh";
 import React, { useRef } from "react";
 import { Vector3 } from "three";
 import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
 import { useAnimationFrame } from "../chapter3/useAnimationFrame";
-import { useModel } from "./useModel";
+import { useAsyncMemo } from "./useAsyncMemo";
 import { V2 } from "./V2";
 import { V3 } from "./V3";
 
@@ -26,8 +27,26 @@ export interface Predictions {
 export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const predictions = useRef<Predictions[]>([]);
   const model = useModel();
+  const velocities = useRef<Vector3[][]>([]);
 
-  useAnimationFrame(25, async () => {
+  useAnimationFrame(60, (deltaTime) => {
+    predictions.current = predictions.current.map(
+      (prediction, predictionIndex) => {
+        return {
+          ...prediction,
+          scaledMesh: prediction.scaledMesh.map(([x, y, z], meshIndex) => {
+            const v =
+              velocities.current[predictionIndex]?.[meshIndex] ?? new Vector3();
+            v.multiplyScalar(0.4);
+            const delta = v.clone().multiplyScalar(deltaTime);
+            return [x + delta.x, y + delta.y, z + delta.z];
+          }),
+        };
+      }
+    );
+  });
+
+  useAnimationFrame(60, async (deltaTime) => {
     if (!webcamRef.current || !model) return;
     const video = webcamRef.current;
 
@@ -40,37 +59,56 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
       predictIrises: false,
     });
 
-    predictions.current = pixelScalePredictions.map((prediction) => {
-      const scaledMesh = getScaledMesh(prediction, video);
-      const boundingBox = getBoundingBox(prediction, video);
-      const orthoVectors = getOrthoVectors(scaledMesh);
+    predictions.current = pixelScalePredictions.map(
+      (prediction, predictionIndex) => {
+        const scaledMesh = getScaledMesh(prediction, video);
+        const boundingBox = getBoundingBox(prediction, video);
+        const orthoVectors = getOrthoVectors(scaledMesh);
 
-      const topHead = scaledMesh[10]!;
-      const bottomHead = scaledMesh[152]!;
+        const topHead = scaledMesh[10]!;
+        const bottomHead = scaledMesh[152]!;
 
-      const topLip = scaledMesh[12]!;
-      const bottomLip = scaledMesh[15]!;
+        const topLip = scaledMesh[12]!;
+        const bottomLip = scaledMesh[15]!;
 
-      const headSize = new Vector3(...topHead).distanceTo(
-        new Vector3(...bottomHead)
-      );
-      const mouthGap = new Vector3(...topLip).distanceTo(
-        new Vector3(...bottomLip)
-      );
+        const headSize = new Vector3(...topHead).distanceTo(
+          new Vector3(...bottomHead)
+        );
+        const mouthGap = new Vector3(...topLip).distanceTo(
+          new Vector3(...bottomLip)
+        );
 
-      const empiricalMouthOpenAmount = clamp(
-        (mouthGap / headSize - 0.03) / 0.15,
-        0,
-        1
-      );
+        const empiricalMouthOpenAmount = clamp(
+          (mouthGap / headSize - 0.03) / 0.15,
+          0,
+          1
+        );
 
-      return {
-        scaledMesh,
-        boundingBox,
-        orthoVectors,
-        mouthOpened: empiricalMouthOpenAmount,
-      };
-    });
+        velocities.current[predictionIndex] = scaledMesh.map(
+          (current, meshIndex) => {
+            const previous =
+              predictions.current[predictionIndex]?.scaledMesh[meshIndex];
+
+            if (previous && deltaTime > 0) {
+              const currentVec = new Vector3(...current);
+              const previousVec = new Vector3(...previous);
+              return new Vector3()
+                .subVectors(currentVec, previousVec)
+                .divideScalar(deltaTime);
+            } else {
+              return new Vector3();
+            }
+          }
+        );
+
+        return {
+          scaledMesh,
+          boundingBox,
+          orthoVectors,
+          mouthOpened: empiricalMouthOpenAmount,
+        };
+      }
+    );
   });
 
   return predictions;
@@ -83,7 +121,7 @@ function getScaledMesh(
     return [
       x / video.videoWidth,
       -y / video.videoHeight,
-      z / video.videoWidth,
+      -z / video.videoWidth,
     ] as V3;
   });
 }
@@ -115,7 +153,7 @@ function getOrthoVectors(mesh: V3[]) {
 }
 
 function getUpVector(mesh: V3[]) {
-  return new Vector3(...mesh[9]!).sub(new Vector3(...mesh[199]!)).normalize();
+  return new Vector3(...mesh[199]!).sub(new Vector3(...mesh[9]!)).normalize();
 }
 
 function getLeftVector(mesh: V3[]) {
@@ -131,9 +169,9 @@ function getLeftVector(mesh: V3[]) {
 }
 
 function getForwardVector(mesh: V3[]) {
-  const a = new Vector3(mesh[151]![0]!, mesh[151]![1]!, -mesh[151]![2]!);
-  const b = new Vector3(mesh[285]![0]!, mesh[285]![1]!, -mesh[285]![2]!);
-  const c = new Vector3(mesh[55]![0]!, mesh[55]![1]!, -mesh[55]![2]!);
+  const a = new Vector3(mesh[151]![0]!, mesh[151]![1]!, mesh[151]![2]!);
+  const b = new Vector3(mesh[285]![0]!, mesh[285]![1]!, mesh[285]![2]!);
+  const c = new Vector3(mesh[55]![0]!, mesh[55]![1]!, mesh[55]![2]!);
 
   const side1 = new Vector3().subVectors(a, b);
   const side2 = new Vector3().subVectors(a, c);
@@ -141,4 +179,24 @@ function getForwardVector(mesh: V3[]) {
     .crossVectors(side2, side1)
     .normalize();
   return facingOutFromHead;
+}
+
+export function useModel() {
+  return useAsyncMemo(
+    async () => {
+      console.log("Loading model");
+      const model = await facemesh.load(
+        facemesh.SupportedPackages.mediapipeFacemesh,
+        {
+          shouldLoadIrisModel: false,
+          maxFaces: 1,
+        }
+      );
+
+      console.log("Loaded model");
+      return model;
+    },
+    [],
+    undefined
+  );
 }
