@@ -1,4 +1,4 @@
-import { useAnimations, useFBX, useGLTF } from "@react-three/drei";
+import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useRef } from "react";
 import { LoopRepeat, Mesh, MeshBasicMaterial, Vector3 } from "three";
@@ -45,6 +45,15 @@ export const RainbowVomit = ({
 
     if (ref.current) {
       ref.current.visible = prediction.mouthOpened > 0.5;
+      const action = actions.Action;
+      if (!action) return;
+      action.loop = LoopRepeat;
+      if (prediction.mouthOpened > 0.5) {
+        action.play();
+      } else {
+        action.stop();
+        action.reset();
+      }
     }
   });
 

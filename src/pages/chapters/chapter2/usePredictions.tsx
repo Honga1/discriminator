@@ -1,11 +1,11 @@
 import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh";
 import React, { useRef } from "react";
-import { useAnimationFrame } from "../chapter3/useAnimationFrame";
-import { useModel } from "./useModel";
-import { V3 } from "./V3";
-import { V2 } from "./V2";
 import { Vector3 } from "three";
 import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
+import { useAnimationFrame } from "../chapter3/useAnimationFrame";
+import { useModel } from "./useModel";
+import { V2 } from "./V2";
+import { V3 } from "./V3";
 
 export interface Predictions {
   scaledMesh: V3[];
