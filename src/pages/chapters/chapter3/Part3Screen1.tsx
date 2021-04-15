@@ -16,7 +16,7 @@ import {
   yearsInShownOrder,
 } from "./Part1Screen2/yearsInShownOrder";
 
-export interface Part3Screen1Props {
+interface Part3Screen1Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
 }
 

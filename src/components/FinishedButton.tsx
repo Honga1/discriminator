@@ -76,7 +76,7 @@ export const FinishedButton = (props: {
   );
 };
 
-export const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
+const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
   transition: right 1s linear;
   position: absolute;
   top: 0;
@@ -86,7 +86,7 @@ export const AnimatedBackground = styled(Box)<{ styledWidth: number }>`
   z-index: -1;
 `;
 
-export const AnimateWidthAndHover = styled(Box)<{
+const AnimateWidthAndHover = styled(Box)<{
   currentWidth: string;
   fullWidth: string;
 }>`
