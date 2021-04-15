@@ -2,34 +2,30 @@ import { useCallback, useEffect, useRef } from "react";
 
 export const useAnimationFrame = (
   frameRate: number,
-  callback: (deltaTime: number) => Promise<void> | void
-): void => {
+  callback: (deltaTime: number) => void | Promise<void>
+) => {
   const requestRef = useRef<number>();
-  const timeoutRef = useRef<number>();
-  const previousTimeRef = useRef<number>(Date.now());
-  const frameInterval = 1000 / frameRate;
+  const previousTimeRef = useRef<number>();
 
   const animate = useCallback(
     async (time: number) => {
+      if (previousTimeRef.current === undefined) {
+        previousTimeRef.current = time;
+      }
       const deltaTime = time - previousTimeRef.current;
-      await new Promise((resolve) => resolve(callback(deltaTime)));
-
-      previousTimeRef.current = time;
-
-      timeoutRef.current = (setTimeout(() => {
-        requestRef.current = requestAnimationFrame(animate);
-      }, frameInterval) as unknown) as number;
+      if (deltaTime > 1000 / frameRate) {
+        await callback(deltaTime);
+        previousTimeRef.current = time;
+      }
+      requestRef.current = requestAnimationFrame(animate);
     },
-    [callback, frameInterval]
+    [callback, frameRate]
   );
 
   useEffect(() => {
-    timeoutRef.current = (setTimeout(() => {
-      requestRef.current = requestAnimationFrame(animate);
-    }, frameInterval) as unknown) as number;
+    requestRef.current = requestAnimationFrame(animate);
     return () => {
       requestRef.current && cancelAnimationFrame(requestRef.current);
-      timeoutRef.current && clearTimeout(timeoutRef.current);
     };
-  }, [animate, frameInterval]);
+  }, [animate]); // Make sure the effect runs only once
 };
