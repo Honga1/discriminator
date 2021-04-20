@@ -1,27 +1,78 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useContext, useRef } from "react";
-import { Mesh, ShaderMaterial, sRGBEncoding, VideoTexture } from "three";
+import React, { useContext, useEffect, useRef } from "react";
+import {
+  BufferGeometry,
+  IUniform,
+  Mesh,
+  ShaderMaterial,
+  sRGBEncoding,
+  VideoTexture,
+} from "three";
 import maskSrc from "../mask.mp4";
+import alphaSrc from "../alpha.mp4";
 import { V3 } from "../V3";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 import { SceneContext } from "./SceneContext";
 
-const video = document.createElement("video");
-video.src = maskSrc;
-video.muted = true;
-video.loop = true;
-video.play();
-const texture = new VideoTexture(video);
-texture.encoding = sRGBEncoding;
+interface MaskMaterial extends ShaderMaterial {
+  uniforms: {
+    map: IUniform<VideoTexture | undefined>;
+    alphaMap: IUniform<VideoTexture | undefined>;
+  };
+}
 
 export const Mask = () => {
-  const mask = useRef<Mesh>();
+  const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
   const predictions = useContext(SceneContext).facemesh;
 
-  console.log(mask.current?.geometry.getAttribute("uv").array.length! / 2);
-  console.log(UV_COORDS.length);
-  console.log(TRIANGULATION.length);
-  console.log(Math.max(...TRIANGULATION));
+  useEffect(() => {
+    const maskMesh = mask.current;
+    if (!maskMesh) return;
+    const mapVideo = document.createElement("video");
+    mapVideo.src = maskSrc;
+    mapVideo.muted = true;
+
+    const alphaMapVideo = document.createElement("video");
+    alphaMapVideo.src = alphaSrc;
+    alphaMapVideo.muted = true;
+
+    const map = new VideoTexture(mapVideo);
+    const alphaMap = new VideoTexture(alphaMapVideo);
+
+    map.encoding = sRGBEncoding;
+    alphaMap.encoding = sRGBEncoding;
+
+    mapVideo.play();
+    alphaMapVideo.play();
+
+    maskMesh.material.uniforms.map.value = map;
+    maskMesh.material.uniforms.alphaMap.value = alphaMap;
+
+    const geometry = maskMesh.geometry;
+
+    if (geometry === undefined) return;
+
+    const uvs = geometry.getAttribute("uv");
+    TRIANGULATION.forEach((vertexIndex, index) => {
+      const uv = UV_COORDS[vertexIndex];
+      if (!uv) return;
+      const [u, v] = uv;
+      uvs.setXY(index, u, v);
+    });
+    uvs.needsUpdate = true;
+
+    return () => {
+      if (maskMesh) {
+        maskMesh.material.uniforms.map.value = undefined;
+        maskMesh.material.uniforms.alphaMap.value = undefined;
+      }
+      mapVideo.remove();
+      alphaMapVideo.remove();
+      map.dispose();
+      alphaMap.dispose();
+    };
+  }, []);
+
   useFrame(() => {
     const geometry = mask.current?.geometry;
 
@@ -29,7 +80,7 @@ export const Mask = () => {
     if (geometry === undefined) return;
     if (!prediction) return;
 
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.mesh as V3[];
     const positions = geometry.getAttribute("position");
     const uvs = geometry.getAttribute("uv");
     TRIANGULATION.forEach((vertexIndex, index) => {
@@ -42,12 +93,8 @@ export const Mask = () => {
       positions.setXYZ(index, x, y, z);
       uvs.setXY(index, u, v);
     });
-    // texture.needsUpdate = true;
     uvs.needsUpdate = true;
     positions.needsUpdate = true;
-    // geometry.computeVertexNormals();
-    // (mask.current!
-    // .material as ShaderMaterial).uniforms!.map!.value.needsUpdate = true;
   });
 
   return (
@@ -56,7 +103,7 @@ export const Mask = () => {
         fragmentShader={frag}
         vertexShader={vert}
         transparent
-        uniforms={{ map: { value: texture } }}
+        uniforms={{ map: { value: undefined }, alphaMap: { value: undefined } }}
       />
     </mesh>
   );
@@ -82,11 +129,12 @@ void main() {
 const frag = /* glsl */ `
 varying vec2 vUv;
 uniform sampler2D map;
-const vec3 alphaColor = vec3(0.898, 0.898, 0.898);
+uniform sampler2D alphaMap;
 
 void main() {
-	vec4 texelColor = texture2D( map, vUv );
-  if ( distance(alphaColor, texelColor.rgb) < 0.05 ) discard;
-  gl_FragColor = texelColor;
+  vec2 invertedUv = vec2(vUv.x, 1.0 - vUv.y);
+	vec4 texelColor = texture2D( map, invertedUv );
+  vec4 alphaColor = texture2D( alphaMap, invertedUv);
+  gl_FragColor = vec4(texelColor.rgb, alphaColor.r);
 }
 `;

@@ -12,6 +12,7 @@ import * as Fili from "fili";
 
 export interface Predictions {
   scaledMesh: V3[];
+  mesh: V3[];
   boundingBox: {
     topLeft: V2;
     bottomRight: V2;
@@ -31,7 +32,7 @@ const iirFilterCoeffs = iirCalculator.lowpass({
   order: 3, // cascade 3 biquad filters (max: 12)
   characteristic: "butterworth",
   Fs: 30, // sampling frequency
-  Fc: 10, // cutoff frequency / center frequency for bandpass, bandstop, peak
+  Fc: 8, // cutoff frequency / center frequency for bandpass, bandstop, peak
   BW: 1, // bandwidth only for bandstop and bandpass filters - optional
   gain: 0, // gain for peak, lowshelf and highshelf
   preGain: false, // adds one constant multiplication for highpass and lowpass
@@ -58,28 +59,27 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
 
     predictions.current = pixelScalePredictions.map(
       (prediction, predictionIndex) => {
-        const scaledMesh = getScaledMesh(prediction, video).map(
-          ([x, y, z], meshIndex) => {
-            const vertexFilters = filters.current[predictionIndex]?.[
-              meshIndex
-            ] ?? [
-              new Fili.IirFilter(iirFilterCoeffs),
-              new Fili.IirFilter(iirFilterCoeffs),
-              new Fili.IirFilter(iirFilterCoeffs),
-            ];
+        const scaledMesh = getScaledMesh(prediction, video);
+        const mesh = getMesh(prediction, video).map(([x, y, z], meshIndex) => {
+          const vertexFilters = filters.current[predictionIndex]?.[
+            meshIndex
+          ] ?? [
+            new Fili.IirFilter(iirFilterCoeffs),
+            new Fili.IirFilter(iirFilterCoeffs),
+            new Fili.IirFilter(iirFilterCoeffs),
+          ];
 
-            filters.current[predictionIndex] =
-              filters.current[predictionIndex] ?? [];
+          filters.current[predictionIndex] =
+            filters.current[predictionIndex] ?? [];
 
-            filters.current[predictionIndex]![meshIndex] = vertexFilters;
+          filters.current[predictionIndex]![meshIndex] = vertexFilters;
 
-            return [
-              vertexFilters[0].singleStep(x),
-              vertexFilters[1].singleStep(y),
-              vertexFilters[2].singleStep(z),
-            ] as V3;
-          }
-        );
+          return [
+            vertexFilters[0].singleStep(x),
+            vertexFilters[1].singleStep(y),
+            vertexFilters[2].singleStep(z),
+          ] as V3;
+        });
         const boundingBox = getBoundingBox(prediction, video);
         const orthoVectors = getOrthoVectors(scaledMesh);
         const mouthOpened = getMouthPosition(scaledMesh);
@@ -89,6 +89,7 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
           boundingBox,
           orthoVectors,
           mouthOpened,
+          mesh,
         };
       }
     );
@@ -127,6 +128,20 @@ function getScaledMesh(
       -z / video.videoWidth,
     ] as V3;
   });
+}
+
+function getMesh(prediction: AnnotatedPrediction, video: HTMLVideoElement) {
+  const aspect = video.videoWidth / video.videoHeight;
+  if (video.videoHeight > video.videoWidth) {
+    return (prediction.mesh as V3[]).map(([x, y, z]) => {
+      return [x / 192, (-y / 192) * aspect, -z / 192] as V3;
+    });
+  } else {
+    return (prediction.mesh as V3[]).map(([x, y, z]) => {
+      const correctedX = (x - 192 / 2) / 192 / aspect + 0.5;
+      return [correctedX, -y / 192, -z / 192] as V3;
+    });
+  }
 }
 
 function getBoundingBox(

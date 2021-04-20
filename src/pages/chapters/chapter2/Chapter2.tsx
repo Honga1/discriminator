@@ -1,7 +1,7 @@
+import { Canvas } from "@react-three/fiber";
 import "@tensorflow/tfjs-backend-webgl";
 import { Box } from "grommet";
 import React, { useRef } from "react";
-import { Canvas } from "@react-three/fiber";
 import { useChapter } from "../../../hooks/useChapter";
 import { useStore } from "../../../store/store";
 import videoSrc from "./../../../p2.mp4";
@@ -58,6 +58,7 @@ function WebcamOverlay() {
           outline: "none",
           width: "100%",
           height: "100%",
+          opacity: 0.0,
         }}
         ref={webcamRef}
         // hidden
