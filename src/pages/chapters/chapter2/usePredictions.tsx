@@ -32,7 +32,7 @@ const iirFilterCoeffs = iirCalculator.lowpass({
   order: 3, // cascade 3 biquad filters (max: 12)
   characteristic: "butterworth",
   Fs: 30, // sampling frequency
-  Fc: 8, // cutoff frequency / center frequency for bandpass, bandstop, peak
+  Fc: 6, // cutoff frequency / center frequency for bandpass, bandstop, peak
   BW: 1, // bandwidth only for bandstop and bandpass filters - optional
   gain: 0, // gain for peak, lowshelf and highshelf
   preGain: false, // adds one constant multiplication for highpass and lowpass
@@ -81,8 +81,8 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
           ] as V3;
         });
         const boundingBox = getBoundingBox(prediction, video);
-        const orthoVectors = getOrthoVectors(scaledMesh);
-        const mouthOpened = getMouthPosition(scaledMesh);
+        const orthoVectors = getOrthoVectors(mesh);
+        const mouthOpened = getMouthPosition(mesh);
 
         return {
           scaledMesh,

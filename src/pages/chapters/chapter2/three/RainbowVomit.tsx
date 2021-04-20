@@ -31,7 +31,7 @@ export const RainbowVomit = () => {
     if (!prediction) return;
     if (!aRObject.current) return;
 
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.mesh as V3[];
     const { up, forward } = prediction.orthoVectors;
 
     aRObject.current.position.set(...mesh[13]!).add(new Vector3(0, 0, 0));
