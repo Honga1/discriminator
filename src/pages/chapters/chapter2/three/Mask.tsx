@@ -21,7 +21,7 @@ interface MaskMaterial extends ShaderMaterial {
   };
 }
 
-export const Mask = () => {
+export const Mask = ({ track }: { track: "center" | "webcam" }) => {
   const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
   const predictions = useContext(SceneContext).facemesh;
 
@@ -80,7 +80,14 @@ export const Mask = () => {
     if (geometry === undefined) return;
     if (!prediction) return;
 
-    const mesh = prediction.mesh as V3[];
+    let mesh: V3[];
+
+    if (track === "center") {
+      mesh = prediction.mesh as V3[];
+    } else {
+      mesh = prediction.scaledMesh as V3[];
+    }
+
     const positions = geometry.getAttribute("position");
     const uvs = geometry.getAttribute("uv");
     TRIANGULATION.forEach((vertexIndex, index) => {

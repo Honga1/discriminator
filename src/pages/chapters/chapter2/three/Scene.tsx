@@ -29,12 +29,12 @@ export const Scene = ({
 }) => {
   return (
     <SceneContext.Provider value={{ facemesh: predictions }}>
-      <Background></Background>
+      {/* <Background></Background> */}
       <WorldOffset>
         {/* <Gizmo  gizmoHome={4} /> */}
         {/* <Dots /> */}
         {/* <BoundingRectangle /> */}
-        <Mask></Mask>
+        <Mask track="webcam"></Mask>
         {/* <ARObject  /> */}
 
         <Suspense fallback={null}>
