@@ -14,51 +14,34 @@ export default function Chapter2() {
 
   useChapter(ref, true);
 
-  return (
-    <Box
-      style={{ position: "relative", width: "100%", height: "100%" }}
-      align="center"
-    >
-      <WebcamOverlay />
-      <video
-        ref={ref}
-        style={{
-          boxSizing: "border-box",
-          outline: "none",
-          width: "100%",
-          height: "100%",
-        }}
-        width="100%"
-        height="100%"
-        src={videoSrc}
-      ></video>
-    </Box>
-  );
-}
-
-function WebcamOverlay() {
   const webcamRef = useRef<HTMLVideoElement>(null);
 
   const webcamStream = useStore((state) => state.webcamStream);
 
   const [canvasWidth, canvasHeight] = useWebcamAndCanvas(
     webcamRef,
+    ref,
     webcamStream
   );
 
   const predictions = usePredictions(webcamRef);
 
   return (
-    <>
+    <Box
+      style={{ position: "relative", width: "100%", height: "100%" }}
+      align="center"
+      overflow="hidden"
+    >
       <video
         style={{
           position: "absolute",
-          top: 0,
           boxSizing: "border-box",
           outline: "none",
-          width: "100%",
-          height: "100%",
-          opacity: 0.0,
+          width: canvasWidth + "px",
+          height: canvasHeight + "px",
+          opacity: 0.5,
+          top: "50%",
+          transform: "translateY(-50%)",
         }}
         ref={webcamRef}
         // hidden
@@ -75,6 +58,18 @@ function WebcamOverlay() {
       >
         <Scene predictions={predictions}></Scene>
       </Canvas>
-    </>
+      <video
+        ref={ref}
+        style={{
+          boxSizing: "border-box",
+          outline: "none",
+          width: "100%",
+          height: "100%",
+        }}
+        width="100%"
+        height="100%"
+        src={videoSrc}
+      ></video>
+    </Box>
   );
 }

@@ -1,14 +1,13 @@
 import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh";
-import React, { useRef } from "react";
+import * as Fili from "fili";
+import React, { useCallback, useRef } from "react";
 import { Vector3 } from "three";
 import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
 import { useAnimationFrame } from "../chapter3/useAnimationFrame";
 import { useAsyncMemo } from "./useAsyncMemo";
 import { V2 } from "./V2";
 import { V3 } from "./V3";
-
-import * as Fili from "fili";
 
 export interface Predictions {
   scaledMesh: V3[];
@@ -44,7 +43,7 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const model = useModel();
   const filters = useRef<any[][]>([]);
 
-  useAnimationFrame(30, async (deltaTime) => {
+  const updatePredictions = useCallback(async () => {
     if (!webcamRef.current || !model) return;
     const video = webcamRef.current;
 
@@ -93,7 +92,9 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
         };
       }
     );
-  });
+  }, [model, webcamRef]);
+
+  useAnimationFrame(30, updatePredictions);
 
   return predictions;
 }
