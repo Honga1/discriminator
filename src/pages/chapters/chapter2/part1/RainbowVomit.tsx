@@ -1,4 +1,4 @@
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import React, { useContext, useEffect, useRef } from "react";
 import {
   Color,
@@ -9,14 +9,11 @@ import {
   MeshBasicMaterial,
   Object3D,
   SphereBufferGeometry,
-  Vector3,
+  Vector3
 } from "three";
 import { V3, V3O } from "../../../../libs/v3";
 import { chunkMesh } from "./chunk";
 import { SceneContext } from "./SceneContext";
-
-const geometry = new InstancedBufferGeometry().copy(chunkMesh.geometry);
-const material = new MeshBasicMaterial({ toneMapped: false });
 
 function arrayOf<T>(creator: (index: number) => T, count: number) {
   return Array.from({ length: count }).map((_, index) => creator(index));
@@ -53,8 +50,6 @@ function useGravityParticles({
   afterUpdate?: (range: number) => void;
   shouldReset?: () => boolean;
 }) {
-  const clock = useThree((state) => state.clock);
-  const startTime = useRef(clock.getElapsedTime());
   const particles = useRef<Particle[]>();
 
   useFrame((context, deltaTime: number) => {
@@ -73,13 +68,13 @@ function useGravityParticles({
           position: V3O.copy(trackingPosition),
           velocity: getVelocity(direction),
           startOffset: (index / particleCount) * duration * Math.random(),
-          resetAt: startTime.current,
+          resetAt: 0,
         }),
         particleCount
       );
     }
 
-    const time = context.clock.getElapsedTime() - startTime.current;
+    const time = context.clock.getElapsedTime();
 
     let positions = [];
     for (let index = 0; index < particles.current.length; index++) {
@@ -120,6 +115,7 @@ function useGravityParticles({
 
       setInstance(position, positions.length - 1);
     }
+
     afterUpdate?.(positions.length);
   });
 
@@ -135,7 +131,7 @@ function useGravityParticles({
   }
 }
 
-export const RainbowVomit = () => {
+export const RainbowVomit = ({ targetAspect }: { targetAspect: number }) => {
   const aRObject = useRef<Mesh>();
   const instances = useRef<
     InstancedMesh<SphereBufferGeometry, MeshBasicMaterial>
@@ -143,7 +139,7 @@ export const RainbowVomit = () => {
 
   const vomitCount = 500;
 
-  useTrackedObject(aRObject);
+  useTrackedObject(aRObject, targetAspect);
   const predictions = useContext(SceneContext).facemesh;
 
   useEffect(() => {
@@ -183,13 +179,19 @@ export const RainbowVomit = () => {
       false,
   });
 
+  const args = useRef<[InstancedBufferGeometry, MeshBasicMaterial, number]>([
+    new InstancedBufferGeometry().copy(chunkMesh.geometry),
+    new MeshBasicMaterial({ toneMapped: false }),
+    vomitCount,
+  ]);
+
   return (
     <>
       <group ref={aRObject} frustumCulled={false}></group>
       <instancedMesh
         frustumCulled={false}
         ref={instances}
-        args={[geometry, material, vomitCount]}
+        args={args.current}
       ></instancedMesh>
     </>
   );
@@ -208,11 +210,12 @@ function getWorldPositionAndDirection(object: Object3D) {
 }
 
 function useTrackedObject(
-  aRObject: React.MutableRefObject<Object3D | undefined>
+  aRObject: React.MutableRefObject<Object3D | undefined>,
+  targetAspect: number
 ) {
   const predictions = useContext(SceneContext).facemesh;
 
-  useFrame((context) => {
+  useFrame(({ viewport }) => {
     const prediction = predictions.current[0];
     if (!prediction) return;
     if (!aRObject.current) return;
@@ -220,12 +223,19 @@ function useTrackedObject(
     const mesh = prediction.mesh as V3[];
     const { up, forward } = prediction.orthoVectors;
 
+    let scale: V3;
+    if (viewport.aspect < targetAspect) {
+      // Is taller than webcam aspect
+      scale = [viewport.height, viewport.height / targetAspect, 1];
+    } else {
+      // Is wider than webcam aspect
+      scale = [viewport.height * targetAspect, viewport.height, 1];
+    }
+
     aRObject.current.position
       .set(...mesh[13]!)
       .add(new Vector3(-0.5, 0.5, 0.5))
-      .multiply(
-        new Vector3(context.viewport.width, context.viewport.height, 1)
-      );
+      .multiply(new Vector3(scale[0], scale[1], 1));
 
     const worldPosition = new Vector3();
     aRObject.current.getWorldPosition(worldPosition);

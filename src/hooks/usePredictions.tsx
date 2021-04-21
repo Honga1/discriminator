@@ -31,20 +31,17 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const model = useModel();
   const filters = useRef<any[][]>([]);
 
-  const iirFilterCoeffs = useRef(() => {
-    const iirCalculator = new Fili.CalcCascades();
-    const iirFilterCoeffs = iirCalculator.lowpass({
+  const iirFilterCoeffs = useRef(
+    new Fili.CalcCascades().lowpass({
       order: 3,
-      characteristic: "butterworts",
+      characteristic: "butterworth",
       Fs: 30,
       Fc: 6,
       BW: 1,
       gain: 0,
-      preGain: false, // adds one constant multiplication for highpass and lowpass
-      // k = (1 + cos(omega)) * 0.5 / k = 1 with preGain == false
-    });
-    return iirFilterCoeffs;
-  });
+      preGain: false,
+    })
+  );
 
   const updatePredictions = useCallback(async () => {
     if (!webcamRef.current || !model) return;

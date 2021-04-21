@@ -1,7 +1,6 @@
 import { Canvas } from "@react-three/fiber";
-import React, { memo, Suspense, useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { useAnimationFrame } from "../../../../hooks/useAnimationFrame";
-import { useStore } from "../../../../store/store";
 import { usePredictions } from "./../../../../hooks/usePredictions";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
@@ -10,71 +9,44 @@ import { StaticBackground } from "./StaticBackground";
 import { useWebcamAndCanvas } from "./useWebcamAndCanvas";
 import { WorldOffset } from "./WorldOffset";
 
-export const Part1 = memo(
-  ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement> }) => {
-    const webcamRef = useRef<HTMLVideoElement>(null);
+export const Part1 = memo(() => {
+  const { webcamRef, aspect } = useWebcamAndCanvas();
 
-    const webcamStream = useStore((state) => state.webcamStream);
+  const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
 
-    const [canvasWidth, canvasHeight] = useWebcamAndCanvas(
-      webcamRef,
-      videoRef,
-      webcamStream
-    );
+  useAnimationFrame(1, () => {
+    if (predictions.current.length > 0 && !hasFirstPrediction) {
+      setHasFirstPrediction(true);
+    }
+  });
 
-    const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
-
-    useAnimationFrame(1, () => {
-      if (predictions.current.length > 0 && !hasFirstPrediction) {
-        setHasFirstPrediction(true);
-      }
-    });
-
-    const predictions = usePredictions(webcamRef);
-    return (
-      <>
-        <video
-          style={{
-            position: "absolute",
-            boxSizing: "border-box",
-            outline: "none",
-            width: canvasWidth + "px",
-            height: canvasHeight + "px",
-            opacity: 0.5,
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-          ref={webcamRef}
-        ></video>
-        <Canvas
-          style={{
-            position: "absolute",
-            width: canvasWidth + "px",
-            height: canvasHeight + "px",
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-          orthographic={false}
-        >
-          <SceneContext.Provider value={{ facemesh: predictions }}>
-            <StaticBackground></StaticBackground>
-            {hasFirstPrediction && (
-              <>
-                <WorldOffset>
-                  {/* <Gizmo  gizmoHome={4} /> */}
-                  {/* <Dots /> */}
-                  {/* <BoundingRectangle /> */}
-                  <Mask track="center"></Mask>
-                  {/* <ARObject  /> */}
-                </WorldOffset>
-                <Suspense fallback={null}>
-                  <RainbowVomit />
-                </Suspense>
-              </>
-            )}
-          </SceneContext.Provider>
-        </Canvas>
-      </>
-    );
-  }
-);
+  const predictions = usePredictions(webcamRef);
+  return (
+    <>
+      <Canvas
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+        }}
+        orthographic={false}
+      >
+        <SceneContext.Provider value={{ facemesh: predictions }}>
+          <StaticBackground></StaticBackground>
+          {hasFirstPrediction && (
+            <>
+              <WorldOffset targetAspect={aspect}>
+                {/* <Gizmo  gizmoHome={4} /> */}
+                {/* <Dots /> */}
+                {/* <BoundingRectangle /> */}
+                <Mask track="center"></Mask>
+                {/* <ARObject  /> */}
+              </WorldOffset>
+              <RainbowVomit targetAspect={aspect} />
+            </>
+          )}
+        </SceneContext.Provider>
+      </Canvas>
+    </>
+  );
+});

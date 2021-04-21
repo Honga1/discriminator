@@ -19,8 +19,6 @@ export default function Chapter2() {
       const video = event.target as HTMLVideoElement;
       const seconds = Math.round(video.currentTime);
 
-      console.log(seconds);
-
       if (seconds < 47) {
         setPart("SCREEN_1");
       } else {
@@ -37,7 +35,7 @@ export default function Chapter2() {
       align="center"
       overflow="hidden"
     >
-      {part === "SCREEN_1" && <Part1 videoRef={ref}></Part1>}
+      {part === "SCREEN_1" && <Part1></Part1>}
       <video
         ref={ref}
         style={{
