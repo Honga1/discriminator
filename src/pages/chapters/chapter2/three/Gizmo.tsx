@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { BufferGeometry, Line, LineBasicMaterial, Vector3 } from "three";
 import { Line2 } from "three-stdlib";
 import { Predictions } from "../usePredictions";
-import { V3 } from "../V3";
+import { V3 } from "../v3";
 
 export const Gizmo = ({
   predictions,

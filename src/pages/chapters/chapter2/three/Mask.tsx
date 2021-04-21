@@ -10,7 +10,7 @@ import {
 } from "three";
 import maskSrc from "../mask.mp4";
 import alphaSrc from "../alpha.mp4";
-import { V3 } from "../V3";
+import { V3 } from "../v3";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 import { SceneContext } from "./SceneContext";
 
@@ -62,7 +62,7 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
     uvs.needsUpdate = true;
 
     return () => {
-      if (maskMesh) {
+      if (maskMesh && maskMesh.material) {
         maskMesh.material.uniforms.map.value = undefined;
         maskMesh.material.uniforms.alphaMap.value = undefined;
       }

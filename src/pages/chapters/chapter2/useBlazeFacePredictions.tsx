@@ -4,7 +4,7 @@ import { Vector2 } from "three";
 import { useAnimationFrame } from "../chapter3/useAnimationFrame";
 import { BoundingBox } from "./three/BoundingBox";
 import { useAsyncMemo } from "./useAsyncMemo";
-import { V2 } from "./V2";
+import { V2 } from "./v2";
 
 export interface BlazeFacePredictions {
   keyPoints: V2[];

@@ -1,6 +1,8 @@
-import { useFrame } from "@react-three/fiber";
-import React, { useContext, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import React, { useContext, useEffect, useRef } from "react";
 import {
+  Color,
+  InstancedBufferGeometry,
   InstancedMesh,
   Matrix4,
   Mesh,
@@ -9,11 +11,129 @@ import {
   SphereBufferGeometry,
   Vector3,
 } from "three";
-import { V3 } from "../V3";
+import { V3, V3O } from "../v3";
+import { chunkMesh } from "./chunk";
 import { SceneContext } from "./SceneContext";
 
-const geometry = new SphereBufferGeometry(0.2);
-const material = new MeshBasicMaterial({ color: "red" });
+const geometry = new InstancedBufferGeometry().copy(chunkMesh.geometry);
+const material = new MeshBasicMaterial({ toneMapped: false });
+
+function arrayOf<T>(creator: (index: number) => T, count: number) {
+  return Array.from({ length: count }).map((_, index) => creator(index));
+}
+
+interface Particle {
+  position: V3;
+  velocity: V3;
+  startOffset: number;
+  resetAt: number;
+}
+
+const colors = [
+  new Color("#ffA8F7"),
+  new Color("#74B15A"),
+  new Color("#F75648"),
+  new Color("#00499F"),
+];
+
+function useGravityParticles({
+  particleCount,
+  gravity,
+  duration,
+  startAtObject,
+  setInstance,
+  afterUpdate,
+  shouldReset,
+}: {
+  particleCount: number;
+  gravity: number;
+  duration: number;
+  startAtObject: { current: Object3D | undefined };
+  setInstance: (position: V3, index: number) => void;
+  afterUpdate?: (range: number) => void;
+  shouldReset?: () => boolean;
+}) {
+  const clock = useThree((state) => state.clock);
+  const startTime = useRef(clock.getElapsedTime());
+  const particles = useRef<Particle[]>();
+
+  useFrame((context, deltaTime: number) => {
+    if (!startAtObject.current) return;
+
+    const reset = shouldReset?.() ?? false;
+
+    const {
+      direction,
+      position: trackingPosition,
+    } = getWorldPositionAndDirection(startAtObject.current);
+
+    if (particles.current === undefined) {
+      particles.current = arrayOf<Particle>(
+        (index) => ({
+          position: V3O.copy(trackingPosition),
+          velocity: getVelocity(direction),
+          startOffset: (index / particleCount) * duration * Math.random(),
+          resetAt: startTime.current,
+        }),
+        particleCount
+      );
+    }
+
+    const time = context.clock.getElapsedTime() - startTime.current;
+
+    let positions = [];
+    for (let index = 0; index < particles.current.length; index++) {
+      const { velocity, position, startOffset, resetAt } = particles.current[
+        index
+      ]!;
+
+      if (resetAt + startOffset > time) {
+        velocity[1] += gravity * deltaTime;
+        position[0] += velocity[0] * deltaTime;
+        position[1] += velocity[1] * deltaTime;
+        position[2] += velocity[2] * deltaTime;
+        positions.push(position);
+      } else if (!reset) {
+        particles.current[index] = {
+          ...particles.current[index]!,
+          position: V3O.subtract(
+            V3O.add(V3O.copy(trackingPosition), V3O.randomRange(-0.2, 0.2)),
+            [0, 0.4, 0]
+          ),
+          velocity: getVelocity(direction),
+          startOffset,
+          resetAt: time,
+        };
+        positions.push(position);
+      } else {
+        particles.current[index] = {
+          ...particles.current[index]!,
+          position: V3O.subtract(
+            V3O.add(V3O.copy(trackingPosition), V3O.randomRange(-0.2, 0.2)),
+            [0, 0.4, 1.2]
+          ),
+          velocity: [0, 0, 0],
+          startOffset,
+        };
+        continue;
+      }
+
+      setInstance(position, positions.length - 1);
+    }
+    afterUpdate?.(positions.length);
+  });
+
+  function getVelocity(direction: V3): V3 {
+    return V3O.rotateAroundAxis(
+      V3O.scale(
+        V3O.rotateAroundAxis(direction, V3O.up(), (Math.random() - 0.5) * 0.3),
+        -5
+      ),
+      V3O.left(),
+      (Math.random() - 0.5) * 0.3
+    );
+  }
+}
 
 export const RainbowVomit = () => {
   const aRObject = useRef<Mesh>();
@@ -21,26 +141,78 @@ export const RainbowVomit = () => {
     InstancedMesh<SphereBufferGeometry, MeshBasicMaterial>
   >();
 
-  const vomitCount = 100;
+  const vomitCount = 500;
 
-  const positions = useRef<V3[]>(
-    Array.from({ length: vomitCount }).map((_, index) => [
-      Math.random() - 0.5,
-      Math.random() - 0.5,
-      Math.random() * index,
-    ])
-  );
-  const velocities = useRef<V3[]>(
-    Array.from({ length: vomitCount }).map((_, index) => [
-      Math.random() - 0.5,
-      Math.random() + 0.1,
-      Math.random() + 1.0,
-    ])
-  );
-
+  useTrackedObject(aRObject);
   const predictions = useContext(SceneContext).facemesh;
 
-  useFrame((context, deltaTime) => {
+  useEffect(() => {
+    if (!instances.current) return;
+    for (let index = 0; index < vomitCount; index++) {
+      instances.current?.setColorAt(index, colors[index % colors.length]!);
+    }
+    instances.current.instanceColor!.needsUpdate = true;
+  });
+
+  useGravityParticles({
+    particleCount: vomitCount,
+    gravity: -10,
+    duration: 2,
+    startAtObject: aRObject,
+    setInstance: (position, index) => {
+      if (!instances.current) return;
+      const matrix = getMatrixFromTransform(
+        position,
+        [0, 0, 0],
+        [0.3, 0.3, 0.3]
+      );
+      instances.current?.setMatrixAt(index, matrix);
+    },
+    afterUpdate: (range) => {
+      if (!instances.current) return;
+      if (!predictions.current[0]) {
+        instances.current.visible = false;
+      } else {
+        instances.current.visible = true;
+      }
+      instances.current.count = range;
+      instances.current.instanceMatrix.needsUpdate = true;
+    },
+    shouldReset: () =>
+      (predictions.current[0] && predictions.current[0].mouthOpened < 0.5) ||
+      false,
+  });
+
+  return (
+    <>
+      <group ref={aRObject} frustumCulled={false}></group>
+      <instancedMesh
+        frustumCulled={false}
+        ref={instances}
+        args={[geometry, material, vomitCount]}
+      ></instancedMesh>
+    </>
+  );
+};
+
+function getWorldPositionAndDirection(object: Object3D) {
+  const objectPosition = new Vector3();
+  object.getWorldPosition(objectPosition);
+
+  const direction = new Vector3();
+  object.getWorldDirection(direction);
+  return {
+    position: V3O.fromVector3(objectPosition),
+    direction: V3O.fromVector3(direction),
+  };
+}
+
+function useTrackedObject(
+  aRObject: React.MutableRefObject<Object3D | undefined>
+) {
+  const predictions = useContext(SceneContext).facemesh;
+
+  useFrame((context) => {
     const prediction = predictions.current[0];
     if (!prediction) return;
     if (!aRObject.current) return;
@@ -48,73 +220,30 @@ export const RainbowVomit = () => {
     const mesh = prediction.mesh as V3[];
     const { up, forward } = prediction.orthoVectors;
 
-    aRObject.current.position.set(...mesh[13]!).add(new Vector3(0, 0, 0));
+    aRObject.current.position
+      .set(...mesh[13]!)
+      .add(new Vector3(-0.5, 0.5, 0.5))
+      .multiply(
+        new Vector3(context.viewport.width, context.viewport.height, 1)
+      );
 
     const worldPosition = new Vector3();
     aRObject.current.getWorldPosition(worldPosition);
     aRObject.current.up.copy(up);
     aRObject.current.lookAt(forward.clone().negate().add(worldPosition));
-
-    if (!instances.current) return;
-
-    if (prediction.mouthOpened > 0.5) {
-      if (instances.current.visible === false) {
-        for (let index = 0; index < vomitCount; index++) {
-          positions.current[index]! = [
-            Math.random() - 0.5,
-            Math.random() - 0.5,
-            Math.random(),
-          ];
-        }
-      }
-      instances.current.visible = true;
-      for (let index = 0; index < vomitCount; index++) {
-        const position = positions.current[index]!;
-        const velocity = velocities.current[index]!;
-        positions.current[index]! = [
-          position[0] - 2 * deltaTime * velocity[0],
-          position[1] + (10 * deltaTime * velocity[1]) ** 2,
-          position[2] - 30 * deltaTime * velocity[2],
-        ];
-
-        if (positions.current[index]![2] < -100) {
-          positions.current[index]! = [
-            Math.random() - 0.5,
-            Math.random() - 0.5,
-            Math.random(),
-          ];
-        }
-
-        const matrix = getMatrixFromTransform(position, 0, [1, 1]);
-        instances.current?.setMatrixAt(index, matrix);
-      }
-    } else {
-      instances.current.visible = false;
-    }
-
-    instances.current.instanceMatrix.needsUpdate = true;
   });
-
-  return (
-    <group ref={aRObject} frustumCulled={false} scale={[0.1, 0.1, 0.1]}>
-      <instancedMesh
-        ref={instances}
-        args={[geometry, material, vomitCount]}
-      ></instancedMesh>
-    </group>
-  );
-};
+}
 
 const transformHolder = new Object3D();
 transformHolder.matrixAutoUpdate = false;
 function getMatrixFromTransform(
   position: V3,
-  rotation: number,
-  scale: [x: number, y: number]
+  rotation: V3,
+  scale: V3
 ): Matrix4 {
   transformHolder.position.set(...position);
-  transformHolder.rotation.set(0, 0, rotation);
-  transformHolder.scale.set(scale[0], scale[1], 1);
+  transformHolder.rotation.set(...rotation);
+  transformHolder.scale.set(...scale);
   transformHolder.updateMatrix();
 
   return transformHolder.matrix;

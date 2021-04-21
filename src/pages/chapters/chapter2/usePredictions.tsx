@@ -6,8 +6,8 @@ import { Vector3 } from "three";
 import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
 import { useAnimationFrame } from "../chapter3/useAnimationFrame";
 import { useAsyncMemo } from "./useAsyncMemo";
-import { V2 } from "./V2";
-import { V3 } from "./V3";
+import { V2 } from "./v2";
+import { V3 } from "./v3";
 
 export interface Predictions {
   scaledMesh: V3[];

@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useContext, useRef } from "react";
 import { Mesh } from "three";
-import { V2 } from "../V2";
+import { V2 } from "../v2";
 import { SceneContext } from "./SceneContext";
 
 export function BoundingRectangle() {

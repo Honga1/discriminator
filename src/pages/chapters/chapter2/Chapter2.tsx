@@ -1,30 +1,35 @@
-import { Canvas } from "@react-three/fiber";
 import "@tensorflow/tfjs-backend-webgl";
 import { Box } from "grommet";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useChapter } from "../../../hooks/useChapter";
-import { useStore } from "../../../store/store";
 import videoSrc from "./../../../p2.mp4";
-import { Scene } from "./three/Scene";
-import { usePredictions } from "./usePredictions";
-import { useWebcamAndCanvas } from "./useWebcamAndCanvas";
+import { Part1 } from "./Part1";
 
 export default function Chapter2() {
   const ref = useRef<HTMLVideoElement>(null);
 
   useChapter(ref, true);
 
-  const webcamRef = useRef<HTMLVideoElement>(null);
+  const [part, setPart] = useState<"SCREEN_1" | "SCREEN_2">("SCREEN_1");
 
-  const webcamStream = useStore((state) => state.webcamStream);
+  useEffect(() => {
+    if (!ref.current) return;
+    const video = ref.current;
+    const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
+      const video = event.target as HTMLVideoElement;
+      const seconds = Math.round(video.currentTime);
 
-  const [canvasWidth, canvasHeight] = useWebcamAndCanvas(
-    webcamRef,
-    ref,
-    webcamStream
-  );
+      console.log(seconds);
 
-  const predictions = usePredictions(webcamRef);
+      if (seconds < 47) {
+        setPart("SCREEN_1");
+      } else {
+        setPart("SCREEN_2");
+      }
+    };
+
+    video.ontimeupdate = (event) => onTimeUpdate({ nativeEvent: event });
+  }, []);
 
   return (
     <Box
@@ -32,32 +37,7 @@ export default function Chapter2() {
       align="center"
       overflow="hidden"
     >
-      <video
-        style={{
-          position: "absolute",
-          boxSizing: "border-box",
-          outline: "none",
-          width: canvasWidth + "px",
-          height: canvasHeight + "px",
-          opacity: 0.5,
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-        ref={webcamRef}
-        // hidden
-      ></video>
-      <Canvas
-        style={{
-          position: "absolute",
-          width: canvasWidth + "px",
-          height: canvasHeight + "px",
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-        orthographic={false}
-      >
-        <Scene predictions={predictions}></Scene>
-      </Canvas>
+      {part === "SCREEN_1" && <Part1 videoRef={ref}></Part1>}
       <video
         ref={ref}
         style={{
