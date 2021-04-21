@@ -151,6 +151,3 @@ const FadeInBox = styled(Box)<{ isShown: boolean }>`
   opacity: ${(props) => (props.isShown ? "1" : "0")};
   transition: opacity 1s;
 `;
-export function clamp(number: number, min: number, max: number) {
-  return Math.max(min, Math.min(number, max));
-}

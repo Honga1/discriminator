@@ -11,7 +11,7 @@ import {
   SphereBufferGeometry,
   Vector3,
 } from "three";
-import { V3, V3O } from "../v3";
+import { V3, V3O } from "../../../../libs/v3";
 import { chunkMesh } from "./chunk";
 import { SceneContext } from "./SceneContext";
 

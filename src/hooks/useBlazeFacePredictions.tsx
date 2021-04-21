@@ -1,10 +1,10 @@
 import * as blazeface from "@tensorflow-models/blazeface";
 import React, { useRef } from "react";
 import { Vector2 } from "three";
-import { useAnimationFrame } from "../chapter3/useAnimationFrame";
-import { BoundingBox } from "./three/BoundingBox";
+import { useAnimationFrame } from "./useAnimationFrame";
+import { BoundingBox } from "../libs/BoundingBox";
 import { useAsyncMemo } from "./useAsyncMemo";
-import { V2 } from "./v2";
+import { V2 } from "../libs/v2";
 
 export interface BlazeFacePredictions {
   keyPoints: V2[];

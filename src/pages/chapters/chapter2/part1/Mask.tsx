@@ -8,11 +8,11 @@ import {
   sRGBEncoding,
   VideoTexture,
 } from "three";
-import maskSrc from "../mask.mp4";
-import alphaSrc from "../alpha.mp4";
-import { V3 } from "../v3";
+import maskSrc from "./mask.mp4";
+import alphaSrc from "./alpha.mp4";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 import { SceneContext } from "./SceneContext";
+import { V3 } from "../../../../libs/v3";
 
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {

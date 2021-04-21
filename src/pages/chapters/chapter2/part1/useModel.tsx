@@ -1,5 +1,5 @@
 import * as facemesh from "@tensorflow-models/face-landmarks-detection";
-import { useAsyncMemo } from "./useAsyncMemo";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
 export function useModel() {
   return useAsyncMemo(

@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useContext, useRef } from "react";
 import { BufferAttribute, BufferGeometry } from "three";
-import { V3 } from "../v3";
+import { V3 } from "../../../../libs/v3";
 import { SceneContext } from "./SceneContext";
 
 export function Dots() {

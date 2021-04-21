@@ -1,13 +1,14 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import React, { memo, Suspense, useRef, useState } from "react";
-import { useStore } from "../../../store/store";
-import { Mask } from "./three/Mask";
-import { RainbowVomit } from "./three/RainbowVomit";
-import { SceneContext } from "./three/SceneContext";
-import { StaticBackground } from "./three/StaticBackground";
-import { usePredictions } from "./usePredictions";
+import { useAnimationFrame } from "../../../../hooks/useAnimationFrame";
+import { useStore } from "../../../../store/store";
+import { usePredictions } from "./../../../../hooks/usePredictions";
+import { Mask } from "./Mask";
+import { RainbowVomit } from "./RainbowVomit";
+import { SceneContext } from "./SceneContext";
+import { StaticBackground } from "./StaticBackground";
 import { useWebcamAndCanvas } from "./useWebcamAndCanvas";
-import { WorldOffset } from "./three/WorldOffset";
+import { WorldOffset } from "./WorldOffset";
 
 export const Part1 = memo(
   ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement> }) => {
@@ -23,7 +24,7 @@ export const Part1 = memo(
 
     const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
 
-    useFrame(() => {
+    useAnimationFrame(1, () => {
       if (predictions.current.length > 0 && !hasFirstPrediction) {
         setHasFirstPrediction(true);
       }

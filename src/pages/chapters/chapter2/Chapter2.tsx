@@ -3,7 +3,7 @@ import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
 import { useChapter } from "../../../hooks/useChapter";
 import videoSrc from "./../../../p2.mp4";
-import { Part1 } from "./Part1";
+import { Part1 } from "./part1/Part1";
 
 export default function Chapter2() {
   const ref = useRef<HTMLVideoElement>(null);

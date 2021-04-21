@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { Predictions } from "../usePredictions";
+import { Predictions } from "../../../../hooks/usePredictions";
 
 export const SceneContext = createContext<{
   facemesh: React.MutableRefObject<Predictions[]>;

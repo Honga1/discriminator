@@ -3,11 +3,11 @@ import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection
 import * as Fili from "fili";
 import React, { useCallback, useRef } from "react";
 import { Vector3 } from "three";
-import { clamp } from "../chapter3/Part1Screen2/yearsInShownOrder";
-import { useAnimationFrame } from "../chapter3/useAnimationFrame";
+import { useAnimationFrame } from "../hooks/useAnimationFrame";
+import { clamp } from "../libs/math";
 import { useAsyncMemo } from "./useAsyncMemo";
-import { V2 } from "./v2";
-import { V3 } from "./v3";
+import { V2 } from "../libs/v2";
+import { V3 } from "../libs/v3";
 
 export interface Predictions {
   scaledMesh: V3[];
@@ -26,22 +26,25 @@ export interface Predictions {
   mouthOpened: number;
 }
 
-const iirCalculator = new Fili.CalcCascades();
-const iirFilterCoeffs = iirCalculator.lowpass({
-  order: 3, // cascade 3 biquad filters (max: 12)
-  characteristic: "butterworth",
-  Fs: 30, // sampling frequency
-  Fc: 6, // cutoff frequency / center frequency for bandpass, bandstop, peak
-  BW: 1, // bandwidth only for bandstop and bandpass filters - optional
-  gain: 0, // gain for peak, lowshelf and highshelf
-  preGain: false, // adds one constant multiplication for highpass and lowpass
-  // k = (1 + cos(omega)) * 0.5 / k = 1 with preGain == false
-});
-
 export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   const predictions = useRef<Predictions[]>([]);
   const model = useModel();
   const filters = useRef<any[][]>([]);
+
+  const iirFilterCoeffs = useRef(() => {
+    const iirCalculator = new Fili.CalcCascades();
+    const iirFilterCoeffs = iirCalculator.lowpass({
+      order: 3,
+      characteristic: "butterworts",
+      Fs: 30,
+      Fc: 6,
+      BW: 1,
+      gain: 0,
+      preGain: false, // adds one constant multiplication for highpass and lowpass
+      // k = (1 + cos(omega)) * 0.5 / k = 1 with preGain == false
+    });
+    return iirFilterCoeffs;
+  });
 
   const updatePredictions = useCallback(async () => {
     if (!webcamRef.current || !model) return;
@@ -63,9 +66,9 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
           const vertexFilters = filters.current[predictionIndex]?.[
             meshIndex
           ] ?? [
-            new Fili.IirFilter(iirFilterCoeffs),
-            new Fili.IirFilter(iirFilterCoeffs),
-            new Fili.IirFilter(iirFilterCoeffs),
+            new Fili.IirFilter(iirFilterCoeffs.current),
+            new Fili.IirFilter(iirFilterCoeffs.current),
+            new Fili.IirFilter(iirFilterCoeffs.current),
           ];
 
           filters.current[predictionIndex] =

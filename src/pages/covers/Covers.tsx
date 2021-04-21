@@ -5,7 +5,7 @@ import { Media } from "./MediaContainer";
 const Cover5 = React.lazy(async () => import("./Cover1"));
 const Cover4 = React.lazy(async () => import("./Cover1"));
 const Cover3 = React.lazy(async () => import("./Cover1"));
-const Cover2 = React.lazy(async () => import("./Cover1"));
+const Cover2 = React.lazy(async () => import("./Cover2"));
 const Cover1 = React.lazy(async () => import("./Cover1"));
 
 export const Cover = ({ chapterNumber }: { chapterNumber: number }) => {

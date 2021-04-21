@@ -2,8 +2,8 @@ import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import React, { memo, useContext, useEffect, useMemo, useRef } from "react";
 import { animated, SpringValue, to, useSpring } from "react-spring/web";
 import { useGesture } from "react-use-gesture";
+import { clamp } from "../../../libs/math";
 import {
-  clamp,
   getZoomPosition,
   GridBoxes,
   GridTextLabels,
