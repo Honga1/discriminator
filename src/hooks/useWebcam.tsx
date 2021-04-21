@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useStore } from "../../../../store/store";
+import { useEffect, useRef, useState } from "react";
+import { useStore } from "../store/store";
 
-export function useWebcamAndCanvas() {
+export function useWebcam() {
   const webcamStream = useStore((state) => state.webcamStream);
   const webcamRef = useRef<HTMLVideoElement>(document.createElement("video"));
   const [aspect, setAspect] = useState(window.innerWidth / window.innerHeight);

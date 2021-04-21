@@ -1,16 +1,16 @@
 import { Canvas } from "@react-three/fiber";
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useState } from "react";
 import { useAnimationFrame } from "../../../../hooks/useAnimationFrame";
 import { usePredictions } from "./../../../../hooks/usePredictions";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { SceneContext } from "./SceneContext";
 import { StaticBackground } from "./StaticBackground";
-import { useWebcamAndCanvas } from "./useWebcamAndCanvas";
+import { useWebcam } from "../../../../hooks/useWebcam";
 import { WorldOffset } from "./WorldOffset";
 
 export const Part1 = memo(() => {
-  const { webcamRef, aspect } = useWebcamAndCanvas();
+  const { webcamRef, aspect } = useWebcam();
 
   const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
 
