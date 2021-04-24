@@ -9,7 +9,11 @@ import { StaticBackground } from "./StaticBackground";
 import { useWebcam } from "../../../../hooks/useWebcam";
 import { WorldOffset } from "./WorldOffset";
 
-export const Part1 = memo(() => {
+export const Part1 = ({
+  maskType,
+}: {
+  maskType: "video" | "brett" | "own";
+}) => {
   const { webcam, aspect } = useWebcam();
 
   const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
@@ -35,7 +39,7 @@ export const Part1 = memo(() => {
         {hasFirstPrediction && (
           <>
             <WorldOffset targetAspect={aspect}>
-              <Mask track="center" maskType="own" webcam={webcam}></Mask>
+              <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
             </WorldOffset>
             <RainbowVomit targetAspect={aspect} />
           </>
@@ -43,4 +47,4 @@ export const Part1 = memo(() => {
       </SceneContext.Provider>
     </Canvas>
   );
-});
+};

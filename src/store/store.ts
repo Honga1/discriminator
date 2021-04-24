@@ -44,6 +44,7 @@ export const store = create<State>((set, get) => {
     },
     turnOnCamera: () => {
       if (
+        navigator.mediaDevices &&
         navigator.mediaDevices.getUserMedia &&
         get().webcamStream === undefined
       ) {
