@@ -1,11 +1,14 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   BufferGeometry,
   IUniform,
   Mesh,
   ShaderMaterial,
   sRGBEncoding,
+  Texture,
+  TextureLoader,
+  Vector2,
   VideoTexture,
 } from "three";
 import maskSrc from "./mask.mp4";
@@ -14,20 +17,26 @@ import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 import { SceneContext } from "./SceneContext";
 import { V3 } from "../../../../libs/v3";
 
+import brettMaskMap from "./brett-mask-map.png";
+import brettMaskAlpha from "./brett-mask-alpha.png";
+
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
-    map: IUniform<VideoTexture | undefined>;
-    alphaMap: IUniform<VideoTexture | undefined>;
+    map: IUniform<VideoTexture | Texture | undefined>;
+    alphaMap: IUniform<VideoTexture | Texture | undefined>;
   };
 }
 
-export const Mask = ({ track }: { track: "center" | "webcam" }) => {
-  const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
-  const predictions = useContext(SceneContext).facemesh;
-
-  useEffect(() => {
-    const maskMesh = mask.current;
-    if (!maskMesh) return;
+export const Mask = ({
+  track,
+  maskType,
+  webcam,
+}: {
+  webcam: HTMLVideoElement;
+  track: "center" | "webcam";
+  maskType: "brett" | "own" | "video";
+}) => {
+  const textures = useMemo(() => {
     const mapVideo = document.createElement("video");
     mapVideo.src = maskSrc;
     mapVideo.muted = true;
@@ -36,17 +45,34 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
     alphaMapVideo.src = alphaSrc;
     alphaMapVideo.muted = true;
 
-    const map = new VideoTexture(mapVideo);
-    const alphaMap = new VideoTexture(alphaMapVideo);
+    const videoMaskMap = new VideoTexture(mapVideo);
+    const videoMaskAlpha = new VideoTexture(alphaMapVideo);
 
-    map.encoding = sRGBEncoding;
-    alphaMap.encoding = sRGBEncoding;
+    videoMaskMap.encoding = sRGBEncoding;
+    videoMaskAlpha.encoding = sRGBEncoding;
 
     mapVideo.play();
     alphaMapVideo.play();
 
-    maskMesh.material.uniforms.map.value = map;
-    maskMesh.material.uniforms.alphaMap.value = alphaMap;
+    const webcamTexture = new VideoTexture(webcam);
+
+    const brettsFaceAlbedo = new TextureLoader().load(brettMaskMap);
+    const brettsFaceAlpha = new TextureLoader().load(brettMaskAlpha);
+
+    return {
+      video: { alpha: videoMaskAlpha, albedo: videoMaskMap },
+      own: { albedo: webcamTexture, alpha: brettsFaceAlpha },
+      brett: { albedo: brettsFaceAlbedo, alpha: brettsFaceAlpha },
+    };
+  }, [webcam]);
+
+  const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
+  const predictions = useContext(SceneContext).facemesh;
+  const maskTexture = textures[maskType];
+
+  useEffect(() => {
+    const maskMesh = mask.current;
+    if (!maskMesh) return;
 
     const geometry = maskMesh.geometry;
 
@@ -60,17 +86,6 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
       uvs.setXY(index, u, v);
     });
     uvs.needsUpdate = true;
-
-    return () => {
-      if (maskMesh && maskMesh.material) {
-        maskMesh.material.uniforms.map.value = undefined;
-        maskMesh.material.uniforms.alphaMap.value = undefined;
-      }
-      mapVideo.remove();
-      alphaMapVideo.remove();
-      map.dispose();
-      alphaMap.dispose();
-    };
   }, []);
 
   useFrame(() => {
@@ -88,6 +103,12 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
       mesh = prediction.scaledMesh as V3[];
     }
 
+    if (maskType === "own") {
+      maskTexture.albedo.center = new Vector2(mesh[4]![0], mesh[4]![1]);
+    }
+
+    const { topLeft, bottomRight } = prediction.boundingBox;
+
     const positions = geometry.getAttribute("position");
     const uvs = geometry.getAttribute("uv");
     TRIANGULATION.forEach((vertexIndex, index) => {
@@ -98,7 +119,16 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
       const [u, v] = uv;
       const [x, y, z] = vertex;
       positions.setXYZ(index, x, y, z);
-      uvs.setXY(index, u, v);
+
+      if (maskType === "own") {
+        // Correct for head rotation and center position
+        const nextU =
+          (u + mesh[4]![0] - 0.5) * (bottomRight[0] - topLeft[0]) + topLeft[0];
+        const nextV = v * (topLeft[1] - bottomRight[1]) - topLeft[1];
+        uvs.setXY(index, nextU, nextV);
+      } else {
+        uvs.setXY(index, u, v);
+      }
     });
     uvs.needsUpdate = true;
     positions.needsUpdate = true;
@@ -106,11 +136,11 @@ export const Mask = ({ track }: { track: "center" | "webcam" }) => {
 
   return (
     <mesh ref={mask} geometry={maskMesh.geometry}>
-      <shaderMaterial
-        fragmentShader={frag}
-        vertexShader={vert}
-        transparent
-        uniforms={{ map: { value: undefined }, alphaMap: { value: undefined } }}
+      <primitive
+        object={maskMaterial}
+        attach="material"
+        uniforms-map-value={maskTexture.albedo}
+        uniforms-alphaMap-value={maskTexture.alpha}
       />
     </mesh>
   );
@@ -145,3 +175,13 @@ void main() {
   gl_FragColor = vec4(texelColor.rgb, alphaColor.r);
 }
 `;
+
+const maskMaterial = new ShaderMaterial({
+  fragmentShader: frag,
+  vertexShader: vert,
+  transparent: true,
+  uniforms: {
+    map: { value: undefined },
+    alphaMap: { value: undefined },
+  },
+});

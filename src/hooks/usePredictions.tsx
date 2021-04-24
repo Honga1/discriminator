@@ -1,13 +1,13 @@
 import * as facemesh from "@tensorflow-models/face-landmarks-detection";
 import { AnnotatedPrediction } from "@tensorflow-models/face-landmarks-detection/dist/mediapipe-facemesh";
 import * as Fili from "fili";
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Vector3 } from "three";
 import { useAnimationFrame } from "../hooks/useAnimationFrame";
 import { clamp } from "../libs/math";
-import { useAsyncMemo } from "./useAsyncMemo";
 import { V2 } from "../libs/v2";
 import { V3 } from "../libs/v3";
+import { useAsyncMemo } from "./useAsyncMemo";
 
 export interface Predictions {
   scaledMesh: V3[];
@@ -26,7 +26,7 @@ export interface Predictions {
   mouthOpened: number;
 }
 
-export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
+export function usePredictions(webcam: HTMLVideoElement) {
   const predictions = useRef<Predictions[]>([]);
   const model = useModel();
   const filters = useRef<any[][]>([]);
@@ -44,13 +44,13 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
   );
 
   const updatePredictions = useCallback(async () => {
-    if (!webcamRef.current || !model) return;
-    const video = webcamRef.current;
+    if (!model) return;
+    const video = webcam;
 
     if (video.readyState < HTMLMediaElement.HAVE_METADATA) return;
 
     const pixelScalePredictions = await model.estimateFaces({
-      input: webcamRef.current,
+      input: webcam,
       returnTensors: false,
       flipHorizontal: false,
       predictIrises: false,
@@ -92,7 +92,7 @@ export function usePredictions(webcamRef: React.RefObject<HTMLVideoElement>) {
         };
       }
     );
-  }, [model, webcamRef]);
+  }, [model, webcam]);
 
   useAnimationFrame(30, updatePredictions);
 
@@ -200,17 +200,19 @@ function getForwardVector(mesh: V3[]) {
   return facingOutFromHead;
 }
 
+const modelPromise = facemesh.load(
+  facemesh.SupportedPackages.mediapipeFacemesh,
+  {
+    shouldLoadIrisModel: false,
+    maxFaces: 1,
+  }
+);
+
 export function useModel() {
   return useAsyncMemo(
     async () => {
       console.log("Loading model");
-      const model = await facemesh.load(
-        facemesh.SupportedPackages.mediapipeFacemesh,
-        {
-          shouldLoadIrisModel: false,
-          maxFaces: 1,
-        }
-      );
+      const model = await modelPromise;
 
       console.log("Loaded model");
       return model;

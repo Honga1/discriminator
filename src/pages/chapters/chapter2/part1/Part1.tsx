@@ -10,7 +10,7 @@ import { useWebcam } from "../../../../hooks/useWebcam";
 import { WorldOffset } from "./WorldOffset";
 
 export const Part1 = memo(() => {
-  const { webcamRef, aspect } = useWebcam();
+  const { webcam, aspect } = useWebcam();
 
   const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
 
@@ -20,33 +20,27 @@ export const Part1 = memo(() => {
     }
   });
 
-  const predictions = usePredictions(webcamRef);
+  const predictions = usePredictions(webcam);
   return (
-    <>
-      <Canvas
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-        }}
-        orthographic={false}
-      >
-        <SceneContext.Provider value={{ facemesh: predictions }}>
-          <StaticBackground></StaticBackground>
-          {hasFirstPrediction && (
-            <>
-              <WorldOffset targetAspect={aspect}>
-                {/* <Gizmo  gizmoHome={4} /> */}
-                {/* <Dots /> */}
-                {/* <BoundingRectangle /> */}
-                <Mask track="center"></Mask>
-                {/* <ARObject  /> */}
-              </WorldOffset>
-              <RainbowVomit targetAspect={aspect} />
-            </>
-          )}
-        </SceneContext.Provider>
-      </Canvas>
-    </>
+    <Canvas
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+      }}
+      orthographic={false}
+    >
+      <SceneContext.Provider value={{ facemesh: predictions }}>
+        <StaticBackground></StaticBackground>
+        {hasFirstPrediction && (
+          <>
+            <WorldOffset targetAspect={aspect}>
+              <Mask track="center" maskType="own" webcam={webcam}></Mask>
+            </WorldOffset>
+            <RainbowVomit targetAspect={aspect} />
+          </>
+        )}
+      </SceneContext.Provider>
+    </Canvas>
   );
 });
