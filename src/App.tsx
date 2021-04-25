@@ -6,6 +6,7 @@ import {
   RouteProps,
   Switch,
 } from "react-router-dom";
+import { PersistGate } from "zustand-persist";
 import { PageContainer } from "./components/PageContainer";
 import { Chapter } from "./pages/chapters/Chapters";
 import { Cover } from "./pages/covers/Covers";
@@ -25,36 +26,38 @@ const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
 
 function App() {
   return (
-    <HashRouter basename={"/"}>
-      <Switch>
-        <KnownRoute exact path={"/"}>
-          <PageContainer backgroundColor={"yellow"}>
-            <Home />
-          </PageContainer>
-        </KnownRoute>
-        <KnownRoute path={["/home", "/coil"]}>
-          <PageContainer backgroundColor={"yellow"}>
-            <Home />
-          </PageContainer>
-        </KnownRoute>
-        <KnownRoute path={"/permissions"}>
-          <PageContainer backgroundColor={"yellow"}>
-            <Permission />
-          </PageContainer>
-        </KnownRoute>
-
-        <Route
-          path={"/chapter/:chapterNumber"}
-          render={(props) => (
-            <PageContainer backgroundColor="black">
-              <ChapterRouter {...props} />
+    <PersistGate>
+      <HashRouter basename={"/"}>
+        <Switch>
+          <KnownRoute exact path={"/"}>
+            <PageContainer backgroundColor={"yellow"}>
+              <Home />
             </PageContainer>
-          )}
-        ></Route>
+          </KnownRoute>
+          <KnownRoute path={["/home", "/coil"]}>
+            <PageContainer backgroundColor={"yellow"}>
+              <Home />
+            </PageContainer>
+          </KnownRoute>
+          <KnownRoute path={"/permissions"}>
+            <PageContainer backgroundColor={"yellow"}>
+              <Permission />
+            </PageContainer>
+          </KnownRoute>
 
-        <Route>Missing Route</Route>
-      </Switch>
-    </HashRouter>
+          <Route
+            path={"/chapter/:chapterNumber"}
+            render={(props) => (
+              <PageContainer backgroundColor="black">
+                <ChapterRouter {...props} />
+              </PageContainer>
+            )}
+          ></Route>
+
+          <Route>Missing Route</Route>
+        </Switch>
+      </HashRouter>
+    </PersistGate>
   );
 }
 
