@@ -1,12 +1,12 @@
 import { Canvas } from "@react-three/fiber";
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { useAnimationFrame } from "../../../../hooks/useAnimationFrame";
+import { useWebcam } from "../../../../hooks/useWebcam";
 import { usePredictions } from "./../../../../hooks/usePredictions";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { SceneContext } from "./SceneContext";
 import { StaticBackground } from "./StaticBackground";
-import { useWebcam } from "../../../../hooks/useWebcam";
 import { WorldOffset } from "./WorldOffset";
 
 export const Part1 = ({

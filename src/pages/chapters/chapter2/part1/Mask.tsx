@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
 import {
   BufferGeometry,
   IUniform,
@@ -11,14 +11,13 @@ import {
   Vector2,
   VideoTexture,
 } from "three";
-import maskSrc from "./mask.mp4";
-import alphaSrc from "./alpha.mp4";
-import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
-import { SceneContext } from "./SceneContext";
 import { V3 } from "../../../../libs/v3";
-
-import brettMaskMap from "./brett-mask-map.png";
+import alphaSrc from "./alpha.mp4";
 import brettMaskAlpha from "./brett-mask-alpha.png";
+import brettMaskMap from "./brett-mask-map.png";
+import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
+import maskSrc from "./mask.mp4";
+import { SceneContext } from "./SceneContext";
 
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
