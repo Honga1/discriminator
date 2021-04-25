@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   HashRouter,
   Route,
@@ -6,7 +6,6 @@ import {
   RouteProps,
   Switch,
 } from "react-router-dom";
-import { PersistGate } from "zustand-persist";
 import { PageContainer } from "./components/PageContainer";
 import { Chapter } from "./pages/chapters/Chapters";
 import { Cover } from "./pages/covers/Covers";
@@ -19,47 +18,43 @@ import {
   validateChapterNumber,
   validatePageTypeQuery,
 } from "./Routes";
-import { useStore } from "./store/store";
 
 const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
   <Route {...props} />
 );
 
 function App() {
-  useStore();
   return (
-    <PersistGate>
-      <HashRouter basename={"/"}>
-        <Switch>
-          <KnownRoute exact path={"/"}>
-            <PageContainer backgroundColor={"yellow"}>
-              <Home />
-            </PageContainer>
-          </KnownRoute>
-          <KnownRoute path={["/home", "/coil"]}>
-            <PageContainer backgroundColor={"yellow"}>
-              <Home />
-            </PageContainer>
-          </KnownRoute>
-          <KnownRoute path={"/permissions"}>
-            <PageContainer backgroundColor={"yellow"}>
-              <Permission />
-            </PageContainer>
-          </KnownRoute>
+    <HashRouter basename={"/"}>
+      <Switch>
+        <KnownRoute exact path={"/"}>
+          <PageContainer backgroundColor={"yellow"}>
+            <Home />
+          </PageContainer>
+        </KnownRoute>
+        <KnownRoute path={["/home", "/coil"]}>
+          <PageContainer backgroundColor={"yellow"}>
+            <Home />
+          </PageContainer>
+        </KnownRoute>
+        <KnownRoute path={"/permissions"}>
+          <PageContainer backgroundColor={"yellow"}>
+            <Permission />
+          </PageContainer>
+        </KnownRoute>
 
-          <Route
-            path={"/chapter/:chapterNumber"}
-            render={(props) => (
-              <PageContainer backgroundColor="black">
-                <ChapterRouter {...props} />
-              </PageContainer>
-            )}
-          ></Route>
+        <Route
+          path={"/chapter/:chapterNumber"}
+          render={(props) => (
+            <PageContainer backgroundColor="black">
+              <ChapterRouter {...props} />
+            </PageContainer>
+          )}
+        ></Route>
 
-          <Route>Missing Route</Route>
-        </Switch>
-      </HashRouter>
-    </PersistGate>
+        <Route>Missing Route</Route>
+      </Switch>
+    </HashRouter>
   );
 }
 
@@ -68,17 +63,16 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
     | string
     | undefined;
   const isValidChapterNumber = validateChapterNumber(maybeChapterNumber);
-
-  if (!isValidChapterNumber) {
-    history.replace(`/chapter/1?type=cover`);
-  }
-
   const query = new URLSearchParams(location.search);
   const isValidQuery = validatePageTypeQuery(query);
 
-  if (!isValidQuery) {
-    history.replace(`${match.url}?type=cover`);
-  }
+  useEffect(() => {
+    if (!isValidChapterNumber) {
+      history.replace(`/chapter/1?type=cover`);
+    } else if (!isValidQuery) {
+      history.replace(`${match.url}?type=cover`);
+    }
+  }, [history, isValidChapterNumber, isValidQuery, match.url]);
 
   if (!isValidQuery || !isValidChapterNumber) return null;
 

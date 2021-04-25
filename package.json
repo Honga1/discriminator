@@ -12,6 +12,7 @@
     "@tensorflow/tfjs-converter": "^3.5.0",
     "@tensorflow/tfjs-core": "^3.5.0",
     "@types/three": "^0.127.1",
+    "activity-detector": "^3.0.0",
     "fili": "^2.0.3",
     "gh-pages": "^3.1.0",
     "grommet": "^2.17.1",
@@ -27,8 +28,7 @@
     "typescript": "^4.2.4",
     "use-resize-observer": "^7.0.0",
     "webfontloader": "^1.6.28",
-    "zustand": "^3.4.1",
-    "zustand-persist": "^0.3.1"
+    "zustand": "^3.4.1"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",

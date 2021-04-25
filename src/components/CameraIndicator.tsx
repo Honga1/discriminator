@@ -13,6 +13,7 @@ export const CameraIndicatorBox = ({
   const isSmall = useContext(ResponsiveContext) === "small";
   const isOn = useStore((state) => state.webcamStream !== undefined);
   const isActive = useIsActive();
+  const toggleCamera = useStore((state) => state.toggleCamera);
 
   const isCameraEnabled = useStore((state) => state.isCameraEnabled);
 
@@ -32,7 +33,7 @@ export const CameraIndicatorBox = ({
     <Button
       style={{ pointerEvents: "all" }}
       plain
-      onClick={store.getState().toggleCamera}
+      onClick={() => toggleCamera()}
       label={
         <AnimateWidthAndHover
           currentWidth={!isActive ? "48px" : width}

@@ -1,10 +1,6 @@
+import createActivityDetector from "activity-detector";
 import createStoreHook from "zustand";
-import { configurePersist } from "zustand-persist";
 import create from "zustand/vanilla";
-
-const { persist } = configurePersist({
-  storage: localStorage,
-});
 
 type State = {
   webcamStream: MediaStream | undefined;
@@ -26,7 +22,7 @@ type State = {
   turnOffCamera: () => void;
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
-  isWebcamWanted: boolean;
+  isActive: boolean;
 };
 
 const initialState: NonFunctionProperties<State> = {
@@ -34,56 +30,53 @@ const initialState: NonFunctionProperties<State> = {
   chapter: undefined,
   isHeadingShown: true,
   isCameraEnabled: true,
-  isWebcamWanted: false,
+  isActive: false,
 };
 
-export const store = create<State>(
-  persist<State>(
-    {
-      key: "discriminator",
-      allowlist: ["isWebcamWanted"],
-    },
-    (set, get) => ({
-      ...initialState,
-      isWebcamWanted: false,
-      toggleCamera: () => {
-        const maybeStream = get().webcamStream;
-        const isOn = maybeStream !== undefined;
-        if (isOn) {
-          get().turnOffCamera();
-        } else {
-          get().turnOnCamera();
-        }
-      },
-      turnOffCamera: () => {
-        set({ isWebcamWanted: false });
-        const maybeStream = get().webcamStream;
-        const isOn = maybeStream !== undefined;
-        if (isOn) {
-          const stream = maybeStream!;
-          stream.getTracks().forEach((track) => track.stop());
-          set({ webcamStream: undefined });
-        }
-      },
-      turnOnCamera: async () => {
-        set({ isWebcamWanted: true });
-        const webcamIsOpen = get().webcamStream !== undefined;
-        if (webcamIsOpen) return;
+export const store = create<State>((set, get) => ({
+  ...initialState,
+  toggleCamera: () => {
+    const maybeStream = get().webcamStream;
+    const isOn = maybeStream !== undefined;
+    if (isOn) {
+      get().turnOffCamera();
+    } else {
+      get().turnOnCamera();
+    }
+  },
+  turnOffCamera: () => {
+    localStorage.setItem("isWebcamWanted", "false");
+    const maybeStream = get().webcamStream;
+    const isOn = maybeStream !== undefined;
+    if (isOn) {
+      const stream = maybeStream!;
+      stream.getTracks().forEach((track) => track.stop());
+      set({ webcamStream: undefined });
+    }
+  },
+  turnOnCamera: async () => {
+    localStorage.setItem("isWebcamWanted", "true");
+    const webcamIsOpen = get().webcamStream !== undefined;
+    if (webcamIsOpen) return;
 
-        getWebcam()
-          .then((stream) => {
-            stream.getTracks().forEach((track) => {
-              track.addEventListener("ended", () => {
-                set({ webcamStream: undefined });
-              });
-              set({ webcamStream: stream });
-            });
-          })
-          .catch((error) => console.error(error));
-      },
-    })
-  )
-);
+    getWebcam()
+      .then((stream) => {
+        stream.getTracks().forEach((track) => {
+          track.addEventListener("ended", () => {
+            set({ webcamStream: undefined });
+          });
+          set({ webcamStream: stream });
+        });
+      })
+      .catch((error) => console.error(error));
+  },
+}));
+
+if (localStorage.getItem("isWebcamWanted") === "true") {
+  store.getState().turnOnCamera();
+} else {
+  store.getState().turnOffCamera();
+}
 
 export const useStore = createStoreHook(store);
 
@@ -123,3 +116,15 @@ function getWebcam() {
     }
   });
 }
+
+const activityDetector = createActivityDetector({
+  timeToIdle: 4000,
+});
+
+activityDetector.on("idle", () => {
+  store.setState({ isActive: false });
+});
+
+activityDetector.on("active", () => {
+  store.setState({ isActive: true });
+});

@@ -6,7 +6,9 @@ export function useChapter(
   ref: React.RefObject<IMediaElement>,
   needsCamera: boolean
 ) {
-  store.setState({ isCameraEnabled: needsCamera });
+  useEffect(() => {
+    store.setState({ isCameraEnabled: needsCamera });
+  }, [needsCamera]);
 
   const play = useCallback(() => ref.current?.play(), [ref]);
   const pause = useCallback(() => ref.current?.pause(), [ref]);
