@@ -1,25 +1,26 @@
-import { Canvas } from "@react-three/fiber";
 import React, { useEffect } from "react";
-import { store } from "../../store/store";
-import { StaticBackground } from "../chapters/chapter2/part1/StaticBackground";
+import { store, useStore } from "../../store/store";
 
 export default function Cover2() {
+  const isFirstPredictionComplete = useStore(
+    (state) => state.isFirstPredictionComplete
+  );
   useEffect(() => {
     store.setState({ isCameraEnabled: true });
   }, []);
 
   return (
-    <Canvas
+    <div
       style={{
         position: "absolute",
-        width: "100%",
-        height: "100%",
+        // width: "100%",
+        // height: "100%",
         top: "50%",
-        transform: "translateY(-50%)",
+        transform: "translate(-50%, -50%)",
+        left: "50%",
       }}
-      orthographic={false}
     >
-      <StaticBackground></StaticBackground>
-    </Canvas>
+      {!isFirstPredictionComplete ? "LOADING" : "COMPLETE"}
+    </div>
   );
 }

@@ -23,6 +23,7 @@ type State = {
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
   isActive: boolean;
+  isFirstPredictionComplete: boolean;
 };
 
 const initialState: NonFunctionProperties<State> = {
@@ -30,7 +31,8 @@ const initialState: NonFunctionProperties<State> = {
   chapter: undefined,
   isHeadingShown: true,
   isCameraEnabled: true,
-  isActive: false,
+  isActive: true,
+  isFirstPredictionComplete: false,
 };
 
 export const store = create<State>((set, get) => ({
@@ -119,6 +121,7 @@ function getWebcam() {
 
 const activityDetector = createActivityDetector({
   timeToIdle: 4000,
+  ignoredEventsWhenIdle: [],
 });
 
 activityDetector.on("idle", () => {

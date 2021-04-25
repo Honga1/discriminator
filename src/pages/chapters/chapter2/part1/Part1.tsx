@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import React, { useState } from "react";
 import { useAnimationFrame } from "../../../../hooks/useAnimationFrame";
 import { useWebcam } from "../../../../hooks/useWebcam";
+import { store } from "../../../../store/store";
 import { usePredictions } from "./../../../../hooks/usePredictions";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
@@ -21,6 +22,7 @@ export const Part1 = ({
   useAnimationFrame(1, () => {
     if (predictions.current.length > 0 && !hasFirstPrediction) {
       setHasFirstPrediction(true);
+      store.setState({ isFirstPredictionComplete: true });
     }
   });
 
