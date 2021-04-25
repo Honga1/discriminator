@@ -41,6 +41,7 @@ export const store = create<State>(
   persist<State>(
     {
       key: "discriminator",
+      allowlist: ["isWebcamWanted"],
     },
     (set, get) => ({
       ...initialState,
@@ -83,27 +84,6 @@ export const store = create<State>(
     })
   )
 );
-
-// async function initialize() {
-//   const shouldUseWebcam = await isWebcamUseApproved();
-//   if (shouldUseWebcam) {
-//     store.getState().turnOnCamera();
-//   }
-// }
-
-// const isWebcamUseApproved = () => {
-//   return new Promise<boolean>((resolve, reject) => {
-//     if (navigator.mediaDevices === undefined) {
-//       resolve(false);
-//       return;
-//     }
-//     navigator.mediaDevices.enumerateDevices().then((mediaDeviceInfo) => {
-//       resolve([...mediaDeviceInfo].some((info) => info.label !== ""));
-//     });
-//   });
-// };
-
-// initialize();
 
 export const useStore = createStoreHook(store);
 

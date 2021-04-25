@@ -19,12 +19,14 @@ import {
   validateChapterNumber,
   validatePageTypeQuery,
 } from "./Routes";
+import { useStore } from "./store/store";
 
 const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
   <Route {...props} />
 );
 
 function App() {
+  useStore();
   return (
     <PersistGate>
       <HashRouter basename={"/"}>
