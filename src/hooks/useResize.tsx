@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 
 export function useResize(element: React.RefObject<HTMLElement>) {
   let [{ screenWidth, screenHeight, aspect, rect }, setState] = useState<{
@@ -34,7 +34,7 @@ export function useResize(element: React.RefObject<HTMLElement>) {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.addEventListener("resize", onResize, false);
     onResize();
     return () => {
