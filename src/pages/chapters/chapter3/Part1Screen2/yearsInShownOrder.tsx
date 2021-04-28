@@ -107,13 +107,14 @@ const SlideBox = styled(Box)<{
   slideDirection: "DOWN" | "LEFT";
 }>`
   opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 1s, transform 1s;
+  transition: opacity 0.4s linear 0.2s,
+    transform 0.6s cubic-bezier(0.42, 0, 0.71, 1.33) 0s;
 
   transform: ${({ isShown, slideDirection }) => {
     if (slideDirection === "LEFT") {
-      return !isShown ? `translateX(100%)` : "translateX(0)";
+      return !isShown ? `translateX(20%)` : "translateX(0)";
     } else {
-      return !isShown ? `translateY(-100%)` : "translateY(0)";
+      return !isShown ? `translateY(-20%)` : "translateY(0)";
     }
   }};
 `;
