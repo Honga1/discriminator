@@ -1,8 +1,7 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext } from "react";
+import { Box, Text } from "grommet";
+import React from "react";
 import styled from "styled-components";
 import { StackedBoxes } from "./StackedBoxes";
-import { useImages } from "./useImages";
 
 export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
 const yearInConsecutiveOrder = [2006, 2007, 2010, 2011, 2012, 2013] as const;
@@ -84,40 +83,20 @@ export function GridBoxes({
   yearsShown: Set<2011 | 2010 | 2007 | 2013 | 2006 | 2012>;
   tinting: { wedding: boolean; family: boolean; party: boolean };
 }) {
-  const isSmall = useContext(ResponsiveContext) === "small";
-  const images = useImages();
   return (
     <>
-      {yearInConsecutiveOrder.map((year) => (
-        <SlideBox
-          key={year}
-          slideDirection={isSmall ? "LEFT" : "DOWN"}
-          gridArea={`stackedBoxes${year}`}
-          align="center"
-          isShown={yearsShown.has(year)}
-        >
-          <StackedBoxes images={images[year]} tinting={tinting} />
-        </SlideBox>
-      ))}
+      {yearInConsecutiveOrder.map((year) => {
+        const isShown = yearsShown.has(year);
+        return (
+          <Box key={year} gridArea={`stackedBoxes${year}`} align="center">
+            <StackedBoxes year={year} tinting={tinting} isShown={isShown} />
+          </Box>
+        );
+      })}
     </>
   );
 }
-const SlideBox = styled(Box)<{
-  isShown: boolean;
-  slideDirection: "DOWN" | "LEFT";
-}>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.4s linear 0.2s,
-    transform 0.6s cubic-bezier(0.42, 0, 0.71, 1.33) 0s;
 
-  transform: ${({ isShown, slideDirection }) => {
-    if (slideDirection === "LEFT") {
-      return !isShown ? `translateX(20%)` : "translateX(0)";
-    } else {
-      return !isShown ? `translateY(-20%)` : "translateY(0)";
-    }
-  }};
-`;
 export function GridTextLabels({
   yearsShown,
 }: {
