@@ -7,10 +7,10 @@ import {
   Switch,
 } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
-import { Chapter } from "./pages/chapters/Chapters";
-import { Cover } from "./pages/covers/Covers";
-import { Home } from "./pages/plain/Home";
-import { Permission } from "./pages/plain/Permission";
+import { Chapter } from "./chapters/Chapters";
+import { Cover } from "./covers/Covers";
+import { Home } from "./plain/Home";
+import { Permission } from "./plain/Permission";
 import {
   parseChapterNumber,
   parsePageTypeQuery,
