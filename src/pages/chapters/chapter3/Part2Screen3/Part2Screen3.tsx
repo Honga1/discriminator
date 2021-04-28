@@ -1,8 +1,8 @@
 import { Box, Button, ResponsiveContext, Text } from "grommet";
 import { memo, useCallback, useContext, useRef, useState } from "react";
 import styled from "styled-components";
-import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
-import { ButtonCornerMapBox, FullScreenMapBox } from "./MapBox";
+import { CustomScrollbarBox } from "../../../../components/CustomScrollbarBox";
+import { ButtonCornerMapBox, FullScreenMapBox } from "../MapBox";
 
 type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);

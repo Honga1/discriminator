@@ -10,7 +10,7 @@ import { Part1Screen1 } from "./Part1Screen1";
 import { Part1Screen2Selector } from "./Part1Screen2/Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
-import { Part2Screen3 } from "./Part2Screen3";
+import { Part2Screen3 } from "./Part2Screen3/Part2Screen3";
 import { Part3Screen1Selector } from "./Part3Screen1";
 
 export default function Chapter3() {

@@ -1,5 +1,5 @@
 import { Box } from "grommet";
-import { FadeOutBox } from "./Part2Screen3";
+import { FadeOutBox } from "./Part2Screen3/Part2Screen3";
 
 export const ButtonCornerMapBox = ({ isShown }: { isShown: boolean }) => {
   return (
