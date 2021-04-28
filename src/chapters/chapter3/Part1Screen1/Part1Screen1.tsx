@@ -116,6 +116,10 @@ const AdamFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
         },
       ],
       from: { scale: 0.98 },
+      config: {
+        duration: 1000,
+        easing: (t) => -(Math.cos(Math.PI * t) - 1) / 2,
+      },
     },
     [isTalking]
   );
@@ -184,6 +188,10 @@ const BrettFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
           scale: 0.98,
         },
       ],
+      config: {
+        duration: 1000,
+        easing: (t) => -(Math.cos(Math.PI * t) - 1) / 2,
+      },
       from: { scale: 0.98 },
     },
     [isTalking]
