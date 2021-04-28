@@ -70,7 +70,7 @@ export const ChapterSelectDropdown = () => {
         >
           <RoutedButton
             plain
-            href="/chapter/1"
+            href="/chapter/1?type=chapter"
             onClick={onClose}
             label={
               <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
@@ -80,7 +80,7 @@ export const ChapterSelectDropdown = () => {
           />
           <RoutedButton
             plain
-            href="/chapter/2"
+            href="/chapter/2?type=cover"
             onClick={onClose}
             label={
               <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
@@ -90,7 +90,7 @@ export const ChapterSelectDropdown = () => {
           />
           <RoutedButton
             plain
-            href="/chapter/3"
+            href="/chapter/3?type=cover"
             onClick={onClose}
             label={
               <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
@@ -100,7 +100,7 @@ export const ChapterSelectDropdown = () => {
           />
           <RoutedButton
             plain
-            href="/chapter/4"
+            href="/chapter/4?type=cover"
             onClick={onClose}
             label={
               <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>

@@ -148,13 +148,13 @@ const PermissionContent = () => {
         color={"red"}
         onClick={() => store.setState({ webcamStream: undefined })}
         textContent={<DeclineText />}
-        href="/chapter/1"
+        href="/chapter/1?type=chapter"
       />
       <PageBodyButton
         color={"green"}
-        onClick={store.getState().turnOnCamera}
+        onClick={() => store.getState().turnOnCamera()}
         textContent={<AcceptText />}
-        href="/chapter/1"
+        href="/chapter/1?type=chapter"
       />
     </Box>
   );
