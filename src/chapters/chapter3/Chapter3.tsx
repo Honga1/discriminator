@@ -101,8 +101,8 @@ export default function Chapter3() {
         setIsAutoPaused(false);
 
         setPart("PART_2_SCREEN_2");
-      } else if (seconds < 187) {
-        if (seconds >= 185) {
+      } else if (seconds < 178) {
+        if (seconds >= 176) {
           if (allowAutoPause && !isAutoPaused) {
             ref.current?.pause();
             setIsAutoPaused(true);
