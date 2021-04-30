@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, useRef } from "react";
-import { useResize } from "src/hooks/useResize";
 import { CSSProperties } from "styled-components";
+import useResizeObserver from "use-resize-observer";
 
 export const SquareDiv = ({
   children,
@@ -15,18 +15,20 @@ export const SquareDiv = ({
   const ref = useRef<HTMLDivElement>(null);
   const parent = useRef<HTMLDivElement>(null);
 
-  const { rect } = useResize(parent);
+  const { width: containerWidth, height: containerHeight } = useResizeObserver({
+    ref: parent,
+  });
 
   let width: CSSProperties["width"];
   let height: CSSProperties["height"];
 
-  if (rect !== undefined) {
-    if (rect.width > rect.height) {
-      width = rect.height + "px";
-      height = rect.height + "px";
+  if (containerWidth !== undefined && containerHeight !== undefined) {
+    if (containerWidth > containerHeight) {
+      width = containerHeight + "px";
+      height = containerHeight + "px";
     } else {
-      height = rect.width + "px";
-      width = rect.width + "px";
+      height = containerWidth + "px";
+      width = containerWidth + "px";
     }
   }
 
