@@ -208,7 +208,7 @@ const modelPromise = facemesh.load(
   }
 );
 
-export function useModel() {
+function useModel() {
   return useAsyncMemo(
     async () => {
       console.log("Loading model");
