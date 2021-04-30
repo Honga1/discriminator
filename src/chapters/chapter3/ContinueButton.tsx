@@ -24,7 +24,7 @@ export function ContinueButton(props: {
           shouldShow={props.isAutoPaused}
           text="Continue"
           textWidth="200px"
-          toProgress={props.play}
+          toProgress={() => props.play?.()}
         />
       )}
     </Box>
