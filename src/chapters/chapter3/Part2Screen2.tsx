@@ -262,7 +262,11 @@ const TypingText = memo(
     return (
       <Box
         direction="row"
-        style={{ lineHeight: "48px", justifyContent: "center" }}
+        style={{
+          lineHeight: "48px",
+          justifyContent: "center",
+          whiteSpace: "pre-line",
+        }}
         color={color}
       >
         <Text
@@ -276,7 +280,7 @@ const TypingText = memo(
           weight="bold"
         >
           {[...text.slice(0, charactersShown)].map((char, index) =>
-            char === " " ? <Fragment key={index}>&nbsp;</Fragment> : char
+            char === " " ? <Fragment key={index}> &nbsp;</Fragment> : char
           )}
         </Text>
         <Text
@@ -290,7 +294,7 @@ const TypingText = memo(
           weight="bold"
         >
           {[...text.slice(charactersShown, text.length)].map((char, index) =>
-            char === " " ? <Fragment key={index}>&nbsp;</Fragment> : char
+            char === " " ? <Fragment key={index}> &nbsp;</Fragment> : char
           )}
         </Text>
       </Box>
