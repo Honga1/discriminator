@@ -71,6 +71,7 @@ export default function Chapter3() {
       const audio = event.target as IMediaElement;
       const seconds = Math.round(audio.currentTime);
       setSeconds(seconds);
+      console.log(seconds);
       if (seconds < 15) {
         store.setState({ isHeadingShown: true });
       } else {
@@ -142,7 +143,7 @@ export default function Chapter3() {
           <Part1Screen2Selector seconds={seconds} />
         )}
         {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
-        {part === "PART_2_SCREEN_2" && <Part2Screen2 />}
+        {part === "PART_2_SCREEN_2" && <Part2Screen2 seconds={seconds} />}
         {part === "PART_2_SCREEN_3" && <Part2Screen3 />}
         {part === "PART_3_SCREEN_1" && (
           <Part3Screen1Selector seconds={seconds} />
