@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://honga1.github.io/discriminator",
   "dependencies": {
-    "@react-three/drei": "^4.3.2",
     "@react-three/fiber": "^6.0.17",
     "@tensorflow-models/blazeface": "^0.0.7",
     "@tensorflow-models/face-landmarks-detection": "^0.0.3",
@@ -58,7 +57,6 @@
     ]
   },
   "devDependencies": {
-    "@types/clmtrackr": "^1.1.0",
     "@types/howler": "^2.2.2",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",

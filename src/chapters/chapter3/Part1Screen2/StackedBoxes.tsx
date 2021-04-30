@@ -1,4 +1,4 @@
-import { useSpring } from "@react-spring/core";
+import { useSpring } from "react-spring";
 import { Box, Image, ResponsiveContext } from "grommet";
 import React, {
   memo,
