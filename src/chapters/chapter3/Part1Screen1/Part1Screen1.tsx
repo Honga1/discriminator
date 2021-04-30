@@ -1,8 +1,7 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef, useState } from "react";
-import { animated, config, to, useSpring } from "react-spring";
+import { animated, useSpring } from "react-spring";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
-import { colorTheme } from "src/theme";
 import { SquareDiv } from "../../../components/SquareDiv";
 import blinking from "./blinking.mp4";
 import { TypingText } from "./TypingText";

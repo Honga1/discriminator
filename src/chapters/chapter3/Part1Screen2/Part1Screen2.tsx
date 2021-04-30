@@ -187,7 +187,6 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     }
   });
 
-  const getStage = () => stage;
   const [{ x, y, scale }, set] = useSpring(() => ({
     x: 0,
     y: 0,
@@ -198,7 +197,6 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     {
       onDrag: ({ delta: [deltaX, deltaY], event, pinching }) => {
         event.preventDefault();
-        console.log(getStage());
 
         !pinching &&
           set({
