@@ -1,5 +1,6 @@
 import { Grid, ResponsiveContext, Timeout } from "grommet";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
 import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
@@ -22,6 +23,12 @@ export const ControlButtonRow = ({
   const [isOpen, setIsOpen] = useState(true);
   const [hasTimeoutElapsed, setHasTimeoutElapsed] = useState(true);
   const isActive = useIsActive();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   useEffect(() => {
     onOpenChange(isOpen);
