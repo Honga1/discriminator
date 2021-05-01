@@ -1,22 +1,14 @@
-import {
-  Box,
-  Button,
-  ButtonType,
-  Grid,
-  ResponsiveContext,
-  Text,
-  Timeout,
-} from "grommet";
+import { Grid, ResponsiveContext, Timeout } from "grommet";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
-import { colorTheme } from "../../theme";
-import { ModalButton } from "../ModalButton";
 import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
+import { FadeOutBox } from "./FadeOutBox";
+import { ModalButtons } from "./ModalButtons";
 import { NextChapterButton } from "./NextChapterButton";
 import { PlayPauseButton } from "./PlayPauseButton";
 import { RewindButton } from "./RewindButton";
+import { ShowMenuButton } from "./ShowMenuButton";
 
 export const ControlButtonRow = ({
   onOpenChange,
@@ -66,163 +58,14 @@ export const ControlButtonRow = ({
         <ChapterSelectDropdown />
       </FadeOutBox>
 
-      {isSmall ? (
-        <>
-          <ModalButtons isSmall={isSmall} isOpen={isOpen}></ModalButtons>{" "}
-          <ShowMenuButton
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            setHasTimeoutElapsed={setHasTimeoutElapsed}
-            timeout={timeout}
-          ></ShowMenuButton>
-        </>
-      ) : (
-        <>
-          <ShowMenuButton
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            setHasTimeoutElapsed={setHasTimeoutElapsed}
-            timeout={timeout}
-          ></ShowMenuButton>
-          <ModalButtons isSmall={isSmall} isOpen={isOpen}></ModalButtons>
-        </>
-      )}
+      {isSmall && <ModalButtons isSmall={isSmall} isOpen={isOpen} />}
+      <ShowMenuButton
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setHasTimeoutElapsed={setHasTimeoutElapsed}
+        timeout={timeout}
+      />
+      {!isSmall && <ModalButtons isSmall={isSmall} isOpen={isOpen} />}
     </Grid>
   );
 };
-
-function ModalButtons(props: { isOpen: boolean; isSmall: boolean }) {
-  return (
-    <FadeOutBox
-      isShown={props.isOpen}
-      flex={false}
-      direction="row"
-      gap="20px"
-      justify={props.isSmall ? "between" : "end"}
-      style={{ pointerEvents: !props.isOpen ? "none" : "auto" }}
-      align="center"
-      width="100%"
-    >
-      <ModalButton
-        plain
-        query={{
-          key: "modal",
-          value: "about",
-          operation: "open",
-        }}
-        label={
-          <StyledModalButtonText size="small">About</StyledModalButtonText>
-        }
-      />
-      <ModalButton
-        plain
-        query={{
-          key: "modal",
-          value: "privacy",
-          operation: "open",
-        }}
-        label={
-          <StyledModalButtonText size="small">Privacy</StyledModalButtonText>
-        }
-      />
-      <ModalButton
-        plain
-        query={{
-          key: "modal",
-          value: "credits",
-          operation: "open",
-        }}
-        label={
-          <StyledModalButtonText size="small">Credits</StyledModalButtonText>
-        }
-      />
-    </FadeOutBox>
-  );
-}
-
-const StyledModalButtonText = styled(Text)`
-  color: ${colorTheme.offWhite};
-  transition: text-decoration 0.2s;
-  text-decoration: underline solid transparent;
-
-  &:hover {
-    text-decoration: underline solid ${colorTheme.offWhite};
-  }
-`;
-
-function ShowMenuButton(props: {
-  timeout: { current: number | undefined };
-  setHasTimeoutElapsed: (arg0: boolean) => void;
-  setIsOpen: (arg0: boolean) => void;
-  isOpen: boolean;
-}) {
-  return (
-    <Box align="center" justify="center">
-      <ThreeDotsMenuButton
-        isOpen={props.isOpen}
-        onMouseOver={() => {
-          if (props.timeout.current) clearTimeout(props.timeout.current);
-          props.setHasTimeoutElapsed(false);
-          props.timeout.current = (setTimeout(
-            () => props.setHasTimeoutElapsed(true),
-            4000
-          ) as unknown) as Timeout;
-          props.setIsOpen(true);
-        }}
-      />
-    </Box>
-  );
-}
-
-function ThreeDotsMenuButton({
-  isOpen,
-  ...buttonProps
-}: ButtonType & { isOpen: boolean }) {
-  return (
-    <Button
-      {...buttonProps}
-      plain
-      label={
-        <Box
-          width="64px"
-          height="32px"
-          direction="row"
-          flex={false}
-          justify="between"
-          align="center"
-        >
-          <StyledDot
-            width="14px"
-            height="14px"
-            style={{ borderRadius: "50%", transition: "background 0.6s" }}
-            border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
-          />
-          <StyledDot
-            width="14px"
-            height="14px"
-            style={{ borderRadius: "50%", transition: "background 0.6s" }}
-            border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
-          />
-          <StyledDot
-            width="14px"
-            height="14px"
-            style={{ borderRadius: "50%", transition: "background 0.6s" }}
-            border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
-          />
-        </Box>
-      }
-    />
-  );
-}
-
-const StyledDot = styled(Box)`
-  box-shadow: 0px 0px 10.4167px rgba(0, 0, 0, 0.3);
-`;
-
-const FadeOutBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.6s;
-`;

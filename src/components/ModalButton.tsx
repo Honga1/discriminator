@@ -3,25 +3,16 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { useQuery } from "../hooks/useQuery";
 
-
-export const ModalButton = (
+export const OpenModalButton = (
   props: ButtonProps & {
-    query: {
-      key: "modal";
-      value: "about" | "privacy" | "credits";
-      operation: "open";
-    } |
-    {
-      key: "modal";
-      operation: "close";
-    };
+    modal: "about" | "privacy" | "credits";
   } & Pick<
-    React.DetailedHTMLProps<
-      React.ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >,
-    "onClick"
-  >
+      React.DetailedHTMLProps<
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+      >,
+      "onClick"
+    >
 ) => {
   const query = useQuery();
   const history = useHistory();
@@ -32,15 +23,41 @@ export const ModalButton = (
       as={"div"}
       onClick={(event) => {
         props.onClick?.(event);
-        if (props.query.operation === "close") {
-          query.delete(props.query.key);
-        } else {
-          query.set(props.query.key, props.query.value);
-        }
+        query.set("modal", props.modal);
         history.push({
           ...history.location,
           search: query.toString(),
         });
-      }} />
+      }}
+    />
+  );
+};
+
+export const CloseModalButton = (
+  props: ButtonProps &
+    Pick<
+      React.DetailedHTMLProps<
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+      >,
+      "onClick"
+    >
+) => {
+  const query = useQuery();
+  const history = useHistory();
+
+  return (
+    <Button
+      {...props}
+      as={"div"}
+      onClick={(event) => {
+        props.onClick?.(event);
+        query.delete("modal");
+        history.push({
+          ...history.location,
+          search: query.toString(),
+        });
+      }}
+    />
   );
 };

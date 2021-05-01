@@ -2,7 +2,7 @@ import { Box, Heading, ResponsiveContext } from "grommet";
 import React, { CSSProperties, PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import { colorTheme } from "../theme";
-import { ModalButton } from "../components/ModalButton";
+import { OpenModalButton } from "../components/ModalButton";
 
 export const Links = () => {
   const size = useContext(ResponsiveContext);
@@ -24,8 +24,8 @@ function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
   const text = !isOnDark ? colorTheme.white : colorTheme.black;
   return (
     <Box className="links" gap="24px">
-      <ModalButton
-        query={{ key: "modal", value: "about", operation: "open" }}
+      <OpenModalButton
+        modal="about"
         plain
         label={
           <LinkFrame textColor={text} frameColor={blue} heading="About">
@@ -33,8 +33,8 @@ function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
           </LinkFrame>
         }
       />
-      <ModalButton
-        query={{ key: "modal", value: "privacy", operation: "open" }}
+      <OpenModalButton
+        modal="privacy"
         plain
         label={
           <LinkFrame textColor={text} frameColor={red} heading="Privacy">
@@ -42,8 +42,8 @@ function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
           </LinkFrame>
         }
       />
-      <ModalButton
-        query={{ key: "modal", value: "credits", operation: "open" }}
+      <OpenModalButton
+        modal="credits"
         plain
         label={
           <LinkFrame textColor={text} frameColor={green} heading="Credits">
@@ -73,8 +73,8 @@ const LinksFloating = ({
             top: "64px",
           }}
         >
-          <ModalButton
-            query={{ key: "modal", value: "about", operation: "open" }}
+          <OpenModalButton
+            modal="about"
             plain
             fill
             label={
@@ -94,9 +94,8 @@ const LinksFloating = ({
             left: "204px",
           }}
         >
-          <ModalButton
-            query={{ key: "modal", value: "privacy", operation: "open" }}
-            href="/privacy"
+          <OpenModalButton
+            modal="privacy"
             plain
             fill
             label={
@@ -117,9 +116,8 @@ const LinksFloating = ({
             top: "84px",
           }}
         >
-          <ModalButton
-            query={{ key: "modal", value: "credits", operation: "open" }}
-            href="/credits"
+          <OpenModalButton
+            modal="credits"
             plain
             fill
             label={

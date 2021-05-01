@@ -1,8 +1,8 @@
 import { Box } from "grommet";
 import React, { useState } from "react";
-import styled from "styled-components";
 import { ChapterIndicators } from "./ChapterIndicators";
 import { ControlButtonRow } from "./ControlButtonRow";
+import { FadeOutBox } from "./FadeOutBox";
 
 export const Timeline = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -30,8 +30,3 @@ export const Timeline = () => {
     </Box>
   );
 };
-
-const FadeOutBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 0.6s;
-`;

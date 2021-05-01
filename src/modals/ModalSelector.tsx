@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { useHistory } from "react-router-dom";
-import { ModalButton } from "../components/ModalButton";
+import { CloseModalButton, OpenModalButton } from "../components/ModalButton";
 import { useQuery } from "../hooks/useQuery";
 import { useStore } from "../store/store";
 import { colorTheme } from "../theme";
@@ -264,8 +264,7 @@ const ScrollingHeadingBlock = ({
 const CloseButtonSmall = () => {
   return (
     <Box pad={{ right: "11px", top: "10px" }}>
-      <ModalButton
-        query={{ key: "modal", operation: "close" }}
+      <CloseModalButton
         plain
         fill
         label={
@@ -302,8 +301,7 @@ const CloseButtonSmall = () => {
 const CloseButtonNotSmall = () => {
   return (
     <Box pad={{ right: "6px", top: "4px" }}>
-      <ModalButton
-        query={{ key: "modal", operation: "close" }}
+      <CloseModalButton
         plain
         fill
         label={
