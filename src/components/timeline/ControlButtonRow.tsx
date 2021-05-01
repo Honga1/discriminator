@@ -111,9 +111,7 @@ function ModalButtons(props: { isOpen: boolean; isSmall: boolean }) {
           operation: "open",
         }}
         label={
-          <Text size="small" color={colorTheme["blueLight"]}>
-            About
-          </Text>
+          <StyledModalButtonText size="small">About</StyledModalButtonText>
         }
       />
       <ModalButton
@@ -124,9 +122,7 @@ function ModalButtons(props: { isOpen: boolean; isSmall: boolean }) {
           operation: "open",
         }}
         label={
-          <Text size="small" color={colorTheme["redLight"]}>
-            Privacy
-          </Text>
+          <StyledModalButtonText size="small">Privacy</StyledModalButtonText>
         }
       />
       <ModalButton
@@ -137,14 +133,22 @@ function ModalButtons(props: { isOpen: boolean; isSmall: boolean }) {
           operation: "open",
         }}
         label={
-          <Text size="small" color={colorTheme["greenLight"]}>
-            Credits
-          </Text>
+          <StyledModalButtonText size="small">Credits</StyledModalButtonText>
         }
       />
     </FadeOutBox>
   );
 }
+
+const StyledModalButtonText = styled(Text)`
+  color: ${colorTheme.offWhite};
+  transition: text-decoration 0.2s;
+  text-decoration: underline solid transparent;
+
+  &:hover {
+    text-decoration: underline solid ${colorTheme.offWhite};
+  }
+`;
 
 function ShowMenuButton(props: {
   timeout: { current: number | undefined };
@@ -210,7 +214,7 @@ function ThreeDotsMenuButton({
           ></Box>
         </Box>
       }
-    ></Button>
+    />
   );
 }
 
