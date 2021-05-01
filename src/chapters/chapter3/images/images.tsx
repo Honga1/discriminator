@@ -36,7 +36,7 @@ export const images = {
             license: "by-sa",
             date: "May 2011",
             year: 2011,
-            tagged: "wedding",
+            tagged: "family",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -49,7 +49,7 @@ export const images = {
             license: "by-sa",
             date: "Jul 2010",
             year: 2010,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -62,7 +62,7 @@ export const images = {
             license: "by-sa",
             date: "Jul 2010",
             year: 2010,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -101,7 +101,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -127,7 +127,7 @@ export const images = {
             license: "by-sa",
             date: "Jan 2007",
             year: 2007,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -140,7 +140,7 @@ export const images = {
             license: "by-sa",
             date: "Apr 2006",
             year: 2006,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -153,7 +153,7 @@ export const images = {
             license: "by-sa",
             date: "Apr 2006",
             year: 2006,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -179,7 +179,7 @@ export const images = {
             license: "by-sa",
             date: "Aug 2013",
             year: 2013,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -192,7 +192,7 @@ export const images = {
             license: "by-sa",
             date: "Aug 2013",
             year: 2013,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -231,7 +231,7 @@ export const images = {
             license: "by-sa",
             date: "Oct 2013",
             year: 2013,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -244,7 +244,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -296,7 +296,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -335,7 +335,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -465,7 +465,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -504,7 +504,7 @@ export const images = {
             license: "by-sa",
             date: "Jun 2007",
             year: 2007,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -517,7 +517,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "wedding",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -543,7 +543,7 @@ export const images = {
             license: "by-sa",
             date: "Feb 2011",
             year: 2011,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>
@@ -582,7 +582,7 @@ export const images = {
             license: "by-sa",
             date: "Oct 2010",
             year: 2010,
-            tagged: "family",
+            tagged: "party",
           },
           {
             image_url: imagesInThisFolder.find((path) =>

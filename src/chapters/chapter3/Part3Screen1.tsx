@@ -184,10 +184,10 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
       tinting.add("wedding");
     }
     if (stageIsAfter(stage, "WEDDING")) {
-      tinting.add("family");
-    }
-    if (stageIsAfter(stage, "FAMILY")) {
       tinting.add("party");
+    }
+    if (stageIsAfter(stage, "PARTY")) {
+      tinting.add("family");
     }
     return tinting;
   }, [stage]);
