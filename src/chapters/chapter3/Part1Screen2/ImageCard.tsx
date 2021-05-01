@@ -1,6 +1,7 @@
-import { Box, Image, ResponsiveContext } from "grommet";
+import { Box, Image, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useRef } from "react";
 import { animated, config, useSpring, useTransition } from "react-spring";
+import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import { ImageText } from "./ImageText";
 import {
@@ -101,12 +102,38 @@ export const ImageCard = memo(
             transform,
           }}
         >
-          <StyledImage
-            style={{ willChange: "opacity" }}
-            src={image.image_url}
-            className="auto-pickable"
-            draggable={false}
-          />
+          <Box
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            {image.image_url.includes("missing_image") && (
+              <Box overflow="hidden">
+                <Box
+                  style={{
+                    position: "absolute",
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text size="30%" color={colorTheme.offWhite}>
+                    Image could no longer be retrieved
+                  </Text>
+                </Box>
+              </Box>
+            )}
+            <StyledImage
+              style={{ willChange: "opacity" }}
+              src={image.image_url}
+              className="auto-pickable"
+              draggable={false}
+            />
+          </Box>
         </AnimatedBox>
 
         {tintingTransition((style, isTinted) =>
