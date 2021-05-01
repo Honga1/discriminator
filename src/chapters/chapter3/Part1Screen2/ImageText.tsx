@@ -28,31 +28,31 @@ export function ImageText({
 
   return (
     <Box style={isSmall ? smallSide : notSmallSide}>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &#123;
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;date: {printData.date},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;image_url: {printData.image_url},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;license: {printData.license},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;nsid: {printData.nsid},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;path_alias: {printData.path_alias},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;photo_id: {printData.photo_id},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &nbsp;&nbsp;tagged: {printData.tagged},
       </Text>
-      <Text size="6px" color={colorTheme.offWhite}>
+      <Text size="30%" color={colorTheme.offWhite}>
         &#125;
       </Text>
     </Box>
