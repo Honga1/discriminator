@@ -5,17 +5,21 @@ import { useGesture } from "react-use-gesture";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { clamp } from "../../../libs/math";
 import {
+  Part1Screen2Provider,
+  Years,
   yearsInShownOrder,
+} from "./Part1Screen2Context";
+import {
   getZoomPosition,
-  smallGridAreas,
-  largeGridAreas,
-  smallGridColumns,
-  largeGridColumns,
-  smallGridRows,
-  largeGridRows,
   GridBoxes,
   GridTextLabels,
-} from "./yearsInShownOrder";
+  largeGridAreas,
+  largeGridColumns,
+  largeGridRows,
+  smallGridAreas,
+  smallGridColumns,
+  smallGridRows,
+} from "./GridLayout";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];
@@ -92,9 +96,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const [yearsShown, setYearsShown] = useState(
-    new Set<typeof yearsInShownOrder[number]>()
-  );
+  const [yearsShown, setYearsShown] = useState(new Set<Years>());
 
   // Handles hiding / showing whole columns
   useEffect(() => {
@@ -160,6 +162,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     if (stage !== "USER_CONTROL") return;
     const container = ref.current;
     const elements = container.getElementsByClassName("auto-pickable");
+
     const containerBb = container.getBoundingClientRect();
 
     for (const key in elements) {
@@ -283,52 +286,47 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   );
 
   return (
-    <Box
-      flex={false}
-      ref={ref}
-      height="100%"
-      width="100%"
-      justify="center"
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        touchAction: "none",
-        pointerEvents: "auto",
-      }}
-      {...bind()}
-    >
-      <animated.div
+    <Part1Screen2Provider yearsShown={yearsShown}>
+      <Box
+        flex={false}
+        ref={ref}
+        height="100%"
+        width="100%"
+        justify="center"
         style={{
-          translate:
-            x && y && scale
-              ? to([x, y, scale], (x, y, scale) => [x * scale, y * scale])
-              : [0, 0],
-          scale: scale ? to([scale], (s) => s) : 1,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          willChange: "transform",
+          position: "relative",
+          overflow: "hidden",
+          touchAction: "none",
+          pointerEvents: "auto",
         }}
+        {...bind()}
       >
-        <Grid
-          fill="vertical"
-          pad={isSmall ? "16px" : "48px"}
-          areas={isSmall ? smallGridAreas : largeGridAreas}
-          columns={isSmall ? smallGridColumns : largeGridColumns}
-          rows={isSmall ? smallGridRows : largeGridRows}
-          gap={"16px"}
+        <animated.div
+          style={{
+            translate:
+              x && y && scale
+                ? to([x, y, scale], (x, y, scale) => [x * scale, y * scale])
+                : [0, 0],
+            scale: scale ? to([scale], (s) => s) : 1,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            willChange: "transform",
+          }}
         >
-          <GridBoxes
-            yearsShown={yearsShown}
-            tinting={{
-              wedding: false,
-              family: false,
-              party: false,
-            }}
-          />
-          <GridTextLabels yearsShown={yearsShown} />
-        </Grid>
-      </animated.div>
-    </Box>
+          <Grid
+            fill="vertical"
+            pad={isSmall ? "16px" : "48px"}
+            areas={isSmall ? smallGridAreas : largeGridAreas}
+            columns={isSmall ? smallGridColumns : largeGridColumns}
+            rows={isSmall ? smallGridRows : largeGridRows}
+            gap={"16px"}
+          >
+            <GridBoxes />
+            <GridTextLabels />
+          </Grid>
+        </animated.div>
+      </Box>
+    </Part1Screen2Provider>
   );
 });

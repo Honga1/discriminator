@@ -1,10 +1,9 @@
-import { Box, Text } from "grommet";
-import React from "react";
-import styled from "styled-components";
+import { Box, ResponsiveContext, Text } from "grommet";
+import React, { memo, useContext } from "react";
+import { animated, useTransition } from "react-spring";
+import { Part1Screen2Context } from "./Part1Screen2Context";
 import { StackedBoxes } from "./StackedBoxes";
 
-export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
-const yearInConsecutiveOrder = [2006, 2007, 2010, 2011, 2012, 2013] as const;
 export const smallGridAreas = [
   { name: "stackedBoxes2006", start: [1, 0], end: [1, 0] },
   { name: "stackedBoxes2007", start: [1, 1], end: [1, 1] },
@@ -76,58 +75,58 @@ export function getZoomPosition(
   const resultY = yGoal + deltaMovementY;
   return { resultX, resultY };
 }
-export function GridBoxes({
-  yearsShown,
-  tinting,
-}: {
-  yearsShown: Set<2011 | 2010 | 2007 | 2013 | 2006 | 2012>;
-  tinting: { wedding: boolean; family: boolean; party: boolean };
-}) {
-  return (
-    <>
-      {yearInConsecutiveOrder.map((year) => {
-        const isShown = yearsShown.has(year);
-        return (
-          <Box key={year} gridArea={`stackedBoxes${year}`} align="center">
-            <StackedBoxes year={year} tinting={tinting} isShown={isShown} />
-          </Box>
-        );
-      })}
-    </>
-  );
-}
+export const GridBoxes = memo(() => {
+  const { yearsShown } = useContext(Part1Screen2Context);
 
-export function GridTextLabels({
-  yearsShown,
-}: {
-  yearsShown: Set<2006 | 2007 | 2010 | 2011 | 2012 | 2013>;
-}) {
-  return (
-    <>
-      {yearInConsecutiveOrder.map((year) => {
-        return (
-          <FadeInBox
-            key={year}
-            gridArea={`text${year}`}
-            align="center"
-            justify="center"
-            isShown={yearsShown.has(year)}
-          >
-            <Text
-              size="24px"
-              style={{ lineHeight: "72px" }}
-              color="white"
-              textAlign="center"
-            >
-              {year}
-            </Text>
-          </FadeInBox>
-        );
-      })}
-    </>
-  );
-}
-const FadeInBox = styled(Box)<{ isShown: boolean }>`
-  opacity: ${(props) => (props.isShown ? "1" : "0")};
-  transition: opacity 1s;
-`;
+  const isSmall = useContext(ResponsiveContext) === "small";
+
+  const transition = useTransition([...yearsShown], {
+    from: isSmall
+      ? { opacity: 0, y: "0%", x: "20%" }
+      : { opacity: 0, y: "-20%", x: "0%" },
+    enter: { opacity: 1, y: "0%", x: "0%" },
+    leave: { opacity: 0, y: "0%", x: "0%" },
+  });
+
+  return transition((style, year) => (
+    <AnimatedBox
+      key={year}
+      style={style}
+      gridArea={`stackedBoxes${year}`}
+      align="center"
+    >
+      <StackedBoxes year={year} />
+    </AnimatedBox>
+  ));
+});
+
+export const GridTextLabels = memo(() => {
+  const { yearsShown } = useContext(Part1Screen2Context);
+
+  const transition = useTransition([...yearsShown], {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
+
+  return transition((style, year) => (
+    <AnimatedBox
+      key={year}
+      style={style}
+      gridArea={`text${year}`}
+      align="center"
+      justify="center"
+    >
+      <Text
+        size="24px"
+        style={{ lineHeight: "72px" }}
+        color="white"
+        textAlign="center"
+      >
+        {year}
+      </Text>
+    </AnimatedBox>
+  ));
+});
+
+const AnimatedBox = animated(Box);

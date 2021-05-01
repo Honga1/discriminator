@@ -1,5 +1,4 @@
-import { useSpring } from "react-spring";
-import { Box, Image, ResponsiveContext } from "grommet";
+import { Box, ResponsiveContext } from "grommet";
 import React, {
   memo,
   useCallback,
@@ -8,62 +7,22 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { animated } from "react-spring";
-import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
-import { useImages } from "../useImages";
+import { ImageCard } from "./ImageCard";
+import { Part1Screen2Context, Years } from "./Part1Screen2Context";
 
-export const StackedBoxes = memo(
-  ({
-    year,
-    tinting,
-    isShown,
-  }: {
-    year: 2011 | 2010 | 2007 | 2013 | 2006 | 2012;
-    tinting: { wedding: boolean; family: boolean; party: boolean };
-    isShown: boolean;
-  }) => {
-    const isSmall = useContext(ResponsiveContext) === "small";
-    const images = useImages()[year];
+export const StackedBoxes = memo(({ year }: { year: Years }) => {
+  const isSmall = useContext(ResponsiveContext) === "small";
 
-    if (isSmall) {
-      return (
-        <StackedBoxesHorizontal
-          images={images}
-          tinting={tinting}
-          isShown={isShown}
-        />
-      );
-    } else {
-      return (
-        <StackedBoxesVertical
-          images={images}
-          tinting={tinting}
-          isShown={isShown}
-        />
-      );
-    }
+  if (isSmall) {
+    return <StackedBoxesHorizontal year={year} />;
+  } else {
+    return <StackedBoxesVertical year={year} />;
   }
-);
+});
 
-const StackedBoxesVertical = ({
-  images,
-  tinting,
-  isShown,
-}: {
-  images: {
-    image_url: string;
-    path_alias: string;
-    nsid: string;
-    photo_id: number;
-    license: string;
-    date: string;
-    tagged: "wedding" | "family" | "party";
-  }[];
-  tinting: { wedding: boolean; family: boolean; party: boolean };
-  isShown: boolean;
-}) => {
-  const amount = images.length;
+const StackedBoxesVertical = ({ year }: { year: Years }) => {
+  const amount = useContext(Part1Screen2Context).images[year].length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
 
@@ -74,7 +33,7 @@ const StackedBoxesVertical = ({
     ref,
   });
 
-  const { BoxesLeft, BoxesRight } = useBoxes(amount, cellsPerColumn);
+  const { BoxesLeft, BoxesRight } = useBoxes(amount, cellsPerColumn, year);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -128,13 +87,7 @@ const StackedBoxesVertical = ({
           gap="10px"
         >
           <Box height="100%" width="100%" align={"center"} justify="end">
-            <BoxesLeft
-              boxHeight={boxHeight}
-              boxWidth={boxWidth}
-              images={images}
-              tinting={tinting}
-              isShown={isShown}
-            />
+            <BoxesLeft boxHeight={boxHeight} boxWidth={boxWidth} />
           </Box>
           {columnCount === 2 && (
             <Box
@@ -144,13 +97,7 @@ const StackedBoxesVertical = ({
               align="center"
               justify="end"
             >
-              <BoxesRight
-                boxHeight={boxHeight}
-                boxWidth={boxWidth}
-                images={images}
-                tinting={tinting}
-                isShown={isShown}
-              />
+              <BoxesRight boxHeight={boxHeight} boxWidth={boxWidth} />
             </Box>
           )}
         </Box>
@@ -159,24 +106,8 @@ const StackedBoxesVertical = ({
   );
 };
 
-const StackedBoxesHorizontal = ({
-  images,
-  tinting,
-  isShown,
-}: {
-  images: {
-    image_url: string;
-    path_alias: string;
-    nsid: string;
-    photo_id: number;
-    license: string;
-    date: string;
-    tagged: "family" | "party" | "wedding";
-  }[];
-  tinting: { wedding: boolean; family: boolean; party: boolean };
-  isShown: boolean;
-}) => {
-  const amount = images.length;
+const StackedBoxesHorizontal = ({ year }: { year: Years }) => {
+  const amount = useContext(Part1Screen2Context).images[year].length;
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerRow = 8;
 
@@ -189,7 +120,8 @@ const StackedBoxesHorizontal = ({
 
   const { BoxesLeft: BoxesUp, BoxesRight: BoxesDown } = useBoxes(
     amount,
-    cellsPerRow
+    cellsPerRow,
+    year
   );
 
   useLayoutEffect(() => {
@@ -249,13 +181,7 @@ const StackedBoxesHorizontal = ({
             justify="start"
             direction="row"
           >
-            <BoxesUp
-              boxHeight={boxHeight}
-              boxWidth={boxWidth}
-              images={images}
-              tinting={tinting}
-              isShown={isShown}
-            />
+            <BoxesUp boxHeight={boxHeight} boxWidth={boxWidth} />
           </Box>
           {rowCount === 2 && (
             <Box
@@ -265,13 +191,7 @@ const StackedBoxesHorizontal = ({
               align="center"
               justify="start"
             >
-              <BoxesDown
-                boxHeight={boxHeight}
-                boxWidth={boxWidth}
-                images={images}
-                tinting={tinting}
-                isShown={isShown}
-              />
+              <BoxesDown boxHeight={boxHeight} boxWidth={boxWidth} />
             </Box>
           )}
         </Box>
@@ -279,123 +199,6 @@ const StackedBoxesHorizontal = ({
     </Box>
   );
 };
-
-const RelativeRotatedBox = memo(
-  ({
-    width,
-    height,
-    image,
-    isTinted,
-    isShown,
-  }: {
-    isTinted: boolean;
-    width: number;
-    height: number;
-    image: {
-      image_url: string;
-      path_alias: string;
-      nsid: string;
-      photo_id: number;
-      license: string;
-      date: string;
-      tagged: string;
-    };
-    isShown: boolean;
-  }) => {
-    const targetRotation = useRef(Math.random() * 84 - 42);
-    const startRotation = useRef(
-      targetRotation.current + (Math.random() - 0.5) * 10
-    );
-    const startOffset = useRef(Math.random() * 50);
-    const isSmall = useContext(ResponsiveContext) === "small";
-
-    const [{ transform, opacity }] = useSpring(() => {
-      const slideDirection = isSmall ? "LEFT" : "DOWN";
-      const translation =
-        slideDirection === "LEFT"
-          ? `translate(${startOffset.current}%, 0%)`
-          : `translate(0, -${startOffset.current}%)`;
-
-      return {
-        transform: !isShown
-          ? `${translation} rotate(${startRotation.current}deg)`
-          : `translate(0%, 0%) rotate(${targetRotation.current}deg)`,
-        opacity: !isShown ? 0 : 1,
-      };
-    }, [isShown]);
-
-    return (
-      <AnimatedBox
-        flex={false}
-        width={width * 100 + "%"}
-        height={height * 100 + "%"}
-        style={{ position: "relative", opacity: opacity }}
-      >
-        <AnimatedBox
-          style={{
-            top: 1,
-            left: 1,
-            right: 1,
-            bottom: 1,
-            position: "absolute",
-            transform: transform,
-            backfaceVisibility: "hidden",
-            zIndex: -1,
-          }}
-          background="#502B2D"
-          border={{ color: "#FF4E4E", size: " 2px" }}
-        />
-
-        <AnimatedBox
-          style={{
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            position: "absolute",
-            transform,
-            overflow: "hidden",
-          }}
-        >
-          <RevealableImage
-            style={{ willChange: "opacity" }}
-            src={image.image_url}
-            className="auto-pickable"
-            draggable={false}
-          />
-        </AnimatedBox>
-
-        <TintedDiv
-          className={isTinted ? `tint-${image.tagged}` : ""}
-          style={{ transform: transform }}
-        />
-      </AnimatedBox>
-    );
-  }
-);
-const AnimatedBox = animated(Box);
-
-const TintedDiv = animated(styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transition: background-color 1s linear;
-  pointer-events: none;
-  backface-visibility: hidden;
-  will-change: background-color;
-
-  &.tint-wedding {
-    background-color: rgba(255, 89, 89, 0.4);
-  }
-
-  &.tint-party {
-    background-color: rgba(117, 122, 255, 0.4);
-  }
-
-  &.tint-family {
-    background-color: rgba(32, 191, 0, 0.4);
-  }
-`);
 
 const shrinkAndMaintainAspectRatio = (
   width: number,
@@ -416,34 +219,15 @@ const shrinkAndMaintainAspectRatio = (
   }
 };
 
-function useBoxes(amount: number, cellsPerColumn: number) {
+function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
   const leftArray = useRef([...new Array(Math.min(amount, cellsPerColumn))]);
   const rightArray = useRef([
     ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
   ]);
 
+  const images = useContext(Part1Screen2Context).images[year];
   const BoxesLeft = useCallback(
-    ({
-      boxWidth,
-      boxHeight,
-      images,
-      tinting,
-      isShown,
-    }: {
-      boxWidth: number;
-      boxHeight: number;
-      images: {
-        image_url: string;
-        path_alias: string;
-        nsid: string;
-        photo_id: number;
-        license: string;
-        date: string;
-        tagged: "wedding" | "family" | "party";
-      }[];
-      tinting: { wedding: boolean; family: boolean; party: boolean };
-      isShown: boolean;
-    }) => (
+    ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
       <>
         {leftArray.current.map((_, index) => {
           const image = images[index];
@@ -453,83 +237,41 @@ function useBoxes(amount: number, cellsPerColumn: number) {
             );
           }
           return (
-            <RelativeRotatedBox
+            <ImageCard
               width={boxWidth}
               height={boxHeight}
               key={index}
               image={image}
-              isTinted={tinting[image.tagged]}
-              isShown={isShown}
             />
           );
         })}
       </>
     ),
-    []
+    [images]
   );
   const BoxesRight = useCallback(
-    ({
-      boxWidth,
-      boxHeight,
-      images,
-      tinting,
-      isShown,
-    }: {
-      boxWidth: number;
-      boxHeight: number;
-      images: {
-        image_url: string;
-        path_alias: string;
-        nsid: string;
-        photo_id: number;
-        license: string;
-        date: string;
-        tagged: "wedding" | "family" | "party";
-      }[];
-      tinting: { wedding: boolean; family: boolean; party: boolean };
-      isShown: boolean;
-    }) => (
+    ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
       <>
         {rightArray.current.map((_, index) => {
-          const image = images[index];
+          const image = images[index + cellsPerColumn];
           if (!image) {
             throw new Error(
               `Could not get image with index ${index} from ${images}`
             );
           }
           return (
-            <RelativeRotatedBox
+            <ImageCard
               width={boxWidth}
               height={boxHeight}
               key={index}
               image={image}
-              isTinted={tinting[image.tagged]}
-              isShown={isShown}
             />
           );
         })}
       </>
     ),
-    []
+    [cellsPerColumn, images]
   );
 
   return { BoxesLeft, BoxesRight };
 }
-
-const RevealableImage = styled(Image)`
-  width: 100%;
-  object-fit: cover;
-  height: 100%;
-  transition: opacity 1s;
-  opacity: 0;
-  backface-visibility: hidden;
-  user-select: none;
-  touch-action: none;
-
-  &.auto-pickable {
-  }
-
-  &.is-picked {
-    opacity: 1;
-  }
-`;
