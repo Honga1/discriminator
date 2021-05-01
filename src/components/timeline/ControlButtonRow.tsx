@@ -191,32 +191,36 @@ function ThreeDotsMenuButton({
           justify="between"
           align="center"
         >
-          <Box
+          <StyledDot
             width="14px"
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
             background={isOpen ? colorTheme.yellow : "none"}
-          ></Box>
-          <Box
+          />
+          <StyledDot
             width="14px"
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
             background={isOpen ? colorTheme.yellow : "none"}
-          ></Box>
-          <Box
+          />
+          <StyledDot
             width="14px"
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
             background={isOpen ? colorTheme.yellow : "none"}
-          ></Box>
+          />
         </Box>
       }
     />
   );
 }
+
+const StyledDot = styled(Box)`
+  box-shadow: 0px 0px 10.4167px rgba(0, 0, 0, 0.3);
+`;
 
 const FadeOutBox = styled(Box)<{ isShown: boolean }>`
   opacity: ${(props) => (props.isShown ? "1" : "0")};
