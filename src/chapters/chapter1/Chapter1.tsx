@@ -1,9 +1,8 @@
 import { useRef } from "react";
 import videoSrc from "./chapter1.mp4";
 import { useChapter } from "../../hooks/useChapter";
-import { IMediaElement } from "../../IMediaElement";
 export default function Chapter1() {
-  const ref = useRef<IMediaElement>(null);
+  const ref = useRef<HTMLVideoElement>(null);
   useChapter(ref, false);
 
   return (

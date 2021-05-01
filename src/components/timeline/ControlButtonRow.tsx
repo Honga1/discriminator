@@ -10,6 +10,7 @@ import { NextChapterButton } from "./NextChapterButton";
 import { PlayPauseButton } from "./PlayPauseButton";
 import { RewindButton } from "./RewindButton";
 import { ShowMenuButton } from "./ShowMenuButton";
+import { MuteButton } from "./MuteButton";
 
 export const ControlButtonRow = ({
   onOpenChange,
@@ -60,6 +61,7 @@ export const ControlButtonRow = ({
         style={{ pointerEvents: !isOpen ? "none" : "auto" }}
       >
         <PlayPauseButton disabled={isCover} />
+        <MuteButton />
         <RewindButton disabled={isCover} />
         <NextChapterButton />
         <ChapterSelectDropdown />

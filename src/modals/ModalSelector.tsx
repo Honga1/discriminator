@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { useHistory } from "react-router-dom";
-import { CloseModalButton, OpenModalButton } from "../components/ModalButton";
+import { CloseModalButton } from "../components/ModalButton";
 import { useQuery } from "../hooks/useQuery";
 import { useStore } from "../store/store";
 import { colorTheme } from "../theme";

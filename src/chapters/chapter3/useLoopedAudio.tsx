@@ -1,5 +1,6 @@
 import { Howl } from "howler";
 import React, { useEffect, useMemo } from "react";
+import { useStore } from "src/store/store";
 import loop1Caf from "./loops/part1.caf";
 import loop1Ogg from "./loops/part1.ogg";
 import loop2Caf from "./loops/part2.caf";
@@ -36,6 +37,14 @@ export function useLoopedAudio(
 
     return [loop1Audio, loop2Audio, loop3Audio];
   }, []);
+
+  const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
+
+  useEffect(() => {
+    loop1Audio.mute(isMuted);
+    loop2Audio.mute(isMuted);
+    loop3Audio.mute(isMuted);
+  }, [isMuted, loop1Audio, loop2Audio, loop3Audio]);
 
   useEffect(() => {
     const mainAudio = ref.current;

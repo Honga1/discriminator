@@ -13,6 +13,8 @@ type State = {
         getIsPlaying: () => boolean;
         getProgress: () => number;
         seekTimeDelta: (delta: number) => void;
+        setMuted: (isMuted: boolean) => void;
+        isMuted: boolean;
         intention: "PLAY" | "PAUSE";
         progress: number;
       }

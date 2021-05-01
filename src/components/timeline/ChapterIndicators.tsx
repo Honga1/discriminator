@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useHistory } from "react-router-dom";
+import { clamp } from "src/libs/math";
 import styled from "styled-components";
 import { useChapterNumber } from "../../hooks/useChapterNumber";
 import { usePageType } from "../../hooks/usePageType";
@@ -262,7 +263,7 @@ function useDraggableElement(
         containerDimensions.width
       );
       dragCurrent = clippedX;
-      const relativeX = clippedX / containerDimensions.width;
+      const relativeX = clamp(clippedX / containerDimensions.width, 0, 1);
 
       onDrag?.(relativeX);
       setTransform(clippedX);

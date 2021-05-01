@@ -1,9 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { store } from "../store/store";
-import { IMediaElement } from "../IMediaElement";
 
 export function useChapter(
-  ref: React.RefObject<IMediaElement>,
+  ref: React.RefObject<HTMLAudioElement | HTMLVideoElement>,
   needsCamera: boolean
 ) {
   useEffect(() => {
@@ -47,6 +46,19 @@ export function useChapter(
     },
     [ref]
   );
+
+  const setMuted = useCallback(
+    (isMuted: boolean) => {
+      if (!ref.current) return;
+      ref.current.muted = isMuted;
+    },
+    [ref]
+  );
+
+  const getMuted = useCallback(() => {
+    if (!ref.current) return false;
+    return ref.current.muted;
+  }, [ref]);
   const onClick = useCallback(() => (getIsPlaying() ? pause() : play()), [
     getIsPlaying,
     pause,
@@ -64,6 +76,8 @@ export function useChapter(
           getProgress,
           setProgress,
           seekTimeDelta,
+          setMuted,
+          isMuted: getMuted(),
           progress: getProgress(),
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
         },
@@ -75,6 +89,7 @@ export function useChapter(
     ref.current?.addEventListener("click", onClick);
     ref.current?.addEventListener("playing", updateStore);
     ref.current?.addEventListener("pause", updateStore);
+    ref.current?.addEventListener("volumechange", updateStore);
     ref.current?.addEventListener("timeupdate", updateStore);
     updateStore();
     return () => {
@@ -92,6 +107,8 @@ export function useChapter(
     rewind,
     setProgress,
     seekTimeDelta,
+    setMuted,
+    getMuted,
     ref,
     onClick,
   ]);
