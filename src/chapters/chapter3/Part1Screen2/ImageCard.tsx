@@ -121,7 +121,11 @@ export const ImageCard = memo(
                     justifyContent: "center",
                   }}
                 >
-                  <Text size="30%" color={colorTheme.offWhite}>
+                  <Text
+                    size={isSmall ? "15%" : "30%"}
+                    color={colorTheme.offWhite}
+                    textAlign="center"
+                  >
                     Image could no longer be retrieved
                   </Text>
                 </Box>
