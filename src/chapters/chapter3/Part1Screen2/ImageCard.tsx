@@ -92,7 +92,8 @@ export const ImageCard = memo(
           border={{ color: "#FF4E4E", size: " 2px" }}
         />
 
-        <AnimatedBox
+        <AnimatedStyledBox
+          className="image-card-image auto-pickable"
           style={{
             top: 0,
             left: 0,
@@ -131,14 +132,9 @@ export const ImageCard = memo(
                 </Box>
               </Box>
             )}
-            <StyledImage
-              style={{ willChange: "opacity" }}
-              src={image.image_url}
-              className="auto-pickable"
-              draggable={false}
-            />
+            <StyledImage src={image.image_url} draggable={false} />
           </Box>
-        </AnimatedBox>
+        </AnimatedStyledBox>
 
         {tintingTransition((style, isTinted) =>
           isTinted ? (
@@ -161,22 +157,22 @@ export const ImageCard = memo(
   }
 );
 
+const AnimatedStyledBox = animated(styled(Box)`
+  will-change: "opacity";
+  backface-visibility: hidden;
+  user-select: none;
+  touch-action: none;
+  transition: opacity 1s;
+  opacity: 0;
+  &.is-picked {
+    opacity: 1;
+  }
+`);
+
 const StyledImage = styled(Image)`
   width: 100%;
   object-fit: cover;
   height: 100%;
-  transition: opacity 1s;
-  opacity: 0;
-  backface-visibility: hidden;
-  user-select: none;
-  touch-action: none;
-
-  &.auto-pickable {
-  }
-
-  &.is-picked {
-    opacity: 1;
-  }
 `;
 
 const AnimatedBox = animated(Box);

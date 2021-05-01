@@ -161,7 +161,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     if (!ref.current) return;
     if (stage !== "USER_CONTROL") return;
     const container = ref.current;
-    const elements = container.getElementsByClassName("auto-pickable");
+    const elements = container.getElementsByClassName("image-card-image");
 
     const containerBb = container.getBoundingClientRect();
 

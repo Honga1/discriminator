@@ -67,10 +67,6 @@ export default function Chapter3() {
   useLoopedAudio(ref, isAutoPaused, part);
 
   useEffect(() => {
-    audio.currentTime = 33;
-  }, [audio]);
-
-  useEffect(() => {
     const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
       const audio = event.target as IMediaElement;
       const seconds = Math.round(audio.currentTime);
