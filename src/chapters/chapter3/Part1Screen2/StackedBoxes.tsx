@@ -11,7 +11,7 @@ import React, {
 import { animated } from "react-spring";
 import styled from "styled-components";
 import useResizeObserver from "use-resize-observer";
-import { useImages } from "./useImages";
+import { useImages } from "../useImages";
 
 export const StackedBoxes = memo(
   ({
