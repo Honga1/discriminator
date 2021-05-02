@@ -27,18 +27,22 @@ export const ImageCard = memo(
       targetRotation.current + (Math.random() - 0.5) * 10
     );
     const startOffset = useRef(Math.random() * 100 - 50);
+    const endOffset = useRef(Math.random() * 100 - 50);
     const isSmall = useContext(ResponsiveContext) === "small";
 
     const [{ transform }] = useSpring(() => {
-      const translation = isSmall
+      const startTranslation = isSmall
         ? `translate(${startOffset.current}%, 0%)`
         : `translate(0, ${startOffset.current}%)`;
+      const endTranslation = isSmall
+        ? `translate(${endOffset.current}%, 0%)`
+        : `translate(0, ${endOffset.current}%)`;
       return {
         from: {
-          transform: `${translation} rotate(${startRotation.current}deg)`,
+          transform: `${startTranslation} rotate(${startRotation.current}deg)`,
         },
         to: {
-          transform: `translate(0, 0)  rotate(${targetRotation.current}deg)`,
+          transform: `${endTranslation}  rotate(${targetRotation.current}deg)`,
         },
         config: config.wobbly,
         delay: 100,

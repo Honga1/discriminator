@@ -226,7 +226,7 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
   ]);
 
   const images = useContext(Part1Screen2Context).images[year];
-  const BoxesLeft = useCallback(
+  const BoxesColumnA = useCallback(
     ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
       <>
         {leftArray.current.map((_, index) => {
@@ -237,12 +237,13 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
             );
           }
           return (
-            <ImageCard
-              width={boxWidth}
-              height={boxHeight}
-              key={index}
-              image={image}
-            />
+            <Box
+              flex={false}
+              height={boxHeight * 100 + "%"}
+              width={boxWidth * 100 + "%"}
+            >
+              <ImageCard width={0.6} height={0.6} key={index} image={image} />
+            </Box>
           );
         })}
       </>
@@ -260,12 +261,13 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
             );
           }
           return (
-            <ImageCard
-              width={boxWidth}
-              height={boxHeight}
-              key={index}
-              image={image}
-            />
+            <Box
+              flex={false}
+              height={boxHeight * 100 + "%"}
+              width={boxWidth * 100 + "%"}
+            >
+              <ImageCard width={0.6} height={0.6} key={index} image={image} />
+            </Box>
           );
         })}
       </>
@@ -273,5 +275,5 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
     [cellsPerColumn, images]
   );
 
-  return { BoxesLeft, BoxesRight };
+  return { BoxesLeft: BoxesColumnA, BoxesRight };
 }
