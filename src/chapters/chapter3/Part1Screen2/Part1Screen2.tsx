@@ -96,6 +96,10 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
+  const [shouldShowElements, setShouldShowElements] = useState<
+    Set<HTMLElement>
+  >(new Set());
+
   const [yearsShown, setYearsShown] = useState(new Set<Years>());
 
   // Handles hiding / showing whole columns
@@ -152,8 +156,9 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       scale: 4,
     });
 
-    choice.classList.add("is-picked");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!shouldShowElements.has(choice)) {
+      setShouldShowElements(new Set([...shouldShowElements, choice]));
+    }
   });
 
   // Shows elements every 1 second if they're within 10% of the center of the screen
@@ -161,10 +166,11 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     if (!ref.current) return;
     if (stage !== "USER_CONTROL") return;
     const container = ref.current;
-    const elements = container.getElementsByClassName("image-card-image");
+    const elements = container.getElementsByClassName("image-card");
 
     const containerBb = container.getBoundingClientRect();
 
+    const shouldShowElements = new Set<HTMLElement>();
     for (const key in elements) {
       if (Object.prototype.hasOwnProperty.call(elements, key)) {
         const element = elements[key]! as HTMLElement;
@@ -182,11 +188,13 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           Math.hypot(distanceFromCenterX, distanceFromCenterY) <
           0.1 * scale.get();
         if (distance) {
-          element.classList.add("is-picked");
-        } else {
-          element.classList.remove("is-picked");
+          shouldShowElements.add(element);
         }
       }
+    }
+
+    if (shouldShowElements.size !== 0) {
+      setShouldShowElements(shouldShowElements);
     }
   });
 
@@ -286,7 +294,10 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   );
 
   return (
-    <Part1Screen2Provider yearsShown={yearsShown}>
+    <Part1Screen2Provider
+      yearsShown={yearsShown}
+      revealedImages={shouldShowElements}
+    >
       <Box
         flex={false}
         ref={ref}

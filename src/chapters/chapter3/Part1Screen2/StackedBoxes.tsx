@@ -238,6 +238,7 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
           }
           return (
             <Box
+              key={index}
               flex={false}
               height={boxHeight * 100 + "%"}
               width={boxWidth * 100 + "%"}
@@ -262,6 +263,7 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
           }
           return (
             <Box
+              key={index}
               flex={false}
               height={boxHeight * 100 + "%"}
               width={boxWidth * 100 + "%"}

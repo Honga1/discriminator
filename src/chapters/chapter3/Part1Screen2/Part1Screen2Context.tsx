@@ -11,6 +11,7 @@ export const Part1Screen2Context = createContext<{
   yearsShown: Set<Years>;
   images: ImagesByYear;
   tinting: Set<Tinting>;
+  revealedImages: Set<HTMLElement> | "SHOW_ALL";
 }>({
   yearsShown: new Set(),
   images: {
@@ -22,6 +23,7 @@ export const Part1Screen2Context = createContext<{
     "2013": [],
   },
   tinting: new Set(),
+  revealedImages: new Set(),
 });
 
 export const Part1Screen2Provider = memo(
@@ -29,13 +31,22 @@ export const Part1Screen2Provider = memo(
     yearsShown = new Set(yearsInShownOrder),
     tinting = new Set(),
     children,
+    revealedImages = "SHOW_ALL",
   }: PropsWithChildren<{
     yearsShown?: Set<Years>;
     tinting?: Set<Tinting>;
+    revealedImages?: Set<HTMLElement> | "SHOW_ALL";
   }>) => {
     const images = useMemo(resolveImages, []);
     return (
-      <Part1Screen2Context.Provider value={{ yearsShown, images, tinting }}>
+      <Part1Screen2Context.Provider
+        value={{
+          yearsShown,
+          images,
+          tinting,
+          revealedImages,
+        }}
+      >
         {children}
       </Part1Screen2Context.Provider>
     );

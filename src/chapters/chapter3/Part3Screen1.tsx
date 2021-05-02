@@ -193,7 +193,7 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   }, [stage]);
 
   return (
-    <Part1Screen2Provider tinting={tinting}>
+    <Part1Screen2Provider tinting={tinting} revealedImages="SHOW_ALL">
       <Box
         flex={false}
         ref={ref}
