@@ -62,6 +62,8 @@ export const Spectrogram = memo(
   }
 );
 
+Spectrogram.displayName = "Spectrogram";
+
 const numBars = 48;
 const randomHeightScales = Array.from({ length: numBars }).map(
   () => 1 + (Math.random() - 0.5) / 5
