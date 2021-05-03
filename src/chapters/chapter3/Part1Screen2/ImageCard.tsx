@@ -1,8 +1,7 @@
-import { Box, Image, ResponsiveContext, Text } from "grommet";
+import { Box, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useRef } from "react";
 import { animated, config, useSpring, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
-import styled from "styled-components";
 import { ImageText } from "./ImageText";
 import {
   MegafaceImageDescriptor,
