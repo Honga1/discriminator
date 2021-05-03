@@ -102,103 +102,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const [yearsShown, setYearsShown] = useState(new Set<Years>());
 
-  // Handles hiding / showing whole columns
-  useEffect(() => {
-    if (
-      typeof stage === "number" ||
-      stage === "ZOOMED_OUT" ||
-      stage === "USER_CONTROL"
-    ) {
-      setYearsShown(new Set(yearsInShownOrder));
-      return;
-    }
-
-    if (stage === "NO_YEARS") {
-      setYearsShown(new Set());
-      return;
-    }
-
-    const index = yearsInShownOrder.findIndex(
-      (year) => year === parseInt(stage, 10)
-    );
-    const shown = yearsInShownOrder.slice(0, index + 1);
-    setYearsShown(new Set(shown));
-  }, [stage]);
-
-  // Handles automated movement
-  useAnimationFrame(1, () => {
-    if (!ref.current) return;
-    const container = ref.current;
-
-    if (typeof stage !== "number") {
-      return;
-    }
-
-    const image = stage;
-    const elements = container.getElementsByClassName("auto-pickable");
-    const choice = elements[image] as HTMLDivElement | undefined;
-    if (!choice) {
-      throw new Error(
-        `Could not find image: ${image} from elements: ${elements}`
-      );
-    }
-
-    const containerBb = container.getBoundingClientRect();
-    const bb = choice.getBoundingClientRect();
-    const distanceFromCenterX =
-      (bb.left + bb.right) / 2 - containerBb.width / 2 + containerBb.left;
-    const distanceFromCenterY =
-      (bb.top + bb.bottom) / 2 - containerBb.height / 2 + containerBb.top;
-
-    set({
-      x: x.get() - distanceFromCenterX / scale.get(),
-      y: y.get() - distanceFromCenterY / scale.get(),
-      scale: 4,
-    });
-
-    if (!shouldShowElements.has(choice)) {
-      setShouldShowElements(new Set([...shouldShowElements, choice]));
-    }
-  });
-
-  // Shows elements every 1 second if they're within 10% of the center of the screen
-  useAnimationFrame(1, () => {
-    if (!ref.current) return;
-    if (stage !== "USER_CONTROL") return;
-    const container = ref.current;
-    const elements = container.getElementsByClassName("image-card");
-
-    const containerBb = container.getBoundingClientRect();
-
-    const shouldShowElements = new Set<HTMLElement>();
-    for (const key in elements) {
-      if (Object.prototype.hasOwnProperty.call(elements, key)) {
-        const element = elements[key]! as HTMLElement;
-
-        const bb = element.getBoundingClientRect();
-
-        const distanceFromCenterX =
-          ((bb.left + bb.right) / 2 - containerBb.width / 2) /
-          containerBb.width;
-        const distanceFromCenterY =
-          ((bb.top + bb.bottom) / 2 - containerBb.height / 2) /
-          containerBb.height;
-
-        const distance =
-          Math.hypot(distanceFromCenterX, distanceFromCenterY) <
-          0.1 * scale.get();
-        if (distance) {
-          shouldShowElements.add(element);
-        }
-      }
-    }
-
-    if (shouldShowElements.size !== 0) {
-      setShouldShowElements(shouldShowElements);
-    }
-  });
-
-  const [{ x, y, scale }, set] = useSpring(() => ({
+  const [{ x, y, scale }, api] = useSpring(() => ({
     x: 0,
     y: 0,
     scale: 1,
@@ -210,7 +114,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
         event.preventDefault();
 
         !pinching &&
-          set({
+          api.start({
             x: x.goal + deltaX / scale.goal,
             y: y.goal + deltaY / scale.goal,
           });
@@ -236,7 +140,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           scale.goal,
           nextScale
         );
-        set({
+        api.start({
           scale: nextScale,
           x: resultX,
           y: resultY,
@@ -278,13 +182,13 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
             nextScale
           );
 
-          set({
+          api.start({
             scale: nextScale,
             x: resultX,
             y: resultY,
           });
         } else {
-          set({
+          api.start({
             scale: nextScale,
           });
         }
@@ -292,6 +196,110 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     },
     { enabled: stage === "USER_CONTROL" }
   );
+
+  // Handles hiding / showing whole columns
+  useEffect(() => {
+    if (
+      typeof stage === "number" ||
+      stage === "ZOOMED_OUT" ||
+      stage === "USER_CONTROL"
+    ) {
+      setYearsShown(new Set(yearsInShownOrder));
+      return;
+    }
+
+    if (stage === "NO_YEARS") {
+      setYearsShown(new Set());
+      return;
+    }
+
+    api.start({
+      x: 0,
+      y: 0,
+      scale: 1,
+    });
+
+    const index = yearsInShownOrder.findIndex(
+      (year) => year === parseInt(stage, 10)
+    );
+    const shown = yearsInShownOrder.slice(0, index + 1);
+    setYearsShown(new Set(shown));
+  }, [api, stage]);
+
+  // Handles automated movement
+  useEffect(() => {
+    if (!ref.current) return;
+    const container = ref.current;
+
+    if (typeof stage !== "number") {
+      return;
+    }
+
+    const image = stage;
+    const elements = container.getElementsByClassName("auto-pickable");
+    const choice = elements[image] as HTMLDivElement | undefined;
+    if (!choice) {
+      console.warn(
+        `Could not find image: ${image} from elements: ${Array.from(elements)}`
+      );
+      return;
+    }
+
+    const containerBb = container.getBoundingClientRect();
+    const bb = choice.getBoundingClientRect();
+    const distanceFromCenterX =
+      (bb.left + bb.right) / 2 - containerBb.width / 2 + containerBb.left;
+    const distanceFromCenterY =
+      (bb.top + bb.bottom) / 2 - containerBb.height / 2 + containerBb.top;
+
+    api.start({
+      x: x.get() - distanceFromCenterX / scale.get(),
+      y: y.get() - distanceFromCenterY / scale.get(),
+      scale: 4,
+    });
+
+    if (!shouldShowElements.has(choice)) {
+      setShouldShowElements(new Set([...shouldShowElements, choice]));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage]);
+
+  // Shows elements every 1 second if they're within 10% of the center of the screen
+  useAnimationFrame(1, () => {
+    if (!ref.current) return;
+    if (stage !== "USER_CONTROL") return;
+    const container = ref.current;
+    const elements = container.getElementsByClassName("image-card");
+
+    const containerBb = container.getBoundingClientRect();
+    const nextShownElements = new Set<HTMLElement>();
+
+    for (const key in elements) {
+      if (Object.prototype.hasOwnProperty.call(elements, key)) {
+        const element = elements[key]! as HTMLElement;
+
+        const bb = element.getBoundingClientRect();
+
+        const distanceFromCenterX =
+          ((bb.left + bb.right) / 2 - containerBb.width / 2) /
+          containerBb.width;
+        const distanceFromCenterY =
+          ((bb.top + bb.bottom) / 2 - containerBb.height / 2) /
+          containerBb.height;
+
+        const distance =
+          Math.hypot(distanceFromCenterX, distanceFromCenterY) <
+          0.1 * scale.get();
+        if (distance) {
+          nextShownElements.add(element);
+        }
+      }
+    }
+
+    if (nextShownElements.size !== 0) {
+      setShouldShowElements(nextShownElements);
+    }
+  });
 
   return (
     <Part1Screen2Provider
@@ -314,11 +322,10 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       >
         <animated.div
           style={{
-            translate:
-              x && y && scale
-                ? to([x, y, scale], (x, y, scale) => [x * scale, y * scale])
-                : [0, 0],
-            scale: scale ? to([scale], (s) => s) : 1,
+            transform: to(
+              [x, y, scale],
+              (x, y, scale) => `scale(${scale}) translate(${x}px, ${y}px)`
+            ),
             width: "100%",
             height: "100%",
             pointerEvents: "none",
