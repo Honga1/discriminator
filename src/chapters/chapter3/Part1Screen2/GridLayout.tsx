@@ -100,6 +100,8 @@ export const GridBoxes = memo(() => {
   ));
 });
 
+GridBoxes.displayName = "GridBoxes";
+
 export const GridTextLabels = memo(() => {
   const { yearsShown } = useContext(Part1Screen2Context);
 
@@ -128,5 +130,7 @@ export const GridTextLabels = memo(() => {
     </AnimatedBox>
   ));
 });
+
+GridTextLabels.displayName = "GridTextLabels";
 
 const AnimatedBox = animated(Box);
