@@ -1,6 +1,7 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import { CSSProperties, useContext } from "react";
 import { colorTheme } from "src/theme";
+import styled from "styled-components";
 import { MegafaceImageDescriptor } from "./Part1Screen2Store";
 
 export function ImageText({
@@ -28,69 +29,37 @@ export function ImageText({
 
   return (
     <Box style={isSmall ? smallSide : notSmallSide}>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
-        &#123;
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      <StyledText size={isSmall ? "15%" : "30%"}>&#123;</StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;date: {printData.date},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;image_url: {printData.image_url},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;license: {printData.license},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;nsid: {printData.nsid},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;path_alias: {printData.path_alias},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;photo_id: {printData.photo_id},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>
         &nbsp;&nbsp;tagged: {printData.tagged},
-      </Text>
-      <Text
-        size={isSmall ? "15%" : "30%"}
-        color={colorTheme.offWhite}
-        style={{ textRendering: "optimizeLegibility" }}
-      >
-        &#125;
-      </Text>
+      </StyledText>
+      <StyledText size={isSmall ? "15%" : "30%"}>&#125;</StyledText>
     </Box>
   );
 }
+
+const StyledText = styled(Text)`
+  font-smooth: always !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility;
+  color: ${colorTheme.offWhite};
+`;

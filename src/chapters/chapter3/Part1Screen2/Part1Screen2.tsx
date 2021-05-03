@@ -1,12 +1,9 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
-import { animated, to, useSpring } from "react-spring";
-import { useGesture } from "react-use-gesture";
+import { animated } from "react-spring";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
-import { clamp } from "../../../libs/math";
 import { usePanZoomControl } from "../usePanZoomControl";
 import {
-  getZoomPosition,
   GridBoxes,
   GridTextLabels,
   largeGridAreas,
