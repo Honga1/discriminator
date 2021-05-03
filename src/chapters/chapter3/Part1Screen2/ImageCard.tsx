@@ -29,16 +29,16 @@ export const ImageCard = memo(
     const endOffset = useRef(Math.random() * 50 - 25);
     const isSmall = useContext(ResponsiveContext) === "small";
 
-    const tinting = usePart1Screen2Store((state) => state.tinting);
-    const revealedImages = usePart1Screen2Store(
-      (state) => state.revealedImages
+    const isTinted = usePart1Screen2Store((state) =>
+      state.tinting.has(image.tagged)
     );
+    const isRevealed = usePart1Screen2Store(({ revealedImages }) => {
+      const isRevealed =
+        revealedImages === "SHOW_ALL" ||
+        (ref.current !== null ? revealedImages.has(ref.current) : false);
 
-    const isRevealed =
-      revealedImages === "SHOW_ALL" ||
-      (ref.current !== null ? revealedImages.has(ref.current) : false);
-
-    const isTinted = tinting.has(image.tagged);
+      return isRevealed;
+    });
 
     const [{ transform }] = useSpring(() => {
       const startTranslation = isSmall
@@ -103,7 +103,7 @@ export const ImageCard = memo(
                   </Box>
                 </Box>
               </AnimatedBox>
-              <AnimatedStyledBox
+              <AnimatedBox
                 style={{
                   top: 0,
                   left: 0,
@@ -145,9 +145,19 @@ export const ImageCard = memo(
                       </Box>
                     </Box>
                   )}
-                  <StyledImage src={image.image_url} draggable={false} />
+                  <img
+                    src={image.image_url}
+                    style={{
+                      width: "100%",
+                      objectFit: "cover",
+                      height: "100%",
+                      userSelect: "none",
+                    }}
+                    draggable={false}
+                    alt="missing"
+                  />
                 </Box>
-              </AnimatedStyledBox>
+              </AnimatedBox>
             </>
           ) : (
             <AnimatedBox
@@ -187,19 +197,6 @@ export const ImageCard = memo(
     );
   }
 );
-
-const AnimatedStyledBox = animated(styled(Box)`
-  will-change: "opacity";
-  backface-visibility: hidden;
-  user-select: none;
-  touch-action: none;
-`);
-
-const StyledImage = styled(Image)`
-  width: 100%;
-  object-fit: cover;
-  height: 100%;
-`;
 
 const AnimatedBox = animated(Box);
 
