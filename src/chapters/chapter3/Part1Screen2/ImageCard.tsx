@@ -6,9 +6,9 @@ import styled from "styled-components";
 import { ImageText } from "./ImageText";
 import {
   MegafaceImageDescriptor,
-  Part1Screen2Context,
   Tinting,
-} from "./Part1Screen2Context";
+  usePart1Screen2Store,
+} from "./Part1Screen2Store";
 
 export const ImageCard = memo(
   ({
@@ -28,7 +28,11 @@ export const ImageCard = memo(
     const startOffset = useRef(Math.random() * 100 - 50);
     const endOffset = useRef(Math.random() * 50 - 25);
     const isSmall = useContext(ResponsiveContext) === "small";
-    const { tinting, revealedImages } = useContext(Part1Screen2Context);
+
+    const tinting = usePart1Screen2Store((state) => state.tinting);
+    const revealedImages = usePart1Screen2Store(
+      (state) => state.revealedImages
+    );
 
     const isRevealed =
       revealedImages === "SHOW_ALL" ||

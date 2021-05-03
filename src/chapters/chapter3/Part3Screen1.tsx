@@ -1,12 +1,8 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import React, { memo, useContext, useEffect, useMemo, useRef } from "react";
+import React, { memo, useContext, useEffect, useRef } from "react";
 import { animated, SpringValue, to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
 import { clamp } from "../../libs/math";
-import {
-  Part1Screen2Provider,
-  Tinting,
-} from "./Part1Screen2/Part1Screen2Context";
 import {
   getZoomPosition,
   GridBoxes,
@@ -18,6 +14,11 @@ import {
   smallGridColumns,
   smallGridRows,
 } from "./Part1Screen2/GridLayout";
+import {
+  part1Screen2Store,
+  Tinting,
+  yearsInShownOrder,
+} from "./Part1Screen2/Part1Screen2Store";
 
 interface Part3Screen1Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
@@ -178,7 +179,7 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     },
   });
 
-  const tinting = useMemo(() => {
+  useEffect(() => {
     const tinting = new Set<Tinting>();
     if (stageIsAfter(stage, "NO_TINTING")) {
       tinting.add("wedding");
@@ -189,54 +190,54 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     if (stageIsAfter(stage, "PARTY")) {
       tinting.add("family");
     }
-    return tinting;
+    part1Screen2Store.getState().setTinting(tinting);
+    part1Screen2Store.getState().setRevealedImages("SHOW_ALL");
+    part1Screen2Store.getState().setYearsShown(new Set(yearsInShownOrder));
   }, [stage]);
 
   return (
-    <Part1Screen2Provider tinting={tinting} revealedImages="SHOW_ALL">
-      <Box
-        flex={false}
-        ref={ref}
-        height="100%"
-        width="100%"
-        justify="center"
+    <Box
+      flex={false}
+      ref={ref}
+      height="100%"
+      width="100%"
+      justify="center"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        touchAction: "none",
+        pointerEvents: "auto",
+      }}
+      {...bind()}
+    >
+      <animated.div
         style={{
-          position: "relative",
-          overflow: "hidden",
-          touchAction: "none",
-          pointerEvents: "auto",
+          translate:
+            x && y && scale
+              ? to([x, y, scale], (x, y, scale) => [x * scale, y * scale])
+              : [0, 0],
+          scale: scale ? to([scale], (s) => s) : 1,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          willChange: "transform",
         }}
-        {...bind()}
       >
-        <animated.div
-          style={{
-            translate:
-              x && y && scale
-                ? to([x, y, scale], (x, y, scale) => [x * scale, y * scale])
-                : [0, 0],
-            scale: scale ? to([scale], (s) => s) : 1,
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-            willChange: "transform",
-          }}
-        >
-          <CategoryLabels stage={stage} />
+        <CategoryLabels stage={stage} />
 
-          <Grid
-            fill="vertical"
-            pad={isSmall ? "16px" : "48px"}
-            areas={isSmall ? smallGridAreas : largeGridAreas}
-            columns={isSmall ? smallGridColumns : largeGridColumns}
-            rows={isSmall ? smallGridRows : largeGridRows}
-            gap={"16px"}
-          >
-            <GridBoxes />
-            <GridTextLabels />
-          </Grid>
-        </animated.div>
-      </Box>
-    </Part1Screen2Provider>
+        <Grid
+          fill="vertical"
+          pad={isSmall ? "16px" : "48px"}
+          areas={isSmall ? smallGridAreas : largeGridAreas}
+          columns={isSmall ? smallGridColumns : largeGridColumns}
+          rows={isSmall ? smallGridRows : largeGridRows}
+          gap={"16px"}
+        >
+          <GridBoxes />
+          <GridTextLabels />
+        </Grid>
+      </animated.div>
+    </Box>
   );
 });
 

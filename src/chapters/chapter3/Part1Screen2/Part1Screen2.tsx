@@ -5,11 +5,6 @@ import { useGesture } from "react-use-gesture";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { clamp } from "../../../libs/math";
 import {
-  Part1Screen2Provider,
-  Years,
-  yearsInShownOrder,
-} from "./Part1Screen2Context";
-import {
   getZoomPosition,
   GridBoxes,
   GridTextLabels,
@@ -20,6 +15,11 @@ import {
   smallGridColumns,
   smallGridRows,
 } from "./GridLayout";
+import {
+  part1Screen2Store,
+  Years,
+  yearsInShownOrder,
+} from "./Part1Screen2Store";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];
@@ -301,50 +301,51 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     }
   });
 
+  useEffect(() => {
+    part1Screen2Store.getState().setTinting(new Set());
+    part1Screen2Store.getState().setYearsShown(yearsShown);
+    part1Screen2Store.getState().setRevealedImages(shouldShowElements);
+  }, [shouldShowElements, yearsShown]);
+
   return (
-    <Part1Screen2Provider
-      yearsShown={yearsShown}
-      revealedImages={shouldShowElements}
+    <Box
+      flex={false}
+      ref={ref}
+      height="100%"
+      width="100%"
+      justify="center"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        touchAction: "none",
+        pointerEvents: "auto",
+      }}
+      {...bind()}
     >
-      <Box
-        flex={false}
-        ref={ref}
-        height="100%"
-        width="100%"
-        justify="center"
+      <animated.div
         style={{
-          position: "relative",
-          overflow: "hidden",
-          touchAction: "none",
-          pointerEvents: "auto",
+          transform: to(
+            [x, y, scale],
+            (x, y, scale) => `scale(${scale}) translate(${x}px, ${y}px)`
+          ),
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          willChange: "transform",
         }}
-        {...bind()}
       >
-        <animated.div
-          style={{
-            transform: to(
-              [x, y, scale],
-              (x, y, scale) => `scale(${scale}) translate(${x}px, ${y}px)`
-            ),
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-            willChange: "transform",
-          }}
+        <Grid
+          fill="vertical"
+          pad={isSmall ? "16px" : "48px"}
+          areas={isSmall ? smallGridAreas : largeGridAreas}
+          columns={isSmall ? smallGridColumns : largeGridColumns}
+          rows={isSmall ? smallGridRows : largeGridRows}
+          gap={"16px"}
         >
-          <Grid
-            fill="vertical"
-            pad={isSmall ? "16px" : "48px"}
-            areas={isSmall ? smallGridAreas : largeGridAreas}
-            columns={isSmall ? smallGridColumns : largeGridColumns}
-            rows={isSmall ? smallGridRows : largeGridRows}
-            gap={"16px"}
-          >
-            <GridBoxes />
-            <GridTextLabels />
-          </Grid>
-        </animated.div>
-      </Box>
-    </Part1Screen2Provider>
+          <GridBoxes />
+          <GridTextLabels />
+        </Grid>
+      </animated.div>
+    </Box>
   );
 });

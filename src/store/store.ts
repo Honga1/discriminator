@@ -1,6 +1,7 @@
 import createActivityDetector from "activity-detector";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
+import { NonFunctionProperties } from "./CallbackFunctionVariadic";
 
 type State = {
   webcamStream: MediaStream | undefined;
@@ -83,13 +84,6 @@ if (localStorage.getItem("isWebcamWanted") === "true") {
 }
 
 export const useStore = createStoreHook(store);
-
-// Type helpers
-type CallbackFunctionVariadic = (...args: never[]) => void;
-type NonFunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends CallbackFunctionVariadic ? never : K;
-}[keyof T];
-type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 
 function getWebcam() {
   return new Promise<MediaStream>((resolve, reject) => {

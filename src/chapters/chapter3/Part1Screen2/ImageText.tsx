@@ -1,7 +1,7 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import { CSSProperties, useContext } from "react";
 import { colorTheme } from "src/theme";
-import { MegafaceImageDescriptor } from "./Part1Screen2Context";
+import { MegafaceImageDescriptor } from "./Part1Screen2Store";
 
 export function ImageText({
   descriptor,

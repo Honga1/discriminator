@@ -1,7 +1,7 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import React, { memo, useContext } from "react";
 import { animated, useTransition } from "react-spring";
-import { Part1Screen2Context } from "./Part1Screen2Context";
+import { usePart1Screen2Store } from "./Part1Screen2Store";
 import { StackedBoxes } from "./StackedBoxes";
 
 export const smallGridAreas = [
@@ -76,7 +76,7 @@ export function getZoomPosition(
   return { resultX, resultY };
 }
 export const GridBoxes = memo(() => {
-  const { yearsShown } = useContext(Part1Screen2Context);
+  const yearsShown = usePart1Screen2Store((state) => state.yearsShown);
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
@@ -103,7 +103,7 @@ export const GridBoxes = memo(() => {
 GridBoxes.displayName = "GridBoxes";
 
 export const GridTextLabels = memo(() => {
-  const { yearsShown } = useContext(Part1Screen2Context);
+  const yearsShown = usePart1Screen2Store((state) => state.yearsShown);
 
   const transition = useTransition([...yearsShown], {
     from: { opacity: 0 },

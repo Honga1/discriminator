@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import useResizeObserver from "use-resize-observer";
 import { ImageCard } from "./ImageCard";
-import { Part1Screen2Context, Years } from "./Part1Screen2Context";
+import { usePart1Screen2Store, Years } from "./Part1Screen2Store";
 
 export const StackedBoxes = memo(({ year }: { year: Years }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
@@ -22,7 +22,7 @@ export const StackedBoxes = memo(({ year }: { year: Years }) => {
 });
 
 const StackedBoxesVertical = ({ year }: { year: Years }) => {
-  const amount = useContext(Part1Screen2Context).images[year].length;
+  const amount = usePart1Screen2Store((state) => state.images[year].length);
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerColumn = 8;
 
@@ -107,7 +107,7 @@ const StackedBoxesVertical = ({ year }: { year: Years }) => {
 };
 
 const StackedBoxesHorizontal = ({ year }: { year: Years }) => {
-  const amount = useContext(Part1Screen2Context).images[year].length;
+  const amount = usePart1Screen2Store((state) => state.images[year].length);
   const [[boxWidth, boxHeight], setDimensions] = useState([1, 1 / 8]);
   const cellsPerRow = 8;
 
@@ -225,7 +225,7 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
     ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
   ]);
 
-  const images = useContext(Part1Screen2Context).images[year];
+  const images = usePart1Screen2Store((state) => state.images[year]);
   const BoxesColumnA = useCallback(
     ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
       <>
