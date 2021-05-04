@@ -62,7 +62,6 @@ export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
     stage = "USER_CONTROL";
   }
 
-  stage = "USER_CONTROL";
   return <Part1Screen2 stage={stage} />;
 };
 
