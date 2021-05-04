@@ -12,12 +12,17 @@ export type Tinting = "wedding" | "family" | "party";
 type State = {
   yearsShown: Set<Years>;
   images: ImagesByYear;
+  autoPickableImageCards: Map<string, { current: HTMLElement | null }>;
   tinting: Set<Tinting>;
-  revealedImages: Set<HTMLElement> | "SHOW_ALL";
+  revealedImage: undefined | "SHOW_ALL" | HTMLElement;
+  focusedElement: HTMLElement | undefined;
+  showData: boolean;
+  userControl: boolean;
   reset: () => void;
-  setRevealedImages: (revealedImages: Set<HTMLElement> | "SHOW_ALL") => void;
+  setRevealedImage: (image: HTMLElement | "SHOW_ALL") => void;
   setTinting: (tinting: Set<Tinting>) => void;
   setYearsShown: (yearsShown: Set<Years>) => void;
+  setFocusedElement(focusedElement: HTMLElement | undefined): void;
 };
 
 const resolveImages = () => {
@@ -36,22 +41,18 @@ const initialState: NonFunctionProperties<State> = {
   yearsShown: new Set(),
   images: resolveImages(),
   tinting: new Set(),
-  revealedImages: "SHOW_ALL",
+  revealedImage: undefined,
+  focusedElement: undefined,
+  showData: false,
+  autoPickableImageCards: new Map(),
+  userControl: false,
 };
 
 export const part1Screen2Store = create<State>((set, get) => ({
   ...initialState,
   reset: () => set({ ...initialState }),
-  setRevealedImages: (images) => {
-    const { revealedImages: current } = get();
-    if (
-      images === "SHOW_ALL" ||
-      current === "SHOW_ALL" ||
-      !isSetEqual(images, current)
-    ) {
-      set({ revealedImages: images });
-      return;
-    }
+  setRevealedImage: (image) => {
+    set({ revealedImage: image });
   },
 
   setTinting: (tinting) => {
@@ -67,6 +68,11 @@ export const part1Screen2Store = create<State>((set, get) => ({
     if (!isSetEqual(yearsShown, current)) {
       set({ yearsShown });
       return;
+    }
+  },
+  setFocusedElement(element) {
+    if (get().userControl) {
+      set({ focusedElement: element });
     }
   },
 }));

@@ -2,7 +2,6 @@ import React from "react";
 import { to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
 import { clamp } from "../../libs/math";
-import { getZoomPosition } from "./Part1Screen2/GridLayout";
 
 export function usePanZoomControl(isEnabled: boolean) {
   const [{ x, y, scale }, api] = useSpring(
@@ -109,4 +108,35 @@ export function usePanZoomControl(isEnabled: boolean) {
     (x, y, scale) => `scale(${scale}) translate(${x}px, ${y}px)`
   );
   return { bind, transform, api, scale, x, y };
+}
+
+function getZoomPosition(
+  xGoal: number,
+  yGoal: number,
+  target: EventTarget | null,
+  clientX: number,
+  clientY: number,
+  scaleGoal: number,
+  nextScale: number
+) {
+  const containerBB = (target as HTMLElement | null)?.getBoundingClientRect();
+
+  const relativeMouseX = clientX - containerBB!.left - containerBB!.width / 2;
+  const relativeMouseY = clientY - containerBB!.top - containerBB!.height / 2;
+
+  const worldMouseX = relativeMouseX / scaleGoal;
+  const worldMouseY = relativeMouseY / scaleGoal;
+
+  const offsetFromCameraX = xGoal - worldMouseX;
+  const offsetFromCameraY = yGoal - worldMouseY;
+
+  const nextMouseOffsetX = xGoal - relativeMouseX / nextScale;
+  const nextMouseOffsetY = yGoal - relativeMouseY / nextScale;
+
+  const deltaMovementX = offsetFromCameraX - nextMouseOffsetX;
+  const deltaMovementY = offsetFromCameraY - nextMouseOffsetY;
+
+  const resultX = xGoal + deltaMovementX;
+  const resultY = yGoal + deltaMovementY;
+  return { resultX, resultY };
 }

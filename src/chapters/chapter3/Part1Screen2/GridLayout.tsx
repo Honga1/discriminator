@@ -45,36 +45,7 @@ export const smallGridRows = [
 export const smallGridColumns = ["auto", "flex"];
 export const largeGridColumns = smallGridRows;
 export const largeGridRows = [...smallGridColumns].reverse();
-export function getZoomPosition(
-  xGoal: number,
-  yGoal: number,
-  target: EventTarget | null,
-  clientX: number,
-  clientY: number,
-  scaleGoal: number,
-  nextScale: number
-) {
-  const containerBB = (target as HTMLElement | null)?.getBoundingClientRect();
 
-  const relativeMouseX = clientX - containerBB!.left - containerBB!.width / 2;
-  const relativeMouseY = clientY - containerBB!.top - containerBB!.height / 2;
-
-  const worldMouseX = relativeMouseX / scaleGoal;
-  const worldMouseY = relativeMouseY / scaleGoal;
-
-  const offsetFromCameraX = xGoal - worldMouseX;
-  const offsetFromCameraY = yGoal - worldMouseY;
-
-  const nextMouseOffsetX = xGoal - relativeMouseX / nextScale;
-  const nextMouseOffsetY = yGoal - relativeMouseY / nextScale;
-
-  const deltaMovementX = offsetFromCameraX - nextMouseOffsetX;
-  const deltaMovementY = offsetFromCameraY - nextMouseOffsetY;
-
-  const resultX = xGoal + deltaMovementX;
-  const resultY = yGoal + deltaMovementY;
-  return { resultX, resultY };
-}
 export const GridBoxes = memo(() => {
   const yearsShown = usePart1Screen2Store((state) => state.yearsShown);
 

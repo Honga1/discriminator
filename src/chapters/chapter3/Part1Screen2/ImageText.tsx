@@ -16,50 +16,56 @@ export function ImageText({
   const isSmall = useContext(ResponsiveContext) === "small";
   const smallSide: CSSProperties = {
     position: "absolute",
-    top: "110%",
-    left: "50%",
-    transform: "translateX(-50%)",
+    top: "130%",
+    paddingLeft: "5%",
+    left: "10%",
+    backfaceVisibility: "hidden",
   };
   const notSmallSide: CSSProperties = {
     position: "absolute",
     left: "110%",
+    paddingLeft: "10%",
     top: "50%",
     transform: "translateY(-50%)",
+    backfaceVisibility: "hidden",
   };
 
   return (
-    <Box style={isSmall ? smallSide : notSmallSide}>
-      <StyledText size={isSmall ? "15%" : "30%"}>&#123;</StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+    <Box width={"100%"} style={isSmall ? smallSide : notSmallSide}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+        &#123;
+      </StyledText>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;date: {printData.date},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
-        &nbsp;&nbsp;image_url: {printData.image_url},
-      </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;license: {printData.license},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;nsid: {printData.nsid},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;path_alias: {printData.path_alias},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;photo_id: {printData.photo_id},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
         &nbsp;&nbsp;tagged: {printData.tagged},
       </StyledText>
-      <StyledText size={isSmall ? "15%" : "30%"}>&#125;</StyledText>
+      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+        &#125;
+      </StyledText>
     </Box>
   );
 }
 
-const StyledText = styled(Text)`
+const StyledText = styled(Text)<{ small: boolean }>`
+  line-height: ${(props) => (props.small ? `175%` : `150%`)};
   font-smooth: always !important;
   -webkit-font-smoothing: subpixel-antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
   text-rendering: optimizeLegibility;
   color: ${colorTheme.offWhite};
+  user-select: none;
 `;

@@ -14,7 +14,10 @@ export const FinishedButton = (props: {
   const shouldShow = props.shouldShow;
 
   useEffect(() => {
-    if (!props.shouldProgress) return;
+    if (!props.shouldProgress) {
+      setProgress(0);
+      return;
+    }
     if (progress >= 6) {
       return;
     }

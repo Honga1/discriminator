@@ -38,6 +38,17 @@ export function useLoopedAudio(
     return [loop1Audio, loop2Audio, loop3Audio];
   }, []);
 
+  useEffect(() => {
+    return () => {
+      loop1Audio.unload();
+      loop1Audio.stop();
+      loop2Audio.unload();
+      loop2Audio.stop();
+      loop3Audio.unload();
+      loop3Audio.stop();
+    };
+  }, [loop1Audio, loop2Audio, loop3Audio]);
+
   const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
 
   useEffect(() => {
@@ -56,7 +67,8 @@ export function useLoopedAudio(
     mainAudio?.addEventListener("play", onPlay);
 
     const onPause = () => {
-      if (!isAutoPaused) {
+      console.log(isAutoPaused);
+      if (!isAutoPaused && ref.current && ref.current.currentTime < 218) {
         loop1Audio.pause();
         loop2Audio.pause();
         loop3Audio.pause();

@@ -14,8 +14,11 @@ import {
 import {
   part1Screen2Store,
   Tinting,
+  usePart1Screen2Store,
   yearsInShownOrder,
 } from "./Part1Screen2/Part1Screen2Store";
+import { Pings } from "./Part1Screen2/Pings";
+import { useZoomOnElement } from "./Part1Screen2/useZoomOnElement";
 import { usePanZoomControl } from "./usePanZoomControl";
 
 interface Part3Screen1Props {
@@ -49,7 +52,7 @@ export const Part3Screen1Selector = ({ seconds }: { seconds: number }) => {
     stage = "WEDDING";
   } else if (seconds < 199) {
     stage = "PARTY";
-  } else if (seconds < 220) {
+  } else if (seconds < 218) {
     stage = "FAMILY";
   } else {
     stage = "USER_CONTROL";
@@ -63,7 +66,34 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const { bind, transform } = usePanZoomControl(stage === "USER_CONTROL");
+  const { bind, transform, api, x, y, scale } = usePanZoomControl(false);
+
+  useEffect(() => {
+    part1Screen2Store.setState({
+      focusedElement: undefined,
+      revealedImage: "SHOW_ALL",
+      tinting: new Set(),
+      showData: false,
+      yearsShown: new Set(yearsInShownOrder),
+    });
+  }, []);
+
+  const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
+  useZoomOnElement(ref, focusedElement, api, x, scale, y, 3);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    if (stage === "USER_CONTROL") {
+      part1Screen2Store.setState({
+        userControl: true,
+      });
+    } else {
+      part1Screen2Store.setState({
+        userControl: false,
+      });
+    }
+  }, [stage]);
 
   useEffect(() => {
     const tinting = new Set<Tinting>();
@@ -77,8 +107,6 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
       tinting.add("family");
     }
     part1Screen2Store.getState().setTinting(tinting);
-    part1Screen2Store.getState().setRevealedImages("SHOW_ALL");
-    part1Screen2Store.getState().setYearsShown(new Set(yearsInShownOrder));
   }, [stage]);
 
   return (
@@ -118,6 +146,7 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
           <GridBoxes />
           <GridTextLabels />
         </Grid>
+        {stage === "USER_CONTROL" && <Pings></Pings>}
       </animated.div>
     </Box>
   );

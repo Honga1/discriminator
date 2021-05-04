@@ -1,7 +1,6 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
-import React, { memo, useContext, useEffect, useRef, useState } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated } from "react-spring";
-import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { usePanZoomControl } from "../usePanZoomControl";
 import {
   GridBoxes,
@@ -15,9 +14,12 @@ import {
 } from "./GridLayout";
 import {
   part1Screen2Store,
+  usePart1Screen2Store,
   Years,
   yearsInShownOrder,
 } from "./Part1Screen2Store";
+import { Pings } from "./Pings";
+import { useZoomOnElement } from "./useZoomOnElement";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];
@@ -35,39 +37,32 @@ export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
     stage = "2013";
   } else if (seconds < 54) {
     stage = "2006";
-  } else if (seconds < 56) {
-    stage = "2012";
   } else if (seconds < 57) {
-    stage = "ZOOMED_OUT";
-  } else if (seconds < 60) {
+    stage = "2012";
+  } else if (seconds < 61) {
     //  I see you
     stage = 0;
-  } else if (seconds < 61) {
-    stage = "ZOOMED_OUT";
-  } else if (seconds < 65) {
+  } else if (seconds < 66) {
     // "A kid with a pumpkin" ZOOMIN 1
     stage = 1;
-  } else if (seconds < 66) {
-    stage = "ZOOMED_OUT";
-  } else if (seconds < 70) {
+  } else if (seconds < 72) {
     // "I see, looks like you" ZOOMIN 2
     stage = 2;
-  } else if (seconds < 72) {
-    stage = "ZOOMED_OUT";
-  } else if (seconds < 76) {
+  } else if (seconds < 77) {
     // "There's a woman" ZOOMIN 3
     stage = 3;
-  } else if (seconds < 77) {
-    stage = "ZOOMED_OUT";
-  } else if (seconds < 93) {
+  } else if (seconds < 82) {
     //  "There's you" ZOOMIN 4
     stage = 4;
+  } else if (seconds < 93) {
+    stage = 5;
   } else if (seconds < 94) {
     stage = "ZOOMED_OUT";
   } else {
     stage = "USER_CONTROL";
   }
 
+  stage = "USER_CONTROL";
   return <Part1Screen2 stage={stage} />;
 };
 
@@ -78,6 +73,7 @@ interface Part1Screen2Props {
     | 2
     | 3
     | 4
+    | 5
     | "ZOOMED_OUT"
     | "USER_CONTROL"
     | "NO_YEARS"
@@ -94,15 +90,19 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const [shouldShowElements, setShouldShowElements] = useState<
-    Set<HTMLElement>
-  >(new Set());
-
   const [yearsShown, setYearsShown] = useState(new Set<Years>());
 
-  const { bind, transform, api, scale, x, y } = usePanZoomControl(
-    stage === "USER_CONTROL"
-  );
+  const { bind, transform, api, scale, x, y } = usePanZoomControl(false);
+
+  useEffect(() => {
+    part1Screen2Store.setState({
+      focusedElement: undefined,
+      revealedImage: undefined,
+      tinting: new Set(),
+      showData: true,
+      yearsShown: new Set(),
+    });
+  }, []);
 
   // Handles hiding / showing whole columns
   useEffect(() => {
@@ -136,83 +136,69 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   // Handles automated movement
   useEffect(() => {
     if (!ref.current) return;
-    const container = ref.current;
+
+    if (stage === "ZOOMED_OUT") {
+      part1Screen2Store.setState({
+        focusedElement: undefined,
+      });
+    }
+
+    if (stage === "USER_CONTROL") {
+      part1Screen2Store.setState({
+        userControl: true,
+      });
+    } else {
+      part1Screen2Store.setState({
+        userControl: false,
+      });
+    }
 
     if (typeof stage !== "number") {
       return;
     }
 
-    const image = stage;
-    const elements = container.getElementsByClassName("auto-pickable");
-    const choice = elements[image] as HTMLDivElement | undefined;
+    let choice: HTMLElement | undefined;
+    const cardsMap = part1Screen2Store.getState().autoPickableImageCards;
+
+    switch (stage) {
+      case 0:
+        choice = cardsMap.get("1073107755_93470b17e6")?.current ?? undefined;
+        break;
+      case 1:
+        choice = cardsMap.get("5181112588_6527bc8401")?.current ?? undefined;
+        break;
+      case 2:
+        choice = cardsMap.get("541454120_ba1028b86e")?.current ?? undefined;
+        break;
+      case 3:
+        choice = cardsMap.get("356480744_03c2c3232b")?.current ?? undefined;
+        break;
+      case 4:
+        choice = cardsMap.get("102631694_ddcba3652b")?.current ?? undefined;
+        break;
+      case 5:
+        choice = cardsMap.get("4760348817_8b3d967eef")?.current ?? undefined;
+        break;
+    }
+
     if (!choice) {
-      console.warn(
-        `Could not find image: ${image} from elements: ${Array.from(elements)}`
-      );
+      console.warn(`Could not find image: ${stage} from elements: ${cardsMap}`);
       return;
     }
 
-    const containerBb = container.getBoundingClientRect();
-    const bb = choice.getBoundingClientRect();
-    const distanceFromCenterX =
-      (bb.left + bb.right) / 2 - containerBb.width / 2 + containerBb.left;
-    const distanceFromCenterY =
-      (bb.top + bb.bottom) / 2 - containerBb.height / 2 + containerBb.top;
+    part1Screen2Store.setState({ focusedElement: choice });
 
-    api.start({
-      x: x.get() - distanceFromCenterX / scale.get(),
-      y: y.get() - distanceFromCenterY / scale.get(),
-      scale: 4,
-    });
-
-    if (!shouldShowElements.has(choice)) {
-      setShouldShowElements(new Set([...shouldShowElements, choice]));
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
 
-  // Shows elements every 1 second if they're within 10% of the center of the screen
-  useAnimationFrame(1, () => {
-    if (!ref.current) return;
-    if (stage !== "USER_CONTROL") return;
-    const container = ref.current;
-    const elements = container.getElementsByClassName("image-card");
-
-    const containerBb = container.getBoundingClientRect();
-    const nextShownElements = new Set<HTMLElement>();
-
-    for (const key in elements) {
-      if (Object.prototype.hasOwnProperty.call(elements, key)) {
-        const element = elements[key]! as HTMLElement;
-
-        const bb = element.getBoundingClientRect();
-
-        const distanceFromCenterX =
-          ((bb.left + bb.right) / 2 - containerBb.width / 2) /
-          containerBb.width;
-        const distanceFromCenterY =
-          ((bb.top + bb.bottom) / 2 - containerBb.height / 2) /
-          containerBb.height;
-
-        const distance =
-          Math.hypot(distanceFromCenterX, distanceFromCenterY) <
-          0.1 * scale.get();
-        if (distance) {
-          nextShownElements.add(element);
-        }
-      }
-    }
-
-    if (nextShownElements.size !== 0) {
-      setShouldShowElements(nextShownElements);
-    }
-  });
+  const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
+  useZoomOnElement(ref, focusedElement, api, x, scale, y, 1);
+  useRevealOnFocus();
 
   useEffect(() => {
     part1Screen2Store.getState().setTinting(new Set());
     part1Screen2Store.getState().setYearsShown(yearsShown);
-    part1Screen2Store.getState().setRevealedImages(shouldShowElements);
-  }, [shouldShowElements, yearsShown]);
+  }, [yearsShown]);
 
   return (
     <Box
@@ -249,7 +235,16 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           <GridBoxes />
           <GridTextLabels />
         </Grid>
+        {stage === "USER_CONTROL" && <Pings></Pings>}
       </animated.div>
     </Box>
   );
 });
+
+function useRevealOnFocus() {
+  const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
+
+  useEffect(() => {
+    part1Screen2Store.setState({ revealedImage: focusedElement });
+  }, [focusedElement]);
+}

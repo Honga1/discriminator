@@ -127,7 +127,7 @@ const StackedBoxesHorizontal = ({ year }: { year: Years }) => {
   useLayoutEffect(() => {
     if (!ref.current) return;
     const maxWidth = 1 / cellsPerRow;
-    const desiredAspect = 4 / 3;
+    const desiredAspect = 3 / 4;
 
     const rowHeight =
       ((maxWidth / desiredAspect) * width) / (height / rowCount);
@@ -225,6 +225,8 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
     ...new Array(Math.max(amount - Math.min(amount, cellsPerColumn), 0)),
   ]);
 
+  const isSmall = useContext(ResponsiveContext) === "small";
+
   const images = usePart1Screen2Store((state) => state.images[year]);
   const BoxesColumnA = useCallback(
     ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
@@ -243,13 +245,18 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
               height={boxHeight * 100 + "%"}
               width={boxWidth * 100 + "%"}
             >
-              <ImageCard width={0.6} height={0.6} key={index} image={image} />
+              <ImageCard
+                width={isSmall ? 0.8 : 0.6}
+                height={isSmall ? 0.8 : 0.6}
+                key={index}
+                image={image}
+              />
             </Box>
           );
         })}
       </>
     ),
-    [images]
+    [images, isSmall]
   );
   const BoxesRight = useCallback(
     ({ boxWidth, boxHeight }: { boxWidth: number; boxHeight: number }) => (
@@ -268,13 +275,18 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
               height={boxHeight * 100 + "%"}
               width={boxWidth * 100 + "%"}
             >
-              <ImageCard width={0.6} height={0.6} key={index} image={image} />
+              <ImageCard
+                width={isSmall ? 0.8 : 0.6}
+                height={isSmall ? 0.8 : 0.6}
+                key={index}
+                image={image}
+              />
             </Box>
           );
         })}
       </>
     ),
-    [cellsPerColumn, images]
+    [cellsPerColumn, images, isSmall]
   );
 
   return { BoxesLeft: BoxesColumnA, BoxesRight };
