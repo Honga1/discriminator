@@ -110,7 +110,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
         Array.from({ length: data[year as keyof typeof data].length })
       ).length;
       const estimatedDownloadsUpToScrollPoint = Math.max(
-        data[nextYear as keyof typeof data]!.entries.length * progress,
+        data[nextYear as keyof typeof data].length * progress,
         0
       );
       const downloads = Math.floor(
