@@ -1,4 +1,3 @@
-import { Box } from "grommet";
 import { memo } from "react";
 import { FadeOutBox } from "./FadeOutBox";
 

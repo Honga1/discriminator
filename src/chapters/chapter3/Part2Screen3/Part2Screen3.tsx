@@ -1,4 +1,4 @@
-import { config, useSpring } from "@react-spring/core";
+import { useSpring } from "@react-spring/core";
 import { Box, ResponsiveContext } from "grommet";
 import {
   memo,
@@ -18,16 +18,10 @@ import { ScrollBanner } from "./ScrollBanner";
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
 
-function easeInOutCirc(x: number): number {
-  return x < 0.5
-    ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
-    : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
-}
-
 export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const hideScrollBanner = useMemo(() => seconds >= 173, [seconds]);
+  const hideScrollBanner = useMemo(() => seconds >= 168, [seconds]);
 
   const [currentYear, setCurrentYear] = useState<Years>(2015);
   const [downloads, setDownloads] = useState(0);
@@ -53,10 +47,10 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   }));
 
   useEffect(() => {
-    if (seconds >= 173 && seconds < 177) {
+    if (seconds >= 168 && seconds < 176) {
       api.start({
         y: 2000,
-        config: { duration: 4000, easing: easeInOutCirc },
+        config: { duration: 8000, easing: easeInOutSine },
         onChange: (result) => scrollBox.current?.scroll(0, result.value.y),
       });
       return;
@@ -156,7 +150,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data showAll={seconds >= 173} />
+            <Data showAll={seconds >= 168} />
           </Box>
         ) : (
           <CustomScrollbarBox
@@ -167,7 +161,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data showAll={seconds >= 173} />
+            <Data showAll={seconds >= 168} />
           </CustomScrollbarBox>
         )}
       </Box>
@@ -176,3 +170,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
 });
 
 Part2Screen3.displayName = "Part2Screen3";
+
+function easeInOutSine(x: number): number {
+  return -(Math.cos(Math.PI * x) - 1) / 2;
+}
