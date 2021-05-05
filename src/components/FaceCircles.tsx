@@ -17,10 +17,10 @@ const FaceCircle = ({
       loop: isTalking,
       to: [
         {
-          scale: 1.0,
+          scale: isTalking ? 1.0 : 0.88,
         },
         {
-          scale: 0.98,
+          scale: isTalking ? 0.98 : 0.88,
         },
       ],
       from: { scale: 0.98 },
