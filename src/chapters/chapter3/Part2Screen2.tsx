@@ -279,23 +279,42 @@ const TypingText = memo(
           }}
           weight="bold"
         >
-          {[...text.slice(0, charactersShown)].map((char, index) =>
-            char === " " ? <Fragment key={index}> &nbsp;</Fragment> : char
-          )}
-        </Text>
-        <Text
-          size="48px"
-          style={{
-            lineHeight: "48px",
-            userSelect: "none",
-            opacity: 0,
-            textAlign: "center",
-          }}
-          weight="bold"
-        >
-          {[...text.slice(charactersShown, text.length)].map((char, index) =>
-            char === " " ? <Fragment key={index}> &nbsp;</Fragment> : char
-          )}
+          <Text
+            size="48px"
+            style={{
+              lineHeight: "48px",
+              userSelect: "none",
+              textAlign: "center",
+              color,
+            }}
+            weight="bold"
+          >
+            {[...text.slice(0, charactersShown)].map((char, index) =>
+              char === " " ? (
+                <Fragment key={index}>&#8203;&nbsp;</Fragment>
+              ) : (
+                char
+              )
+            )}
+          </Text>
+          <Text
+            size="48px"
+            style={{
+              lineHeight: "48px",
+              userSelect: "none",
+              opacity: 0,
+              textAlign: "center",
+            }}
+            weight="bold"
+          >
+            {[...text.slice(charactersShown, text.length)].map((char, index) =>
+              char === " " ? (
+                <Fragment key={index}>&#8203;&nbsp;</Fragment>
+              ) : (
+                char
+              )
+            )}
+          </Text>
         </Text>
       </Box>
     );
