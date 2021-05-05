@@ -11,7 +11,8 @@ import {
 } from "react";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { ButtonCornerMapBox, FullScreenMapBox } from "../MapBox";
-import { data, Data } from "./Data";
+import { Data } from "./Data";
+import { data } from "./data";
 import { HeaderBar } from "./HeaderBar";
 import { ScrollBanner } from "./ScrollBanner";
 
@@ -102,12 +103,14 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
       const { top, height } = currentYearRect;
       const progress = (-top + heightOfOneLine) / height;
       const dataYearIndex = nextYear - 2015;
-      const downloadsBeforeThisYear = data
-        .slice(0, dataYearIndex)
-        .flatMap(({ entries }) => Array.from({ length: entries.length }))
-        .length;
+      const yearsInOrder = [2015, 2016, 2017, 2018, 2019];
+      const yearsBeforeThisOne = yearsInOrder.slice(0, dataYearIndex);
+
+      const downloadsBeforeThisYear = yearsBeforeThisOne.flatMap((year) =>
+        Array.from({ length: data[year as keyof typeof data].length })
+      ).length;
       const estimatedDownloadsUpToScrollPoint = Math.max(
-        data[dataYearIndex]!.entries.length * progress,
+        data[nextYear as keyof typeof data]!.entries.length * progress,
         0
       );
       const downloads = Math.floor(
