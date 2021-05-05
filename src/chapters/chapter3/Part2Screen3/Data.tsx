@@ -23,7 +23,7 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
       >
         {year}
       </Text>
-      &nbsp;&nbsp;
+      &#8203;&nbsp;&#8203;&nbsp;&#8203;
       <Text
         color="offWhite"
         size={isSmall ? "20px" : "24px"}
@@ -32,12 +32,12 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
         {entries.map((entry, entryNumber) => {
           return (
             <Fragment key={entryNumber}>
-              &nbsp;&nbsp;{entry}
-              &nbsp;&nbsp;&nbsp;•••
+              &#8203;&nbsp;&#8203;&nbsp;{entry}
+              &#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;•••
             </Fragment>
           );
         })}
-        &nbsp;&nbsp;
+        &#8203;&nbsp;&#8203;&nbsp;
       </Text>
     </Text>
   );
