@@ -1,5 +1,12 @@
 import { Box, ResponsiveContext } from "grommet";
-import { useCallback, useContext, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { ButtonCornerMapBox, FullScreenMapBox } from "../MapBox";
 import { data, Data } from "./Data";
@@ -9,9 +16,10 @@ import { ScrollBanner } from "./ScrollBanner";
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
 
-export const Part2Screen3 = () => {
+export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
-  const [hideScrollBanner, setHideScrollBanner] = useState(false);
+
+  const hideScrollBanner = useMemo(() => seconds >= 175, [seconds]);
 
   const [currentYear, setCurrentYear] = useState<Years>(2015);
   const [downloads, setDownloads] = useState(0);
@@ -34,10 +42,6 @@ export const Part2Screen3 = () => {
 
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
     (event) => {
-      setHideScrollBanner(
-        (event.target as HTMLElement).scrollTop !== 0 || hideScrollBanner
-      );
-
       const yearElements = (event.target as HTMLElement).querySelectorAll(
         ".TextRow"
       ) as NodeListOf<HTMLDivElement> | undefined;
@@ -94,7 +98,7 @@ export const Part2Screen3 = () => {
       );
       setDownloads(downloads);
     },
-    [currentYear, hideScrollBanner, isSmall]
+    [currentYear, isSmall]
   );
   const onMapBoxClose = useCallback(() => setShowFullScreenMap(false), []);
   const onMapClicked = useCallback(() => setShowFullScreenMap(true), []);
@@ -129,7 +133,7 @@ export const Part2Screen3 = () => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data />
+            <Data showAll={seconds >= 175} />
           </Box>
         ) : (
           <CustomScrollbarBox
@@ -140,10 +144,12 @@ export const Part2Screen3 = () => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data />
+            <Data showAll={seconds >= 175} />
           </CustomScrollbarBox>
         )}
       </Box>
     </Box>
   );
-};
+});
+
+Part2Screen3.displayName = "Part2Screen3";

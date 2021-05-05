@@ -144,7 +144,7 @@ export default function Chapter3() {
         )}
         {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
         {part === "PART_2_SCREEN_2" && <Part2Screen2 seconds={seconds} />}
-        {part === "PART_2_SCREEN_3" && <Part2Screen3 />}
+        {part === "PART_2_SCREEN_3" && <Part2Screen3 seconds={seconds} />}
         {part === "PART_3_SCREEN_1" && (
           <Part3Screen1Selector seconds={seconds} />
         )}

@@ -1,17 +1,108 @@
 import { ResponsiveContext, Text } from "grommet";
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 
-export const Data = memo(() => {
+export const Data = memo(({ showAll }: { showAll: boolean }) => {
+  const startYear = useMemo(
+    () => Math.min(...data.map(({ year }) => year)),
+    []
+  );
+  useEffect(() => {
+    if (showAll === false) setTypingYear(startYear);
+  }, [showAll, startYear]);
+
+  const [typingYear, setTypingYear] = useState(startYear);
+
   return (
-    <Text>
+    <Text style={{ userSelect: "none" }}>
       {data.map(({ year, entries }) => {
-        return <TextRow key={year} year={year} entries={entries} />;
+        return (
+          <TextRow
+            key={year}
+            year={year}
+            entries={entries}
+            state={
+              showAll || typingYear > year
+                ? "SHOW_ALL"
+                : typingYear === year
+                ? "TYPING"
+                : "SHOW_NONE"
+            }
+            onFinished={() => setTypingYear(Math.max(year + 1, startYear + 1))}
+          />
+        );
       })}
     </Text>
   );
 });
-function TextRow({ year, entries }: { year: number; entries: string[] }) {
+
+function TextRow({
+  year,
+  entries,
+  onFinished,
+  state,
+}: {
+  state: "SHOW_ALL" | "TYPING" | "SHOW_NONE";
+  year: number;
+  entries: string[];
+  onFinished: () => void;
+}) {
+  const queuedCharactersShown = useRef(0);
+  const [charactersShown, setCharactersShown] = useState(
+    queuedCharactersShown.current
+  );
   const isSmall = useContext(ResponsiveContext) === "small";
+  const yearText = useMemo(() => year.toFixed(0), [year]);
+  const text = useMemo(() => `   ${entries.join("   •••   ")}   •••   `, [
+    entries,
+  ]);
+  const interval = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    switch (state) {
+      case "SHOW_ALL": {
+        queuedCharactersShown.current = text.length + 1;
+        return;
+      }
+      case "SHOW_NONE": {
+        queuedCharactersShown.current = 0;
+        return;
+      }
+
+      case "TYPING": {
+        if (interval.current) clearInterval(interval.current);
+        interval.current = setInterval(() => {
+          queuedCharactersShown.current = Math.min(
+            queuedCharactersShown.current + 4,
+            text.length + 1
+          );
+        }, 4);
+        return () => {
+          if (interval.current) clearInterval(interval.current);
+        };
+      }
+    }
+  }, [state, text.length]);
+
+  useAnimationFrame(60, () => {
+    setCharactersShown(queuedCharactersShown.current);
+  });
+
+  useEffect(() => {
+    if (charactersShown >= text.length + 1) onFinished();
+  }, [charactersShown, onFinished, text.length]);
+
+  const slicedYear = yearText.slice(0, charactersShown);
+  const remainingYear =
+    charactersShown < yearText.length
+      ? yearText.slice(charactersShown, yearText.length)
+      : "";
+  const slicedText =
+    charactersShown < yearText.length ? "" : text.slice(0, charactersShown - 4);
+  const remainingText =
+    charactersShown < yearText.length
+      ? text
+      : text.slice(charactersShown - 4, text.length);
 
   return (
     <Text
@@ -25,7 +116,14 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
         size={isSmall ? "20px" : "24px"}
         style={{ lineHeight: isSmall ? "40px" : "72px" }}
       >
-        {year}
+        {slicedYear}
+      </Text>
+      <Text
+        weight={"bold"}
+        size={isSmall ? "20px" : "24px"}
+        style={{ lineHeight: isSmall ? "40px" : "72px", opacity: 0 }}
+      >
+        {remainingYear}
       </Text>
 
       <Text
@@ -33,11 +131,18 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
         size={isSmall ? "20px" : "24px"}
         style={{ lineHeight: isSmall ? "40px" : "72px" }}
       >
-        {`   ${entries.join("   •••   ")}   •••   `}
+        {slicedText}
+      </Text>
+      <Text
+        size={isSmall ? "20px" : "24px"}
+        style={{ lineHeight: isSmall ? "40px" : "72px", opacity: 0 }}
+      >
+        {remainingText}
       </Text>
     </Text>
   );
 }
+
 export const data = [
   {
     year: 2015,
