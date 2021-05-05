@@ -82,7 +82,7 @@ export const SpriteText = ({
         &nbsp;&nbsp;&nbsp;
         <TypingText
           bold={false}
-          text={text}
+          text={text.replaceAll(" ", "\xa0")}
           state={state}
           onFinished={onFinished}
         />
