@@ -1,7 +1,8 @@
 import { Box } from "grommet";
-import { FadeOutBox } from "./Part2Screen3/Part2Screen3";
+import { memo } from "react";
+import { FadeOutBox } from "./Part2Screen3/FadeOutBox";
 
-export const ButtonCornerMapBox = ({ isShown }: { isShown: boolean }) => {
+export const ButtonCornerMapBox = memo(({ isShown }: { isShown: boolean }) => {
   return (
     <FadeOutBox
       width="300px"
@@ -20,9 +21,11 @@ export const ButtonCornerMapBox = ({ isShown }: { isShown: boolean }) => {
       <MapBoxSVG />
     </FadeOutBox>
   );
-};
+});
 
-export const FullScreenMapBox = ({ onClose }: { onClose: () => void }) => {
+ButtonCornerMapBox.displayName = "ButtonCornerMapBox";
+
+export const FullScreenMapBox = memo(({ onClose }: { onClose: () => void }) => {
   return (
     <Box
       flex={false}
@@ -35,9 +38,11 @@ export const FullScreenMapBox = ({ onClose }: { onClose: () => void }) => {
       <MapBoxSVG />
     </Box>
   );
-};
+});
 
-function MapBoxSVG() {
+FullScreenMapBox.displayName = "FullScreenMapBox";
+
+const MapBoxSVG = memo(() => {
   return (
     <svg
       width="100%"
@@ -145,4 +150,6 @@ function MapBoxSVG() {
       />
     </svg>
   );
-}
+});
+
+MapBoxSVG.displayName = "MapBoxSVG";
