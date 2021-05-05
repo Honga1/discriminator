@@ -51,21 +51,21 @@ function ThreeDotsMenuButton({
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
+            background={!isOpen ? colorTheme.yellow : "none"}
           />
           <StyledDot
             width="14px"
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
+            background={!isOpen ? colorTheme.yellow : "none"}
           />
           <StyledDot
             width="14px"
             height="14px"
             style={{ borderRadius: "50%", transition: "background 0.6s" }}
             border={{ color: colorTheme.offWhite, size: "2px" }}
-            background={isOpen ? colorTheme.yellow : "none"}
+            background={!isOpen ? colorTheme.yellow : "none"}
           />
         </Box>
       }
