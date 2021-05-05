@@ -62,6 +62,15 @@ export const ImageCard = memo(
       leave: { opacity: 0 },
     });
 
+    const missingImageTextTransition = useTransition(
+      isFocused && image.image_url.includes("missing_image"),
+      {
+        from: { opacity: 0 },
+        enter: { opacity: 1 },
+        leave: { opacity: 0 },
+      }
+    );
+
     return (
       <AnimatedBox
         ref={ref}
@@ -142,31 +151,35 @@ export const ImageCard = memo(
                       height: "100%",
                     }}
                   >
-                    {image.image_url.includes("missing_image") && (
-                      <Box overflow="hidden">
-                        <Box
-                          style={{
-                            position: "absolute",
-                            height: "100%",
-                            width: "80%",
-                            left: "50%",
-                            transform: `translateX(-50%)`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backfaceVisibility: "hidden",
-                          }}
-                        >
-                          <StyledText
-                            size={isSmall ? "15%" : "30%"}
-                            color={colorTheme.offWhite}
-                            textAlign="center"
-                          >
-                            Image could no longer be retrieved
-                          </StyledText>
-                        </Box>
-                      </Box>
+                    {missingImageTextTransition(
+                      (style, isShown) =>
+                        isShown && (
+                          <AnimatedBox style={style} overflow="hidden">
+                            <Box
+                              style={{
+                                position: "absolute",
+                                height: "100%",
+                                width: "80%",
+                                left: "50%",
+                                transform: `translateX(-50%)`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backfaceVisibility: "hidden",
+                              }}
+                            >
+                              <StyledText
+                                size={isSmall ? "15%" : "30%"}
+                                color={colorTheme.offWhite}
+                                textAlign="center"
+                              >
+                                Image could no longer be retrieved
+                              </StyledText>
+                            </Box>
+                          </AnimatedBox>
+                        )
                     )}
+
                     <img
                       src={image.image_url}
                       style={{
@@ -237,7 +250,9 @@ const HoverBox = styled(Box)<{ selected: boolean; interactive: boolean }>`
   transition: transform 0.2s ease-out;
 
   transform: ${(props) =>
-    props.selected ? `scale(1.1) rotate(1deg)` : `scale(1) rotate(0deg)`};
+    props.selected && props.interactive
+      ? `scale(1.1) rotate(1deg)`
+      : `scale(1) rotate(0deg)`};
 
   &:hover {
     transform: ${(props) =>

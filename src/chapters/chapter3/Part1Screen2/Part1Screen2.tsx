@@ -132,16 +132,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     setYearsShown(new Set(shown));
   }, [api, stage]);
 
-  // Handles automated movement
   useEffect(() => {
-    if (!ref.current) return;
-
-    if (stage === "ZOOMED_OUT") {
-      part1Screen2Store.setState({
-        focusedElement: undefined,
-      });
-    }
-
     if (stage === "USER_CONTROL") {
       part1Screen2Store.setState({
         userControl: true,
@@ -149,6 +140,17 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     } else {
       part1Screen2Store.setState({
         userControl: false,
+      });
+    }
+  }, [stage]);
+
+  // Handles automated movement
+  useEffect(() => {
+    if (!ref.current) return;
+
+    if (stage === "ZOOMED_OUT") {
+      part1Screen2Store.setState({
+        focusedElement: undefined,
       });
     }
 
