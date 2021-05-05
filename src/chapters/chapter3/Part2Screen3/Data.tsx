@@ -1,5 +1,5 @@
 import { ResponsiveContext, Text } from "grommet";
-import { Fragment, memo, useContext } from "react";
+import { memo, useContext } from "react";
 
 export const Data = memo(() => {
   return (
@@ -14,7 +14,11 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
-    <Text className={`TextRow year${year}`} data-year={year}>
+    <Text
+      className={`TextRow year${year}`}
+      data-year={year}
+      style={{ whiteSpace: "pre-wrap" }}
+    >
       <Text
         weight={"bold"}
         color={"offWhite"}
@@ -23,21 +27,13 @@ function TextRow({ year, entries }: { year: number; entries: string[] }) {
       >
         {year}
       </Text>
-      &#8203;&nbsp;&#8203;&nbsp;&#8203;
+
       <Text
         color="offWhite"
         size={isSmall ? "20px" : "24px"}
         style={{ lineHeight: isSmall ? "40px" : "72px" }}
       >
-        {entries.map((entry, entryNumber) => {
-          return (
-            <Fragment key={entryNumber}>
-              &#8203;&nbsp;&#8203;&nbsp;{entry}
-              &#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;•••
-            </Fragment>
-          );
-        })}
-        &#8203;&nbsp;&#8203;&nbsp;
+        {`   ${entries.join("   •••   ")}   •••   `}
       </Text>
     </Text>
   );
