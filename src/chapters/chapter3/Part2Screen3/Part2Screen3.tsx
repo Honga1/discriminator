@@ -1,8 +1,10 @@
+import { config, useSpring } from "@react-spring/core";
 import { Box, ResponsiveContext } from "grommet";
 import {
   memo,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -16,10 +18,16 @@ import { ScrollBanner } from "./ScrollBanner";
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
 
+function easeInOutCirc(x: number): number {
+  return x < 0.5
+    ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+    : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
+}
+
 export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const hideScrollBanner = useMemo(() => seconds >= 175, [seconds]);
+  const hideScrollBanner = useMemo(() => seconds >= 173, [seconds]);
 
   const [currentYear, setCurrentYear] = useState<Years>(2015);
   const [downloads, setDownloads] = useState(0);
@@ -39,6 +47,21 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
     yearElement.scrollIntoView();
     setCurrentYear(year);
   }, []);
+
+  const [, api] = useSpring(() => ({
+    y: 0,
+  }));
+
+  useEffect(() => {
+    if (seconds >= 173 && seconds < 177) {
+      api.start({
+        y: 2000,
+        config: { duration: 4000, easing: easeInOutCirc },
+        onChange: (result) => scrollBox.current?.scroll(0, result.value.y),
+      });
+      return;
+    }
+  }, [api, seconds]);
 
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
     (event) => {
@@ -116,7 +139,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
         style={{ position: "relative" }}
       >
         <HeaderBar
-          isShown={hideScrollBanner}
+          isShown={true}
           downloads={downloads}
           year={currentYear}
           onNavigationClicked={onNavigationClicked}
@@ -133,7 +156,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data showAll={seconds >= 175} />
+            <Data showAll={seconds >= 173} />
           </Box>
         ) : (
           <CustomScrollbarBox
@@ -144,7 +167,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
             ref={scrollBox}
             onScroll={onScroll}
           >
-            <Data showAll={seconds >= 175} />
+            <Data showAll={seconds >= 173} />
           </CustomScrollbarBox>
         )}
       </Box>
