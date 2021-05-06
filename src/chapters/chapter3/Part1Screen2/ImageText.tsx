@@ -11,13 +11,18 @@ export function ImageText({
 }) {
   const printData = { ...descriptor } as Partial<MegafaceImageDescriptor>;
   const isSmall = useContext(ResponsiveContext) === "small";
+
   const smallSide: CSSProperties = {
     position: "absolute",
-    top: "130%",
+    top: "100%",
     paddingLeft: "5%",
     left: "10%",
     backfaceVisibility: "hidden",
+    backgroundColor: "rgba(32, 33, 34, 0.2)",
+    boxShadow: `3px 3px 5px 6px rgba(32, 33, 34, 0.2)`,
+    pointerEvents: "none",
   };
+
   const notSmallSide: CSSProperties = {
     position: "absolute",
     left: "110%",
@@ -29,28 +34,26 @@ export function ImageText({
 
   return (
     <Box width={"100%"} style={isSmall ? smallSide : notSmallSide}>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &#123;
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &nbsp;&nbsp;date: {printData.date},
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &nbsp;&nbsp;license: {printData.license},
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &nbsp;&nbsp;nsid: {printData.nsid},
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &nbsp;&nbsp;path_alias: {printData.path_alias},
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
-        &nbsp;&nbsp;photo_id: {printData.photo_id},
-      </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &nbsp;&nbsp;tagged: {printData.tagged},
       </StyledText>
-      <StyledText small={isSmall} size={isSmall ? "7%" : "12%"}>
+      <StyledText small={isSmall} size={isSmall ? "12%" : "12%"}>
         &#125;
       </StyledText>
     </Box>

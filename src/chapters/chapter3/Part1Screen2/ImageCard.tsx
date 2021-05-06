@@ -88,32 +88,6 @@ export const ImageCard = memo(
         height={height * 100 + "%"}
         style={{ position: "relative", transform: transformPosition }}
       >
-        {showData &&
-          revealedTransition(
-            (style, isRevealed) =>
-              isRevealed && (
-                <AnimatedBox
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    ...style,
-                  }}
-                >
-                  <Box overflow="hidden">
-                    <Box
-                      style={{
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    >
-                      <ImageText descriptor={image} />
-                    </Box>
-                  </Box>
-                </AnimatedBox>
-              )
-          )}
         <animated.div
           style={{
             transform: transformRotation,
@@ -191,6 +165,7 @@ export const ImageCard = memo(
                         position: "relative",
                         width: "100%",
                         height: "100%",
+                        pointerEvents: "none",
                       }}
                     >
                       {image.overlaySrc !== undefined && (
@@ -203,6 +178,8 @@ export const ImageCard = memo(
                             opacity: overlay.opacity,
                             objectFit: "cover",
                             userSelect: "none",
+                            pointerEvents: "none",
+                            display: "block",
                           }}
                           draggable={false}
                           src={image.overlaySrc}
@@ -215,6 +192,8 @@ export const ImageCard = memo(
                           objectFit: "cover",
                           height: "100%",
                           userSelect: "none",
+                          pointerEvents: "none",
+                          display: "block",
                         }}
                         draggable={false}
                         alt="personal"
@@ -256,6 +235,32 @@ export const ImageCard = memo(
             )}
           </HoverBox>
         </animated.div>
+        {showData &&
+          revealedTransition(
+            (style, isRevealed) =>
+              isRevealed && (
+                <AnimatedBox
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    ...style,
+                  }}
+                >
+                  <Box overflow="hidden">
+                    <Box
+                      style={{
+                        position: "absolute",
+                        height: "100%",
+                        width: "100%",
+                      }}
+                    >
+                      <ImageText descriptor={image} />
+                    </Box>
+                  </Box>
+                </AnimatedBox>
+              )
+          )}
       </AnimatedBox>
     );
   }
