@@ -1,5 +1,5 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { AdamFaceCircle } from "src/components/FaceCircles";
 import styled from "styled-components";
@@ -9,8 +9,8 @@ export const Part2Screen1 = () => {
 
   const [style] = useSpring(() => ({
     from: { transform: `scale(0.8)` },
-    to: { transform: `scale(2)` },
-    config: { duration: 25000 },
+    to: { transform: `scale(100)` },
+    config: { duration: 20000, easing: (t) => t * t * t },
   }));
 
   return (
@@ -24,7 +24,7 @@ export const Part2Screen1 = () => {
         width="100%"
         justify="center"
         pad="48px"
-        style={{ zIndex: 0, ...style, overflow: "hidden" }}
+        style={{ ...style, overflow: "hidden" }}
       >
         {isSmall ? (
           <Grid
@@ -77,16 +77,16 @@ const StyledRainDrop = styled.div`
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: normal;
-    transform: translate(-50%, -100%);
+    transform: scale(0.8) translate(-50%, -100%);
   }
 
   @keyframes ChangeHeight {
     from {
-      transform: translate(-50%, -100%);
+      transform: scale(0.8) translate(-50%, -100%);
     }
 
     to {
-      transform: translate(-50%, 100vh);
+      transform: scale(1.2) translate(-50%, 100vh);
     }
   }
 `;
@@ -103,7 +103,7 @@ const RainDrop = () => {
         left: Math.random() * 100 + "%",
         opacity: distanceFactor,
         animationDuration: (1 / distanceFactor) * 2 + "s",
-        zIndex: distanceFactor > 0.9 ? 0 : -1,
+        // zIndex: distanceFactor > 0.9 ? 0 : -1,
       }}
     >
       <svg
@@ -125,14 +125,41 @@ const RainDrop = () => {
 };
 
 const RainDrops = memo(() => {
-  const amount = 50;
+  const amount = useRef(1);
+  const [drops, setDrops] = useState<JSX.Element[]>([]);
+  useEffect(() => {
+    amount.current = 1;
+    const interval = setInterval(() => {
+      amount.current *= 1.03;
+      setDrops((drops) => {
+        const dropsNext = Math.min(50, Math.floor(amount.current));
+        if (drops.length < dropsNext) {
+          const addDrops = Math.abs(dropsNext - drops.length);
+          return [
+            ...drops,
+            ...Array.from({ length: addDrops }).map((_, index) => {
+              console.log(drops.length + index + 1);
+              return <RainDrop key={drops.length + index} />;
+            }),
+          ];
+        } else {
+          return drops;
+        }
+      });
+    }, 100);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <Box
       width="100%"
       height="100%"
       style={{
         position: "absolute",
-        // zIndex: 0,
+        //,
       }}
       justify="center"
     >
@@ -144,9 +171,7 @@ const RainDrops = memo(() => {
         }}
         overflow="hidden"
       >
-        {Array.from({ length: amount }).map((_, index) => (
-          <RainDrop key={index} />
-        ))}
+        {drops}
       </Box>
     </Box>
   );
