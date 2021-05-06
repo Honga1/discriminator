@@ -186,7 +186,13 @@ export const ImageCard = memo(
                           </AnimatedBox>
                         )
                     )}
-                    <Box style={{ position: "relative" }}>
+                    <Box
+                      style={{
+                        position: "relative",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
                       {image.overlaySrc !== undefined && (
                         <animated.img
                           alt="data"
