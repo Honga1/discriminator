@@ -62,6 +62,12 @@ export const ImageCard = memo(
       leave: { opacity: 0 },
     });
 
+    const dataTransition = useTransition(isFocused, {
+      from: { opacity: 0 },
+      enter: { opacity: 1 },
+      leave: { opacity: 0 },
+    });
+
     const missingImageTextTransition = useTransition(
       isFocused && image.imageSrc.includes("missing_image"),
       {
@@ -236,9 +242,9 @@ export const ImageCard = memo(
           </HoverBox>
         </animated.div>
         {showData &&
-          revealedTransition(
-            (style, isRevealed) =>
-              isRevealed && (
+          dataTransition(
+            (style, isFocused) =>
+              isFocused && (
                 <AnimatedBox
                   style={{
                     position: "relative",

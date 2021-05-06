@@ -54,7 +54,7 @@ export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   } else if (seconds < 82) {
     //  "There's you" ZOOMIN 4
     stage = 4;
-  } else if (seconds < 93) {
+  } else if (seconds < 92) {
     stage = 5;
   } else if (seconds < 94) {
     stage = "ZOOMED_OUT";
@@ -94,13 +94,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   const { bind, transform, api, scale, x, y } = usePanZoomControl(false);
 
   useEffect(() => {
-    part1Screen2Store.setState({
-      focusedElement: undefined,
-      revealedImage: undefined,
-      tinting: new Set(),
-      showData: true,
-      yearsShown: new Set(),
-    });
+    part1Screen2Store.setState({ showData: true });
   }, []);
 
   // Handles hiding / showing whole columns
@@ -136,6 +130,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     if (stage === "USER_CONTROL") {
       part1Screen2Store.setState({
         userControl: true,
+        focusedElement: undefined,
       });
     } else {
       part1Screen2Store.setState({
@@ -150,7 +145,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
     if (stage === "ZOOMED_OUT") {
       part1Screen2Store.setState({
-        focusedElement: undefined,
+        revealedImage: "SHOW_ALL",
       });
     }
 
@@ -194,7 +189,14 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
   useZoomOnElement(ref, focusedElement, api, x, scale, y, 1);
-  useRevealOnFocus();
+
+  useEffect(() => {
+    if (stage !== "USER_CONTROL") {
+      part1Screen2Store.setState({ revealedImage: focusedElement });
+    } else {
+      part1Screen2Store.setState({ revealedImage: "SHOW_ALL" });
+    }
+  }, [focusedElement, stage]);
 
   useEffect(() => {
     part1Screen2Store.getState().setTinting(new Set());
@@ -241,11 +243,3 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     </Box>
   );
 });
-
-function useRevealOnFocus() {
-  const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
-
-  useEffect(() => {
-    part1Screen2Store.setState({ revealedImage: focusedElement });
-  }, [focusedElement]);
-}
