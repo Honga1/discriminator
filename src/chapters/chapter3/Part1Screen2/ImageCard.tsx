@@ -1,4 +1,4 @@
-import { Box, ResponsiveContext, Text } from "grommet";
+import { ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef } from "react";
 import { animated, config, useSpring, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
@@ -85,14 +85,16 @@ export const ImageCard = memo(
     }, [isFocused, image.overlaySrc]);
 
     return (
-      <AnimatedBox
+      <animated.div
         ref={ref}
         data-url={image.url}
         className="image-card"
-        flex={false}
-        width={width * 100 + "%"}
-        height={height * 100 + "%"}
-        style={{ position: "relative", transform: transformPosition }}
+        style={{
+          position: "relative",
+          transform: transformPosition,
+          width: width * 100 + "%",
+          height: height * 100 + "%",
+        }}
       >
         <animated.div
           style={{
@@ -122,7 +124,7 @@ export const ImageCard = memo(
           <HoverBox selected={isFocused} interactive={isUserControlled}>
             {revealedTransition((style, isRevealed) =>
               isRevealed ? (
-                <AnimatedBox
+                <animated.div
                   style={{
                     ...style,
                     width: "100%",
@@ -131,42 +133,14 @@ export const ImageCard = memo(
                     position: "absolute",
                   }}
                 >
-                  <Box
+                  <div
                     style={{
                       position: "relative",
                       width: "100%",
                       height: "100%",
                     }}
                   >
-                    {missingImageTextTransition(
-                      (style, isShown) =>
-                        isShown && (
-                          <AnimatedBox style={style} overflow="hidden">
-                            <Box
-                              style={{
-                                position: "absolute",
-                                height: "100%",
-                                width: "80%",
-                                left: "50%",
-                                transform: `translateX(-50%)`,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                backfaceVisibility: "hidden",
-                              }}
-                            >
-                              <StyledText
-                                size={isSmall ? "15%" : "30%"}
-                                color={colorTheme.offWhite}
-                                textAlign="center"
-                              >
-                                Image could no longer be retrieved
-                              </StyledText>
-                            </Box>
-                          </AnimatedBox>
-                        )
-                    )}
-                    <Box
+                    <div
                       style={{
                         position: "relative",
                         width: "100%",
@@ -204,11 +178,43 @@ export const ImageCard = memo(
                         draggable={false}
                         alt="personal"
                       />
-                    </Box>
-                  </Box>
-                </AnimatedBox>
+                    </div>
+
+                    {missingImageTextTransition(
+                      (style, isShown) =>
+                        isShown && (
+                          <animated.div
+                            style={{ ...style, overflow: "hidden" }}
+                          >
+                            <div
+                              style={{
+                                position: "absolute",
+                                height: "100%",
+                                width: "80%",
+                                top: 0,
+                                left: "50%",
+                                transform: `translateX(-50%)`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backfaceVisibility: "hidden",
+                              }}
+                            >
+                              <StyledText
+                                size={isSmall ? "15%" : "30%"}
+                                color={colorTheme.offWhite}
+                                textAlign="center"
+                              >
+                                Image could no longer be retrieved
+                              </StyledText>
+                            </div>
+                          </animated.div>
+                        )
+                    )}
+                  </div>
+                </animated.div>
               ) : (
-                <AnimatedBox
+                <animated.div
                   style={{
                     width: "100%",
                     height: "100%",
@@ -217,10 +223,10 @@ export const ImageCard = memo(
                     backfaceVisibility: "hidden",
                     touchAction: "none",
                     pointerEvents: "none",
+                    background: "#502B2D",
+                    border: "2px solid #FF4E4E",
                     ...style,
                   }}
-                  background="#502B2D"
-                  border={{ color: "#FF4E4E", size: " 2px" }}
                 />
               )
             )}
@@ -245,7 +251,7 @@ export const ImageCard = memo(
           dataTransition(
             (style, isFocused) =>
               isFocused && (
-                <AnimatedBox
+                <animated.div
                   style={{
                     position: "relative",
                     width: "100%",
@@ -253,8 +259,8 @@ export const ImageCard = memo(
                     ...style,
                   }}
                 >
-                  <Box overflow="hidden">
-                    <Box
+                  <div style={{ overflow: "hidden" }}>
+                    <div
                       style={{
                         position: "absolute",
                         height: "100%",
@@ -262,12 +268,12 @@ export const ImageCard = memo(
                       }}
                     >
                       <ImageText descriptor={image} />
-                    </Box>
-                  </Box>
-                </AnimatedBox>
+                    </div>
+                  </div>
+                </animated.div>
               )
           )}
-      </AnimatedBox>
+      </animated.div>
     );
   }
 );
@@ -280,13 +286,11 @@ const StyledText = styled(Text)`
   user-select: none;
 `;
 
-const AnimatedBox = animated(Box);
-
-const HoverBox = styled(Box)<{ selected: boolean; interactive: boolean }>`
+const HoverBox = styled.div<{ selected: boolean; interactive: boolean }>`
   width: 100%;
   height: 100%;
   position: relative;
-
+  backface-visibility: hidden;
   transition: transform 0.2s ease-out;
 
   transform: ${(props) =>
