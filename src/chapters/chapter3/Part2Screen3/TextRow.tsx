@@ -94,6 +94,7 @@ export function TextRow({
             );
           return (
             <SpriteText
+              key={segmentIndex}
               audioSrc={audioFile}
               logoSrc={logos[segmentData.logoName as keyof typeof logos]}
               text={segmentData.companyName}
@@ -105,6 +106,7 @@ export function TextRow({
           return (
             <TypingText
               bold={false}
+              key={segmentIndex}
               text={`${segmentData.entries.join("   •••   ")}   •••   `}
               state={getSegmentState(segmentIndex + 1, currentSegment, state)}
               onFinished={() => setSegment(segmentIndex + 2)}
