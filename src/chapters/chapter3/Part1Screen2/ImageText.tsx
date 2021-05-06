@@ -10,9 +10,6 @@ export function ImageText({
   descriptor: MegafaceImageDescriptor;
 }) {
   const printData = { ...descriptor } as Partial<MegafaceImageDescriptor>;
-  printData.image_url = printData.url;
-  delete printData["url"];
-
   const isSmall = useContext(ResponsiveContext) === "small";
   const smallSide: CSSProperties = {
     position: "absolute",

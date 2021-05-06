@@ -63,13 +63,20 @@ export const ImageCard = memo(
     });
 
     const missingImageTextTransition = useTransition(
-      isFocused && image.image_url.includes("missing_image"),
+      isFocused && image.imageSrc.includes("missing_image"),
       {
         from: { opacity: 0 },
         enter: { opacity: 1 },
         leave: { opacity: 0 },
       }
     );
+
+    const [overlay] = useSpring(() => {
+      return {
+        opacity: isFocused && image.overlaySrc !== undefined ? 1 : 0,
+        delay: 1000,
+      };
+    }, [isFocused, image.overlaySrc]);
 
     return (
       <AnimatedBox
@@ -179,18 +186,34 @@ export const ImageCard = memo(
                           </AnimatedBox>
                         )
                     )}
-
-                    <img
-                      src={image.image_url}
-                      style={{
-                        width: "100%",
-                        objectFit: "cover",
-                        height: "100%",
-                        userSelect: "none",
-                      }}
-                      draggable={false}
-                      alt="missing"
-                    />
+                    <Box style={{ position: "relative" }}>
+                      {image.overlaySrc !== undefined && (
+                        <animated.img
+                          alt="data"
+                          style={{
+                            position: "absolute",
+                            width: "100%",
+                            height: "100%",
+                            opacity: overlay.opacity,
+                            objectFit: "cover",
+                            userSelect: "none",
+                          }}
+                          draggable={false}
+                          src={image.overlaySrc}
+                        />
+                      )}
+                      <img
+                        src={image.imageSrc}
+                        style={{
+                          width: "100%",
+                          objectFit: "cover",
+                          height: "100%",
+                          userSelect: "none",
+                        }}
+                        draggable={false}
+                        alt="personal"
+                      />
+                    </Box>
                   </Box>
                 </AnimatedBox>
               ) : (

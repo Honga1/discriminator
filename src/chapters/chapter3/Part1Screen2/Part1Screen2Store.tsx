@@ -1,7 +1,8 @@
 import { NonFunctionProperties } from "src/store/CallbackFunctionVariadic";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
-import { images } from "../images/images";
+import { getImagesForId } from "../images/images";
+import { imageData, ImageMetaData } from "./imageData";
 
 export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
 export type Years = typeof yearsInShownOrder[number];
@@ -28,9 +29,17 @@ type State = {
 const resolveImages = () => {
   const result = Object.fromEntries(
     yearsInShownOrder.map((year) => {
-      const imagesThisYear = images.user.datasets.megaface.images.filter(
-        ({ date }) => date.includes(year.toFixed())
-      );
+      const imagesThisYear = imageData
+        .filter(({ date }) => date.includes(year.toFixed()))
+        .map((data) => {
+          const { overlay, image } = getImagesForId(data.photo_id);
+          const result: MegafaceImageDescriptor = {
+            ...data,
+            overlaySrc: overlay,
+            imageSrc: image,
+          };
+          return result;
+        });
       return [year, imagesThisYear];
     })
   ) as ImagesByYear;
@@ -79,16 +88,10 @@ export const part1Screen2Store = create<State>((set, get) => ({
 
 export const usePart1Screen2Store = createStoreHook(part1Screen2Store);
 
-export interface MegafaceImageDescriptor {
-  url: string;
-  image_url: string;
-  path_alias: string;
-  nsid: string;
-  photo_id: number;
-  license: string;
-  date: string;
+export interface MegafaceImageDescriptor extends ImageMetaData {
+  overlaySrc: string | undefined;
+  imageSrc: string;
   year: Years;
-  tagged: "family" | "party" | "wedding";
 }
 
 function isSetEqual<T extends unknown>(a: Set<T>, bs: Set<T>) {
