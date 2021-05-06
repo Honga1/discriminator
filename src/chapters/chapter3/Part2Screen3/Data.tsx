@@ -1,6 +1,7 @@
 import { Text } from "grommet";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { data } from "./data";
+import { part2Screen3Store } from "./Part2Screen3";
 import { TextRow } from "./TextRow";
 
 type Years = keyof typeof data;
@@ -43,8 +44,18 @@ export const Data = memo(({ showAll }: { showAll: boolean }) => {
 
   const [typingYear, setTypingYear] = useState<2015 | 2016>(startYear);
 
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    part2Screen3Store.setState({ container: ref });
+
+    return () => {
+      part2Screen3Store.setState({ container: undefined });
+    };
+  }, []);
+
   return (
-    <Text style={{ userSelect: "none" }}>
+    <Text ref={ref} style={{ userSelect: "none" }}>
       {years.map((year) => {
         const entries = data[year as keyof typeof data];
         return (

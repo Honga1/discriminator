@@ -9,6 +9,9 @@ import {
   useRef,
   useState,
 } from "react";
+import useResizeObserver from "use-resize-observer";
+import { default as createStore } from "zustand";
+import create from "zustand/vanilla";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { ButtonCornerMapBox, FullScreenMapBox } from "../MapBox";
 import { Data } from "./Data";
@@ -123,10 +126,16 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const onMapBoxClose = useCallback(() => setShowFullScreenMap(false), []);
   const onMapClicked = useCallback(() => setShowFullScreenMap(true), []);
   return (
-    <Box flex={false} height="100%" width="100%">
+    <Box
+      flex={false}
+      height="100%"
+      width="100%"
+      style={{ position: "relative", overflow: "hidden" }}
+    >
       {showFullScreenMap && isSmall && (
         <FullScreenMapBox onClose={onMapBoxClose} />
       )}
+
       <Box
         flex={false}
         height="100%"
@@ -142,31 +151,34 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
           onNavigationClicked={onNavigationClicked}
           onMapClicked={onMapClicked}
         />
-        <ScrollBanner isShown={!hideScrollBanner} />
-        {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
-        {isSmall ? (
-          <Box
-            height="100%"
-            width="100%"
-            overflow="auto"
-            pad={"8px"}
-            ref={scrollBox}
-            onScroll={onScroll}
-          >
-            <Data showAll={seconds >= 168} />
-          </Box>
-        ) : (
-          <CustomScrollbarBox
-            height="100%"
-            width="100%"
-            overflow="auto"
-            pad={"8px"}
-            ref={scrollBox}
-            onScroll={onScroll}
-          >
-            <Data showAll={seconds >= 168} />
-          </CustomScrollbarBox>
-        )}
+        <Box>
+          {seconds >= 168 && <SpriteLevelIndicators />}
+          <ScrollBanner isShown={!hideScrollBanner} />
+          {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
+          {isSmall ? (
+            <Box
+              height="100%"
+              width="100%"
+              overflow={{ horizontal: "hidden", vertical: "auto" }}
+              pad={"8px"}
+              ref={scrollBox}
+              onScroll={onScroll}
+            >
+              <Data showAll={seconds >= 168} />
+            </Box>
+          ) : (
+            <CustomScrollbarBox
+              height="100%"
+              width="100%"
+              overflow={{ horizontal: "hidden", vertical: "auto" }}
+              pad={"8px"}
+              ref={scrollBox}
+              onScroll={onScroll}
+            >
+              <Data showAll={seconds >= 168} />
+            </CustomScrollbarBox>
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -177,3 +189,61 @@ Part2Screen3.displayName = "Part2Screen3";
 function easeInOutSine(x: number): number {
   return -(Math.cos(Math.PI * x) - 1) / 2;
 }
+
+export const part2Screen3Store = create<{
+  sprites: Set<{ current: HTMLSpanElement | null }>;
+  container: { current: HTMLSpanElement | null } | undefined;
+}>((set, get) => ({
+  container: undefined,
+  sprites: new Set<{ current: HTMLSpanElement | null }>(),
+}));
+
+const usePart2Screen3Store = createStore(part2Screen3Store);
+
+const SpriteLevelIndicators = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const indicators = usePart2Screen3Store((state) => state.sprites);
+  const container = usePart2Screen3Store((state) => state.container);
+
+  const { height } = useResizeObserver({ ref: container });
+
+  const [positions, setPositions] = useState<number[]>([]);
+
+  useEffect(() => {
+    const positions = [...indicators].flatMap((indicator) => {
+      if (!indicator.current) return [];
+      if (!height || height === 0) return [];
+
+      return indicator.current.getBoundingClientRect().top / height;
+    });
+    setPositions(positions);
+  }, [height, indicators]);
+  return (
+    <Box
+      ref={ref}
+      style={{
+        position: "absolute",
+        height: "100%",
+        right: "4px",
+        width: "20px",
+        overflow: "hidden",
+        pointerEvents: "none",
+        touchAction: "none",
+      }}
+    >
+      <Box style={{ position: "relative", width: "100%", height: "100%" }}>
+        {positions.map((distance, key) => {
+          return (
+            <Box
+              key={key}
+              background="greenLight"
+              width="100%"
+              height="2px"
+              style={{ position: "absolute", top: distance * 100 + "%" }}
+            ></Box>
+          );
+        })}
+      </Box>
+    </Box>
+  );
+};

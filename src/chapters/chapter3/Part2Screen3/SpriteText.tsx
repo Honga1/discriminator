@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import { animated, to, useSpring } from "react-spring";
 import { clamp } from "src/libs/math";
 import { colorTheme } from "src/theme";
+import styled from "styled-components";
+import { part2Screen3Store } from "./Part2Screen3";
 import { TypingText } from "./TypingText";
 
 export const SpriteText = ({
@@ -18,10 +20,25 @@ export const SpriteText = ({
   logoSrc: string;
   audioSrc: { caf: string; ogg: string };
 }) => {
+  const ref = useRef<HTMLSpanElement>(null);
   const audio = useRef<HTMLAudioElement>(null);
   const [{ width }, api] = useSpring(() => ({
     width: "0%",
   }));
+
+  useEffect(() => {
+    const sprites = part2Screen3Store.getState().sprites;
+    if (!sprites.has(ref)) {
+      sprites.add(ref);
+      part2Screen3Store.setState({ sprites: new Set([...sprites]) });
+    }
+
+    return () => {
+      const sprites = part2Screen3Store.getState().sprites;
+      sprites.delete(ref);
+      part2Screen3Store.setState({ sprites: new Set([...sprites]) });
+    };
+  }, []);
 
   useEffect(() => {
     const audioInside = audio.current;
@@ -45,7 +62,8 @@ export const SpriteText = ({
   }, [api, audio]);
   return (
     <>
-      <Text
+      <HoverText
+        ref={ref}
         onMouseEnter={() => audio.current?.play()}
         onMouseLeave={() => {
           audio.current?.pause();
@@ -86,8 +104,14 @@ export const SpriteText = ({
           state={state}
           onFinished={onFinished}
         />
-      </Text>
+      </HoverText>
       {`   •••   `}
     </>
   );
 };
+
+const HoverText = styled(Text)`
+  &:hover {
+    cursor: help;
+  }
+`;
