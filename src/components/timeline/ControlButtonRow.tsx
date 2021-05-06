@@ -1,16 +1,16 @@
-import { Grid, ResponsiveContext, Timeout } from "grommet";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { Grid, ResponsiveContext } from "grommet";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
 import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
 import { FadeOutBox } from "./FadeOutBox";
 import { ModalButtons } from "./ModalButtons";
+import { MuteButton } from "./MuteButton";
 import { NextChapterButton } from "./NextChapterButton";
 import { PlayPauseButton } from "./PlayPauseButton";
 import { RewindButton } from "./RewindButton";
 import { ShowMenuButton } from "./ShowMenuButton";
-import { MuteButton } from "./MuteButton";
 
 export const ControlButtonRow = ({
   onOpenChange,
