@@ -14,7 +14,7 @@ export function ContinueButton(props: {
     <Box
       style={{
         position: "absolute",
-        bottom: isSmall ? "48px" : "64px",
+        top: isSmall ? "69%" : "77%",
         right: 0,
       }}
     >
