@@ -41,8 +41,6 @@ export const ControlButtonRow = ({
     }
   }, [hasTimeoutElapsed, isActive, isOpen]);
 
-  const timeout = useRef<Timeout>();
-
   return (
     <Grid
       fill="horizontal"
@@ -72,7 +70,6 @@ export const ControlButtonRow = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         setHasTimeoutElapsed={setHasTimeoutElapsed}
-        timeout={timeout}
       />
       {!isSmall && <ModalButtons isSmall={isSmall} isOpen={isOpen} />}
     </Grid>
