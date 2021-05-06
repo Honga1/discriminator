@@ -35,8 +35,8 @@ export function useZoomOnElement(
     const bb = focusedElement.getBoundingClientRect();
     const containerBb = container.getBoundingClientRect();
 
-    const maxWidth = containerBb.width * 0.8;
-    const maxHeight = containerBb.height * 0.8;
+    const maxWidth = containerBb.width * (isSmall ? 0.9 : 0.8);
+    const maxHeight = containerBb.height * (isSmall ? 0.9 : 0.8);
 
     const scaleY = maxHeight / bb.height;
     const scaleX = maxWidth / bb.width;
