@@ -74,7 +74,6 @@ export function Pings() {
         {transition((style, item) => {
           return (
             <animated.div
-              key={item.key}
               style={{
                 position: "absolute",
                 top: item.x,
