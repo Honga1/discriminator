@@ -246,8 +246,8 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
               width={boxWidth * 100 + "%"}
             >
               <ImageCard
-                width={isSmall ? 0.8 : 0.6}
-                height={isSmall ? 0.8 : 0.6}
+                width={isSmall ? 0.9 : 0.6}
+                height={isSmall ? 0.9 : 0.6}
                 key={index}
                 image={image}
               />
@@ -276,8 +276,8 @@ function useBoxes(amount: number, cellsPerColumn: number, year: Years) {
               width={boxWidth * 100 + "%"}
             >
               <ImageCard
-                width={isSmall ? 0.8 : 0.6}
-                height={isSmall ? 0.8 : 0.6}
+                width={isSmall ? 0.9 : 0.6}
+                height={isSmall ? 0.9 : 0.6}
                 key={index}
                 image={image}
               />
