@@ -295,12 +295,12 @@ const HoverBox = styled.div<{ selected: boolean; interactive: boolean }>`
 
   transform: ${(props) =>
     props.selected && props.interactive
-      ? `scale(1.1) rotate(1deg)`
+      ? `scale(1.3) rotate(1deg)`
       : `scale(1) rotate(0deg)`};
 
   &:hover {
     transform: ${(props) =>
-      props.interactive ? `scale(1.1) rotate(1deg)` : `scale(1) rotate(0deg)`};
+      props.interactive ? `scale(1.3) rotate(1deg)` : `scale(1) rotate(0deg)`};
   }
 `;
 
