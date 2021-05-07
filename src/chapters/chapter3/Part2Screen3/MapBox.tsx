@@ -1,6 +1,6 @@
 import { Box } from "grommet";
 import { memo } from "react";
-import { FadeOutBox } from "./Part2Screen3/FadeOutBox";
+import { FadeOutBox } from "./FadeOutBox";
 
 export const ButtonCornerMapBox = memo(({ isShown }: { isShown: boolean }) => {
   return (

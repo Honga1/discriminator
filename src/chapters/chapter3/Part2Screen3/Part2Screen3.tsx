@@ -14,7 +14,7 @@ import useResizeObserver from "use-resize-observer";
 import { default as createStore } from "zustand";
 import create from "zustand/vanilla";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
-import { ButtonCornerMapBox, FullScreenMapBox } from "../MapBox";
+import { ButtonCornerMapBox, FullScreenMapBox } from "./MapBox";
 import { Data } from "./Data";
 import { data } from "./data";
 import { HeaderBar } from "./HeaderBar";
