@@ -9,7 +9,7 @@ import { Part1Screen2Selector } from "./Part1Screen2/Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3/Part2Screen3";
-import { Part3Screen1Selector } from "./Part3Screen1";
+import { Part3Selector } from "./Part3";
 import { useLoopedAudio } from "./hooks/useLoopedAudio";
 
 export default function Chapter3() {
@@ -145,9 +145,7 @@ export default function Chapter3() {
         {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
         {part === "PART_2_SCREEN_2" && <Part2Screen2 seconds={seconds} />}
         {part === "PART_2_SCREEN_3" && <Part2Screen3 seconds={seconds} />}
-        {part === "PART_3_SCREEN_1" && (
-          <Part3Screen1Selector seconds={seconds} />
-        )}
+        {part === "PART_3_SCREEN_1" && <Part3Selector seconds={seconds} />}
       </Box>
     </>
   );

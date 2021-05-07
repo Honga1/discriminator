@@ -21,7 +21,7 @@ import {
   yearsInShownOrder,
 } from "./Part1Screen2/store/Part1Screen2Store";
 
-interface Part3Screen1Props {
+interface Part3Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
 }
 
@@ -33,18 +33,15 @@ const stageProgress = [
   "USER_CONTROL",
 ] as const;
 
-function stageIsAfter(
-  stage: Part3Screen1Props["stage"],
-  point: Part3Screen1Props["stage"]
-) {
+function stageIsAfter(stage: Part3Props["stage"], point: Part3Props["stage"]) {
   const stageIndex = stageProgress.findIndex((test) => test === stage);
   const pointIndex = stageProgress.findIndex((test) => test === point);
 
   return stageIndex > pointIndex;
 }
 
-export const Part3Screen1Selector = ({ seconds }: { seconds: number }) => {
-  let stage: Part3Screen1Props["stage"];
+export const Part3Selector = ({ seconds }: { seconds: number }) => {
+  let stage: Part3Props["stage"];
 
   if (seconds < 191) {
     stage = "NO_TINTING";
@@ -58,10 +55,10 @@ export const Part3Screen1Selector = ({ seconds }: { seconds: number }) => {
     stage = "USER_CONTROL";
   }
 
-  return <Part3Screen1 stage={stage} />;
+  return <Part3 stage={stage} />;
 };
 
-const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
+const Part3 = memo(({ stage }: Part3Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const isSmall = useContext(ResponsiveContext) === "small";
@@ -162,7 +159,7 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
   );
 });
 
-function CategoryLabels(props: { stage: Part3Screen1Props["stage"] }) {
+function CategoryLabels(props: { stage: Part3Props["stage"] }) {
   return (
     <Box
       style={{
