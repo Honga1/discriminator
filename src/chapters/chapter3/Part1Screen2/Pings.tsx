@@ -117,6 +117,8 @@ const PulsingCircle = styled.div<{ delay: number }>`
   width: 100%;
   height: 100%;
   animation-delay: ${(props) => props.delay}s;
+  backface-visibility: hidden;
+  user-select: none;
   opacity: 0;
 
   @keyframes scaleIn {
@@ -130,8 +132,3 @@ const PulsingCircle = styled.div<{ delay: number }>`
     }
   }
 `;
-function delay<T>(time: number, result?: T): Promise<T | undefined> {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(result), time);
-  });
-}
