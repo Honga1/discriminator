@@ -1,17 +1,17 @@
 import { Howl } from "howler";
 import React, { useEffect, useMemo } from "react";
-import { useStore } from "src/store/store";
-import loop1Caf from "./loops/part1.caf";
-import loop1Ogg from "./loops/part1.ogg";
-import loop2Caf from "./loops/part2.caf";
-import loop2Ogg from "./loops/part2.ogg";
-import loop3Caf from "./loops/part3.caf";
-import loop3Ogg from "./loops/part3.ogg";
+import loop1Caf from "../audio/part1.caf";
+import loop1Ogg from "../audio/part1.ogg";
+import loop2Caf from "../audio/part2.caf";
+import loop2Ogg from "../audio/part2.ogg";
+import loop3Caf from "../audio/part3.caf";
+import loop3Ogg from "../audio/part3.ogg";
 
 export function useLoopedAudio(
   ref: React.RefObject<HTMLAudioElement>,
   isAutoPaused: boolean,
-  part: string
+  part: string,
+  isMuted: boolean
 ) {
   const [loop1Audio, loop2Audio, loop3Audio] = useMemo(() => {
     const loop1Audio = new Howl({
@@ -49,8 +49,6 @@ export function useLoopedAudio(
     };
   }, [loop1Audio, loop2Audio, loop3Audio]);
 
-  const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
-
   useEffect(() => {
     loop1Audio.mute(isMuted);
     loop2Audio.mute(isMuted);
@@ -67,7 +65,6 @@ export function useLoopedAudio(
     mainAudio?.addEventListener("play", onPlay);
 
     const onPause = () => {
-      console.log(isAutoPaused);
       if (!isAutoPaused && ref.current && ref.current.currentTime < 218) {
         loop1Audio.pause();
         loop2Audio.pause();

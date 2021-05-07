@@ -2,7 +2,7 @@ import { Box, ResponsiveContext, Text } from "grommet";
 import React, { memo, useContext } from "react";
 import { animated, useTransition } from "react-spring";
 import styled from "styled-components";
-import { usePart1Screen2Store } from "./Part1Screen2Store";
+import { usePart1Screen2Store } from "../store/Part1Screen2Store";
 import { StackedBoxes } from "./StackedBoxes";
 
 export const smallGridAreas = [

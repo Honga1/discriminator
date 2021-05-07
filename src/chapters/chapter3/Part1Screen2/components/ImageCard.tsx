@@ -9,7 +9,7 @@ import {
   part1Screen2Store,
   Tinting,
   usePart1Screen2Store,
-} from "./Part1Screen2Store";
+} from "../store/Part1Screen2Store";
 
 export const ImageCard = memo(
   ({

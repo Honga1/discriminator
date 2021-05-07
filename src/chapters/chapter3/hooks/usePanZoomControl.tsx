@@ -1,7 +1,7 @@
 import React from "react";
 import { to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
-import { clamp } from "../../libs/math";
+import { clamp } from "src/libs/math";
 
 export function usePanZoomControl(isEnabled: boolean) {
   const [{ x, y, scale }, api] = useSpring(

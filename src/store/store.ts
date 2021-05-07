@@ -1,7 +1,7 @@
 import createActivityDetector from "activity-detector";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
-import { NonFunctionProperties } from "./CallbackFunctionVariadic";
+import { NonFunctionProperties } from "../@types/NonFunctionProperties";
 
 type State = {
   webcamStream: MediaStream | undefined;

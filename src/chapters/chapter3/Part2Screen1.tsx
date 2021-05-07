@@ -1,7 +1,7 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
 import { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated, useSpring } from "react-spring";
-import { AdamFaceCircle } from "src/components/FaceCircles";
+import { AdamFaceCircle } from "./components/FaceCircles";
 import styled from "styled-components";
 
 export const Part2Screen1 = () => {

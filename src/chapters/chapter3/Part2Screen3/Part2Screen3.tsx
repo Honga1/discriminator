@@ -11,14 +11,13 @@ import {
   useState,
 } from "react";
 import useResizeObserver from "use-resize-observer";
-import { default as createStore } from "zustand";
-import create from "zustand/vanilla";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
-import { ButtonCornerMapBox, FullScreenMapBox } from "./MapBox";
-import { Data } from "./Data";
+import { ButtonCornerMapBox, FullScreenMapBox } from "./components/MapBox";
+import { Data } from "./components/Data";
 import { data } from "./data";
-import { HeaderBar } from "./HeaderBar";
-import { ScrollBanner } from "./ScrollBanner";
+import { HeaderBar } from "./components/HeaderBar";
+import { ScrollBanner } from "./components/ScrollBanner";
+import { part2Screen3Store, usePart2Screen3Store } from "./store/part2Screen3Store";
 
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
@@ -200,18 +199,6 @@ Part2Screen3.displayName = "Part2Screen3";
 function easeInOutSine(x: number): number {
   return -(Math.cos(Math.PI * x) - 1) / 2;
 }
-
-export const part2Screen3Store = create<{
-  sprites: Set<{ current: HTMLSpanElement | null }>;
-  container: { current: HTMLSpanElement | null } | undefined;
-  isInteractive: boolean;
-}>((set, get) => ({
-  container: undefined,
-  isInteractive: false,
-  sprites: new Set<{ current: HTMLSpanElement | null }>(),
-}));
-
-const usePart2Screen3Store = createStore(part2Screen3Store);
 
 const SpriteLevelIndicators = memo(() => {
   const ref = useRef<HTMLDivElement>(null);

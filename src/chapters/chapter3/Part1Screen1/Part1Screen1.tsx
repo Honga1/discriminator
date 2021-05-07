@@ -1,11 +1,8 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { useContext, useEffect, useState } from "react";
-import {
-  BrettFaceCircle,
-  AdamFaceCircle,
-} from "../../../components/FaceCircles";
-import { Spectrogram } from "./Spectrogram";
-import { TypingText } from "./TypingText";
+import { AdamFaceCircle, BrettFaceCircle } from "../components/FaceCircles";
+import { Spectrogram } from "./components/Spectrogram";
+import { TypingText } from "./components/TypingText";
 
 export const Part1Screen1 = ({
   getByteData,

@@ -1,7 +1,7 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
 import { memo, useContext, useEffect, useRef, useState } from "react";
 import { animated } from "react-spring";
-import { usePanZoomControl } from "../usePanZoomControl";
+import { usePanZoomControl } from "../hooks/usePanZoomControl";
 import {
   GridBoxes,
   GridTextLabels,
@@ -11,15 +11,15 @@ import {
   smallGridAreas,
   smallGridColumns,
   smallGridRows,
-} from "./GridLayout";
+} from "./components/GridLayout";
 import {
   part1Screen2Store,
   usePart1Screen2Store,
   Years,
   yearsInShownOrder,
-} from "./Part1Screen2Store";
-import { Pings } from "./Pings";
-import { useZoomOnElement } from "./useZoomOnElement";
+} from "./store/Part1Screen2Store";
+import { Pings } from "../components/Pings";
+import { useZoomOnElement } from "./hooks/useZoomOnElement";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];
@@ -203,6 +203,14 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     part1Screen2Store.getState().setYearsShown(yearsShown);
   }, [yearsShown]);
 
+  const isFocused = usePart1Screen2Store(
+    (state) => state.focusedElement !== undefined
+  );
+
+  const imageCards = usePart1Screen2Store(
+    (state) => state.autoPickableImageCards
+  );
+
   return (
     <Box
       flex={false}
@@ -238,7 +246,9 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           <GridBoxes />
           <GridTextLabels />
         </Grid>
-        {stage === "USER_CONTROL" && <Pings></Pings>}
+        {stage === "USER_CONTROL" && (
+          <Pings isFocused={isFocused} imageCards={imageCards} />
+        )}
       </animated.div>
     </Box>
   );

@@ -3,29 +3,29 @@ import { useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
-import { part1Screen2Store, usePart1Screen2Store } from "./Part1Screen2Store";
 
-export function Pings() {
+export function Pings({
+  isFocused,
+  imageCards,
+}: {
+  isFocused: boolean;
+  imageCards: Map<string, { current: HTMLElement | null }>;
+}) {
   const [pings, setPings] = useState<{ x: number; y: number; key: number }[]>(
     []
   );
   const count = useRef(0);
 
-  const isFocused = usePart1Screen2Store(
-    (state) => state.focusedElement !== undefined
-  );
-
   useEffect(() => {
     const timeout = setInterval(async () => {
-      const { autoPickableImageCards } = part1Screen2Store.getState();
-      const keys = [...autoPickableImageCards.keys()];
+      const keys = [...imageCards.keys()];
 
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       if (!randomKey) return;
-      const cardToPing = autoPickableImageCards.get(randomKey);
+      const cardToPing = imageCards.get(randomKey);
       if (!cardToPing)
         throw new Error(
-          `Could not get card ${randomKey} from cards ${autoPickableImageCards}`
+          `Could not get card ${randomKey} from cards ${imageCards}`
         );
 
       if (!cardToPing.current) return;
@@ -48,7 +48,7 @@ export function Pings() {
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [imageCards]);
 
   const transition = useTransition(pings, {
     keys: (item) => item.key,

@@ -1,17 +1,16 @@
 import { Box } from "grommet";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useChapter } from "../../hooks/useChapter";
-import { IMediaElement } from "../../IMediaElement";
-import { store } from "../../store/store";
-import audioSrc from "./Chapter3.mp3";
-import { ContinueButton } from "./ContinueButton";
+import { store, useStore } from "../../store/store";
+import audioSrc from "./audio/Chapter3.mp3";
+import { ContinueButton } from "./components/ContinueButton";
 import { Part1Screen1 } from "./Part1Screen1/Part1Screen1";
 import { Part1Screen2Selector } from "./Part1Screen2/Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3/Part2Screen3";
 import { Part3Screen1Selector } from "./Part3Screen1";
-import { useLoopedAudio } from "./useLoopedAudio";
+import { useLoopedAudio } from "./hooks/useLoopedAudio";
 
 export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
@@ -64,11 +63,12 @@ export default function Chapter3() {
     | "PART_3_SCREEN_1"
   >("PART_1_SCREEN_1");
 
-  useLoopedAudio(ref, isAutoPaused, part);
+  const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
+  useLoopedAudio(ref, isAutoPaused, part, isMuted);
 
   useEffect(() => {
     const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
-      const audio = event.target as IMediaElement;
+      const audio = event.target as HTMLAudioElement;
       const seconds = Math.round(audio.currentTime);
       setSeconds(seconds);
       console.log(seconds);

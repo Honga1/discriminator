@@ -1,4 +1,3 @@
-import { SpriteNames } from "../Data";
 import advertima from "./advertima logo1.png";
 import affectiva from "./affectiva logo2.png";
 import amazon from "./amazon logo3.png";
@@ -30,7 +29,7 @@ import tencent from "./tencent logo28.png";
 import turkishpolice from "./turkishpolice logo29.png";
 import uncannyvision from "./uncannyvision logo30.png";
 
-export const logos: Record<SpriteNames, string> = {
+export const logos = {
   advertima,
   affectiva,
   amazon,
@@ -61,6 +60,4 @@ export const logos: Record<SpriteNames, string> = {
   microsoft,
   idiap,
   bitmain,
-};
-
-export default logos;
+} as const;

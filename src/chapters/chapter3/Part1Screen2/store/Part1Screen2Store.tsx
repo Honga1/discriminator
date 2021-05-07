@@ -1,8 +1,8 @@
-import { NonFunctionProperties } from "src/store/CallbackFunctionVariadic";
+import { NonFunctionProperties } from "src/@types/NonFunctionProperties";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
-import { getImagesForId } from "../images/images";
-import { imageData, ImageMetaData } from "./imageData";
+import { imageData, ImageMetaData } from "../../images/imageData";
+import { getImagesForId } from "../../images/images";
 
 export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
 export type Years = typeof yearsInShownOrder[number];

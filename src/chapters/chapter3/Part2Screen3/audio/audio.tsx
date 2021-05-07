@@ -1,4 +1,3 @@
-import { SpriteNames } from "../Data";
 import advertimaCaf from "./advertima.caf";
 import advertimaOgg from "./advertima.ogg";
 import affectivaCaf from "./affectiva.caf";
@@ -63,7 +62,7 @@ import idiapOgg from "./idiap.ogg";
 import bitmainCaf from "./bitmain.caf";
 import bitmainOgg from "./bitmain.ogg";
 
-export const audio: Record<SpriteNames, { caf: string; ogg: string }> = {
+export const audio = {
   advertima: { caf: advertimaCaf, ogg: advertimaOgg },
   affectiva: { caf: affectivaCaf, ogg: affectivaOgg },
   amazon: { caf: amazonCaf, ogg: amazonOgg },
@@ -94,4 +93,4 @@ export const audio: Record<SpriteNames, { caf: string; ogg: string }> = {
   microsoft: { caf: microsoftCaf, ogg: microsoftOgg },
   idiap: { caf: idiapCaf, ogg: idiapOgg },
   bitmain: { caf: bitmainCaf, ogg: bitmainOgg },
-};
+} as const;

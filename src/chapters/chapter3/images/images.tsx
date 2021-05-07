@@ -1,4 +1,4 @@
-import { ImageIds } from "../Part1Screen2/imageData";
+import { ImageIds } from "./imageData";
 import image_10090346453 from "./10090346453_a0c4a59ded_b.jpg";
 import overlay_102631694 from "./102631694_blank.png";
 import image_102631694 from "./102631694_ddcba3652b_b.jpg";
@@ -66,8 +66,6 @@ import overlay_5708843240 from "./5708843240_blank.png";
 import image_7178904372 from "./7178904372_3217ec6a6e_b.jpg";
 import overlay_7178904372 from "./7178904372_blank.png";
 import missing_image from "./missing_image.jpg";
-
-
 
 const images: Record<string, { overlay: string | undefined; image: string }> = {
   "10090346453": { overlay: undefined, image: image_10090346453 },

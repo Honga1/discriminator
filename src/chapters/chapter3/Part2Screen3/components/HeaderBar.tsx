@@ -1,10 +1,10 @@
 import { Box, Button, ResponsiveContext, Text } from "grommet";
 import { memo, useContext } from "react";
 import styled from "styled-components";
+import { Years } from "../Part2Screen3";
 import { ChevronLeft } from "./ChevronLeft";
 import { ChevronRight } from "./ChevronRight";
 import { MapIcon } from "./MapIcon";
-import { Years } from "./Part2Screen3";
 
 export const HeaderBar = memo(
   ({

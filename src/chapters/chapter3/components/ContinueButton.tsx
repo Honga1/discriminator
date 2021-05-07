@@ -1,14 +1,14 @@
 import { Box, ResponsiveContext } from "grommet";
 import { useContext } from "react";
-import { FinishedButton } from "../../components/FinishedButton";
-import { useIsActive } from "../../hooks/useIsActive";
+import { FinishedButton } from "src/components/FinishedButton";
+import { useStore } from "src/store/store";
 
 export function ContinueButton(props: {
   isAutoPaused: boolean;
   play?: () => void;
 }) {
   const isSmall = useContext(ResponsiveContext) === "small";
-  const isActive = useIsActive();
+  const isActive = useStore((state) => state.isActive);
 
   return (
     <Box

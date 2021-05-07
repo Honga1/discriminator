@@ -4,7 +4,7 @@ import { animated, to, useSpring } from "react-spring";
 import { clamp } from "src/libs/math";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
-import { part2Screen3Store } from "./Part2Screen3";
+import { part2Screen3Store } from "../store/part2Screen3Store";
 import { TypingText } from "./TypingText";
 
 export const SpriteText = memo(

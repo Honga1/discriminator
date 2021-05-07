@@ -1,6 +1,8 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef } from "react";
 import { animated } from "react-spring";
+import { Pings } from "./components/Pings";
+import { usePanZoomControl } from "./hooks/usePanZoomControl";
 import {
   GridBoxes,
   GridTextLabels,
@@ -10,16 +12,14 @@ import {
   smallGridAreas,
   smallGridColumns,
   smallGridRows,
-} from "./Part1Screen2/GridLayout";
+} from "./Part1Screen2/components/GridLayout";
+import { useZoomOnElement } from "./Part1Screen2/hooks/useZoomOnElement";
 import {
   part1Screen2Store,
   Tinting,
   usePart1Screen2Store,
   yearsInShownOrder,
-} from "./Part1Screen2/Part1Screen2Store";
-import { Pings } from "./Part1Screen2/Pings";
-import { useZoomOnElement } from "./Part1Screen2/useZoomOnElement";
-import { usePanZoomControl } from "./usePanZoomControl";
+} from "./Part1Screen2/store/Part1Screen2Store";
 
 interface Part3Screen1Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
@@ -109,6 +109,14 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
     part1Screen2Store.getState().setTinting(tinting);
   }, [stage]);
 
+  const isFocused = usePart1Screen2Store(
+    (state) => state.focusedElement !== undefined
+  );
+
+  const imageCards = usePart1Screen2Store(
+    (state) => state.autoPickableImageCards
+  );
+
   return (
     <Box
       flex={false}
@@ -146,7 +154,9 @@ const Part3Screen1 = memo(({ stage }: Part3Screen1Props) => {
           <GridBoxes />
           <GridTextLabels />
         </Grid>
-        {stage === "USER_CONTROL" && <Pings></Pings>}
+        {stage === "USER_CONTROL" && (
+          <Pings isFocused={isFocused} imageCards={imageCards} />
+        )}
       </animated.div>
     </Box>
   );

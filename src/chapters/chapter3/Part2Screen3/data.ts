@@ -1,8 +1,8 @@
-import { SpriteNames } from "./Data";
+import { logos } from "./logos/logos";
 
 export const data: Record<
   2015 | 2016 | 2017 | 2018 | 2019,
-  ({ entry: string } | { logo: SpriteNames; entry: string })[]
+  ({ entry: string } | { logo: keyof typeof logos; entry: string })[]
 > = {
   "2015": [
     {

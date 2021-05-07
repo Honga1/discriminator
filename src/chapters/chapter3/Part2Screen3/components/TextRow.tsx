@@ -1,15 +1,10 @@
 import { Text } from "grommet";
 import { memo, useEffect, useMemo, useState } from "react";
-import { audio as audioSources } from "./audio/audio";
-import logos from "./logos/logos";
+import { audio as audioSources } from "../audio/audio";
+import { logos } from "../logos/logos";
 import { SpriteText } from "./SpriteText";
 import { TypingText } from "./TypingText";
-import {
-  SpriteNames,
-  entryIsLogo,
-  segmentIsString,
-  getSegmentState,
-} from "./Data";
+import { entryIsLogo, segmentIsString, getSegmentState } from "./Data";
 
 export const TextRow = memo(
   ({
@@ -20,7 +15,10 @@ export const TextRow = memo(
   }: {
     state: "SHOW_ALL" | "TYPING" | "SHOW_NONE";
     year: number;
-    entries: ({ logo: SpriteNames; entry: string } | { entry: string })[];
+    entries: (
+      | { logo: keyof typeof logos; entry: string }
+      | { entry: string }
+    )[];
     onFinished: () => void;
   }) => {
     const segments = useMemo(() => {
@@ -29,7 +27,7 @@ export const TextRow = memo(
             type: "string";
             entries: string[];
           }
-        | { type: "logo"; logoName: SpriteNames; companyName: string }
+        | { type: "logo"; logoName: keyof typeof logos; companyName: string }
       )[] = [];
 
       entries.forEach((entry) => {
@@ -86,7 +84,7 @@ export const TextRow = memo(
               <SpriteText
                 key={segmentIndex}
                 audioSrc={audioFile}
-                logoSrc={logos[segmentData.logoName as keyof typeof logos]}
+                logoSrc={logos[segmentData.logoName]}
                 text={segmentData.companyName}
                 onFinished={() => setSegment(segmentIndex + 2)}
                 state={getSegmentState(segmentIndex + 1, currentSegment, state)}

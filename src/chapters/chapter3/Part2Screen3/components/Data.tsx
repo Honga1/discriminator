@@ -1,44 +1,12 @@
 import { Text } from "grommet";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { data } from "./data";
-import { part2Screen3Store } from "./Part2Screen3";
+import { data } from "../data";
+import { Years } from "../Part2Screen3";
+import { part2Screen3Store } from "../store/part2Screen3Store";
 import { TextRow } from "./TextRow";
 
-type Years = keyof typeof data;
-const years = [2015, 2016, 2017, 2018, 2019] as Years[];
 const startYear = 2015;
-
-export type SpriteNames =
-  | "advertima"
-  | "affectiva"
-  | "amazon"
-  | "bytedance"
-  | "csiac"
-  | "dfat"
-  | "digitalbarriers"
-  | "esteelauder"
-  | "europol"
-  | "facebook"
-  | "google"
-  | "hikvision"
-  | "huawei"
-  | "inqtel"
-  | "intel"
-  | "kipod"
-  | "nc3"
-  | "nec"
-  | "noblis"
-  | "northropgrumman"
-  | "nudt"
-  | "nvidia"
-  | "sensetime"
-  | "smartcheckr"
-  | "tencent"
-  | "turkishpolice"
-  | "microsoft"
-  | "idiap"
-  | "bitmain"
-  | "uncannyvision";
+const years = [2015, 2016, 2017, 2018, 2019] as Years[];
 
 export const Data = memo(({ showAll }: { showAll: boolean }) => {
   useEffect(() => {

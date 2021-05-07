@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import useResizeObserver from "use-resize-observer";
 import { ImageCard } from "./ImageCard";
-import { usePart1Screen2Store, Years } from "./Part1Screen2Store";
+import { usePart1Screen2Store, Years } from "../store/Part1Screen2Store";
 
 export const StackedBoxes = memo(({ year }: { year: Years }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
