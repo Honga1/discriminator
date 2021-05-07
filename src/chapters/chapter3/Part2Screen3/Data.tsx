@@ -1,5 +1,5 @@
 import { Text } from "grommet";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { data } from "./data";
 import { part2Screen3Store } from "./Part2Screen3";
 import { TextRow } from "./TextRow";
@@ -35,6 +35,9 @@ export type SpriteNames =
   | "smartcheckr"
   | "tencent"
   | "turkishpolice"
+  | "microsoft"
+  | "idiap"
+  | "bitmain"
   | "uncannyvision";
 
 export const Data = memo(({ showAll }: { showAll: boolean }) => {
@@ -54,9 +57,9 @@ export const Data = memo(({ showAll }: { showAll: boolean }) => {
     };
   }, []);
 
-  return (
-    <Text ref={ref} style={{ userSelect: "none" }}>
-      {years.map((year) => {
+  const textRows = useMemo(
+    () =>
+      years.map((year) => {
         const entries = data[year as keyof typeof data];
         return (
           <TextRow
@@ -75,7 +78,12 @@ export const Data = memo(({ showAll }: { showAll: boolean }) => {
             }
           />
         );
-      })}
+      }),
+    [showAll, typingYear]
+  );
+  return (
+    <Text ref={ref} style={{ userSelect: "none" }}>
+      {textRows}
     </Text>
   );
 });

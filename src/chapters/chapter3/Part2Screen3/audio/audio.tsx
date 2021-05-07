@@ -54,6 +54,15 @@ import turkishpoliceOgg from "./turkishpolice.ogg";
 import uncannyvisionCaf from "./uncannyvision.caf";
 import uncannyvisionOgg from "./uncannyvision.ogg";
 
+import microsoftCaf from "./microsoft.caf";
+import microsoftOgg from "./microsoft.ogg";
+
+import idiapCaf from "./idiap.caf";
+import idiapOgg from "./idiap.ogg";
+
+import bitmainCaf from "./bitmain.caf";
+import bitmainOgg from "./bitmain.ogg";
+
 export const audio: Record<SpriteNames, { caf: string; ogg: string }> = {
   advertima: { caf: advertimaCaf, ogg: advertimaOgg },
   affectiva: { caf: affectivaCaf, ogg: affectivaOgg },
@@ -82,4 +91,7 @@ export const audio: Record<SpriteNames, { caf: string; ogg: string }> = {
   tencent: { caf: tencentCaf, ogg: tencentOgg },
   turkishpolice: { caf: turkishpoliceCaf, ogg: turkishpoliceOgg },
   uncannyvision: { caf: uncannyvisionCaf, ogg: uncannyvisionOgg },
+  microsoft: { caf: microsoftCaf, ogg: microsoftOgg },
+  idiap: { caf: idiapCaf, ogg: idiapOgg },
+  bitmain: { caf: bitmainCaf, ogg: bitmainOgg },
 };

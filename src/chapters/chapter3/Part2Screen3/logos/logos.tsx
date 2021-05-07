@@ -2,6 +2,7 @@ import { SpriteNames } from "../Data";
 import advertima from "./advertima logo1.png";
 import affectiva from "./affectiva logo2.png";
 import amazon from "./amazon logo3.png";
+import bitmain from "./bitmain logo4.jpeg";
 import bytedance from "./bytedance logo5.png";
 import csiac from "./csiac logo6.png";
 import dfat from "./dfat logo7.png";
@@ -12,9 +13,11 @@ import facebook from "./facebook logo11.png";
 import google from "./google logo12.png";
 import hikvision from "./hikvision logo13.png";
 import huawei from "./huawei logo14.png";
+import idiap from "./idiap logo15.jpeg";
 import inqtel from "./inqtel logo16.png";
 import intel from "./intel logo17.png";
 import kipod from "./kipod logo18.png";
+import microsoft from "./microsoft logo19.jpeg";
 import nc3 from "./nc3 logo20.png";
 import nec from "./nec logo21.png";
 import noblis from "./noblis logo22.png";
@@ -55,6 +58,9 @@ export const logos: Record<SpriteNames, string> = {
   tencent,
   turkishpolice,
   uncannyvision,
+  microsoft,
+  idiap,
+  bitmain,
 };
 
 export default logos;

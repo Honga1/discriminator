@@ -1,5 +1,6 @@
 import { useSpring } from "@react-spring/core";
 import { Box, ResponsiveContext } from "grommet";
+import { throttle } from "lodash";
 import {
   memo,
   useCallback,
@@ -49,6 +50,14 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const [, api] = useSpring(() => ({
     y: 0,
   }));
+
+  useEffect(() => {
+    if (seconds > 174) {
+      part2Screen3Store.setState({ isInteractive: true });
+    } else {
+      part2Screen3Store.setState({ isInteractive: false });
+    }
+  }, [seconds]);
 
   useEffect(() => {
     if (seconds >= 168 && seconds < 176) {
@@ -123,6 +132,8 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
     },
     [currentYear, isSmall]
   );
+
+  const throttledScroll = useMemo(() => throttle(onScroll, 100), [onScroll]);
   const onMapBoxClose = useCallback(() => setShowFullScreenMap(false), []);
   const onMapClicked = useCallback(() => setShowFullScreenMap(true), []);
   return (
@@ -152,7 +163,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
           onMapClicked={onMapClicked}
         />
         <Box>
-          {seconds >= 168 && <SpriteLevelIndicators />}
           <ScrollBanner isShown={!hideScrollBanner} />
           {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
           {isSmall ? (
@@ -164,7 +174,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               ref={scrollBox}
               onScroll={onScroll}
             >
-              <Data showAll={seconds >= 168} />
+              <Data showAll={seconds >= 167} />
             </Box>
           ) : (
             <CustomScrollbarBox
@@ -173,11 +183,12 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               overflow={{ horizontal: "hidden", vertical: "auto" }}
               pad={"8px"}
               ref={scrollBox}
-              onScroll={onScroll}
+              onScroll={throttledScroll}
             >
-              <Data showAll={seconds >= 168} />
+              <Data showAll={seconds >= 167} />
             </CustomScrollbarBox>
           )}
+          {seconds >= 176 && <SpriteLevelIndicators />}
         </Box>
       </Box>
     </Box>
@@ -193,14 +204,16 @@ function easeInOutSine(x: number): number {
 export const part2Screen3Store = create<{
   sprites: Set<{ current: HTMLSpanElement | null }>;
   container: { current: HTMLSpanElement | null } | undefined;
+  isInteractive: boolean;
 }>((set, get) => ({
   container: undefined,
+  isInteractive: false,
   sprites: new Set<{ current: HTMLSpanElement | null }>(),
 }));
 
 const usePart2Screen3Store = createStore(part2Screen3Store);
 
-const SpriteLevelIndicators = () => {
+const SpriteLevelIndicators = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
   const indicators = usePart2Screen3Store((state) => state.sprites);
   const container = usePart2Screen3Store((state) => state.container);
@@ -218,6 +231,22 @@ const SpriteLevelIndicators = () => {
     });
     setPositions(positions);
   }, [height, indicators]);
+
+  const indicatorElements = useMemo(
+    () =>
+      positions.map((distance, key) => {
+        return (
+          <Box
+            key={key}
+            background="greenLight"
+            width="100%"
+            height="2px"
+            style={{ position: "absolute", top: distance * 100 + "%" }}
+          ></Box>
+        );
+      }),
+    [positions]
+  );
   return (
     <Box
       ref={ref}
@@ -231,19 +260,16 @@ const SpriteLevelIndicators = () => {
         touchAction: "none",
       }}
     >
-      <Box style={{ position: "relative", width: "100%", height: "100%" }}>
-        {positions.map((distance, key) => {
-          return (
-            <Box
-              key={key}
-              background="greenLight"
-              width="100%"
-              height="2px"
-              style={{ position: "absolute", top: distance * 100 + "%" }}
-            ></Box>
-          );
-        })}
+      <Box
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          zIndex: -1,
+        }}
+      >
+        {indicatorElements}
       </Box>
     </Box>
   );
-};
+});

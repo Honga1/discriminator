@@ -1,4 +1,9 @@
-export const data = {
+import { SpriteNames } from "./Data";
+
+export const data: Record<
+  2015 | 2016 | 2017 | 2018 | 2019,
+  ({ entry: string } | { logo: SpriteNames; entry: string })[]
+> = {
   "2015": [
     {
       entry: "University of Electronic Science and Technology of China [UESTC]",
@@ -26,6 +31,10 @@ export const data = {
   "2016": [
     {
       entry: "Inria",
+    },
+    {
+      logo: "csiac",
+      entry: "CSIAC",
     },
     {
       entry: "University of Dhaka",
@@ -72,6 +81,10 @@ export const data = {
       entry: "Technical University of Catalonia (UPC)",
     },
     {
+      logo: "digitalbarriers",
+      entry: "Digital Barriers",
+    },
+    {
       entry: "School of Mathematical Sciences, Peking University",
     },
     {
@@ -91,6 +104,7 @@ export const data = {
     },
     {
       entry: "Idiap research institute",
+      logo: "idiap",
     },
     {
       entry: "Rochester Institute of Technology",
@@ -189,6 +203,10 @@ export const data = {
       entry: "University of Koblenz",
     },
     {
+      entry: "KIPOD",
+      logo: "kipod",
+    },
+    {
       entry: "Research center",
     },
     {
@@ -274,6 +292,7 @@ export const data = {
     },
     {
       entry: "Microsoft Research Asia",
+      logo: "microsoft",
     },
     {
       entry: "CHINA-SJTU-School of EI&EE",
@@ -833,6 +852,7 @@ export const data = {
     },
     {
       entry: "SenseTime.Inc",
+      logo: "sensetime",
     },
     {
       entry: "south china university of technology",
@@ -873,6 +893,10 @@ export const data = {
     },
     {
       entry: "KNU",
+    },
+    {
+      logo: "advertima",
+      entry: "Advertima",
     },
     {
       entry: "Chonbuk National University",
@@ -983,6 +1007,10 @@ export const data = {
     },
     {
       entry: "Zhejiang Uiniversity of Technolofy",
+    },
+    {
+      logo: "inqtel",
+      entry: "In-Q-Tel",
     },
     {
       entry: "厦门大学",
@@ -1531,7 +1559,8 @@ export const data = {
       entry: "ict, UCAS",
     },
     {
-      entry: "Microsoft ",
+      entry: "Microsoft",
+      logo: "microsoft",
     },
     {
       entry: "University of Tartu, Estonia",
@@ -1968,6 +1997,10 @@ export const data = {
   ],
   "2018": [
     {
+      entry: "Department of Foreign Affairs and Trade",
+      logo: "dfat",
+    },
+    {
       entry: "Harbin Insitute of Technology",
     },
     {
@@ -2109,6 +2142,10 @@ export const data = {
     },
     {
       entry: "Harvard University",
+    },
+    {
+      entry: "Smartcheckr",
+      logo: "smartcheckr",
     },
     {
       entry: "Worcester Polytechnic Institute",
@@ -2258,6 +2295,7 @@ export const data = {
     },
     {
       entry: "Microsoft Research",
+      logo: "microsoft",
     },
     {
       entry: "ULiège",
@@ -3135,6 +3173,7 @@ export const data = {
     },
     {
       entry: "SenseTime Japan",
+      logo: "sensetime",
     },
     {
       entry: "Beijing University of Posts and Telecommunications",
@@ -3227,6 +3266,7 @@ export const data = {
       entry: "Baidu company",
     },
     {
+      logo: "bitmain",
       entry: "Bitmain",
     },
     {
@@ -3253,6 +3293,7 @@ export const data = {
     },
     {
       entry: "Microsoft Bing Multimedia Team",
+      logo: "microsoft",
     },
     {
       entry: "NAVER CLOVA AI RESEARCH",
@@ -3294,10 +3335,9 @@ export const data = {
     },
     {
       entry: "sensetime",
+      logo: "sensetime",
     },
-    {
-      entry: "Sensetime",
-    },
+
     {
       logo: "tencent",
       entry: "Tencent YouTu Lab",
@@ -3330,6 +3370,10 @@ export const data = {
     },
     {
       entry: "GeoVision Inc.",
+    },
+    {
+      entry: "Estee Lauder",
+      logo: "esteelauder",
     },
     {
       entry: "graduate student",
@@ -3381,6 +3425,10 @@ export const data = {
     },
     {
       entry: "qiankunliu007@gmail.com",
+    },
+    {
+      entry: "Sensetime",
+      logo: "sensetime",
     },
     {
       entry: "Peking University",
@@ -4023,6 +4071,7 @@ export const data = {
     },
     {
       entry: "Microsoft",
+      logo: "microsoft",
     },
     {
       entry: "Rokid R-Lab",
@@ -4373,6 +4422,7 @@ export const data = {
     },
     {
       entry: "microsoft",
+      logo: "microsoft",
     },
     {
       entry: "Massachusetts Institute of Technology",
@@ -4424,7 +4474,4 @@ export const data = {
       entry: "tencent",
     },
   ],
-} as Record<
-  2015 | 2016 | 2017 | 2018 | 2019,
-  ({ entry: string } | { logo: string; entry: string })[]
->;
+};
