@@ -3,32 +3,37 @@ import { useEffect, useRef, useState } from "react";
 import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
+import { part1Screen2Store, usePart1Screen2Store } from "./Part1Screen2Store";
 
 export function Pings() {
-  const [pings, setPings] = useState<{ x: string; y: string; key: number }[]>(
+  const [pings, setPings] = useState<{ x: number; y: number; key: number }[]>(
     []
   );
   const count = useRef(0);
 
+  const isFocused = usePart1Screen2Store(
+    (state) => state.focusedElement !== undefined
+  );
+
   useEffect(() => {
-    const x = Math.random() * 100 + "%";
-    const y = Math.random() * 100 + "%";
-    setPings((pings) => {
-      return [
-        {
-          x,
-          y,
-          key: count.current + 1,
-        },
-        ...pings.slice(0, 2),
-      ];
-    });
-
     const timeout = setInterval(async () => {
-      await delay(Math.random() * 3000);
+      const { autoPickableImageCards } = part1Screen2Store.getState();
+      const keys = [...autoPickableImageCards.keys()];
 
-      const x = Math.random() * 100 + "%";
-      const y = Math.random() * 100 + "%";
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      if (!randomKey) return;
+      const cardToPing = autoPickableImageCards.get(randomKey);
+      if (!cardToPing)
+        throw new Error(
+          `Could not get card ${randomKey} from cards ${autoPickableImageCards}`
+        );
+
+      if (!cardToPing.current) return;
+
+      const bb = cardToPing.current.getBoundingClientRect();
+      const x = bb.x;
+      const y = bb.y;
+
       setPings((pings) => {
         return [
           {
@@ -40,7 +45,7 @@ export function Pings() {
         ];
       });
       count.current = count.current + 1;
-    }, 4000);
+    }, 1000);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -71,40 +76,40 @@ export function Pings() {
           overflow: "hidden",
         }}
       >
-        {transition((style, item) => {
-          return (
-            <animated.div
-              style={{
-                position: "absolute",
-                top: item.x,
-                left: item.y,
-                opacity: style.opacity,
-                width: "45px",
-                height: "45px",
-              }}
-            >
-              <AnimatedBox
+        {transition(
+          (style, item) =>
+            !isFocused && (
+              <animated.div
                 style={{
-                  position: "relative",
-                  width: "100%",
-                  height: "100%",
-                  transform: style.transform,
+                  position: "absolute",
+                  x: item.x,
+                  y: item.y,
+                  opacity: style.opacity,
+                  width: "45px",
+                  height: "45px",
                 }}
               >
-                <PulsingCircle delay={0}></PulsingCircle>
-                <PulsingCircle delay={1 / 2}></PulsingCircle>
-                <PulsingCircle delay={2 / 2}></PulsingCircle>
-                <PulsingCircle delay={3 / 2}></PulsingCircle>
-              </AnimatedBox>
-            </animated.div>
-          );
-        })}
+                <animated.div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    transform: style.transform,
+                  }}
+                >
+                  <PulsingCircle delay={0}></PulsingCircle>
+                  <PulsingCircle delay={1 / 2}></PulsingCircle>
+                  <PulsingCircle delay={2 / 2}></PulsingCircle>
+                  <PulsingCircle delay={3 / 2}></PulsingCircle>
+                </animated.div>
+              </animated.div>
+            )
+        )}
       </Box>
     </Box>
   );
 }
-const AnimatedBox = animated(Box);
-const PulsingCircle = styled(Box)<{ delay: number }>`
+const PulsingCircle = styled.div<{ delay: number }>`
   border-radius: 50%;
   animation: scaleIn 2s cubic-bezier(0.36, 0.11, 0.89, 0.32);
   position: absolute;
