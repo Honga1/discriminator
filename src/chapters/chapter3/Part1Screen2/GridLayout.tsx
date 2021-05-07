@@ -1,6 +1,7 @@
 import { Box, ResponsiveContext, Text } from "grommet";
 import React, { memo, useContext } from "react";
 import { animated, useTransition } from "react-spring";
+import styled from "styled-components";
 import { usePart1Screen2Store } from "./Part1Screen2Store";
 import { StackedBoxes } from "./StackedBoxes";
 
@@ -90,14 +91,14 @@ export const GridTextLabels = memo(() => {
       align="center"
       justify="center"
     >
-      <Text
+      <StyledText
         size="24px"
         style={{ lineHeight: "72px" }}
         color="white"
         textAlign="center"
       >
         {year}
-      </Text>
+      </StyledText>
     </AnimatedBox>
   ));
 });
@@ -105,3 +106,12 @@ export const GridTextLabels = memo(() => {
 GridTextLabels.displayName = "GridTextLabels";
 
 const AnimatedBox = animated(Box);
+
+const StyledText = styled(Text)`
+  font-smooth: always !important;
+  -webkit-font-smoothing: subpixel-antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+  backface-visibility: hidden;
+`;
