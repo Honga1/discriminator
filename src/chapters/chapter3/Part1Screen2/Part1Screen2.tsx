@@ -19,7 +19,7 @@ import {
   yearsInShownOrder,
 } from "./store/Part1Screen2Store";
 import { Pings } from "../components/Pings";
-import { useZoomOnElement } from "./hooks/useZoomOnElement";
+import { useZoomOnElement } from "../hooks/useZoomOnElement";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];

@@ -1,25 +1,20 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
 import { memo, useContext, useEffect, useRef } from "react";
 import { animated } from "react-spring";
-import { Pings } from "./components/Pings";
-import { usePanZoomControl } from "./hooks/usePanZoomControl";
+import { Pings } from "../components/Pings";
+import { usePanZoomControl } from "../hooks/usePanZoomControl";
 import {
-  GridBoxes,
-  GridTextLabels,
+  PileBoxes,
+  PileTextLabels,
   largeGridAreas,
   largeGridColumns,
   largeGridRows,
   smallGridAreas,
   smallGridColumns,
   smallGridRows,
-} from "./Part1Screen2/components/GridLayout";
-import { useZoomOnElement } from "./Part1Screen2/hooks/useZoomOnElement";
-import {
-  part1Screen2Store,
-  Tinting,
-  usePart1Screen2Store,
-  yearsInShownOrder,
-} from "./Part1Screen2/store/Part1Screen2Store";
+} from "./components/PileLayout";
+import { useZoomOnElement } from "../hooks/useZoomOnElement";
+import { part3Store, Tinting, usePart3Store } from "./store/Part3Store";
 
 interface Part3Props {
   stage: "NO_TINTING" | "WEDDING" | "PARTY" | "FAMILY" | "USER_CONTROL";
@@ -66,27 +61,24 @@ const Part3 = memo(({ stage }: Part3Props) => {
   const { bind, transform, api, x, y, scale } = usePanZoomControl(false);
 
   useEffect(() => {
-    part1Screen2Store.setState({
+    part3Store.setState({
       focusedElement: undefined,
-      revealedImage: "SHOW_ALL",
       tinting: new Set(),
-      showData: false,
-      yearsShown: new Set(yearsInShownOrder),
     });
   }, []);
 
-  const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
+  const focusedElement = usePart3Store((state) => state.focusedElement);
   useZoomOnElement(ref, focusedElement, api, x, scale, y, 3);
 
   useEffect(() => {
     if (!ref.current) return;
 
     if (stage === "USER_CONTROL") {
-      part1Screen2Store.setState({
+      part3Store.setState({
         userControl: true,
       });
     } else {
-      part1Screen2Store.setState({
+      part3Store.setState({
         userControl: false,
       });
     }
@@ -103,16 +95,14 @@ const Part3 = memo(({ stage }: Part3Props) => {
     if (stageIsAfter(stage, "PARTY")) {
       tinting.add("family");
     }
-    part1Screen2Store.getState().setTinting(tinting);
+    part3Store.getState().setTinting(tinting);
   }, [stage]);
 
-  const isFocused = usePart1Screen2Store(
+  const isFocused = usePart3Store(
     (state) => state.focusedElement !== undefined
   );
 
-  const imageCards = usePart1Screen2Store(
-    (state) => state.autoPickableImageCards
-  );
+  const imageCards = usePart3Store((state) => state.autoPickableImageCards);
 
   return (
     <Box
@@ -138,8 +128,6 @@ const Part3 = memo(({ stage }: Part3Props) => {
           willChange: "transform",
         }}
       >
-        <CategoryLabels stage={stage} />
-
         <Grid
           fill="vertical"
           pad={isSmall ? "16px" : "48px"}
@@ -148,8 +136,8 @@ const Part3 = memo(({ stage }: Part3Props) => {
           rows={isSmall ? smallGridRows : largeGridRows}
           gap={"16px"}
         >
-          <GridBoxes />
-          <GridTextLabels />
+          <PileBoxes />
+          <PileTextLabels />
         </Grid>
         {stage === "USER_CONTROL" && (
           <Pings isFocused={isFocused} imageCards={imageCards} />
@@ -158,57 +146,3 @@ const Part3 = memo(({ stage }: Part3Props) => {
     </Box>
   );
 });
-
-function CategoryLabels(props: { stage: Part3Props["stage"] }) {
-  return (
-    <Box
-      style={{
-        position: "relative",
-        width: "100%",
-      }}
-    >
-      <Box
-        style={{
-          position: "absolute",
-          width: "200px",
-          top: "21px",
-          left: "32px",
-        }}
-      >
-        <Text
-          size="48px"
-          style={{
-            lineHeight: "48px",
-            opacity: stageIsAfter(props.stage, "NO_TINTING") ? 1 : 0,
-            transition: "opacity 1s",
-          }}
-          color={"redLight"}
-        >
-          Wedding
-        </Text>
-        <Text
-          size="48px"
-          style={{
-            lineHeight: "48px",
-            opacity: stageIsAfter(props.stage, "WEDDING") ? 1 : 0,
-            transition: "opacity 1s",
-          }}
-          color="blueLight"
-        >
-          Party
-        </Text>
-        <Text
-          size="48px"
-          style={{
-            lineHeight: "48px",
-            opacity: stageIsAfter(props.stage, "PARTY") ? 1 : 0,
-            transition: "opacity 1s",
-          }}
-          color="greenLight"
-        >
-          Family & Friends
-        </Text>
-      </Box>
-    </Box>
-  );
-}
