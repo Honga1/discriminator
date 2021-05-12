@@ -149,7 +149,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
           onMapClicked={onMapClicked}
         />
         <Box>
-          <ScrollBanner isShown={!hideScrollBanner} />
           {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
           {isSmall ? (
             <Box
