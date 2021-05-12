@@ -1,6 +1,5 @@
 import { Box, Button, ResponsiveContext, Text } from "grommet";
 import { memo, useContext } from "react";
-import styled from "styled-components";
 import { Years } from "../Part2Screen3";
 import { ChevronLeft } from "./ChevronLeft";
 import { ChevronRight } from "./ChevronRight";
@@ -8,13 +7,11 @@ import { MapIcon } from "./MapIcon";
 
 export const HeaderBar = memo(
   ({
-    isShown,
     year,
     downloads,
     onNavigationClicked,
     onMapClicked,
   }: {
-    isShown: boolean;
     year: Years;
     downloads: number;
     onNavigationClicked: (destinationYear: Years) => void;
@@ -23,17 +20,18 @@ export const HeaderBar = memo(
     const isSmall = useContext(ResponsiveContext) === "small";
 
     return (
-      <SlideInBox
+      <Box
         flex={false}
         width="100%"
         height="48px"
         justify="between"
-        isShown={isShown}
         direction="row"
         background="black"
         align="center"
+        overflow="hidden"
         border={{ side: "bottom", size: "4px", color: "offWhiteOpaque" }}
         pad={{ left: "8px", right: "59px" }}
+        style={{ position: "relative" }}
       >
         <HeaderText
           year={year}
@@ -47,19 +45,12 @@ export const HeaderBar = memo(
             </Text>
           </Box>
         )}
-      </SlideInBox>
+      </Box>
     );
   }
 );
 
 HeaderBar.displayName = "HeaderBar";
-
-const SlideInBox = styled(Box)<{ isShown: boolean }>`
-  overflow: hidden;
-  height: ${(props) => (props.isShown ? "48px" : "0px")};
-  border-width: ${(props) => (props.isShown ? "4px" : "0px")};
-  transition: height 0.2s, border-width 0.2s;
-`;
 
 const HeaderText = memo(
   ({

@@ -150,13 +150,13 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
         style={{ position: "relative" }}
       >
         <HeaderBar
-          isShown={true}
           downloads={downloads}
           year={currentYear}
           onNavigationClicked={onNavigationClicked}
           onMapClicked={onMapClicked}
         />
-        <Box>
+        <Box style={{ position: "relative" }}>
+          <SpriteLevelIndicators />
           {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
           {isSmall ? (
             <Box
@@ -181,7 +181,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               <Data showAll={true} />
             </CustomScrollbarBox>
           )}
-          <SpriteLevelIndicators />
         </Box>
       </Box>
     </Box>
@@ -230,8 +229,8 @@ const SpriteLevelIndicators = memo(() => {
       style={{
         position: "absolute",
         height: "100%",
-        right: "4px",
-        width: "20px",
+        right: "0px",
+        width: "18px",
         overflow: "hidden",
         pointerEvents: "none",
         touchAction: "none",
