@@ -1,4 +1,3 @@
-import { useSpring } from "@react-spring/core";
 import { Box, ResponsiveContext } from "grommet";
 import { throttle } from "lodash";
 import {
@@ -12,11 +11,11 @@ import {
 } from "react";
 import useResizeObserver from "use-resize-observer";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
-import { ButtonCornerMapBox, FullScreenMapBox } from "./components/MapBox";
 import { Data } from "./components/Data";
-import { data } from "./data";
 import { HeaderBar } from "./components/HeaderBar";
+import { ButtonCornerMapBox, FullScreenMapBox } from "./components/MapBox";
 import { ScrollBanner } from "./components/ScrollBanner";
+import { data } from "./data";
 import {
   part2Screen3Store,
   usePart2Screen3Store,
@@ -49,10 +48,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
     setCurrentYear(year);
   }, []);
 
-  const [, api] = useSpring(() => ({
-    y: 0,
-  }));
-
   useEffect(() => {
     if (seconds > 174) {
       part2Screen3Store.setState({ isInteractive: true });
@@ -60,17 +55,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
       part2Screen3Store.setState({ isInteractive: false });
     }
   }, [seconds]);
-
-  useEffect(() => {
-    if (seconds >= 168 && seconds < 176) {
-      api.start({
-        y: 2000,
-        config: { duration: 8000, easing: easeInOutSine },
-        onChange: (result) => scrollBox.current?.scroll(0, result.value.y),
-      });
-      return;
-    }
-  }, [api, seconds]);
 
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
     (event) => {
@@ -198,10 +182,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
 });
 
 Part2Screen3.displayName = "Part2Screen3";
-
-function easeInOutSine(x: number): number {
-  return -(Math.cos(Math.PI * x) - 1) / 2;
-}
 
 const SpriteLevelIndicators = memo(() => {
   const ref = useRef<HTMLDivElement>(null);
