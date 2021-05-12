@@ -174,7 +174,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               <Data showAll={true} />
             </CustomScrollbarBox>
           )}
-          {seconds >= 176 && <SpriteLevelIndicators />}
+          <SpriteLevelIndicators />
         </Box>
       </Box>
     </Box>
@@ -235,7 +235,6 @@ const SpriteLevelIndicators = memo(() => {
           position: "relative",
           width: "100%",
           height: "100%",
-          zIndex: -1,
         }}
       >
         {indicatorElements}
