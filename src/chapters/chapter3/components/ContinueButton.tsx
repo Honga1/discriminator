@@ -1,14 +1,12 @@
 import { Box, ResponsiveContext } from "grommet";
 import { useContext } from "react";
 import { FinishedButton } from "src/components/FinishedButton";
-import { useStore } from "src/store/store";
 
 export function ContinueButton(props: {
   isAutoPaused: boolean;
   play?: () => void;
 }) {
   const isSmall = useContext(ResponsiveContext) === "small";
-  const isActive = useStore((state) => state.isActive);
 
   return (
     <Box
@@ -20,7 +18,7 @@ export function ContinueButton(props: {
     >
       {props.isAutoPaused && (
         <FinishedButton
-          shouldProgress={!isActive}
+          shouldProgress={false}
           shouldShow={props.isAutoPaused}
           text="Continue"
           textWidth="200px"
