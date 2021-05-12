@@ -109,15 +109,11 @@ export const ImageCard = memo(
               <div
                 style={{
                   position: "relative",
-                  width: "100%",
-                  height: "100%",
                 }}
               >
                 <div
                   style={{
                     position: "relative",
-                    width: "100%",
-                    height: "100%",
                     pointerEvents: "none",
                   }}
                 >
@@ -129,7 +125,7 @@ export const ImageCard = memo(
                         width: "100%",
                         height: "100%",
                         opacity: overlay.opacity,
-                        objectFit: "cover",
+                        objectFit: "contain",
                         userSelect: "none",
                         pointerEvents: "none",
                         display: "block",
@@ -142,7 +138,7 @@ export const ImageCard = memo(
                     src={image.imageSrc}
                     style={{
                       width: "100%",
-                      objectFit: "cover",
+                      objectFit: "contain",
                       height: "100%",
                       userSelect: "none",
                       pointerEvents: "none",
@@ -151,6 +147,21 @@ export const ImageCard = memo(
                     draggable={false}
                     alt="personal"
                   />
+                  {tintingTransition((style, isTinted) =>
+                    isTinted ? (
+                      <animated.div
+                        style={{
+                          position: "absolute",
+                          width: "100%",
+                          height: "100%",
+                          top: 0,
+                          pointerEvents: "none",
+                          backfaceVisibility: "hidden",
+                          ...style,
+                        }}
+                      />
+                    ) : null
+                  )}
                 </div>
 
                 {missingImageTextTransition(
@@ -184,21 +195,6 @@ export const ImageCard = memo(
                 )}
               </div>
             </div>
-
-            {tintingTransition((style, isTinted) =>
-              isTinted ? (
-                <animated.div
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                    backfaceVisibility: "hidden",
-                    ...style,
-                  }}
-                />
-              ) : null
-            )}
           </HoverBox>
         </animated.div>
       </animated.div>
@@ -244,21 +240,16 @@ const imageTagToColor = (tinting: Tinting): string => {
 };
 
 function useTransforms() {
-  const isSmall = useContext(ResponsiveContext) === "small";
   const targetRotation = useRef(Math.random() * 70 - 35);
   const startRotation = useRef(
     targetRotation.current + (Math.random() - 0.5) * 10
   );
   const startOffset = useRef(Math.random() * 100 - 50);
-  const endOffset = useRef(Math.random() * 50 - 25);
+  const endOffset = useRef(Math.random() * 40 - 20);
 
   const [{ transformPosition, transformRotation }] = useSpring(() => {
-    const startTranslation = isSmall
-      ? `translate(${startOffset.current}%, 0%)`
-      : `translate(0, ${startOffset.current}%)`;
-    const endTranslation = isSmall
-      ? `translate(${endOffset.current}%, 0%)`
-      : `translate(0, ${endOffset.current}%)`;
+    const startTranslation = `translateX(${startOffset.current}%)`;
+    const endTranslation = `translateX(${endOffset.current}%)`;
     return {
       from: {
         transformPosition: `${startTranslation}`,

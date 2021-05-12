@@ -1,19 +1,20 @@
-import { Box, Grid, ResponsiveContext, Text } from "grommet";
+import { Box, Grid, ResponsiveContext } from "grommet";
 import { memo, useContext, useEffect, useRef } from "react";
 import { animated } from "react-spring";
+import { useScreenAspect } from "src/hooks/useScreenAspect";
 import { Pings } from "../components/Pings";
 import { usePanZoomControl } from "../hooks/usePanZoomControl";
+import { useZoomOnElement } from "../hooks/useZoomOnElement";
 import {
-  PileBoxes,
-  PileTextLabels,
   largeGridAreas,
   largeGridColumns,
   largeGridRows,
+  PileBoxes,
+  PileTextLabels,
   smallGridAreas,
   smallGridColumns,
   smallGridRows,
 } from "./components/PileLayout";
-import { useZoomOnElement } from "../hooks/useZoomOnElement";
 import { part3Store, Tinting, usePart3Store } from "./store/Part3Store";
 
 interface Part3Props {
@@ -56,7 +57,12 @@ export const Part3Selector = ({ seconds }: { seconds: number }) => {
 const Part3 = memo(({ stage }: Part3Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const isSmall = useContext(ResponsiveContext) === "small";
+  let isSmall = useContext(ResponsiveContext) === "small";
+
+  const aspect = useScreenAspect();
+  if (aspect < 1) {
+    isSmall = true;
+  }
 
   const { bind, transform, api, x, y, scale } = usePanZoomControl(false);
 
@@ -116,6 +122,7 @@ const Part3 = memo(({ stage }: Part3Props) => {
         overflow: "hidden",
         touchAction: "none",
         pointerEvents: "auto",
+        paddingBottom: "16px",
       }}
       {...bind()}
     >

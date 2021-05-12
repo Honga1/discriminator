@@ -10,18 +10,17 @@ export default function Chapter2() {
 
   useChapter(ref, true);
 
-  const [part, setPart] = useState<
-    "SCREEN_1_MASK_1" | "SCREEN_1_MASK_2" | "SCREEN_1_MASK_3" | "SCREEN_2"
-  >("SCREEN_1_MASK_1");
+  const [part, setPart] =
+    useState<
+      "SCREEN_1_MASK_1" | "SCREEN_1_MASK_2" | "SCREEN_1_MASK_3" | "SCREEN_2"
+    >("SCREEN_1_MASK_1");
 
-  console.log("render");
   useEffect(() => {
     if (!ref.current) return;
     const video = ref.current;
     const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
       const video = event.target as HTMLVideoElement;
       const seconds = Math.round(video.currentTime);
-      console.log(seconds);
 
       if (seconds < 25) {
         setPart("SCREEN_1_MASK_1");
