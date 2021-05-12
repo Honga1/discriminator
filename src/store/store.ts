@@ -14,7 +14,9 @@ type State = {
         getIsPlaying: () => boolean;
         getProgress: () => number;
         seekTimeDelta: (delta: number) => void;
+        seekTime: (time: number) => void;
         setMuted: (isMuted: boolean) => void;
+        setVolume: (volume: number) => void;
         isMuted: boolean;
         intention: "PLAY" | "PAUSE";
         progress: number;

@@ -46,6 +46,15 @@ export function useChapter(
     },
     [ref]
   );
+  const seekTime = useCallback(
+    (time: number) => {
+      if (!ref.current) return;
+      const target = time;
+      const clippedTarget = Math.min(Math.max(0, target), ref.current.duration);
+      ref.current.currentTime = clippedTarget;
+    },
+    [ref]
+  );
 
   const setMuted = useCallback(
     (isMuted: boolean) => {
@@ -54,16 +63,22 @@ export function useChapter(
     },
     [ref]
   );
+  const setVolume = useCallback(
+    (volume: number) => {
+      if (!ref.current) return;
+      ref.current.volume = volume;
+    },
+    [ref]
+  );
 
   const getMuted = useCallback(() => {
     if (!ref.current) return false;
     return ref.current.muted;
   }, [ref]);
-  const onClick = useCallback(() => (getIsPlaying() ? pause() : play()), [
-    getIsPlaying,
-    pause,
-    play,
-  ]);
+  const onClick = useCallback(
+    () => (getIsPlaying() ? pause() : play()),
+    [getIsPlaying, pause, play]
+  );
 
   useEffect(() => {
     const updateStore = () => {
@@ -76,7 +91,9 @@ export function useChapter(
           getProgress,
           setProgress,
           seekTimeDelta,
+          seekTime,
           setMuted,
+          setVolume,
           isMuted: getMuted(),
           progress: getProgress(),
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
@@ -111,5 +128,7 @@ export function useChapter(
     getMuted,
     ref,
     onClick,
+    seekTime,
+    setVolume,
   ]);
 }
