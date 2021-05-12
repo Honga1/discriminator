@@ -14,12 +14,8 @@ import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { Data } from "./components/Data";
 import { HeaderBar } from "./components/HeaderBar";
 import { ButtonCornerMapBox, FullScreenMapBox } from "./components/MapBox";
-import { ScrollBanner } from "./components/ScrollBanner";
 import { data } from "./data";
-import {
-  part2Screen3Store,
-  usePart2Screen3Store,
-} from "./store/part2Screen3Store";
+import { usePart2Screen3Store } from "./store/part2Screen3Store";
 
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
@@ -47,14 +43,6 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
     yearElement.scrollIntoView();
     setCurrentYear(year);
   }, []);
-
-  useEffect(() => {
-    if (seconds > 174) {
-      part2Screen3Store.setState({ isInteractive: true });
-    } else {
-      part2Screen3Store.setState({ isInteractive: false });
-    }
-  }, [seconds]);
 
   const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(
     (event) => {

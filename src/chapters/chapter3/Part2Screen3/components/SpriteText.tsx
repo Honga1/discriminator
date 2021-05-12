@@ -60,10 +60,7 @@ export const SpriteText = memo(
         audioInside?.removeEventListener("timeupdate", onTimeUpdate);
       };
     }, [api, audio]);
-    const onMouseEnter = useCallback(
-      () => part2Screen3Store.getState().isInteractive && audio.current?.play(),
-      []
-    );
+    const onMouseEnter = useCallback(() => audio.current?.play(), []);
     const onMouseLeave = useCallback(() => {
       audio.current?.pause();
       if (audio.current) audio.current.currentTime = 0;
