@@ -24,6 +24,7 @@ export interface Predictions {
   };
 
   mouthOpened: number;
+  eyesOpened: boolean;
 }
 
 export function usePredictions(webcam: HTMLVideoElement) {
@@ -53,7 +54,7 @@ export function usePredictions(webcam: HTMLVideoElement) {
       input: webcam,
       returnTensors: false,
       flipHorizontal: false,
-      predictIrises: false,
+      predictIrises: true,
     });
 
     predictions.current = pixelScalePredictions.map(
@@ -82,6 +83,7 @@ export function usePredictions(webcam: HTMLVideoElement) {
         const boundingBox = getBoundingBox(prediction, video);
         const orthoVectors = getOrthoVectors(mesh);
         const mouthOpened = getMouthPosition(mesh);
+        const eyesOpened = areEyesOpen(mesh);
 
         return {
           scaledMesh,
@@ -89,6 +91,7 @@ export function usePredictions(webcam: HTMLVideoElement) {
           orthoVectors,
           mouthOpened,
           mesh,
+          eyesOpened,
         };
       }
     );
@@ -116,6 +119,50 @@ function getMouthPosition(scaledMesh: V3[]) {
     1
   );
   return empiricalMouthOpenAmount;
+}
+
+function areEyesOpen(scaledMesh: V3[]) {
+  const topLeftEyelid = scaledMesh[159]!;
+  const bottomLeftEyelid = scaledMesh[145]!;
+
+  const leftEyeLeftCrease = scaledMesh[33]!;
+  const leftEyeRightCrease = scaledMesh[133]!;
+
+  const topRightEyelid = scaledMesh[386]!;
+  const bottomRightEyelid = scaledMesh[374]!;
+
+  const rightEyeLeftCrease = scaledMesh[362]!;
+  const rightEyeRightCrease = scaledMesh[263]!;
+
+  const leftEyeWidth = new Vector3(...leftEyeLeftCrease).distanceTo(
+    new Vector3(...leftEyeRightCrease)
+  );
+
+  const rightEyeWidth = new Vector3(...rightEyeLeftCrease).distanceTo(
+    new Vector3(...rightEyeRightCrease)
+  );
+
+  const leftEyeOpenGap = new Vector3(...bottomLeftEyelid).distanceTo(
+    new Vector3(...topLeftEyelid)
+  );
+  const rightEyeOpenGap = new Vector3(...bottomRightEyelid).distanceTo(
+    new Vector3(...topRightEyelid)
+  );
+
+  const empiricalLeftEyeOpenAmount = clamp(
+    leftEyeOpenGap / (leftEyeWidth * 2),
+    0,
+    1
+  );
+  const empiricalRightEyeOpenAmount = clamp(
+    rightEyeOpenGap / (rightEyeWidth * 2),
+    0,
+    1
+  );
+
+  return (
+    empiricalLeftEyeOpenAmount > 0.11 && empiricalRightEyeOpenAmount > 0.11
+  );
 }
 
 function getScaledMesh(
@@ -203,7 +250,7 @@ function getForwardVector(mesh: V3[]) {
 const modelPromise = facemesh.load(
   facemesh.SupportedPackages.mediapipeFacemesh,
   {
-    shouldLoadIrisModel: false,
+    shouldLoadIrisModel: true,
     maxFaces: 1,
   }
 );
