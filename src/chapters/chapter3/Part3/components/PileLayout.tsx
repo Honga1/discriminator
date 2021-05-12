@@ -1,5 +1,5 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { memo, useContext } from "react";
+import { Box, Text } from "grommet";
+import React, { memo } from "react";
 import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";

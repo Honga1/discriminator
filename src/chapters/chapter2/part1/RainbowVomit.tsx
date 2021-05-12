@@ -9,7 +9,7 @@ import {
   MeshBasicMaterial,
   Object3D,
   SphereBufferGeometry,
-  Vector3
+  Vector3,
 } from "three";
 import { V3, V3O } from "../../../libs/v3";
 import { chunkMesh } from "./chunk";
@@ -57,10 +57,8 @@ function useGravityParticles({
 
     const reset = shouldReset?.() ?? false;
 
-    const {
-      direction,
-      position: trackingPosition,
-    } = getWorldPositionAndDirection(startAtObject.current);
+    const { direction, position: trackingPosition } =
+      getWorldPositionAndDirection(startAtObject.current);
 
     if (particles.current === undefined) {
       particles.current = arrayOf<Particle>(
@@ -78,9 +76,8 @@ function useGravityParticles({
 
     let positions = [];
     for (let index = 0; index < particles.current.length; index++) {
-      const { velocity, position, startOffset, resetAt } = particles.current[
-        index
-      ]!;
+      const { velocity, position, startOffset, resetAt } =
+        particles.current[index]!;
 
       if (resetAt + startOffset > time) {
         velocity[1] += gravity * deltaTime;
@@ -133,9 +130,8 @@ function useGravityParticles({
 
 export const RainbowVomit = ({ targetAspect }: { targetAspect: number }) => {
   const aRObject = useRef<Mesh>();
-  const instances = useRef<
-    InstancedMesh<SphereBufferGeometry, MeshBasicMaterial>
-  >();
+  const instances =
+    useRef<InstancedMesh<SphereBufferGeometry, MeshBasicMaterial>>();
 
   const vomitCount = 500;
 

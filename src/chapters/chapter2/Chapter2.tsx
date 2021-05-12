@@ -1,11 +1,32 @@
 import "@tensorflow/tfjs-backend-webgl";
 import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
+import { Media } from "src/components/MediaContainer";
+import { usePredictions } from "src/hooks/usePredictions";
+import { useWebcam } from "src/hooks/useWebcam";
 import { useChapter } from "../../hooks/useChapter";
 import videoSrc from "./chapter2.mp4";
+import Cover2 from "./Cover2";
 import { Part1 } from "./part1/Part1";
+import { SceneContext } from "./part1/SceneContext";
 
-export default function Chapter2() {
+export default function Chapter2({ isCover }: { isCover: boolean }) {
+  const { webcam, aspect } = useWebcam();
+  const predictions = usePredictions(webcam);
+
+  return (
+    <SceneContext.Provider value={{ facemesh: predictions, aspect, webcam }}>
+      <Media>
+        <Box fill style={isCover ? { display: "none" } : {}}>
+          <Chapter2Content />
+        </Box>
+        {isCover && <Cover2 />}
+      </Media>
+    </SceneContext.Provider>
+  );
+}
+
+function Chapter2Content() {
   const ref = useRef<HTMLVideoElement>(null);
 
   useChapter(ref, true);

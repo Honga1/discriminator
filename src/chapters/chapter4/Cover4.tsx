@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { store, useStore } from "../store/store";
+import { store, useStore } from "src/store/store";
 
-export default function Cover2() {
+export default function Cove4() {
   const isFirstPredictionComplete = useStore(
     (state) => state.isFirstPredictionComplete
   );

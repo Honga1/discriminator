@@ -1,23 +1,22 @@
 import { Canvas } from "@react-three/fiber";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
-import { useWebcam } from "../../../hooks/useWebcam";
 import { store } from "../../../store/store";
-import { usePredictions } from "../../../hooks/usePredictions";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { SceneContext } from "./SceneContext";
 import { StaticBackground } from "./StaticBackground";
 import { WorldOffset } from "./WorldOffset";
+import { useContextBridge } from "@react-three/drei";
 
 export const Part1 = ({
   maskType,
 }: {
   maskType: "video" | "brett" | "own";
 }) => {
-  const { webcam, aspect } = useWebcam();
-
   const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
+
+  const { facemesh: predictions, aspect, webcam } = useContext(SceneContext);
 
   useAnimationFrame(1, () => {
     if (predictions.current.length > 0 && !hasFirstPrediction) {
@@ -26,7 +25,8 @@ export const Part1 = ({
     }
   });
 
-  const predictions = usePredictions(webcam);
+  const ContextBridge = useContextBridge(SceneContext);
+
   return (
     <Canvas
       style={{
@@ -36,9 +36,9 @@ export const Part1 = ({
       }}
       orthographic={false}
     >
-      <SceneContext.Provider value={{ facemesh: predictions }}>
+      <ContextBridge>
         <StaticBackground></StaticBackground>
-        {hasFirstPrediction && (
+        {hasFirstPrediction && aspect !== undefined && webcam !== undefined && (
           <>
             <WorldOffset targetAspect={aspect}>
               <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
@@ -46,7 +46,7 @@ export const Part1 = ({
             <RainbowVomit targetAspect={aspect} />
           </>
         )}
-      </SceneContext.Provider>
+      </ContextBridge>
     </Canvas>
   );
 };

@@ -1,4 +1,3 @@
-import { clearWebGLContext } from "@tensorflow/tfjs-backend-webgl/dist/canvas_util";
 import { Box, Grid, ResponsiveContext } from "grommet";
 import React, { memo, useContext, useMemo, useRef } from "react";
 import { useScreenAspect } from "src/hooks/useScreenAspect";

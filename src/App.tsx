@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
 import { Chapter } from "./chapters/Chapters";
-import { Cover } from "./covers/Covers";
 import { Home } from "./plain/Home";
 import { Permission } from "./plain/Permission";
 import {
@@ -93,8 +92,7 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
   const type = parsePageTypeQuery(query, chapterNumber);
   return (
     <>
-      <Chapter hidden={type !== "chapter"} chapterNumber={chapterNumber} />
-      {type === "cover" && <Cover chapterNumber={chapterNumber} />}
+      <Chapter isCover={type !== "chapter"} chapterNumber={chapterNumber} />
     </>
   );
 };
