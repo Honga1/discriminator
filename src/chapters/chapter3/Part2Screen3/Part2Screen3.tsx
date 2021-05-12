@@ -17,7 +17,10 @@ import { Data } from "./components/Data";
 import { data } from "./data";
 import { HeaderBar } from "./components/HeaderBar";
 import { ScrollBanner } from "./components/ScrollBanner";
-import { part2Screen3Store, usePart2Screen3Store } from "./store/part2Screen3Store";
+import {
+  part2Screen3Store,
+  usePart2Screen3Store,
+} from "./store/part2Screen3Store";
 
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
@@ -173,7 +176,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               ref={scrollBox}
               onScroll={onScroll}
             >
-              <Data showAll={seconds >= 167} />
+              <Data showAll={true} />
             </Box>
           ) : (
             <CustomScrollbarBox
@@ -184,7 +187,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
               ref={scrollBox}
               onScroll={throttledScroll}
             >
-              <Data showAll={seconds >= 167} />
+              <Data showAll={true} />
             </CustomScrollbarBox>
           )}
           {seconds >= 176 && <SpriteLevelIndicators />}
