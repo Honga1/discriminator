@@ -9,13 +9,17 @@ import {
   useRef,
   useState,
 } from "react";
+import { store } from "src/store/store";
 import useResizeObserver from "use-resize-observer";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { Data } from "./components/Data";
 import { HeaderBar } from "./components/HeaderBar";
 import { ButtonCornerMapBox, FullScreenMapBox } from "./components/MapBox";
 import { data } from "./data";
-import { usePart2Screen3Store } from "./store/part2Screen3Store";
+import {
+  part2Screen3Store,
+  usePart2Screen3Store,
+} from "./store/part2Screen3Store";
 
 export type Years = 2015 | 2016 | 2017 | 2019 | 2019;
 const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
@@ -24,6 +28,22 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
   const hideScrollBanner = useMemo(() => seconds >= 168, [seconds]);
+
+  const currentPlayingAudio = usePart2Screen3Store(
+    (state) => state.currentPlayingAudio
+  );
+
+  useEffect(() => {
+    part2Screen3Store.setState({ currentPlayingAudio: undefined });
+  }, []);
+
+  useEffect(() => {
+    if (currentPlayingAudio !== undefined) {
+      store.getState().chapter?.setVolume(0);
+    } else {
+      store.getState().chapter?.setVolume(1);
+    }
+  }, [currentPlayingAudio]);
 
   const [currentYear, setCurrentYear] = useState<Years>(2015);
   const [downloads, setDownloads] = useState(0);

@@ -87,7 +87,45 @@ export const SpriteText = memo(
               borderBottom: `4px dotted ${colorTheme.greenLight}`,
             }}
           />
-          <audio ref={audio} controls={false} autoPlay={false}>
+          <audio
+            ref={audio}
+            controls={false}
+            autoPlay={false}
+            onPlay={(event) => {
+              const thisElementIsPlaying =
+                part2Screen3Store.getState().currentPlayingAudio ===
+                event.currentTarget;
+
+              if (thisElementIsPlaying) return;
+
+              part2Screen3Store.getState().currentPlayingAudio?.pause();
+              part2Screen3Store.setState({
+                currentPlayingAudio: event.currentTarget,
+              });
+            }}
+            onEnded={(event) => {
+              const thisElementIsPlaying =
+                part2Screen3Store.getState().currentPlayingAudio ===
+                event.currentTarget;
+
+              if (thisElementIsPlaying) {
+                part2Screen3Store.setState({
+                  currentPlayingAudio: undefined,
+                });
+              }
+            }}
+            onPause={(event) => {
+              const thisElementIsPlaying =
+                part2Screen3Store.getState().currentPlayingAudio ===
+                event.currentTarget;
+
+              if (thisElementIsPlaying) {
+                part2Screen3Store.setState({
+                  currentPlayingAudio: undefined,
+                });
+              }
+            }}
+          >
             <source src={audioSrc.ogg} type="audio/ogg" />
             <source src={audioSrc.caf} type="audio/x-caf" />
           </audio>
