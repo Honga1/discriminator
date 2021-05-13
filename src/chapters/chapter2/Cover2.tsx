@@ -1,3 +1,4 @@
+import { Text } from "grommet";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
@@ -32,6 +33,20 @@ export default function Cover2() {
     store.setState({ isCameraEnabled: true });
   }, []);
 
+  useEffect(() => {
+    const onResize = () => {
+      if (!ref.current) return;
+      const context = ref.current?.getContext("2d");
+      if (!context) return;
+      context.clearRect(0, 0, ref.current.width, ref.current.height);
+      setOpenCount(0);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
   useAnimationFrame(10, () => {
     const isOpen = predictions.current[0]?.eyesOpened ?? false;
 
@@ -51,13 +66,17 @@ export default function Cover2() {
     const context = ref.current?.getContext("2d");
     if (!context) return;
     if (images.length === 0) return;
-    const image = images[Math.floor(Math.random() * images.length)]!;
 
-    const x = Math.random() * ref.current.width;
-    const y = Math.random() * ref.current.height;
-    const width = Math.random() * 75 + 25;
-    const height = (width * image.naturalHeight) / image.naturalWidth;
-    context.drawImage(image, x - width / 2, y - height / 2, width, height);
+    const amountOfImages = Math.min(Math.floor(openCount ** 1.5), 10);
+
+    for (let index = 0; index < amountOfImages; index++) {
+      const image = images[Math.floor(Math.random() * images.length)]!;
+      const x = Math.random() * ref.current.width;
+      const y = Math.random() * ref.current.height;
+      const width = Math.random() * 75 + 25;
+      const height = (width * image.naturalHeight) / image.naturalWidth;
+      context.drawImage(image, x - width / 2, y - height / 2, width, height);
+    }
   }, [images, openCount]);
 
   return (
@@ -71,12 +90,34 @@ export default function Cover2() {
         left: "50%",
       }}
     >
-      <canvas
-        width={window.innerWidth / 2}
-        height={window.innerHeight / 2}
-        style={{ width: "100%", height: "100%" }}
-        ref={ref}
-      ></canvas>
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            padding: "58px",
+            boxSizing: "border-box",
+            textAlign: "center",
+          }}
+        >
+          <Text
+            color="yellow"
+            size="32px"
+            style={{
+              textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+              border: `1px solid rgba(0, 0, 0, 0.25)`,
+            }}
+          >
+            You have blinked {openCount} time{openCount === 1 ? "" : "s"}
+          </Text>
+        </div>
+        <canvas
+          width={window.innerWidth / 2}
+          height={window.innerHeight / 2}
+          style={{ width: "100%", height: "100%" }}
+          ref={ref}
+        ></canvas>
+      </div>
     </div>
   );
 }
