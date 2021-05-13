@@ -1,18 +1,31 @@
 import { Box } from "grommet";
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Media } from "src/components/MediaContainer";
 import { useChapter } from "../../hooks/useChapter";
 import { store, useStore } from "../../store/store";
 import audioSrc from "./audio/Chapter3.mp3";
 import { ContinueButton } from "./components/ContinueButton";
+import Cover3 from "./Cover3";
+import { useLoopedAudio } from "./hooks/useLoopedAudio";
 import { Part1Screen1 } from "./Part1Screen1/Part1Screen1";
 import { Part1Screen2Selector } from "./Part1Screen2/Part1Screen2";
 import { Part2Screen1 } from "./Part2Screen1";
 import { Part2Screen2 } from "./Part2Screen2";
 import { Part2Screen3 } from "./Part2Screen3/Part2Screen3";
 import { Part3Selector } from "./Part3/Part3";
-import { useLoopedAudio } from "./hooks/useLoopedAudio";
 
-export default function Chapter3() {
+export default function Chapter3({ isCover }: { isCover: boolean }) {
+  return (
+    <Media>
+      <Box fill style={isCover ? { display: "none" } : {}}>
+        <Chapter3Content />
+      </Box>
+      {isCover && <Cover3 />}
+    </Media>
+  );
+}
+
+function Chapter3Content() {
   const ref = useRef<HTMLAudioElement>(null);
 
   const [getByteData, audio] = useMemo(() => {
@@ -54,14 +67,15 @@ export default function Chapter3() {
   const [allowAutoPause, setAllowAutoPause] = useState(false);
   const [isAutoPaused, setIsAutoPaused] = useState(false);
 
-  const [part, setPart] = useState<
-    | "PART_1_SCREEN_1"
-    | "PART_1_SCREEN_2"
-    | "PART_2_SCREEN_1"
-    | "PART_2_SCREEN_2"
-    | "PART_2_SCREEN_3"
-    | "PART_3_SCREEN_1"
-  >("PART_1_SCREEN_1");
+  const [part, setPart] =
+    useState<
+      | "PART_1_SCREEN_1"
+      | "PART_1_SCREEN_2"
+      | "PART_2_SCREEN_1"
+      | "PART_2_SCREEN_2"
+      | "PART_2_SCREEN_3"
+      | "PART_3_SCREEN_1"
+    >("PART_1_SCREEN_1");
 
   const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
   useLoopedAudio(ref, isAutoPaused, part, isMuted);

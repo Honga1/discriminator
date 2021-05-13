@@ -1,14 +1,14 @@
 import { Text } from "grommet";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
+import { usePredictions } from "src/hooks/usePredictions";
 import { store } from "../../store/store";
 import { eyes } from "./eyes/eyes";
-import { SceneContext } from "./part1/SceneContext";
 
 export default function Cover2() {
   const ref = useRef<HTMLCanvasElement>(null);
-  const predictions = useContext(SceneContext).facemesh;
+  const predictions = usePredictions();
 
   const [openCount, setOpenCount] = useState(0);
   const wasOpenLastFrame = useRef(false);

@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Mesh, Vector3 } from "three";
-import { Predictions } from "../../../hooks/usePredictions";
 import { V3 } from "../../../libs/v3";
+import { Predictions } from "src/store/PredictionsStore";
 
 export const ARObject = ({
   predictions,

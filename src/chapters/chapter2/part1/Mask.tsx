@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useContext, useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
+import { usePredictions } from "src/hooks/usePredictions";
 import {
   BufferGeometry,
   IUniform,
@@ -17,7 +18,6 @@ import brettMaskAlpha from "./brett-mask-alpha.png";
 import brettMaskMap from "./brett-mask-map.png";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 import maskSrc from "./mask.mp4";
-import { SceneContext } from "./SceneContext";
 
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
@@ -66,7 +66,7 @@ export const Mask = ({
   }, [webcam]);
 
   const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
-  const predictions = useContext(SceneContext).facemesh;
+  const predictions = usePredictions();
   const maskTexture = textures[maskType];
 
   useEffect(() => {

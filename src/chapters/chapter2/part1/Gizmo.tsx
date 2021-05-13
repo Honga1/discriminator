@@ -1,9 +1,9 @@
-import React, { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import React, { useMemo, useRef } from "react";
+import { Predictions } from "src/store/PredictionsStore";
 import { BufferGeometry, Line, LineBasicMaterial, Vector3 } from "three";
 import { Line2 } from "three-stdlib";
 import { V3 } from "../../../libs/v3";
-import { Predictions } from "../../../hooks/usePredictions";
 
 export const Gizmo = ({
   predictions,

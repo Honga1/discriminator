@@ -3,8 +3,6 @@ import React, { Suspense } from "react";
 import { Media } from "../components/MediaContainer";
 
 const Cover4 = React.lazy(async () => import("./chapter4/Cover4"));
-const Cover3 = React.lazy(async () => import("./chapter3/Cover3"));
-
 const Chapter1 = React.lazy(async () => import("./chapter1/Chapter1"));
 const Chapter2 = React.lazy(async () => import("./chapter2/Chapter2"));
 const Chapter3 = React.lazy(async () => import("./chapter3/Chapter3"));
@@ -26,13 +24,7 @@ export const Chapter = ({
       pair = <Chapter2 isCover={isCover} />;
       break;
     case 3:
-      pair = (
-        <CoverChapterPair
-          isCover={isCover}
-          chapter={<Chapter3 />}
-          cover={<Cover3 />}
-        />
-      );
+      pair = <Chapter3 isCover={isCover} />;
       break;
     case 4:
       pair = (

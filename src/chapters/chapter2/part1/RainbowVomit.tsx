@@ -1,5 +1,7 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { usePredictions } from "src/hooks/usePredictions";
+import { V3, V3O } from "src/libs/v3";
 import {
   Color,
   InstancedBufferGeometry,
@@ -11,9 +13,7 @@ import {
   SphereBufferGeometry,
   Vector3,
 } from "three";
-import { V3, V3O } from "../../../libs/v3";
 import { chunkMesh } from "./chunk";
-import { SceneContext } from "./SceneContext";
 
 function arrayOf<T>(creator: (index: number) => T, count: number) {
   return Array.from({ length: count }).map((_, index) => creator(index));
@@ -136,7 +136,7 @@ export const RainbowVomit = ({ targetAspect }: { targetAspect: number }) => {
   const vomitCount = 500;
 
   useTrackedObject(aRObject, targetAspect);
-  const predictions = useContext(SceneContext).facemesh;
+  const predictions = usePredictions();
 
   useEffect(() => {
     if (!instances.current) return;
@@ -209,7 +209,7 @@ function useTrackedObject(
   aRObject: React.MutableRefObject<Object3D | undefined>,
   targetAspect: number
 ) {
-  const predictions = useContext(SceneContext).facemesh;
+  const predictions = usePredictions();
 
   useFrame(({ viewport }) => {
     const prediction = predictions.current[0];

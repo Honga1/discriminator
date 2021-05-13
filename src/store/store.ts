@@ -29,6 +29,8 @@ type State = {
   isHeadingShown: boolean;
   isActive: boolean;
   isFirstPredictionComplete: boolean;
+  webcamHTMLElement: HTMLVideoElement;
+  webcamAspect: number;
 };
 
 const initialState: NonFunctionProperties<State> = {
@@ -38,6 +40,8 @@ const initialState: NonFunctionProperties<State> = {
   isCameraEnabled: true,
   isActive: true,
   isFirstPredictionComplete: false,
+  webcamAspect: 4 / 3,
+  webcamHTMLElement: document.createElement("video"),
 };
 
 export const store = create<State>((set, get) => ({
@@ -59,6 +63,9 @@ export const store = create<State>((set, get) => ({
       const stream = maybeStream!;
       stream.getTracks().forEach((track) => track.stop());
       set({ webcamStream: undefined });
+      const webcam = get().webcamHTMLElement;
+      webcam.srcObject = null;
+      webcam.pause();
     }
   },
   turnOnCamera: async () => {
@@ -72,8 +79,22 @@ export const store = create<State>((set, get) => ({
           track.addEventListener("ended", () => {
             set({ webcamStream: undefined });
           });
+
           set({ webcamStream: stream });
         });
+        const webcam = get().webcamHTMLElement;
+
+        if (webcam.srcObject !== stream) {
+          webcam.srcObject = stream;
+          webcam.play();
+        }
+
+        const track = stream.getVideoTracks()[0]!;
+        webcam.width = track.getSettings().width!;
+        webcam.height = track.getSettings().height!;
+
+        const videoAspect = webcam.width / webcam.height;
+        set({ webcamAspect: videoAspect });
       })
       .catch((error) => console.error(error));
   },

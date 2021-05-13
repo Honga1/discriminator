@@ -1,13 +1,12 @@
 import { Canvas } from "@react-three/fiber";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { usePredictions } from "src/hooks/usePredictions";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
-import { store } from "../../../store/store";
+import { store, useStore } from "../../../store/store";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
-import { SceneContext } from "./SceneContext";
 import { StaticBackground } from "./StaticBackground";
 import { WorldOffset } from "./WorldOffset";
-import { useContextBridge } from "@react-three/drei";
 
 export const Part1 = ({
   maskType,
@@ -16,7 +15,9 @@ export const Part1 = ({
 }) => {
   const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
 
-  const { facemesh: predictions, aspect, webcam } = useContext(SceneContext);
+  const webcam = useStore((state) => state.webcamHTMLElement);
+  const aspect = useStore((state) => state.webcamAspect);
+  const predictions = usePredictions();
 
   useAnimationFrame(1, () => {
     if (predictions.current.length > 0 && !hasFirstPrediction) {
@@ -24,8 +25,6 @@ export const Part1 = ({
       store.setState({ isFirstPredictionComplete: true });
     }
   });
-
-  const ContextBridge = useContextBridge(SceneContext);
 
   return (
     <Canvas
@@ -36,17 +35,15 @@ export const Part1 = ({
       }}
       orthographic={false}
     >
-      <ContextBridge>
-        <StaticBackground></StaticBackground>
-        {hasFirstPrediction && aspect !== undefined && webcam !== undefined && (
-          <>
-            <WorldOffset targetAspect={aspect}>
-              <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
-            </WorldOffset>
-            <RainbowVomit targetAspect={aspect} />
-          </>
-        )}
-      </ContextBridge>
+      <StaticBackground></StaticBackground>
+      {hasFirstPrediction && aspect !== undefined && (
+        <>
+          <WorldOffset targetAspect={aspect}>
+            <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
+          </WorldOffset>
+          <RainbowVomit targetAspect={aspect} />
+        </>
+      )}
     </Canvas>
   );
 };
