@@ -17,6 +17,7 @@ import {
   validateChapterNumber,
   validatePageTypeQuery,
 } from "./Routes";
+import { Media } from "./components/MediaContainer";
 
 const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
   <Route {...props} />
@@ -91,9 +92,9 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
 
   const type = parsePageTypeQuery(query, chapterNumber);
   return (
-    <>
+    <Media>
       <Chapter isCover={type !== "chapter"} chapterNumber={chapterNumber} />
-    </>
+    </Media>
   );
 };
 

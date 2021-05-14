@@ -1,23 +1,10 @@
 import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
-import { Media } from "src/components/MediaContainer";
 import { useChapter } from "../../hooks/useChapter";
 import videoSrc from "./chapter2.mp4";
-import Cover2 from "./Cover2";
 import { Part1 } from "./part1/Part1";
 
-export default function Chapter2({ isCover }: { isCover: boolean }) {
-  return (
-    <Media>
-      <Box fill style={isCover ? { display: "none" } : {}}>
-        <Chapter2Content />
-      </Box>
-      {isCover && <Cover2 />}
-    </Media>
-  );
-}
-
-function Chapter2Content() {
+export default function Chapter2() {
   const ref = useRef<HTMLVideoElement>(null);
 
   useChapter(ref, true);

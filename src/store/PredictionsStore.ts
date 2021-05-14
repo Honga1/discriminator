@@ -34,6 +34,16 @@ export class PredictionsStore {
   private static webcam: undefined | HTMLVideoElement;
   private static isUpdating = false;
   static hasFirstFace = makeObservable(false);
+  static isPaused = false;
+  static pauseFor = async (duration: number) => {
+    console.log("Predictions paused");
+    PredictionsStore.isPaused = true;
+    await new Promise((resolve) => {
+      setTimeout(resolve, duration);
+    });
+    console.log("Predictions resumed");
+    PredictionsStore.isPaused = false;
+  };
 
   static update = async () => {
     PredictionsStore.isUpdating = false;
@@ -53,6 +63,9 @@ export class PredictionsStore {
     const webcam = PredictionsStore.webcam;
 
     PredictionsStore.isUpdating = true;
+
+    if (PredictionsStore.isPaused)
+      return requestAnimationFrame(PredictionsStore.update);
 
     if (webcam.readyState < HTMLMediaElement.HAVE_METADATA)
       return requestAnimationFrame(PredictionsStore.update);
