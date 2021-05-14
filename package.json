@@ -2,7 +2,7 @@
   "name": "disc",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://honga1.github.io/discriminator",
+  "homepage": "/",
   "dependencies": {
     "@react-three/drei": "^4.3.3",
     "@react-three/fiber": "^6.1.2",
@@ -39,7 +39,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "build-netlify": "react-scripts build && echo '/* /index.html 200' | cat >build/_redirects"
   },
   "eslintConfig": {
     "extends": [
