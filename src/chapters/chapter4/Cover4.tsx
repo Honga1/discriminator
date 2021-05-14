@@ -1,8 +1,10 @@
+import { SpringValue, useSpring } from "@react-spring/core";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useEffect, useMemo, useRef } from "react";
+import { Text } from "grommet";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePredictions } from "src/hooks/usePredictions";
 import { V3 } from "src/libs/v3";
-import { Predictions } from "src/store/PredictionsStore";
+import { Predictions, PredictionsStore } from "src/store/PredictionsStore";
 import { store, useStore } from "src/store/store";
 import {
   BufferGeometry,
@@ -17,6 +19,40 @@ export default function Cover4() {
     store.setState({ isCameraEnabled: true });
   }, []);
 
+  const [state, setState] = useState(0);
+
+  useEffect(() => {
+    let timeout1: NodeJS.Timeout | undefined;
+    let timeout2: NodeJS.Timeout | undefined;
+
+    setState(0);
+
+    let unsubscribe: (() => void) | undefined;
+    if (PredictionsStore.hasFirstFace.get()) {
+      timeout1 = setTimeout(() => setState(1), 5000);
+      timeout2 = setTimeout(() => setState(2), 10000);
+    } else {
+      unsubscribe = PredictionsStore.hasFirstFace.subscribe(() => {
+        timeout1 = setTimeout(() => setState(1), 5000);
+        timeout2 = setTimeout(() => setState(2), 10000);
+      });
+    }
+
+    return () => {
+      unsubscribe?.();
+      timeout1 && clearTimeout(timeout1);
+      timeout2 && clearTimeout(timeout2);
+    };
+  }, []);
+
+  const [{ amount }, api] = useSpring(
+    () => ({
+      amount: state === 1 || state === 2 ? 1 : 0,
+      config: { duration: 5000 },
+    }),
+    [state]
+  );
+
   return (
     <div
       style={{
@@ -25,14 +61,38 @@ export default function Cover4() {
         height: "100%",
       }}
     >
-      <Canvas orthographic>
-        <WebcamPlane />
-      </Canvas>
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+        <Canvas orthographic>
+          <WebcamPlane amount={amount} />
+        </Canvas>
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            padding: "58px",
+            top: 0,
+            boxSizing: "border-box",
+            textAlign: "center",
+          }}
+        >
+          <Text
+            color="yellow"
+            size="32px"
+            style={{
+              textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+            }}
+          >
+            {state === 0 && `You don't look happy :(`}
+            {state === 1 && `Let's see what we can do to fix that.`}
+            {state === 2 && `There, much better!`}
+          </Text>
+        </div>
+      </div>
     </div>
   );
 }
 
-function WebcamPlane() {
+function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
   const webcam = useStore((state) => state.webcamHTMLElement);
   const aspect = useStore((state) => state.webcamAspect);
   const viewport = useThree((state) => state.viewport);
@@ -53,6 +113,12 @@ function WebcamPlane() {
   useLeftIrisPosition(predictions, ref);
   useRightIrisPosition(predictions, ref);
 
+  useFrame(() => {
+    if (ref.current) {
+      ref.current.material.uniforms["amount"]!.value = amount.get();
+    }
+  });
+
   return (
     <group scale={[width, height, 1]}>
       <mesh ref={ref}>
@@ -66,6 +132,7 @@ function WebcamPlane() {
           uniforms-rightEye-value={new Vector4(0.5, 0.5, 0.5, 0.5)}
           uniforms-rightIris-value={new Vector4(0.5, 0.5, 0.5, 0.5)}
           uniforms-leftIris-value={new Vector4(0.5, 0.5, 0.5, 0.5)}
+          uniforms-amount-value={0}
         />
       </mesh>
     </group>
@@ -219,7 +286,14 @@ uniform vec4 leftEye;
 uniform vec4 rightEye;
 uniform vec4 leftIris;
 uniform vec4 rightIris;
+uniform float amount;
 
+vec4 desaturate(vec3 color, float factor)
+{
+	vec3 lum = vec3(0.299, 0.587, 0.114);
+	vec3 gray = vec3(dot(lum, color));
+	return vec4(mix(color, gray, factor), 1.0);
+}
 
 struct Result {
   vec2 uv;
@@ -306,11 +380,11 @@ void main() {
     Result smile = getSmile();
     Result leftEyeKawaii = getLeftEye();
     Result rightEyeKawaii = getRightEye();
-    vec2 uv = mix(vUv, smile.uv, smile.mixDistance);
-    uv = mix(uv, leftEyeKawaii.uv, leftEyeKawaii.mixDistance);
-    uv = mix(uv, rightEyeKawaii.uv, rightEyeKawaii.mixDistance);
+    vec2 uv = mix(vUv, smile.uv, smile.mixDistance * amount);
+    uv = mix(uv, leftEyeKawaii.uv, leftEyeKawaii.mixDistance * amount);
+    uv = mix(uv, rightEyeKawaii.uv, rightEyeKawaii.mixDistance * amount);
     vec4 texelColor = texture2D( map, uv );
-    gl_FragColor = vec4(texelColor.rgb, 1.0);
+    gl_FragColor = desaturate(texelColor.rgb, 1.0 - amount);
 }
 `;
 
@@ -325,5 +399,6 @@ const maskMaterial = new ShaderMaterial({
     rightEye: { value: undefined },
     leftIris: { value: undefined },
     rightIris: { value: undefined },
+    amount: { value: undefined },
   },
 });

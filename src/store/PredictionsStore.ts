@@ -33,6 +33,7 @@ export class PredictionsStore {
   private static modelPromise: undefined | Promise<MediaPipeFaceMesh>;
   private static webcam: undefined | HTMLVideoElement;
   private static isUpdating = false;
+  static hasFirstFace = makeObservable(false);
 
   static update = async () => {
     PredictionsStore.isUpdating = false;
@@ -64,6 +65,8 @@ export class PredictionsStore {
       flipHorizontal: false,
       predictIrises: true,
     });
+
+    PredictionsStore.hasFirstFace.set(true);
 
     const predictions = rawPrediction.map((prediction) => {
       const scaledMesh = getScaledMesh(prediction, webcam);
