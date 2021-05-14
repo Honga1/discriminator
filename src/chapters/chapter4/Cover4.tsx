@@ -4,7 +4,7 @@ import { Text } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePredictions } from "src/hooks/usePredictions";
 import { V3 } from "src/libs/v3";
-import { Predictions, PredictionsStore } from "src/store/PredictionsStore";
+import { Predictions } from "src/store/PredictionsStore";
 import { store, useStore } from "src/store/store";
 import {
   BufferGeometry,
@@ -13,6 +13,7 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
+import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 
 export default function Cover4() {
   useEffect(() => {
@@ -21,31 +22,22 @@ export default function Cover4() {
 
   const [state, setState] = useState(0);
 
-  useEffect(() => {
-    let timeout1: NodeJS.Timeout | undefined;
-    let timeout2: NodeJS.Timeout | undefined;
+  const hasFirstPrediction = useHasFirstPrediction();
 
+  useEffect(() => {
     setState(0);
 
-    let unsubscribe: (() => void) | undefined;
-    if (PredictionsStore.hasFirstFace.get()) {
-      timeout1 = setTimeout(() => setState(1), 5000);
-      timeout2 = setTimeout(() => setState(2), 10000);
-    } else {
-      unsubscribe = PredictionsStore.hasFirstFace.subscribe(() => {
-        timeout1 = setTimeout(() => setState(1), 5000);
-        timeout2 = setTimeout(() => setState(2), 10000);
-      });
+    if (hasFirstPrediction) {
+      const timeout1 = setTimeout(() => setState(1), 5000);
+      const timeout2 = setTimeout(() => setState(2), 10000);
+      return () => {
+        clearTimeout(timeout1);
+        clearTimeout(timeout2);
+      };
     }
+  }, [hasFirstPrediction]);
 
-    return () => {
-      unsubscribe?.();
-      timeout1 && clearTimeout(timeout1);
-      timeout2 && clearTimeout(timeout2);
-    };
-  }, []);
-
-  const [{ amount }, api] = useSpring(
+  const [{ amount }] = useSpring(
     () => ({
       amount: state === 1 || state === 2 ? 1 : 0,
       config: { duration: 5000 },

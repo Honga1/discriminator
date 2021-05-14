@@ -64,6 +64,11 @@ function Chapter3Content() {
   useChapter(ref, false);
   const [seconds, setSeconds] = useState(0);
 
+  const isPlaying = seconds !== 0;
+  useEffect(() => {
+    store.setState({ isCameraEnabled: false });
+  }, [isPlaying]);
+
   const [allowAutoPause, setAllowAutoPause] = useState(false);
   const [isAutoPaused, setIsAutoPaused] = useState(false);
 

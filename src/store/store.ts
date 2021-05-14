@@ -28,7 +28,6 @@ type State = {
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
   isActive: boolean;
-  isFirstPredictionComplete: boolean;
   webcamHTMLElement: HTMLVideoElement;
   webcamAspect: number;
 };
@@ -39,7 +38,6 @@ const initialState: NonFunctionProperties<State> = {
   isHeadingShown: true,
   isCameraEnabled: true,
   isActive: true,
-  isFirstPredictionComplete: false,
   webcamAspect: 4 / 3,
   webcamHTMLElement: document.createElement("video"),
 };

@@ -1,8 +1,7 @@
 import { Canvas } from "@react-three/fiber";
-import React, { useState } from "react";
-import { usePredictions } from "src/hooks/usePredictions";
-import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
-import { store, useStore } from "../../../store/store";
+import React from "react";
+import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
+import { useStore } from "../../../store/store";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { StaticBackground } from "./StaticBackground";
@@ -13,18 +12,10 @@ export const Part1 = ({
 }: {
   maskType: "video" | "brett" | "own";
 }) => {
-  const [hasFirstPrediction, setHasFirstPrediction] = useState(false);
+  const hasFirstPrediction = useHasFirstPrediction();
 
   const webcam = useStore((state) => state.webcamHTMLElement);
   const aspect = useStore((state) => state.webcamAspect);
-  const predictions = usePredictions();
-
-  useAnimationFrame(1, () => {
-    if (predictions.current.length > 0 && !hasFirstPrediction) {
-      setHasFirstPrediction(true);
-      store.setState({ isFirstPredictionComplete: true });
-    }
-  });
 
   return (
     <Canvas
