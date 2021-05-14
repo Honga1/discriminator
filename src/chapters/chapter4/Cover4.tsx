@@ -1,8 +1,9 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { usePredictions } from "src/hooks/usePredictions";
 import { V3 } from "src/libs/v3";
 import { Predictions } from "src/store/PredictionsStore";
+import { store, useStore } from "src/store/store";
 import {
   BufferGeometry,
   Mesh,
@@ -10,11 +11,11 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
-import { useStore } from "../../store/store";
-import { WorldOffset } from "../chapter2/part1/WorldOffset";
 
 export default function Cover4() {
-  const aspect = useStore((state) => state.webcamAspect);
+  useEffect(() => {
+    store.setState({ isCameraEnabled: true });
+  }, []);
 
   return (
     <div
@@ -26,9 +27,6 @@ export default function Cover4() {
     >
       <Canvas orthographic>
         <WebcamPlane />
-        <WorldOffset targetAspect={aspect}>
-          {/* <WireframeMask track="webcam" /> */}
-        </WorldOffset>
       </Canvas>
     </div>
   );
