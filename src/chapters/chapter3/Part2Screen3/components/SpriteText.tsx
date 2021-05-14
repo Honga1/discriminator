@@ -71,7 +71,7 @@ export const SpriteText = memo(
           ref={ref}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          style={{ position: "relative", whiteSpace: "nowrap" }}
+          style={{ position: "relative", whiteSpace: "nowrap", zIndex: 0 }}
         >
           <animated.div
             style={{

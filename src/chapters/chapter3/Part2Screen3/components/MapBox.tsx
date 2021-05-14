@@ -8,7 +8,7 @@ export const ButtonCornerMapBox = memo(({ isShown }: { isShown: boolean }) => {
       width="300px"
       height="160px"
       style={{
-        zIndex: 0,
+        zIndex: 1,
         position: "absolute",
         pointerEvents: "none",
         background:

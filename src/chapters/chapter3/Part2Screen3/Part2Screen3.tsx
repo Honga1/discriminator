@@ -146,7 +146,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
         height="100%"
         width="100%"
         pad="4px"
-        hidden={!showFullScreenMap || !isSmall}
+        hidden={!isSmall}
         style={{ position: "relative" }}
       >
         <HeaderBar
