@@ -82,7 +82,7 @@ export const store = create<State>((set, get) => ({
 
           set({ webcamStream: stream });
         });
-        const webcam = get().webcamHTMLElement;
+        const webcam = get().webcamHTMLElement.cloneNode() as HTMLVideoElement;
 
         if (webcam.srcObject !== stream) {
           webcam.srcObject = stream;
@@ -94,7 +94,7 @@ export const store = create<State>((set, get) => ({
         webcam.height = track.getSettings().height!;
 
         const videoAspect = webcam.width / webcam.height;
-        set({ webcamAspect: videoAspect });
+        set({ webcamAspect: videoAspect, webcamHTMLElement: webcam });
       })
       .catch((error) => console.error(error));
   },
