@@ -19,6 +19,7 @@ export const Timeline = () => {
           ? "linear-gradient(0deg, rgba(32, 33, 34, 0.5), rgba(32, 33, 34, 0.5))"
           : "none",
         zIndex: 10,
+        pointerEvents: !isOpen ? "none" : "auto",
       }}
     >
       <FadeOutBox

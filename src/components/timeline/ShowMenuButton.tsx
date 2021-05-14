@@ -22,10 +22,10 @@ export function ShowMenuButton(props: {
         onMouseEnter={() => {
           if (timeout.current) clearTimeout(timeout.current);
           props.setHasTimeoutElapsed(false);
-          timeout.current = (setTimeout(
+          timeout.current = setTimeout(
             () => props.setHasTimeoutElapsed(true),
             4000
-          ) as unknown) as Timeout;
+          ) as unknown as Timeout;
           props.setIsOpen(true);
         }}
         onClick={() => {
@@ -52,6 +52,7 @@ function ThreeDotsMenuButton({
           flex={false}
           justify="between"
           align="center"
+          style={{ pointerEvents: "auto" }}
         >
           <StyledDot
             width="14px"
