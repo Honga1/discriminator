@@ -1,5 +1,7 @@
+import { useTransition } from "@react-spring/core";
 import { Box } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { animated } from "react-spring";
 import { useChapter } from "../../hooks/useChapter";
 import { store, useStore } from "../../store/store";
 import audioSrc from "./audio/Chapter3.mp3";
@@ -134,6 +136,15 @@ export default function Chapter3() {
     };
   }, [allowAutoPause, audio, isAutoPaused]);
 
+  const transition = useTransition(part, {
+    from: { opacity: 0 },
+    enter: (item) => async (next) => {
+      await next({ opacity: 0 });
+      await next({ opacity: 1, delay: 300 });
+    },
+    leave: { opacity: 0 },
+  });
+
   return (
     <>
       <Box style={{ position: "relative" }} width="100%" height="100%">
@@ -142,16 +153,32 @@ export default function Chapter3() {
           isAutoPaused={isAutoPaused}
         />
 
-        {part === "PART_1_SCREEN_1" && (
-          <Part1Screen1 getByteData={getByteData} seconds={seconds} />
-        )}
-        {part === "PART_1_SCREEN_2" && (
-          <Part1Screen2Selector seconds={seconds} />
-        )}
-        {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
-        {part === "PART_2_SCREEN_2" && <Part2Screen2 seconds={seconds} />}
-        {part === "PART_2_SCREEN_3" && <Part2Screen3 seconds={seconds} />}
-        {part === "PART_3_SCREEN_1" && <Part3Selector seconds={seconds} />}
+        {transition((style, part) => {
+          return (
+            <animated.div
+              style={{
+                ...style,
+                position: "absolute",
+                top: 0,
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              {part === "PART_1_SCREEN_1" && (
+                <Part1Screen1 getByteData={getByteData} seconds={seconds} />
+              )}
+              {part === "PART_1_SCREEN_2" && (
+                <Part1Screen2Selector seconds={seconds} />
+              )}
+              {part === "PART_2_SCREEN_1" && <Part2Screen1 />}
+              {part === "PART_2_SCREEN_2" && <Part2Screen2 seconds={seconds} />}
+              {part === "PART_2_SCREEN_3" && <Part2Screen3 seconds={seconds} />}
+              {part === "PART_3_SCREEN_1" && (
+                <Part3Selector seconds={seconds} />
+              )}
+            </animated.div>
+          );
+        })}
       </Box>
     </>
   );
