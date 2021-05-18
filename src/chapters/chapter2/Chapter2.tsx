@@ -1,6 +1,6 @@
 import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
-import ReactPlayer from "react-player";
+import { DashPlayer } from "src/components/DashPlayer";
 import { useChapter } from "../../hooks/useChapter";
 import { Part1 } from "./part1/Part1";
 
@@ -49,10 +49,8 @@ export default function Chapter2() {
       overflow="hidden"
     >
       {part !== "SCREEN_2" && <Part1 maskType={maskType} />}
-      <ReactPlayer
-        ref={(incoming) =>
-          ((ref as any).current = incoming?.getInternalPlayer())
-        }
+      <DashPlayer
+        ref={ref}
         style={{
           boxSizing: "border-box",
           outline: "none",
@@ -61,8 +59,8 @@ export default function Chapter2() {
         }}
         width="100%"
         height="100%"
-        url={`https://discriminator-media-server.jaeperris.com/part2/stream.mpd`}
-      ></ReactPlayer>
+        src={`https://discriminator-media-server.jaeperris.com/part2/stream.mpd`}
+      ></DashPlayer>
     </Box>
   );
 }

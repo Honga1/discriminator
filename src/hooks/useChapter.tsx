@@ -32,6 +32,8 @@ export function useChapter(
   const setProgress = useCallback(
     (progress: number) => {
       if (!ref.current) return;
+      if (!isFinite(progress)) return;
+      if (!isFinite(ref.current.duration)) return;
       ref.current.currentTime = progress * ref.current.duration;
     },
     [ref]

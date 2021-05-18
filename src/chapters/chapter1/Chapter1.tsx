@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { useChapter } from "../../hooks/useChapter";
-import ReactPlayer from "react-player";
+import { DashPlayer } from "../../components/DashPlayer";
 export default function Chapter1() {
   const ref = useRef<HTMLVideoElement>(null);
   useChapter(ref, false);
 
   return (
-    <ReactPlayer
-      ref={(incoming) => ((ref as any).current = incoming?.getInternalPlayer())}
+    <DashPlayer
+      ref={ref}
       style={{
         boxSizing: "border-box",
         outline: "none",
@@ -16,7 +16,7 @@ export default function Chapter1() {
       }}
       width="100%"
       height="100%"
-      url={`https://discriminator-media-server.jaeperris.com/part1/stream.mpd`}
-    ></ReactPlayer>
+      src={`https://discriminator-media-server.jaeperris.com/part1/stream.mpd`}
+    ></DashPlayer>
   );
 }
