@@ -33,34 +33,34 @@ export const Chapter = memo(
     return (
       <Box fill flex={false} style={{ position: "relative" }}>
         {transition((style, { isCover, chapterNumber }) => {
-          let pair;
+          let component;
           if (isCover) {
             switch (chapterNumber) {
               case 1:
                 throw new Error("No cover for chapter 1");
               case 2:
-                pair = <Cover2 />;
+                component = <Cover2 />;
                 break;
               case 3:
-                pair = <Cover3 />;
+                component = <Cover3 />;
                 break;
               case 4:
-                pair = <Cover4 />;
+                component = <Cover4 />;
                 break;
             }
           } else {
             switch (chapterNumber) {
               case 1:
-                pair = <Chapter1 />;
+                component = <Chapter1 />;
                 break;
               case 2:
-                pair = <Chapter2 />;
+                component = <Chapter2 />;
                 break;
               case 3:
-                pair = <Chapter3 />;
+                component = <Chapter3 />;
                 break;
               case 4:
-                pair = <Chapter4 />;
+                component = <Chapter4 />;
                 break;
             }
           }
@@ -74,7 +74,9 @@ export const Chapter = memo(
                 top: 0,
               }}
             >
-              <Suspense fallback={<Text>Loading...</Text>}>{pair}</Suspense>
+              <Suspense fallback={<Text>Loading...</Text>}>
+                {component}
+              </Suspense>
             </animated.div>
           );
         })}

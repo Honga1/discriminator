@@ -6,10 +6,7 @@ import React, {
   useState,
 } from "react";
 import styled from "styled-components";
-import {
-  CameraIndicatorBox,
-  ChapterCameraIndicator,
-} from "./CameraIndicator";
+import { CameraIndicatorBox, ChapterCameraIndicator } from "./CameraIndicator";
 import { ChapterAndCoverNextButton } from "./ChapterAndCoverFinishedButton";
 import { Timeline } from "./timeline/Timeline";
 import { useIsActive } from "../hooks/useIsActive";
@@ -159,5 +156,6 @@ const FrameBox = styled(Box)<{
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 10;
   }
 `;
