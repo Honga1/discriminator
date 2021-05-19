@@ -87,17 +87,24 @@ export const About = () => {
         <br />
         <ul>
           <li>
-            <Anchor>GenderShades</Anchor> - Joy Boulamwini
+            <Anchor href="http://gendershades.org/">GenderShades</Anchor> - Joy
+            Boulamwini
           </li>
           <li>
-            <Anchor>The Point of Collection</Anchor> - Mimi Onuoha
+            <Anchor href="https://points.datasociety.net/the-point-of-collection-8ee44ad7c2fa#79b1">
+              The Point of Collection
+            </Anchor>{" "}
+            - Mimi Onuoha
           </li>
           <li>
-            <Anchor>Facial recognition’s dirty little secret</Anchor> - Oliva
-            Solon
+            <Anchor href="https://www.nbcnews.com/tech/internet/facial-recognition-s-dirty-little-secret-millions-online-photos-scraped-n981921">
+              Facial recognition’s dirty little secret
+            </Anchor>{" "}
+            - Oliva Solon
           </li>
           <li>
-            <Anchor>Exposing.ai</Anchor> - Adam Harvey
+            <Anchor href="http://www.exposing.ai">Exposing.ai</Anchor> - Adam
+            Harvey
           </li>
         </ul>
         <br />
@@ -196,7 +203,7 @@ export const About = () => {
             <tr>
               <td>
                 <Anchor href="https://pixabay.com/illustrations/man-stand-drinkers-alcoholics-5272165/">
-                  Alchoholic‌
+                  Alcoholic‌
                 </Anchor>
               </td>
               <td>
@@ -364,7 +371,7 @@ export const About = () => {
             <tr>
               <td>
                 <Anchor href="https://www.flickr.com/photos/smercury98/3531371982/">
-                  Art‌ ‌Car‌ ‌3‌
+                  Art‌ ‌Car‌ ‌4‌
                 </Anchor>
               </td>
               <td>
