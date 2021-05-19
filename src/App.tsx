@@ -1,13 +1,15 @@
+import { History } from "history";
 import React, { useEffect } from "react";
 import {
-  HashRouter,
   Route,
   RouteComponentProps,
   RouteProps,
+  Router,
   Switch,
 } from "react-router-dom";
-import { PageContainer } from "./components/PageContainer";
 import { Chapter } from "./chapters/Chapters";
+import { Media } from "./components/MediaContainer";
+import { PageContainer } from "./components/PageContainer";
 import { Home } from "./plain/Home";
 import { Permission } from "./plain/Permission";
 import {
@@ -17,15 +19,14 @@ import {
   validateChapterNumber,
   validatePageTypeQuery,
 } from "./Routes";
-import { Media } from "./components/MediaContainer";
 
 const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
   <Route {...props} />
 );
 
-function App() {
+function App({ history }: { history: History }) {
   return (
-    <HashRouter basename={"/"}>
+    <Router history={history}>
       <Switch>
         <KnownRoute exact path={"/"}>
           <PageContainer backgroundColor={"yellow"}>
@@ -54,7 +55,7 @@ function App() {
 
         <Route>Missing Route</Route>
       </Switch>
-    </HashRouter>
+    </Router>
   );
 }
 

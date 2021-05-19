@@ -6,6 +6,8 @@
   "dependencies": {
     "@react-three/drei": "^5.0.0",
     "@react-three/fiber": "^6.1.4",
+    "@sentry/react": "^6.4.0",
+    "@sentry/tracing": "^6.4.0",
     "@tensorflow-models/blazeface": "^0.0.7",
     "@tensorflow-models/face-landmarks-detection": "^0.0.3",
     "@tensorflow/tfjs-backend-webgl": "^3.6.0",
