@@ -5,7 +5,7 @@ import { useQuery } from "../hooks/useQuery";
 
 export const OpenModalButton = (
   props: ButtonProps & {
-    modal: "about" | "privacy" | "credits";
+    modal: "about" | "privacy" | "support";
   } & Pick<
       React.DetailedHTMLProps<
         React.ButtonHTMLAttributes<HTMLButtonElement>,

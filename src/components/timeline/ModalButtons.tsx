@@ -33,9 +33,9 @@ export function ModalButtons(props: { isOpen: boolean; isSmall: boolean }) {
       />
       <OpenModalButton
         plain
-        modal="credits"
+        modal="support"
         label={
-          <StyledModalButtonText size="small">Credits</StyledModalButtonText>
+          <StyledModalButtonText size="small">Support</StyledModalButtonText>
         }
       />
     </FadeOutBox>

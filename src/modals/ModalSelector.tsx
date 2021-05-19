@@ -12,7 +12,7 @@ import { useQuery } from "../hooks/useQuery";
 import { useStore } from "../store/store";
 import { colorTheme } from "../theme";
 import { About } from "./About";
-import { Credits } from "./Credits";
+import { Support } from "./Support";
 import { CustomScrollbarBox } from "../components/CustomScrollbarBox";
 import { Privacy } from "./Privacy";
 
@@ -51,15 +51,15 @@ export const ModalSelector = () => {
           <Privacy />
         </Modal>
       );
-    case "credits":
+    case "support":
       return (
         <Modal
           onClose={close}
           frameColor={colorTheme.green}
           textColor={colorTheme.white}
-          heading="Credits"
+          heading="Support"
         >
-          <Credits />
+          <Support />
         </Modal>
       );
     default:

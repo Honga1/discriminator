@@ -43,10 +43,10 @@ function LinksSmall({ isOnDark = false }: { isOnDark?: boolean }) {
         }
       />
       <OpenModalButton
-        modal="credits"
+        modal="support"
         plain
         label={
-          <LinkFrame textColor={text} frameColor={green} heading="Credits">
+          <LinkFrame textColor={text} frameColor={green} heading="Support">
             <Box height={"32px"}></Box>
           </LinkFrame>
         }
@@ -117,14 +117,14 @@ const LinksFloating = ({
           }}
         >
           <OpenModalButton
-            modal="credits"
+            modal="support"
             plain
             fill
             label={
               <LinkFrame
                 textColor={colorTheme.white}
                 frameColor={colorTheme.green}
-                heading="Credits"
+                heading="Support"
               >
                 <Box height={"60px"} width={"140px"}></Box>
               </LinkFrame>
