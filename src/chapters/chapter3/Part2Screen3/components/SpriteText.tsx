@@ -133,6 +133,7 @@ export const SpriteText = memo(
             style={{
               height: "1em",
               opacity: state === "SHOW_ALL" || state === "TYPING" ? 1 : 0,
+              transform: "translateY(20%)",
             }}
             src={logoSrc}
             alt="logo"
