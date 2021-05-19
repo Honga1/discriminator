@@ -1,4 +1,4 @@
-import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
+import { Anchor, Box, BoxProps, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext, useEffect } from "react";
 import { colorTheme } from "../theme";
 import { PageBodyButton } from "./PageBodyButton";
@@ -85,10 +85,26 @@ const HomeContent = () => {
       margin={{ horizontal: marginHorizontal, top: marginTop, bottom: "64px" }}
     >
       <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
-        Egestas enim cursus pretium leo, egestas blandit egestas nunc magna.
-        Lectus euismod mauris faucibus massa nibh condimentum vitae nunc quis.
-        Lacus vitae amet aliquam id leo. Interdum vulputate eu et aliquet elit
-        morbi bibendum. Tellus euismod metus, id feugiat amet.
+        Discriminator is an interactive documentary about facial recognition
+        databases directed by Brett Gaylor.
+      </Text>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
+        Total running time: 15 minutes.
+      </Text>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
+        For the best experience, enable your webcam so we can demonstrate how
+        facial recognition works. We don’t store your data - for more
+        information, read our privacy policy.
+      </Text>
+      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
+        If you’re interested in a more personalized experience, consider joining{" "}
+        <Anchor href="https://coil.com/">Coil</Anchor>, a micropayments service
+        to support creators. All payments for viewing this film as a Coil
+        subscriber support the{" "}
+        <Anchor href="https://www.stopspying.org/">
+          Surveillance Technology Oversight Project
+        </Anchor>
+        .
       </Text>
 
       <PageBodyButton
