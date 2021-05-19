@@ -14,25 +14,32 @@ export const Privacy = () => {
   return (
     <>
       <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euism
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
+        This website does not store any information about users. Preferences as
+        to whether you have selected to share your webcam are stored on your
+        computer.
         <br />
         <br />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
+        Images from the webcam are processed in the following manner: Webcam
+        images are sent to a cloud based virtual computer to run the “wav2lip”
+        software library, which creates a video file of a users face, lip
+        synched to a previously recorded audio file. This file is then sent back
+        to discriminator.film and inserted into the film.
         <br />
         <br />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget euismod
-        neque, sed justo, nibh pulvinar fringilla euismod scelerisque. Eu et
-        scelerisque maecenas magna dolor id arcu massa orci. Nunc commodo neque,
-        quis eu eget imperdiet purus duis. Venenatis, amet sapien sollicitudin
-        auctor sed gravida aliquet bibendum.
+        The video is deleted after your session.
+        <br />
+        <br />
+        This website does not use Google Analytics. We use Goat Counter, a
+        privacy respecting analytics tool.
+        <br />
+        <br />
+        There is a possibility that this Privacy Policy will be adapted in the
+        future, to clarify or modify it in response to feature changes or user
+        feedback. You can refer to the last updated timestamp at the bottom of
+        the page.
+        <br />
+        <br />
+        Last updated: May 19 2021
       </Text>
     </>
   );
