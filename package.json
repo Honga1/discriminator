@@ -42,7 +42,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build-netlify",
-    "deploy": "netlify deploy -d ./build",
+    "deploy": "netlify deploy --prod -d ./build",
     "build-netlify": "react-scripts build && echo '/* /index.html 200' | cat >build/_redirects"
   },
   "eslintConfig": {

@@ -1,4 +1,4 @@
-import { ResponsiveContext, Text } from "grommet";
+import { Anchor, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
 
 export const Privacy = () => {
@@ -29,7 +29,8 @@ export const Privacy = () => {
         The video is deleted after your session.
         <br />
         <br />
-        This website does not use Google Analytics. We use Goat Counter, a
+        This website does not use Google Analytics. We use{" "}
+        <Anchor href="https://www.goatcounter.com/">Goat Counter</Anchor>, a
         privacy respecting analytics tool.
         <br />
         <br />
