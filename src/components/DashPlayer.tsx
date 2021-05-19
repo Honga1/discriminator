@@ -18,7 +18,9 @@ export const DashPlayer = forwardRef<
     player.initialize(combinedRef.current, src, true);
   }, [combinedRef, src]);
 
-  return <video ref={combinedRef} {...props}></video>;
+  return (
+    <video ref={combinedRef} {...props} disablePictureInPicture={true}></video>
+  );
 });
 
 DashPlayer.displayName = "DashPlayer";
