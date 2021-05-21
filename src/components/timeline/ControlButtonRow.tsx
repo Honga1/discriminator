@@ -23,7 +23,6 @@ export const ControlButtonRow = ({
 
   const [isOpen, setIsOpen] = useState(true);
   const isActive = useIsActive();
-
   const location = useLocation();
 
   useEffect(() => {

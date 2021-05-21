@@ -7,6 +7,7 @@ export function useIsActive() {
 const activityDetector = createActivityDetector({
   timeToIdle: 8000,
   ignoredEventsWhenIdle: [],
+  inactivityEvents: [],
 });
 activityDetector.on("idle", () => {
   store.setState({ isActive: false });
