@@ -1,5 +1,5 @@
-import { Box, Text } from "grommet";
-import React, { memo } from "react";
+import { Box, ResponsiveContext, Text } from "grommet";
+import React, { memo, useContext } from "react";
 import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
@@ -44,6 +44,7 @@ PileBoxes.displayName = "GridBoxes";
 
 export const PileTextLabels = memo(() => {
   const tinting = usePart3Store((state) => state.tinting);
+  const isSmall = useContext(ResponsiveContext) === "small";
 
   const transition = useTransition([...tinting], {
     from: { opacity: 0 },
@@ -81,8 +82,8 @@ export const PileTextLabels = memo(() => {
       justify="center"
     >
       <StyledText
-        size="48px"
-        style={{ lineHeight: "48px" }}
+        size={isSmall ? "24px" : "48px"}
+        style={{ lineHeight: isSmall ? "32px" : "48px" }}
         color={getTintingColor(tinting)}
         textAlign="center"
       >
