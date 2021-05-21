@@ -1,11 +1,11 @@
 import { Canvas } from "@react-three/fiber";
 import React from "react";
+import { WorldOffset } from "src/components/WorldOffset";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
-import { useStore } from "../../../store/store";
+import { useStore } from "src/store/store";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
 import { StaticBackground } from "./StaticBackground";
-import { WorldOffset } from "./WorldOffset";
 
 export const Part1 = ({
   maskType,

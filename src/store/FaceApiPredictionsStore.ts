@@ -1,5 +1,6 @@
 import "@tensorflow/tfjs-backend-webgl";
-import * as faceapi from "@vladmandic/face-api";
+import "@tensorflow/tfjs";
+import * as faceapi from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
 import {
   FaceDetection,
   FaceExpressions,

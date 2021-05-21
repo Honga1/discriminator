@@ -4,6 +4,7 @@ import { Box } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { DashPlayer } from "src/components/DashPlayer";
+import { WorldOffset } from "src/components/WorldOffset";
 import { useChapter } from "src/hooks/useChapter";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useStore } from "src/store/store";
@@ -15,7 +16,6 @@ import {
   Vector3,
   VideoTexture,
 } from "three";
-import { WorldOffset } from "../chapter2/part1/WorldOffset";
 
 export default function Chapter4() {
   const ref = useRef<HTMLVideoElement>(null);

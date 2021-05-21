@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { useThree } from "@react-three/fiber";
-import { V3 } from "../../../libs/v3";
+import { V3 } from "src/libs/v3";
 
 /**
  * Makes world scale 0-1, and position 0-1 for width and height
