@@ -84,6 +84,8 @@ export const store = create<State>((set, get) => ({
 
         if (webcam.srcObject !== stream) {
           webcam.srcObject = stream;
+          webcam.muted = true;
+          webcam.playsInline = true;
           webcam.play();
         }
 
@@ -118,11 +120,8 @@ function getWebcam() {
     try {
       navigator.mediaDevices
         .getUserMedia({
-          video: {
-            aspectRatio: 4 / 3,
-            width: 320,
-            height: 240,
-          },
+          video: true,
+          audio: false,
         })
         .then((stream) => resolve(stream))
         .catch((error) => {
