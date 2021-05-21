@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/",
   "dependencies": {
+    "@juggle/resize-observer": "^3.3.1",
     "@react-three/drei": "5.1.6",
     "@react-three/fiber": "^6.1.5",
     "@sentry/react": "^6.4.1",

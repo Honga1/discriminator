@@ -1,8 +1,9 @@
 import { Html } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Box } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
 import { WorldOffset } from "src/components/WorldOffset";
 import { useChapter } from "src/hooks/useChapter";
@@ -49,13 +50,13 @@ export default function Chapter4() {
       overflow="hidden"
     >
       {part !== "VIDEO" && (
-        <Canvas
+        <ResizeCanvas
           linear
           orthographic
           style={{ position: "absolute", width: "100%", height: "100%" }}
         >
           <WebcamPlane />
-        </Canvas>
+        </ResizeCanvas>
       )}
 
       <VideoPlayer

@@ -1,4 +1,4 @@
-import { Canvas } from "@react-three/fiber";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
 import React from "react";
 import { WorldOffset } from "src/components/WorldOffset";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
@@ -18,7 +18,7 @@ export const Part1 = ({
   const aspect = useStore((state) => state.webcamAspect);
 
   return (
-    <Canvas
+    <ResizeCanvas
       style={{
         position: "absolute",
         width: "100%",
@@ -35,6 +35,6 @@ export const Part1 = ({
           <RainbowVomit targetAspect={aspect} />
         </>
       )}
-    </Canvas>
+    </ResizeCanvas>
   );
 };

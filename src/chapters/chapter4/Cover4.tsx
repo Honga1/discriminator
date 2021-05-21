@@ -1,7 +1,9 @@
 import { SpringValue, useSpring } from "@react-spring/core";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Text } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
+import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { usePredictions } from "src/hooks/usePredictions";
 import { V3 } from "src/libs/v3";
 import { Predictions } from "src/store/PredictionsStore";
@@ -13,7 +15,6 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
-import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 
 export default function Cover4() {
   useEffect(() => {
@@ -54,9 +55,9 @@ export default function Cover4() {
       }}
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        <Canvas orthographic>
+        <ResizeCanvas orthographic>
           <WebcamPlane amount={amount} />
-        </Canvas>
+        </ResizeCanvas>
         <div
           style={{
             position: "absolute",

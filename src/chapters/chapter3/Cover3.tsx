@@ -1,6 +1,6 @@
-import { Canvas } from "@react-three/fiber";
 import { Text } from "grommet";
 import React, { useEffect, useState } from "react";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { WorldOffset } from "src/components/WorldOffset";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { store, useStore } from "src/store/store";
@@ -32,7 +32,7 @@ export default function Cover3() {
       }
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        <Canvas
+        <ResizeCanvas
           style={{
             position: "absolute",
             width: "100%",
@@ -49,7 +49,7 @@ export default function Cover3() {
               <RainbowVomit targetAspect={aspect} />
             </>
           )}
-        </Canvas>
+        </ResizeCanvas>
         <div
           style={{
             position: "absolute",
