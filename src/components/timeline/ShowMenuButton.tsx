@@ -1,5 +1,5 @@
-import { Box, Button, ButtonType, Timeout } from "grommet";
-import { useEffect, useRef } from "react";
+import { Box, Button, ButtonType, ResponsiveContext, Timeout } from "grommet";
+import { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { colorTheme } from "../../theme";
 
@@ -9,6 +9,7 @@ export function ShowMenuButton(props: {
   isOpen: boolean;
 }) {
   const timeout = useRef<Timeout>();
+  const isSmall = useContext(ResponsiveContext) === "small";
   useEffect(() => {
     return () => {
       if (timeout.current) clearTimeout(timeout.current);
@@ -20,6 +21,7 @@ export function ShowMenuButton(props: {
       <ThreeDotsMenuButton
         isOpen={props.isOpen}
         onMouseEnter={() => {
+          if (isSmall) return;
           if (timeout.current) clearTimeout(timeout.current);
           props.setHasTimeoutElapsed(false);
           timeout.current = setTimeout(
