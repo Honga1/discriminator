@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Box } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { DashPlayer } from "src/components/DashPlayer";
+import { VideoPlayer } from "src/components/VideoPlayer";
 import { WorldOffset } from "src/components/WorldOffset";
 import { useChapter } from "src/hooks/useChapter";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
@@ -58,7 +58,7 @@ export default function Chapter4() {
         </Canvas>
       )}
 
-      <DashPlayer
+      <VideoPlayer
         ref={ref}
         style={{
           boxSizing: "border-box",
@@ -69,8 +69,9 @@ export default function Chapter4() {
         }}
         width="100%"
         height="100%"
-        src={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
-      ></DashPlayer>
+        srcDash={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
+        srcHls={`https://discriminator-media-server.jaeperris.com/part4/master.m3u8`}
+      ></VideoPlayer>
     </Box>
   );
 }
