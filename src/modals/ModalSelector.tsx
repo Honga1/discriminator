@@ -169,7 +169,7 @@ const ModalContainer = ({
 
   return (
     <Box fill overflow="hidden" align="center">
-      <Box className="modal container" {...props} background="yellow">
+      <Box className="modal container" {...props} background="yellow" fill>
         <ScrollableFrame
           textColor={textColor}
           frameColor={frameColor}
