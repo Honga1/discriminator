@@ -156,7 +156,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
           onMapClicked={onMapClicked}
         />
         <Box style={{ position: "relative" }}>
-          <SpriteLevelIndicators />
+          {!isSmall && <SpriteLevelIndicators />}
           {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
           {isSmall ? (
             <Box
