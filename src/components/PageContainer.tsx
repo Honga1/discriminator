@@ -8,7 +8,11 @@ export const PageContainer = ({
   backgroundColor,
 }: PropsWithChildren<{ backgroundColor: "yellow" | "black" }>) => {
   return (
-    <Grommet theme={customTheme} full background={backgroundColor}>
+    <Grommet
+      theme={customTheme}
+      style={{ width: "100%", height: "100%", overflowY: "auto" }}
+      background={backgroundColor}
+    >
       {children}
       <ModalSelector />
     </Grommet>
