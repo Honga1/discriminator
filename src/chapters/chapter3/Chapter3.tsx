@@ -20,6 +20,8 @@ export default function Chapter3() {
   const [getByteData, audio] = useMemo(() => {
     const speakingAudio = document.createElement("audio");
     speakingAudio.src = audioSrc;
+    const AudioContext =
+      window.AudioContext ?? (window as any).webkitAudioContext;
     const context = new AudioContext();
     const source = context.createMediaElementSource(speakingAudio);
     const analyser = context.createAnalyser();
