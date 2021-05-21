@@ -1,4 +1,3 @@
-import createActivityDetector from "activity-detector";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
 import { NonFunctionProperties } from "../@types/NonFunctionProperties";
@@ -134,16 +133,3 @@ function getWebcam() {
     }
   });
 }
-
-const activityDetector = createActivityDetector({
-  timeToIdle: 4000,
-  ignoredEventsWhenIdle: [],
-});
-
-activityDetector.on("idle", () => {
-  store.setState({ isActive: false });
-});
-
-activityDetector.on("active", () => {
-  store.setState({ isActive: true });
-});
