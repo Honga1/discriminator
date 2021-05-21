@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { store } from "src/store/store";
-import useResizeObserver from "use-resize-observer";
+import useResizeObserver from "use-resize-observer/polyfilled";
 import { CustomScrollbarBox } from "../../../components/CustomScrollbarBox";
 import { Data } from "./components/Data";
 import { HeaderBar } from "./components/HeaderBar";

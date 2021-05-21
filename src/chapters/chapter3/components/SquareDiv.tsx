@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef, useRef } from "react";
 import { CSSProperties } from "styled-components";
-import useResizeObserver from "use-resize-observer";
+import useResizeObserver from "use-resize-observer/polyfilled";
 
 export const SquareDiv = ({
   children,

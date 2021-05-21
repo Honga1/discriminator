@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import useResizeObserver from "use-resize-observer";
+import useResizeObserver from "use-resize-observer/polyfilled";
 import { ImageCard } from "./ImageCard";
 import { usePart1Screen2Store, Years } from "../store/Part1Screen2Store";
 

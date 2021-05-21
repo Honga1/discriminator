@@ -1,7 +1,7 @@
 import { Box, Grid, ResponsiveContext } from "grommet";
 import React, { memo, useContext, useMemo, useRef } from "react";
 import { useScreenAspect } from "src/hooks/useScreenAspect";
-import useResizeObserver from "use-resize-observer";
+import useResizeObserver from "use-resize-observer/polyfilled";
 import { MegafaceImageDescriptor } from "../../Part1Screen2/store/Part1Screen2Store";
 import { Tinting, usePart3Store } from "../store/Part3Store";
 import { ImageCard } from "./ImageCard";
