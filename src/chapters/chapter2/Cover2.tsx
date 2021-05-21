@@ -105,7 +105,6 @@ export default function Cover2() {
             size="32px"
             style={{
               textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-              border: `1px solid rgba(0, 0, 0, 0.25)`,
             }}
           >
             You have blinked {openCount} time{openCount === 1 ? "" : "s"}
