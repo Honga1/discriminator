@@ -11,3 +11,14 @@ body {
   visibility: visible;
   font-family: Roboto;
 }
+
+/* Fix ios zoom */
+body {
+  touch-action: manipulation;
+}
+
+/* Prevent iOS bounce */
+body {
+  position: fixed;
+  overflow: hidden;
+}
