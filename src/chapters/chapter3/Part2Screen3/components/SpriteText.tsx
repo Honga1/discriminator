@@ -6,6 +6,7 @@ import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import { part2Screen3Store } from "../store/part2Screen3Store";
 import { TypingText } from "./TypingText";
+import replaceAll from "string-replace-all-ponyfill";
 
 export const SpriteText = memo(
   ({
@@ -141,7 +142,7 @@ export const SpriteText = memo(
           &nbsp;&nbsp;&nbsp;
           <TypingText
             bold={false}
-            text={text.replaceAll(" ", "\xa0") + `   •••   `}
+            text={replaceAll(" ", "\xa0") + `   •••   `}
             state={state}
             onFinished={onFinished}
           />

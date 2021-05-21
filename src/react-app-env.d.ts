@@ -21,3 +21,7 @@ declare module "*.gltf" {
   export default content;
 }
 declare module "grommet/components/Stack/StyledStack";
+
+declare module "string-replace-all-ponyfill" {
+  export default String.prototype.replaceAll;
+}

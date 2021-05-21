@@ -115,6 +115,7 @@ export const ImageCard = memo(
                   style={{
                     position: "relative",
                     pointerEvents: "none",
+                    transform: "scale(1)",
                   }}
                 >
                   {image.overlaySrc !== undefined && (

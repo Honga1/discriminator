@@ -3,7 +3,6 @@ import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 
 export const Spectrogram = memo(
   ({ getByteData }: { getByteData: () => Uint8Array }) => {
-    const heightFactor = 390 / numBars;
     const rects = useRef<(SVGRectElement | null)[]>(
       Array.from({ length: numBars })
     );
@@ -23,14 +22,12 @@ export const Spectrogram = memo(
       const range = 64;
 
       for (let index = 0; index < rects.current.length; index++) {
-        const scale = Math.min(
-          (data[index]! - min) / range + 0.2 * randomHeightScales[index]!,
-          1.0
-        );
+        const baseHeight = 0.2 * randomHeightScales[index]!;
+        const scale = Math.min((data[index]! - min) / range + baseHeight, 1.0);
         const rect = rects.current[index];
         rect?.setAttribute(
           `transform`,
-          `matrix(1, 0, 0, ${scale}, ${heightFactor * index}, 0)`
+          `translate(0, ${50.5 - (scale * 101) / 2}), scale(1, ${scale})`
         );
       }
     });
@@ -45,6 +42,7 @@ export const Spectrogram = memo(
         ref={ref}
       >
         {rects.current.map((value, index) => {
+          const scale = 1.0;
           return (
             <rect
               ref={(ref) => (rects.current[index] = ref)}
@@ -52,8 +50,10 @@ export const Spectrogram = memo(
               key={index}
               width={3}
               height={101}
-              transform={`matrix(1, 0, 0, 1, ${heightFactor * index}, 0)`}
-              style={{ transformOrigin: "left center" }}
+              x={(390 / 48) * index}
+              transform={`translate(0, ${
+                50.5 - (scale * 101) / 2
+              }), scale(1, ${scale})`}
             />
           );
         })}
