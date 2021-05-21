@@ -18,6 +18,7 @@ export function ImageText({
     paddingLeft: "5%",
     left: "10%",
     backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden",
     backgroundColor: "rgba(32, 33, 34, 0.2)",
     boxShadow: `3px 3px 5px 6px rgba(32, 33, 34, 0.2)`,
     pointerEvents: "none",
@@ -30,6 +31,7 @@ export function ImageText({
     top: "50%",
     transform: "translateY(-50%)",
     backfaceVisibility: "hidden",
+    WebkitBackfaceVisibility: "hidden",
   };
 
   return (

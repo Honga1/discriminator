@@ -100,6 +100,7 @@ export const ImageCard = memo(
           style={{
             transform: transformRotation,
             backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             top: 0,
             left: 0,
             right: 0,
@@ -198,6 +199,7 @@ export const ImageCard = memo(
                                 alignItems: "center",
                                 justifyContent: "center",
                                 backfaceVisibility: "hidden",
+                                WebkitBackfaceVisibility: "hidden",
                               }}
                             >
                               <StyledText
@@ -221,6 +223,7 @@ export const ImageCard = memo(
                     top: 0,
                     position: "absolute",
                     backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
                     touchAction: "none",
                     pointerEvents: "none",
                     background: "#502B2D",
@@ -240,6 +243,7 @@ export const ImageCard = memo(
                     height: "100%",
                     pointerEvents: "none",
                     backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
                     ...style,
                   }}
                 />
@@ -291,6 +295,7 @@ const HoverBox = styled.div<{ selected: boolean; interactive: boolean }>`
   height: 100%;
   position: relative;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition: transform 0.2s ease-out;
 
   transform: ${(props) =>

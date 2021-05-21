@@ -118,6 +118,7 @@ const PulsingCircle = styled.div<{ delay: number }>`
   height: 100%;
   animation-delay: ${(props) => props.delay}s;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   user-select: none;
   opacity: 0;
 

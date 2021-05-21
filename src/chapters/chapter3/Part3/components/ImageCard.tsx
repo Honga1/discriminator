@@ -76,6 +76,7 @@ export const ImageCard = memo(
           style={{
             transform: transformRotation,
             backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
             top: 0,
             left: 0,
             right: 0,
@@ -158,6 +159,7 @@ export const ImageCard = memo(
                           top: 0,
                           pointerEvents: "none",
                           backfaceVisibility: "hidden",
+                          WebkitBackfaceVisibility: "hidden",
                           ...style,
                         }}
                       />
@@ -181,6 +183,7 @@ export const ImageCard = memo(
                             alignItems: "center",
                             justifyContent: "center",
                             backfaceVisibility: "hidden",
+                            WebkitBackfaceVisibility: "hidden",
                           }}
                         >
                           <StyledText

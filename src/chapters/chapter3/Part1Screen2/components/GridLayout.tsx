@@ -114,4 +114,5 @@ const StyledText = styled(Text)`
   text-rendering: optimizeLegibility;
   user-select: none;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 `;
