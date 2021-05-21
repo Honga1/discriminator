@@ -43,9 +43,10 @@ export function useZoomOnElement(
     const minScale = Math.min(scaleY, scaleX);
 
     const alignLeft =
-      isSmall || part === 3 ? 0 : (containerBb.width * 0.2) / minScale;
-    const alignTop =
-      !isSmall || part === 3 ? 0 : (containerBb.height * 0.2) / minScale;
+      isSmall || part === 3
+        ? (part === 1 ? 0 : -containerBb.width * 0.1) / minScale
+        : (containerBb.width * 0.2) / minScale;
+    const alignTop = !isSmall ? 0 : (containerBb.height * 0.2) / minScale;
     const distanceFromCenterX =
       (bb.left + bb.right) / 2 -
       containerBb.width / 2 +
