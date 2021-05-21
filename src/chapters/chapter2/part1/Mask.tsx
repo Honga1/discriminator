@@ -39,9 +39,13 @@ export const Mask = ({
     const mapVideo = document.createElement("video");
     mapVideo.src = maskSrc;
     mapVideo.muted = true;
+    mapVideo.playsInline = true;
+    mapVideo.muted = true;
 
     const alphaMapVideo = document.createElement("video");
     alphaMapVideo.src = alphaSrc;
+    alphaMapVideo.muted = true;
+    alphaMapVideo.playsInline = true;
     alphaMapVideo.muted = true;
 
     const videoMaskMap = new VideoTexture(mapVideo);
