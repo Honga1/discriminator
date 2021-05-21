@@ -58,12 +58,13 @@ const FaceCircle = ({
           maxWidth="80%"
           maxHeight="80%"
           style={{
-            overflow: "clip",
+            overflow: "hidden",
             borderRadius: "50%",
             background: "#202122",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            WebkitMaskImage: "-webkit-radial-gradient(white, black)",
           }}
         >
           {children}
@@ -99,6 +100,7 @@ export const BrettFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
         muted
         autoPlay
         loop
+        playsInline
         style={{
           transform: `scale(2) translate(10%, 12%)`,
         }}
