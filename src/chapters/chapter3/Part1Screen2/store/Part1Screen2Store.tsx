@@ -1,3 +1,4 @@
+import fromEntries from "fromentries";
 import { NonFunctionProperties } from "src/@types/NonFunctionProperties";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
@@ -27,7 +28,7 @@ type State = {
 };
 
 const resolveImages = () => {
-  const result = Object.fromEntries(
+  const result = fromEntries(
     yearsInShownOrder.map((year) => {
       const imagesThisYear = imageData
         .filter(({ date }) => date.includes(year.toFixed()))

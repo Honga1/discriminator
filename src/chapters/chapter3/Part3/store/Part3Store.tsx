@@ -1,3 +1,4 @@
+import fromEntries from "fromentries";
 import { NonFunctionProperties } from "src/@types/NonFunctionProperties";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
@@ -19,7 +20,7 @@ type State = {
 };
 
 const resolveImages = () => {
-  const result: ImagesByTinting = Object.fromEntries(
+  const result: ImagesByTinting = fromEntries(
     tintingInShownOrder.map((tinting) => {
       const images = imageData
         .filter(({ tagged }) => tagged.includes(tinting))

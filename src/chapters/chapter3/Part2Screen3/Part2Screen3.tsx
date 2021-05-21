@@ -1,3 +1,4 @@
+import fromEntries from "fromentries";
 import { Box, ResponsiveContext } from "grommet";
 import { throttle } from "lodash";
 import {
@@ -86,7 +87,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
       const filterInvalid = (value: Entries | undefined): value is Entries =>
         value !== undefined;
 
-      const yearToBoundingBox = Object.fromEntries(
+      const yearToBoundingBox = fromEntries(
         [...yearElements.values()]
           .map(getValidBoundingBoxes)
           .filter(filterInvalid)
