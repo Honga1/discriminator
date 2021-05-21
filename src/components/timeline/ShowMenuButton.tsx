@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { colorTheme } from "../../theme";
 
 export function ShowMenuButton(props: {
-  setHasTimeoutElapsed: (arg0: boolean) => void;
   setIsOpen: (arg0: boolean) => void;
   isOpen: boolean;
 }) {
@@ -22,12 +21,6 @@ export function ShowMenuButton(props: {
         isOpen={props.isOpen}
         onMouseEnter={() => {
           if (isSmall) return;
-          if (timeout.current) clearTimeout(timeout.current);
-          props.setHasTimeoutElapsed(false);
-          timeout.current = setTimeout(
-            () => props.setHasTimeoutElapsed(true),
-            4000
-          ) as unknown as Timeout;
           props.setIsOpen(true);
         }}
         onClick={() => {
@@ -48,12 +41,13 @@ function ThreeDotsMenuButton({
       plain
       label={
         <Box
-          width="64px"
+          width="72px"
           height="32px"
           direction="row"
           flex={false}
           justify="between"
           align="center"
+          pad={{ horizontal: "4px" }}
           style={{ pointerEvents: "auto" }}
         >
           <StyledDot

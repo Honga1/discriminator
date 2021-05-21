@@ -1,7 +1,6 @@
 import { Grid, ResponsiveContext } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { getLeadingCommentRanges } from "typescript";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
 import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
@@ -23,7 +22,6 @@ export const ControlButtonRow = ({
   const isSmall = size === "small";
 
   const [isOpen, setIsOpen] = useState(true);
-  const [hasTimeoutElapsed, setHasTimeoutElapsed] = useState(true);
   const isActive = useIsActive();
 
   const location = useLocation();
@@ -37,11 +35,11 @@ export const ControlButtonRow = ({
   }, [isOpen, onOpenChange]);
 
   useEffect(() => {
-    console.log(isOpen, hasTimeoutElapsed, isActive);
-    if (isOpen && (hasTimeoutElapsed || !isActive)) {
+    console.log(isOpen, isActive);
+    if (isOpen && !isActive) {
       setIsOpen(false);
     }
-  }, [hasTimeoutElapsed, isActive, isOpen]);
+  }, [isActive, isOpen]);
 
   return (
     <Grid
@@ -68,11 +66,7 @@ export const ControlButtonRow = ({
       </FadeOutBox>
 
       {isSmall && <ModalButtons isSmall={isSmall} isOpen={isOpen} />}
-      <ShowMenuButton
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        setHasTimeoutElapsed={setHasTimeoutElapsed}
-      />
+      <ShowMenuButton isOpen={isOpen} setIsOpen={setIsOpen} />
       {!isSmall && <ModalButtons isSmall={isSmall} isOpen={isOpen} />}
     </Grid>
   );
