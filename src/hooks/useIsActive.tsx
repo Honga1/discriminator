@@ -5,7 +5,7 @@ export function useIsActive() {
   return useStore((state) => state.isActive);
 }
 const activityDetector = createActivityDetector({
-  timeToIdle: 4000,
+  timeToIdle: 8000,
   ignoredEventsWhenIdle: [],
 });
 activityDetector.on("idle", () => {
