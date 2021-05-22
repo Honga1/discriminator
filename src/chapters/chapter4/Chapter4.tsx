@@ -1,7 +1,7 @@
-import { Html } from "@react-three/drei";
+import { Html, useContextBridge } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Box } from "grommet";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Box, ResponsiveContext, Text, ThemeContext } from "grommet";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
@@ -9,6 +9,7 @@ import { WorldOffset } from "src/components/WorldOffset";
 import { useChapter } from "src/hooks/useChapter";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useStore } from "src/store/store";
+import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import {
   BufferGeometry,
@@ -43,6 +44,8 @@ export default function Chapter4() {
     video.ontimeupdate = (event) => onTimeUpdate({ nativeEvent: event });
   }, []);
 
+  const ContextBridge = useContextBridge(ThemeContext, ResponsiveContext);
+
   return (
     <Box
       style={{ position: "relative", width: "100%", height: "100%" }}
@@ -55,7 +58,9 @@ export default function Chapter4() {
           orthographic
           style={{ position: "absolute", width: "100%", height: "100%" }}
         >
-          <WebcamPlane />
+          <ContextBridge>
+            <WebcamPlane />
+          </ContextBridge>
         </ResizeCanvas>
       )}
 
@@ -92,6 +97,8 @@ function WebcamPlane() {
 
   const predictions = useFaceApiPredictions();
 
+  const isSmall = useContext(ResponsiveContext) === "small";
+
   useFrame(() => {
     if (topLeft.current && predictions.current !== undefined) {
       const { width, height, x, y } = predictions.current.detection.relativeBox;
@@ -106,58 +113,124 @@ function WebcamPlane() {
     if (html.current && predictions.current !== undefined) {
       ReactDOM.render(
         <React.StrictMode>
-          <StyledTBody>
-            <tr>
-              <td>confidence</td>
-              <td>{predictions.current.detection.score.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>age</td>
-              <td>{predictions.current.age.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>gender</td>
-              <td>{predictions.current.gender}</td>
-            </tr>
-            <tr>
-              <td>gender probability</td>
-              <td>{predictions.current.genderProbability.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>
-                <br></br>expression
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>angry</td>
-              <td>{predictions.current.expressions.angry.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>disgusted</td>
-              <td>{predictions.current.expressions.disgusted.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>fearful</td>
-              <td>{predictions.current.expressions.fearful.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>happy</td>
-              <td>{predictions.current.expressions.happy.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>neutral</td>
-              <td>{predictions.current.expressions.neutral.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>sad</td>
-              <td>{predictions.current.expressions.sad.toFixed(2)}</td>
-            </tr>
-            <tr>
-              <td>surprised</td>
-              <td>{predictions.current.expressions.surprised.toFixed(2)}</td>
-            </tr>
-          </StyledTBody>
+          <table>
+            <StyledTBody>
+              <tr>
+                <td>
+                  <Text color={colorTheme.yellow}>confidence</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.detection.score.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Text color={colorTheme.yellow}>age</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.age.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Text color={colorTheme.yellow}>gender</Text>
+                </td>
+                <td>
+                  <Text
+                    color={colorTheme.offWhite}
+                  >{`${predictions.current.genderProbability.toFixed(2)} ${
+                    predictions.current.gender
+                  }`}</Text>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <br />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Text color={colorTheme.redLight}>angry</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.expressions.angry.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              {!isSmall && (
+                <>
+                  <tr>
+                    <td>
+                      <Text color={colorTheme.redLight}>disgusted</Text>
+                    </td>
+                    <td>
+                      <Text color={colorTheme.offWhite}>
+                        {predictions.current.expressions.disgusted.toFixed(2)}
+                      </Text>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <Text color={colorTheme.redLight}>fearful</Text>
+                    </td>
+                    <td>
+                      <Text color={colorTheme.offWhite}>
+                        {predictions.current.expressions.fearful.toFixed(2)}
+                      </Text>
+                    </td>
+                  </tr>
+                </>
+              )}
+              <tr>
+                <td>
+                  <Text color={colorTheme.greenLight}>happy</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.expressions.happy.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Text color={colorTheme.greenLight}>neutral</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.expressions.neutral.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Text color={colorTheme.blueLight}>sad</Text>
+                </td>
+                <td>
+                  <Text color={colorTheme.offWhite}>
+                    {predictions.current.expressions.sad.toFixed(2)}
+                  </Text>
+                </td>
+              </tr>
+              {!isSmall && (
+                <tr>
+                  <td>
+                    <Text color={colorTheme.blueLight}>surprised</Text>
+                  </td>
+                  <td>
+                    <Text color={colorTheme.offWhite}>
+                      {predictions.current.expressions.surprised.toFixed(2)}
+                    </Text>
+                  </td>
+                </tr>
+              )}
+            </StyledTBody>
+          </table>
         </React.StrictMode>,
         html.current
       );
@@ -192,5 +265,12 @@ const StyledTBody = styled.tbody`
 
   td {
     padding: 0 15px;
+  }
+
+  span {
+    line-height: 30px;
+    font-size: 20px;
+    white-space: nowrap;
+    user-select: none;
   }
 `;
