@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FaceApiPrediction,
   FaceApiPredictionsStore,
@@ -12,6 +12,20 @@ export function useFaceApiPredictions() {
   useEffect(() => {
     return FaceApiPredictionsStore.subscribe(webcam, (incoming) => {
       predictions.current = incoming;
+    });
+  }, [webcam]);
+
+  return predictions;
+}
+
+export function useStatefulApiPredictions() {
+  const [predictions, setPredictions] =
+    useState<FaceApiPrediction | undefined>();
+  const webcam = useStore((state) => state.webcamHTMLElement);
+
+  useEffect(() => {
+    return FaceApiPredictionsStore.subscribe(webcam, (incoming) => {
+      setPredictions(incoming);
     });
   }, [webcam]);
 

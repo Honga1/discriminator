@@ -1,23 +1,23 @@
-import { Html, useContextBridge } from "@react-three/drei";
+import { useContextBridge } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Box, ResponsiveContext, Text, ThemeContext } from "grommet";
+import { Box, Grid, ResponsiveContext, ThemeContext } from "grommet";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
-import { WorldOffset } from "src/components/WorldOffset";
 import { useChapter } from "src/hooks/useChapter";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
-import styled from "styled-components";
 import {
   BufferGeometry,
   Mesh,
+  PlaneBufferGeometry,
   ShaderMaterial,
-  Vector3,
+  Vector4,
   VideoTexture,
 } from "three";
+import { SquareDiv } from "../chapter3/components/SquareDiv";
+import { AIInfo } from "./AIInfo";
 
 export default function Chapter4() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -45,23 +45,102 @@ export default function Chapter4() {
   }, []);
 
   const ContextBridge = useContextBridge(ThemeContext, ResponsiveContext);
+  const isSmall = useContext(ResponsiveContext) === "small";
 
   return (
     <Box
       style={{ position: "relative", width: "100%", height: "100%" }}
-      align="center"
       overflow="hidden"
+      flex={false}
     >
       {part !== "VIDEO" && (
-        <ResizeCanvas
-          linear
-          orthographic
-          style={{ position: "absolute", width: "100%", height: "100%" }}
+        <Box
+          flex={false}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+          }}
+          pad={{ horizontal: "20px", vertical: "48px" }}
+          justify="center"
+          align="center"
         >
-          <ContextBridge>
-            <WebcamPlane />
-          </ContextBridge>
-        </ResizeCanvas>
+          {isSmall ? (
+            <Grid
+              style={{ height: "100%", width: "100%" }}
+              rows={["min-content", "auto"]}
+              columns={["auto"]}
+              justify="center"
+              gap="24px"
+            >
+              <Box
+                style={{
+                  maxWidth: "300px",
+                  maxHeight: "300px",
+                  width: "66vw",
+                  height: "66vw",
+                }}
+              >
+                <SquareDiv
+                  style={{
+                    border: `3px solid ${colorTheme.greenLight}`,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <ResizeCanvas
+                    linear
+                    orthographic
+                    style={{ width: "100%", height: "100%" }}
+                  >
+                    <ContextBridge>
+                      <WebcamPlane />
+                    </ContextBridge>
+                  </ResizeCanvas>
+                </SquareDiv>
+              </Box>
+              <Box align="center">
+                <AIInfo />
+              </Box>
+            </Grid>
+          ) : (
+            <Grid
+              style={{ width: "100%", maxWidth: "800px" }}
+              rows={["auto"]}
+              columns={["auto", "min-content"]}
+              gap="59px"
+            >
+              <Box style={{ position: "relative", height: "100%" }}>
+                <Box
+                  style={{
+                    position: "absolute",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <SquareDiv
+                    style={{
+                      border: `3px solid ${colorTheme.greenLight}`,
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <ResizeCanvas
+                      linear
+                      orthographic
+                      style={{ width: "100%", height: "100%" }}
+                    >
+                      <ContextBridge>
+                        <WebcamPlane />
+                      </ContextBridge>
+                    </ResizeCanvas>
+                  </SquareDiv>
+                </Box>
+              </Box>
+              <Box justify="start">
+                <AIInfo />
+              </Box>
+            </Grid>
+          )}
+        </Box>
       )}
 
       <VideoPlayer
@@ -72,11 +151,13 @@ export default function Chapter4() {
           width: "100%",
           height: "100%",
           opacity: part === "INTERACTIVE" ? "0" : "1",
+          userSelect: "none",
         }}
         width="100%"
         height="100%"
         srcDash={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
         srcHls={`https://discriminator-media-server.jaeperris.com/part4/master.m3u8`}
+        hidden
       ></VideoPlayer>
     </Box>
   );
@@ -84,12 +165,7 @@ export default function Chapter4() {
 
 function WebcamPlane() {
   const webcam = useStore((state) => state.webcamHTMLElement);
-  const aspect = useStore((state) => state.webcamAspect);
   const viewport = useThree((state) => state.viewport);
-
-  const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>();
-  const width = Math.min(viewport.width, viewport.height * aspect);
-  const height = Math.min(viewport.width / aspect, viewport.height);
 
   const videoTexture = useMemo(() => {
     return new VideoTexture(webcam);
@@ -97,180 +173,99 @@ function WebcamPlane() {
 
   const predictions = useFaceApiPredictions();
 
-  const isSmall = useContext(ResponsiveContext) === "small";
-
   useFrame(() => {
     if (topLeft.current && predictions.current !== undefined) {
-      const { width, height, x, y } = predictions.current.detection.relativeBox;
+      const { x, y, width, height } = predictions.current.detection.relativeBox;
 
-      topLeft.current.position.lerp(
-        new Vector3(x + width / 2, -y - height / 2, 0.0),
-        0.1
-      );
-      topLeft.current.scale.lerp(new Vector3(width, height, 1.0), 0.1);
-    }
+      const maxAxis = Math.max(width, height);
 
-    if (html.current && predictions.current !== undefined) {
-      ReactDOM.render(
-        <React.StrictMode>
-          <table>
-            <StyledTBody>
-              <tr>
-                <td>
-                  <Text color={colorTheme.yellow}>confidence</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.detection.score.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Text color={colorTheme.yellow}>age</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.age.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Text color={colorTheme.yellow}>gender</Text>
-                </td>
-                <td>
-                  <Text
-                    color={colorTheme.offWhite}
-                  >{`${predictions.current.genderProbability.toFixed(2)} ${
-                    predictions.current.gender
-                  }`}</Text>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <br />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Text color={colorTheme.redLight}>angry</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.expressions.angry.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              {!isSmall && (
-                <>
-                  <tr>
-                    <td>
-                      <Text color={colorTheme.redLight}>disgusted</Text>
-                    </td>
-                    <td>
-                      <Text color={colorTheme.offWhite}>
-                        {predictions.current.expressions.disgusted.toFixed(2)}
-                      </Text>
-                    </td>
-                  </tr>
+      const aspect = width / height;
+      const centerX = x + width / 2;
+      const moveCameraUp = (height / 2) * 0.3;
+      const centerY = y + (height / 2 - moveCameraUp);
 
-                  <tr>
-                    <td>
-                      <Text color={colorTheme.redLight}>fearful</Text>
-                    </td>
-                    <td>
-                      <Text color={colorTheme.offWhite}>
-                        {predictions.current.expressions.fearful.toFixed(2)}
-                      </Text>
-                    </td>
-                  </tr>
-                </>
-              )}
-              <tr>
-                <td>
-                  <Text color={colorTheme.greenLight}>happy</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.expressions.happy.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Text color={colorTheme.greenLight}>neutral</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.expressions.neutral.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Text color={colorTheme.blueLight}>sad</Text>
-                </td>
-                <td>
-                  <Text color={colorTheme.offWhite}>
-                    {predictions.current.expressions.sad.toFixed(2)}
-                  </Text>
-                </td>
-              </tr>
-              {!isSmall && (
-                <tr>
-                  <td>
-                    <Text color={colorTheme.blueLight}>surprised</Text>
-                  </td>
-                  <td>
-                    <Text color={colorTheme.offWhite}>
-                      {predictions.current.expressions.surprised.toFixed(2)}
-                    </Text>
-                  </td>
-                </tr>
-              )}
-            </StyledTBody>
-          </table>
-        </React.StrictMode>,
-        html.current
-      );
+      let left;
+      let top;
+      let right;
+      let bottom;
+
+      const zoomOutFactor = 1.5;
+      // Cover fit
+      if (aspect < 1) {
+        left = centerX - (width / 2) * zoomOutFactor;
+        top = centerY - (maxAxis / 2) * zoomOutFactor;
+        right = centerX + (width / 2) * zoomOutFactor;
+        bottom = centerY + (maxAxis / 2) * zoomOutFactor;
+      } else {
+        left = centerX - (maxAxis / 2) * zoomOutFactor;
+        top = centerY - (height / 2) * zoomOutFactor;
+        right = centerX + (maxAxis / 2) * zoomOutFactor;
+        bottom = centerY + (height / 2) * zoomOutFactor;
+      }
+
+      const uniform = topLeft.current.material.uniforms["boundingBox"]!.value;
+
+      uniform.x = left;
+      uniform.y = bottom;
+      uniform.z = right;
+      uniform.w = top;
     }
   });
 
-  const topLeft = useRef<Mesh>();
-  const html = useRef<HTMLDivElement>(null);
+  const topLeft = useRef<Mesh<PlaneBufferGeometry, ShaderMaterial>>();
   return (
-    <>
-      <WorldOffset targetAspect={aspect}>
-        <mesh ref={topLeft}>
-          <planeBufferGeometry />
-          <meshBasicMaterial wireframe />
-          <Html ref={html} position={[0.5, 0.5, 0]}></Html>
-        </mesh>
-      </WorldOffset>
-      <group scale={[width, height, 1]} position={[0, 0, -1]}>
-        <mesh ref={ref}>
-          <planeBufferGeometry />
-          <meshBasicMaterial map={videoTexture} toneMapped={false} />
-        </mesh>
-      </group>
-    </>
+    <mesh scale={[viewport.width, viewport.height, 1]} ref={topLeft}>
+      <planeBufferGeometry />
+      <primitive
+        object={facePlaneMaterial}
+        attach="material"
+        uniforms-map-value={videoTexture}
+        uniforms-boundingBox-value={new Vector4(0.2, 0.8, 0.8, 0.2)}
+      />
+    </mesh>
   );
 }
 
-const StyledTBody = styled.tbody`
-  tr {
-    vertical-align: top;
-  }
+const vert = /* glsl */ `
+varying vec2 vUv;
+uniform mat3 uvTransform;
 
-  td {
-    padding: 0 15px;
-  }
+void main() {
 
-  span {
-    line-height: 30px;
-    font-size: 20px;
-    white-space: nowrap;
-    user-select: none;
-  }
+	#include <uv_vertex>
+
+	vec3 transformed = vec3( position );
+  vUv = uv.xy;
+  vec4 mvPosition = vec4( transformed, 1.0 );
+  mvPosition = modelViewMatrix * mvPosition;
+  gl_Position = projectionMatrix * mvPosition;
+
+}
 `;
+
+const frag = /* glsl */ `
+varying vec2 vUv;
+uniform sampler2D map;
+uniform vec4 boundingBox;
+
+void main() {
+  vec2 topLeft = boundingBox.xy;
+  vec2 bottomRight = boundingBox.zw;
+  vec2 dimensions = bottomRight - topLeft;
+  vec2 uv = vUv * dimensions + topLeft;
+  vec2 invertedUv = clamp(vec2(uv.x, 1.0 - uv.y), vec2(0), vec2(1));
+  
+	vec4 texelColor = texture2D( map, invertedUv );
+  gl_FragColor = vec4(texelColor.rgb,1.0);
+}
+`;
+
+const facePlaneMaterial = new ShaderMaterial({
+  fragmentShader: frag,
+  vertexShader: vert,
+  transparent: true,
+  uniforms: {
+    map: { value: undefined },
+    boundingBox: { value: undefined },
+  },
+});
