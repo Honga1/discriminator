@@ -9,7 +9,6 @@ import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
 import {
-  BufferGeometry,
   Mesh,
   PlaneBufferGeometry,
   ShaderMaterial,
