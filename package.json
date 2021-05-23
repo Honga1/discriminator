@@ -6,7 +6,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.3.1",
     "@react-three/drei": "5.1.6",
-    "@react-three/fiber": "^6.1.5",
+    "@react-three/fiber": "^6.2.0",
     "@sentry/react": "^6.4.1",
     "@sentry/tracing": "^6.4.1",
     "@tensorflow-models/blazeface": "^0.0.7",
@@ -36,7 +36,7 @@
     "string-replace-all-ponyfill": "^1.0.1",
     "styled-components": "^5.3.0",
     "three": "^0.128.0",
-    "three-stdlib": "^2.0.3",
+    "three-stdlib": "^2.0.5",
     "typescript": "^4.2.4",
     "use-resize-observer": "^7.0.0",
     "webfontloader": "^1.6.28",
