@@ -105,11 +105,11 @@ const Logos = () => {
 };
 
 const TribecaLaurel = () => {
-  return <Image src={tribecaLogoSrc}></Image>;
+  return <Image src={tribecaLogoSrc} fit="contain"></Image>;
 };
 
 const ImposterMediaLogo = () => {
-  return <Image src={imposterMediaLogoSrc}></Image>;
+  return <Image src={imposterMediaLogoSrc} fit="contain"></Image>;
 };
 
 const HomeContent = () => {
