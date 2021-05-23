@@ -73,6 +73,7 @@ export default function Cover4() {
             size="32px"
             style={{
               textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+              userSelect: "none",
             }}
           >
             {state === 0 && `You don't look happy :(`}
