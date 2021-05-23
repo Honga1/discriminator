@@ -30,5 +30,4 @@ body {
 *:hover:not(:focus-visible),
 *:focus:not(:focus-visible) {
   box-shadow: none !important;
-  outline: none !important;
 }
