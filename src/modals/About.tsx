@@ -110,7 +110,7 @@ export const About = () => {
         <br />
         <br />
         Images used:
-        <>
+        <table>
           <tbody>
             <tr>
               <td>
@@ -907,7 +907,7 @@ export const About = () => {
               </td>
             </tr>
           </tbody>
-        </>
+        </table>
       </Text>
     </>
   );
