@@ -1,16 +1,17 @@
 import { ResponsiveContext } from "grommet";
 import { useContext, useEffect } from "react";
-import { config, SpringRef, SpringValue } from "react-spring";
+import { config, SpringConfig, SpringRef, SpringValue } from "react-spring";
 
 export function useZoomOnElement(
   ref: { current: HTMLElement | null },
   focusedElement: HTMLElement | undefined,
-  api: SpringRef<{
-    drag: boolean;
-    x: number;
-    y: number;
-    scale: number;
-  }>,
+  start: (value: {
+    drag?: boolean;
+    x?: number;
+    y?: number;
+    scale?: number;
+    config?: SpringConfig;
+  }) => void,
   x: SpringValue<number>,
   scale: SpringValue<number>,
   y: SpringValue<number>,
@@ -21,7 +22,7 @@ export function useZoomOnElement(
   useEffect(() => {
     if (!ref.current) return;
     if (!focusedElement) {
-      api.start({
+      start({
         x: 0,
         y: 0,
         scale: 1,
@@ -58,7 +59,7 @@ export function useZoomOnElement(
       containerBb.top +
       alignTop;
 
-    api.start({
+    start({
       x: x.get() - distanceFromCenterX / scale.get(),
       y: y.get() - distanceFromCenterY / scale.get(),
       scale: minScale * scale.get(),

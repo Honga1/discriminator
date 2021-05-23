@@ -1,5 +1,5 @@
-import React from "react";
-import { to, useSpring } from "react-spring";
+import React, { useCallback, useState } from "react";
+import { SpringConfig, to, useSpring } from "react-spring";
 import { useGesture } from "react-use-gesture";
 import { clamp } from "src/libs/math";
 
@@ -14,13 +14,30 @@ export function usePanZoomControl(isEnabled: boolean) {
     []
   );
 
+  const start = useCallback(
+    (value: {
+      x?: number;
+      y?: number;
+      scale?: number;
+      drag?: boolean;
+      config?: SpringConfig;
+    }) => {
+      api.start({
+        ...value,
+        onStart: () => setIsAnimating(true),
+        onRest: () => setIsAnimating(false),
+      });
+    },
+    [api]
+  );
+
   const bind = useGesture(
     {
       onDrag: ({ delta: [deltaX, deltaY], event, pinching }) => {
         event.preventDefault();
 
         !pinching &&
-          api.start({
+          start({
             x: x.goal + deltaX / scale.goal,
             y: y.goal + deltaY / scale.goal,
           });
@@ -46,7 +63,7 @@ export function usePanZoomControl(isEnabled: boolean) {
           scale.goal,
           nextScale
         );
-        api.start({
+        start({
           scale: nextScale,
           x: resultX,
           y: resultY,
@@ -88,13 +105,13 @@ export function usePanZoomControl(isEnabled: boolean) {
             nextScale
           );
 
-          api.start({
+          start({
             scale: nextScale,
             x: resultX,
             y: resultY,
           });
         } else {
-          api.start({
+          start({
             scale: nextScale,
           });
         }
@@ -107,7 +124,10 @@ export function usePanZoomControl(isEnabled: boolean) {
     [x, y, scale],
     (x, y, scale) => `scale(${scale}) translate(${x}px, ${y}px)`
   );
-  return { bind, transform, api, scale, x, y };
+
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  return { bind, transform, start, scale, x, y, isAnimating };
 }
 
 function getZoomPosition(

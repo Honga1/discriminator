@@ -20,6 +20,7 @@ import {
 } from "./store/Part1Screen2Store";
 import { Pings } from "../components/Pings";
 import { useZoomOnElement } from "../hooks/useZoomOnElement";
+import { ImageText } from "./components/ImageText";
 
 export const Part1Screen2Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part1Screen2Props["stage"];
@@ -91,7 +92,8 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
 
   const [yearsShown, setYearsShown] = useState(new Set<Years>());
 
-  const { bind, transform, api, scale, x, y } = usePanZoomControl(false);
+  const { bind, transform, start, scale, x, y, isAnimating } =
+    usePanZoomControl(false);
 
   useEffect(() => {
     part1Screen2Store.setState({ showData: true });
@@ -113,7 +115,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
       return;
     }
 
-    api.start({
+    start({
       x: 0,
       y: 0,
       scale: 1,
@@ -124,7 +126,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     );
     const shown = yearsInShownOrder.slice(0, index + 1);
     setYearsShown(new Set(shown));
-  }, [api, stage]);
+  }, [start, stage]);
 
   useEffect(() => {
     if (stage === "USER_CONTROL") {
@@ -135,6 +137,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
     } else {
       part1Screen2Store.setState({
         userControl: false,
+        focusedElement: undefined,
       });
     }
   }, [stage]);
@@ -188,7 +191,7 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   }, [stage]);
 
   const focusedElement = usePart1Screen2Store((state) => state.focusedElement);
-  useZoomOnElement(ref, focusedElement, api, x, scale, y, 1);
+  useZoomOnElement(ref, focusedElement, start, x, scale, y, 1);
 
   useEffect(() => {
     if (stage !== "USER_CONTROL") {
@@ -250,6 +253,24 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
           <Pings isFocused={isFocused} imageCards={imageCards} />
         )}
       </animated.div>
+      <Box
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          userSelect: "none",
+          pointerEvents: "none",
+        }}
+        align={!isSmall ? "end" : "center"}
+        justify={isSmall ? "end" : "center"}
+      >
+        <Box
+          style={{ userSelect: "none", pointerEvents: "none" }}
+          margin={"48px"}
+        >
+          <ImageText show={!isAnimating && scale.get() !== 1} />
+        </Box>
+      </Box>
     </Box>
   );
 });

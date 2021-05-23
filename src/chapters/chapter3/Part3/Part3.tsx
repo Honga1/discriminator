@@ -64,7 +64,7 @@ const Part3 = memo(({ stage }: Part3Props) => {
     isSmall = true;
   }
 
-  const { bind, transform, api, x, y, scale } = usePanZoomControl(false);
+  const { bind, transform, start, x, y, scale } = usePanZoomControl(false);
 
   useEffect(() => {
     part3Store.setState({
@@ -74,7 +74,7 @@ const Part3 = memo(({ stage }: Part3Props) => {
   }, []);
 
   const focusedElement = usePart3Store((state) => state.focusedElement);
-  useZoomOnElement(ref, focusedElement, api, x, scale, y, 3);
+  useZoomOnElement(ref, focusedElement, start, x, scale, y, 3);
 
   useEffect(() => {
     if (!ref.current) return;

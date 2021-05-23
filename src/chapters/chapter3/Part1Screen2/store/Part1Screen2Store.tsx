@@ -18,13 +18,13 @@ type State = {
   tinting: Set<Tinting>;
   revealedImage: undefined | "SHOW_ALL" | HTMLElement;
   focusedElement: HTMLElement | undefined;
+  focusedData: MegafaceImageDescriptor | undefined;
   showData: boolean;
   userControl: boolean;
   reset: () => void;
   setRevealedImage: (image: HTMLElement | "SHOW_ALL") => void;
   setTinting: (tinting: Set<Tinting>) => void;
   setYearsShown: (yearsShown: Set<Years>) => void;
-  setFocusedElement(focusedElement: HTMLElement | undefined): void;
 };
 
 const resolveImages = () => {
@@ -56,6 +56,7 @@ const initialState: NonFunctionProperties<State> = {
   showData: false,
   autoPickableImageCards: new Map(),
   userControl: false,
+  focusedData: undefined,
 };
 
 export const part1Screen2Store = create<State>((set, get) => ({
@@ -78,11 +79,6 @@ export const part1Screen2Store = create<State>((set, get) => ({
     if (!isSetEqual(yearsShown, current)) {
       set({ yearsShown });
       return;
-    }
-  },
-  setFocusedElement(element) {
-    if (get().userControl) {
-      set({ focusedElement: element });
     }
   },
 }));

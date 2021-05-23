@@ -3,7 +3,6 @@ import { memo, useContext, useEffect, useRef } from "react";
 import { animated, config, useSpring, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
-import { ImageText } from "./ImageText";
 import {
   MegafaceImageDescriptor,
   part1Screen2Store,
@@ -49,6 +48,12 @@ export const ImageCard = memo(
     });
 
     const { transformPosition, transformRotation } = useTransforms();
+
+    useEffect(() => {
+      if (isFocused) {
+        part1Screen2Store.setState({ focusedData: image });
+      }
+    }, [image, isFocused]);
 
     const tintingTransition = useTransition(isTinted, {
       from: { backgroundColor: `rgba(0, 0, 0, 0)` },
@@ -280,7 +285,7 @@ export const ImageCard = memo(
                         width: "100%",
                       }}
                     >
-                      <ImageText descriptor={image} />
+                      {/* <ImageText descriptor={image} /> */}
                     </div>
                   </div>
                 </animated.div>
