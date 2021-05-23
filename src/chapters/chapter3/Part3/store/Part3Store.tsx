@@ -7,7 +7,7 @@ import { getImagesForId } from "../../images/images";
 
 export const tintingInShownOrder = ["wedding", "party", "family"] as const;
 export type Tinting = typeof tintingInShownOrder[number];
-export type ImagesByTinting = Record<Tinting, MegafaceImageDescriptor[]>;
+type ImagesByTinting = Record<Tinting, MegafaceImageDescriptor[]>;
 
 type State = {
   images: ImagesByTinting;

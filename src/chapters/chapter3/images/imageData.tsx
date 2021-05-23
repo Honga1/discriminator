@@ -10,8 +10,8 @@ export interface ImageMetaData {
 }
 
 export type ImageIds = typeof imageData[number]["photo_id"];
-export type Years = typeof imageData[number]["year"];
-export type Tagged = typeof imageData[number]["tagged"];
+type Years = typeof imageData[number]["year"];
+type Tagged = typeof imageData[number]["tagged"];
 
 export const imageData = [
   {

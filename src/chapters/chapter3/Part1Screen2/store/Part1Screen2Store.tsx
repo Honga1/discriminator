@@ -7,7 +7,7 @@ import { getImagesForId } from "../../images/images";
 
 export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
 export type Years = typeof yearsInShownOrder[number];
-export type ImagesByYear = Record<Years, MegafaceImageDescriptor[]>;
+type ImagesByYear = Record<Years, MegafaceImageDescriptor[]>;
 
 export type Tinting = "wedding" | "family" | "party";
 
