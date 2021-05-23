@@ -3,8 +3,11 @@ import React, { memo, useContext } from "react";
 import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
-import { Tinting } from "../../Part1Screen2/store/Part1Screen2Store";
-import { tintingInShownOrder, usePart3Store } from "../store/Part3Store";
+import {
+  Tinting,
+  tintingInShownOrder,
+  usePart3Store,
+} from "../store/Part3Store";
 import { PiledBoxes } from "./PiledBoxes";
 
 export const smallGridAreas = [

@@ -1,6 +1,6 @@
 import { ResponsiveContext } from "grommet";
 import { useContext, useEffect } from "react";
-import { config, SpringConfig, SpringRef, SpringValue } from "react-spring";
+import { config, SpringConfig, SpringValue } from "react-spring";
 
 export function useZoomOnElement(
   ref: { current: HTMLElement | null },

@@ -9,21 +9,14 @@ export const yearsInShownOrder = [2011, 2010, 2007, 2013, 2006, 2012] as const;
 export type Years = typeof yearsInShownOrder[number];
 type ImagesByYear = Record<Years, MegafaceImageDescriptor[]>;
 
-export type Tinting = "wedding" | "family" | "party";
-
 type State = {
   yearsShown: Set<Years>;
   images: ImagesByYear;
   autoPickableImageCards: Map<string, { current: HTMLElement | null }>;
-  tinting: Set<Tinting>;
   revealedImage: undefined | "SHOW_ALL" | HTMLElement;
   focusedElement: HTMLElement | undefined;
   focusedData: MegafaceImageDescriptor | undefined;
-  showData: boolean;
   userControl: boolean;
-  reset: () => void;
-  setRevealedImage: (image: HTMLElement | "SHOW_ALL") => void;
-  setTinting: (tinting: Set<Tinting>) => void;
   setYearsShown: (yearsShown: Set<Years>) => void;
 };
 
@@ -50,10 +43,8 @@ const resolveImages = () => {
 const initialState: NonFunctionProperties<State> = {
   yearsShown: new Set(),
   images: resolveImages(),
-  tinting: new Set(),
   revealedImage: undefined,
   focusedElement: undefined,
-  showData: false,
   autoPickableImageCards: new Map(),
   userControl: false,
   focusedData: undefined,
@@ -61,19 +52,6 @@ const initialState: NonFunctionProperties<State> = {
 
 export const part1Screen2Store = create<State>((set, get) => ({
   ...initialState,
-  reset: () => set({ ...initialState }),
-  setRevealedImage: (image) => {
-    set({ revealedImage: image });
-  },
-
-  setTinting: (tinting) => {
-    const { tinting: current } = get();
-    if (!isSetEqual(tinting, current)) {
-      set({ tinting });
-      return;
-    }
-  },
-
   setYearsShown: (yearsShown) => {
     const { yearsShown: current } = get();
     if (!isSetEqual(yearsShown, current)) {

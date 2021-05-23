@@ -6,7 +6,6 @@ import styled from "styled-components";
 import {
   MegafaceImageDescriptor,
   part1Screen2Store,
-  Tinting,
   usePart1Screen2Store,
 } from "../store/Part1Screen2Store";
 
@@ -28,17 +27,11 @@ export const ImageCard = memo(
 
     const isSmall = useContext(ResponsiveContext) === "small";
 
-    const isTinted = usePart1Screen2Store((state) =>
-      state.tinting.has(image.tagged)
-    );
-
     const isFocused = usePart1Screen2Store(
       (state) => state.focusedElement === ref.current
     );
 
     const isUserControlled = usePart1Screen2Store((state) => state.userControl);
-
-    const showData = usePart1Screen2Store((state) => state.showData);
 
     const isRevealed = usePart1Screen2Store(({ revealedImage }) => {
       const isRevealed =
@@ -55,19 +48,7 @@ export const ImageCard = memo(
       }
     }, [image, isFocused]);
 
-    const tintingTransition = useTransition(isTinted, {
-      from: { backgroundColor: `rgba(0, 0, 0, 0)` },
-      enter: { backgroundColor: imageTagToColor(image.tagged) },
-      leave: { backgroundColor: `rgba(0, 0, 0, 0)` },
-    });
-
     const revealedTransition = useTransition(isRevealed, {
-      from: { opacity: 0 },
-      enter: { opacity: 1 },
-      leave: { opacity: 0 },
-    });
-
-    const dataTransition = useTransition(isFocused, {
       from: { opacity: 0 },
       enter: { opacity: 1 },
       leave: { opacity: 0 },
@@ -245,52 +226,8 @@ export const ImageCard = memo(
                 />
               )
             )}
-
-            {tintingTransition((style, isTinted) =>
-              isTinted ? (
-                <animated.div
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                    backfaceVisibility: "hidden",
-                    WebkitBackfaceVisibility: "hidden",
-                    transform: `translate3d(0, 0, 0)`,
-                    WebkitTransform: `translate3d(0, 0, 0)`,
-                    ...style,
-                  }}
-                />
-              ) : null
-            )}
           </HoverBox>
         </animated.div>
-        {showData &&
-          dataTransition(
-            (style, isFocused) =>
-              isFocused && (
-                <animated.div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    ...style,
-                  }}
-                >
-                  <div style={{ overflow: "hidden" }}>
-                    <div
-                      style={{
-                        position: "absolute",
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    >
-                      {/* <ImageText descriptor={image} /> */}
-                    </div>
-                  </div>
-                </animated.div>
-              )
-          )}
       </animated.div>
     );
   }
@@ -322,17 +259,6 @@ const HoverBox = styled.div<{ selected: boolean; interactive: boolean }>`
       props.interactive ? `scale(1.3) rotate(1deg)` : `scale(1) rotate(0deg)`};
   }
 `;
-
-const imageTagToColor = (tinting: Tinting): string => {
-  switch (tinting) {
-    case "wedding":
-      return `rgba(255, 89, 89, 0.4)`;
-    case "family":
-      return `rgba(32, 191, 0, 0.4)`;
-    case "party":
-      return `rgba(117, 122, 255, 0.4)`;
-  }
-};
 
 function useTransforms() {
   const isSmall = useContext(ResponsiveContext) === "small";

@@ -95,10 +95,6 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   const { bind, transform, start, scale, x, y, isAnimating } =
     usePanZoomControl(false);
 
-  useEffect(() => {
-    part1Screen2Store.setState({ showData: true });
-  }, []);
-
   // Handles hiding / showing whole columns
   useEffect(() => {
     if (
@@ -202,7 +198,6 @@ const Part1Screen2 = memo(({ stage }: Part1Screen2Props) => {
   }, [focusedElement, stage]);
 
   useEffect(() => {
-    part1Screen2Store.getState().setTinting(new Set());
     part1Screen2Store.getState().setYearsShown(yearsShown);
   }, [yearsShown]);
 
