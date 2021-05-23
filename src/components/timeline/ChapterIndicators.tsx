@@ -1,5 +1,6 @@
 import { Box, Button, Grid } from "grommet";
 import React, {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -33,9 +34,10 @@ function isTouchEvent(event: TouchEvent | MouseEvent): event is TouchEvent {
   return event.type.startsWith("touch");
 }
 
-function getClickCoordinates(
-  event: TouchEvent | MouseEvent
-): { x: number; y: number } {
+function getClickCoordinates(event: TouchEvent | MouseEvent): {
+  x: number;
+  y: number;
+} {
   if (isTouchEvent(event)) {
     const x = event.changedTouches[0]?.clientX ?? 0;
     const y = event.changedTouches[0]?.clientY ?? 0;
@@ -180,37 +182,43 @@ const Scrubber = ({
     onDragEnd
   );
 
-  const buttonStyle: React.CSSProperties = useMemo(
-    () => ({
+  const ScrubberElement = useMemo(() => {
+    const buttonStyle: React.CSSProperties = {
       position: "absolute",
       pointerEvents: "auto",
       top: "50%",
       transform: "translateY(-50%)",
       width: "auto",
       height: "auto",
-    }),
-    []
-  );
-  return (
-    <Box fill="horizontal" ref={containerRef} style={{ pointerEvents: "none" }}>
-      <Button
-        style={buttonStyle}
-        className="scrubber-button"
-        ref={buttonRef}
-        plain
-        label={
-          <Box
-            className="scrubber-dot"
-            style={{ pointerEvents: "none" }}
-            round="100%"
-            background="yellowAlternative"
-            width="20px"
-            height="20px"
-          ></Box>
-        }
-      />
-    </Box>
-  );
+    };
+
+    return (
+      <Box
+        fill="horizontal"
+        ref={containerRef}
+        style={{ pointerEvents: "none" }}
+      >
+        <Button
+          style={buttonStyle}
+          className="scrubber-button"
+          ref={buttonRef}
+          plain
+          label={
+            <Box
+              className="scrubber-dot"
+              style={{ pointerEvents: "none" }}
+              round="100%"
+              background="yellowAlternative"
+              width="20px"
+              height="20px"
+            ></Box>
+          }
+        />
+      </Box>
+    );
+  }, []);
+
+  return ScrubberElement;
 };
 
 function useDraggableElement(

@@ -1,6 +1,6 @@
 import { useTransition } from "@react-spring/core";
 import { Box } from "grommet";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { animated } from "react-spring";
 import { useChapter } from "../../hooks/useChapter";
 import { store, useStore } from "../../store/store";
@@ -16,41 +16,6 @@ import { Part3Selector } from "./Part3/Part3";
 
 export default function Chapter3() {
   const ref = useRef<HTMLAudioElement>(null);
-
-  const [getByteData, audio] = useMemo(() => {
-    const speakingAudio = document.createElement("audio");
-    speakingAudio.src = audioSrc;
-    const AudioContext =
-      window.AudioContext ?? (window as any).webkitAudioContext;
-    const context = new AudioContext();
-    const source = context.createMediaElementSource(speakingAudio);
-    const analyser = context.createAnalyser();
-    source.connect(analyser);
-    analyser.connect(context.destination);
-    analyser.fftSize = 64;
-    const bufferLength = analyser.fftSize;
-    const dataArray = new Uint8Array(bufferLength);
-
-    speakingAudio.addEventListener("play", () => {
-      if (context.state === "suspended") context.resume();
-    });
-
-    return [
-      () => {
-        analyser.getByteTimeDomainData(dataArray);
-        return dataArray;
-      },
-      speakingAudio,
-    ];
-  }, []);
-
-  useEffect(() => {
-    return () => audio.pause();
-  }, [audio]);
-
-  useEffect(() => {
-    (ref as any).current = audio;
-  }, [audio]);
 
   useChapter(ref, false);
   const [seconds, setSeconds] = useState(0);
@@ -77,6 +42,7 @@ export default function Chapter3() {
   useLoopedAudio(ref, isAutoPaused, part, isMuted);
 
   useEffect(() => {
+    if (!ref.current) return;
     const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
       const audio = event.target as HTMLAudioElement;
       const seconds = Math.round(audio.currentTime);
@@ -132,11 +98,11 @@ export default function Chapter3() {
       }
     };
 
-    audio.ontimeupdate = (event) => onTimeUpdate({ nativeEvent: event });
-    audio.onplay = () => {
+    ref.current.ontimeupdate = (event) => onTimeUpdate({ nativeEvent: event });
+    ref.current.onplay = () => {
       return setIsAutoPaused(false);
     };
-  }, [allowAutoPause, audio, isAutoPaused]);
+  }, [allowAutoPause, isAutoPaused]);
 
   const transition = useTransition(part, {
     from: { opacity: 0 },
@@ -166,9 +132,7 @@ export default function Chapter3() {
                 height: "100%",
               }}
             >
-              {part === "PART_1_SCREEN_1" && (
-                <Part1Screen1 getByteData={getByteData} seconds={seconds} />
-              )}
+              {part === "PART_1_SCREEN_1" && <Part1Screen1 seconds={seconds} />}
               {part === "PART_1_SCREEN_2" && (
                 <Part1Screen2Selector seconds={seconds} />
               )}
@@ -182,6 +146,7 @@ export default function Chapter3() {
           );
         })}
       </Box>
+      <audio ref={ref} src={audioSrc} controls={false} playsInline />
     </>
   );
 }

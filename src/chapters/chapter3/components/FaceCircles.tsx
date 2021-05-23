@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { animated, useSpring } from "react-spring";
 import { SquareDiv } from "./SquareDiv";
 import blinking from "src/videos/blinking.mp4";
@@ -73,7 +73,7 @@ const FaceCircle = ({
     </div>
   );
 };
-export const AdamFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
+export const AdamFaceCircle = memo(({ isTalking }: { isTalking: boolean }) => {
   return (
     <FaceCircle isTalking={isTalking} background={"#312DFF"}>
       <svg
@@ -90,8 +90,11 @@ export const AdamFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
       </svg>
     </FaceCircle>
   );
-};
-export const BrettFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
+});
+
+AdamFaceCircle.displayName = "AdamFaceCircle";
+
+export const BrettFaceCircle = memo(({ isTalking }: { isTalking: boolean }) => {
   return (
     <FaceCircle isTalking={isTalking} background={"#168500"}>
       <video
@@ -109,4 +112,6 @@ export const BrettFaceCircle = ({ isTalking }: { isTalking: boolean }) => {
       </video>
     </FaceCircle>
   );
-};
+});
+
+BrettFaceCircle.displayName = "BrettFaceCircle";
