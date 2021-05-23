@@ -128,4 +128,8 @@ export const customTheme: ThemeType = {
       },
     },
   },
+  anchor: {
+    color: colorTheme.blue,
+    fontWeight: 400,
+  },
 };
