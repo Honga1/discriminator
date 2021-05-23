@@ -105,18 +105,23 @@ export const ImageCard = memo(
                 height: "100%",
                 top: 0,
                 position: "absolute",
+                transform: `translate3d(0, 0, 0)`,
+                WebkitTransform: `translate3d(0, 0, 0)`,
               }}
             >
               <div
                 style={{
                   position: "relative",
+                  transform: `translate3d(0, 0, 0)`,
+                  WebkitTransform: `translate3d(0, 0, 0)`,
                 }}
               >
                 <div
                   style={{
                     position: "relative",
                     pointerEvents: "none",
-                    transform: "scale(1)",
+                    transform: `translate3d(0, 0, 0)`,
+                    WebkitTransform: `translate3d(0, 0, 0)`,
                   }}
                 >
                   {image.overlaySrc !== undefined && (
@@ -131,6 +136,9 @@ export const ImageCard = memo(
                         userSelect: "none",
                         pointerEvents: "none",
                         display: "block",
+                        transform: `translate3d(0, 0, 0)`,
+                        WebkitTransform: `translate3d(0, 0, 0)`,
+                        zIndex: 1,
                       }}
                       draggable={false}
                       src={image.overlaySrc}
@@ -145,6 +153,8 @@ export const ImageCard = memo(
                       userSelect: "none",
                       pointerEvents: "none",
                       display: "block",
+                      transform: `translate3d(0, 0, 0)`,
+                      WebkitTransform: `translate3d(0, 0, 0)`,
                     }}
                     draggable={false}
                     alt="personal"
@@ -160,6 +170,9 @@ export const ImageCard = memo(
                           pointerEvents: "none",
                           backfaceVisibility: "hidden",
                           WebkitBackfaceVisibility: "hidden",
+                          transform: `translate3d(0, 0, 0)`,
+                          WebkitTransform: `translate3d(0, 0, 0)`,
+
                           ...style,
                         }}
                       />

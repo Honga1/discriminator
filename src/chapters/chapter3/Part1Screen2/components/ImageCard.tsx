@@ -161,6 +161,9 @@ export const ImageCard = memo(
                             userSelect: "none",
                             pointerEvents: "none",
                             display: "block",
+                            transform: `translate3d(0, 0, 0)`,
+                            WebkitTransform: `translate3d(0, 0, 0)`,
+                            zIndex: 1,
                           }}
                           draggable={false}
                           src={image.overlaySrc}
@@ -175,6 +178,8 @@ export const ImageCard = memo(
                           userSelect: "none",
                           pointerEvents: "none",
                           display: "block",
+                          transform: `translate3d(0, 0, 0)`,
+                          WebkitTransform: `translate3d(0, 0, 0)`,
                         }}
                         draggable={false}
                         alt="personal"
@@ -229,6 +234,8 @@ export const ImageCard = memo(
                     background: "#502B2D",
                     border: "2px solid #FF4E4E",
                     ...style,
+                    transform: `translate3d(0, 0, 0)`,
+                    WebkitTransform: `translate3d(0, 0, 0)`,
                   }}
                 />
               )
@@ -244,6 +251,8 @@ export const ImageCard = memo(
                     pointerEvents: "none",
                     backfaceVisibility: "hidden",
                     WebkitBackfaceVisibility: "hidden",
+                    transform: `translate3d(0, 0, 0)`,
+                    WebkitTransform: `translate3d(0, 0, 0)`,
                     ...style,
                   }}
                 />
