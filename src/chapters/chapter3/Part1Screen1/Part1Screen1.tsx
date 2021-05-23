@@ -1,5 +1,5 @@
 import { Box, Grid, ResponsiveContext, Text } from "grommet";
-import { memo, useContext, useEffect, useMemo, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { AdamFaceCircle, BrettFaceCircle } from "../components/FaceCircles";
 import { Spectrogram } from "./components/Spectrogram";
 import { TypingText } from "./components/TypingText";

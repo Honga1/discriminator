@@ -1,6 +1,5 @@
 import { Box, Button, Grid } from "grommet";
 import React, {
-  memo,
   useCallback,
   useEffect,
   useMemo,
