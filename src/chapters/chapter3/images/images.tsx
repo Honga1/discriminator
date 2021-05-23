@@ -65,7 +65,10 @@ import image_5708843240 from "./5708843240_493b303411_b.jpg";
 import overlay_5708843240 from "./5708843240_blank.png";
 import image_7178904372 from "./7178904372_3217ec6a6e_b.jpg";
 import overlay_7178904372 from "./7178904372_blank.png";
-import missing_image from "./missing_image.jpg";
+import missing_image_1 from "./missing_image_1.jpg";
+import missing_image_2 from "./missing_image_2.jpg";
+import missing_image_3 from "./missing_image_3.jpg";
+import missing_image_overlay from "./missing_image_overlay.png";
 
 const images: Record<string, { overlay: string | undefined; image: string }> = {
   "10090346453": { overlay: undefined, image: image_10090346453 },
@@ -103,11 +106,13 @@ const images: Record<string, { overlay: string | undefined; image: string }> = {
   "5483538802": { overlay: overlay_5483538802, image: image_5483538802 },
   "5708843240": { overlay: overlay_5708843240, image: image_5708843240 },
   "7178904372": { overlay: overlay_7178904372, image: image_7178904372 },
-  missing_image: { overlay: undefined, image: missing_image },
+  missing_image_1: { overlay: missing_image_overlay, image: missing_image_1 },
+  missing_image_2: { overlay: missing_image_overlay, image: missing_image_2 },
+  missing_image_3: { overlay: missing_image_overlay, image: missing_image_3 },
 };
 
 export const getImagesForId = (
   id: ImageIds
 ): { overlay: string | undefined; image: string } => {
-  return images[id] ?? images.missing_image!;
+  return images[id] ?? images[`missing_image_${Math.ceil(Math.random() * 3)}`]!;
 };

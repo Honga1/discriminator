@@ -1,7 +1,5 @@
-import { ResponsiveContext, Text } from "grommet";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { animated, config, useSpring, useTransition } from "react-spring";
-import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import {
   MegafaceImageDescriptor,
@@ -26,8 +24,6 @@ export const ImageCard = memo(
       part3Store.getState().autoPickableImageCards.set(image.url, ref);
     }, [image.url]);
 
-    const isSmall = useContext(ResponsiveContext) === "small";
-
     const isTinted = usePart3Store((state) => state.tinting.has(image.tagged));
 
     const isFocused = usePart3Store(
@@ -43,15 +39,6 @@ export const ImageCard = memo(
       enter: { backgroundColor: imageTagToColor(image.tagged) },
       leave: { backgroundColor: `rgba(0, 0, 0, 0)` },
     });
-
-    const missingImageTextTransition = useTransition(
-      isFocused && image.imageSrc.includes("missing_image"),
-      {
-        from: { opacity: 0 },
-        enter: { opacity: 1 },
-        leave: { opacity: 0 },
-      }
-    );
 
     const [overlay] = useSpring(() => {
       return {
@@ -179,37 +166,6 @@ export const ImageCard = memo(
                     ) : null
                   )}
                 </div>
-
-                {missingImageTextTransition(
-                  (style, isShown) =>
-                    isShown && (
-                      <animated.div style={{ ...style, overflow: "hidden" }}>
-                        <div
-                          style={{
-                            position: "absolute",
-                            height: "100%",
-                            width: "80%",
-                            top: 0,
-                            left: "50%",
-                            transform: `translateX(-50%)`,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            backfaceVisibility: "hidden",
-                            WebkitBackfaceVisibility: "hidden",
-                          }}
-                        >
-                          <StyledText
-                            size={isSmall ? "15%" : "30%"}
-                            color={colorTheme.offWhite}
-                            textAlign="center"
-                          >
-                            Image could no longer be retrieved
-                          </StyledText>
-                        </div>
-                      </animated.div>
-                    )
-                )}
               </div>
             </div>
           </HoverBox>
@@ -218,14 +174,6 @@ export const ImageCard = memo(
     );
   }
 );
-
-const StyledText = styled(Text)`
-  font-smooth: always !important;
-  -webkit-font-smoothing: subpixel-antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  text-rendering: optimizeLegibility;
-  user-select: none;
-`;
 
 const HoverBox = styled.div<{ selected: boolean; interactive: boolean }>`
   width: 100%;
