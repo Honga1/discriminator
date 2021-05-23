@@ -34,7 +34,6 @@ export const ControlButtonRow = ({
   }, [isOpen, onOpenChange]);
 
   useEffect(() => {
-    console.log(isOpen, isActive);
     if (isOpen && !isActive) {
       setIsOpen(false);
     }

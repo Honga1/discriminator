@@ -137,10 +137,9 @@ const RainDrops = memo(() => {
           const addDrops = Math.abs(dropsNext - drops.length);
           return [
             ...drops,
-            ...Array.from({ length: addDrops }).map((_, index) => {
-              console.log(drops.length + index + 1);
-              return <RainDrop key={drops.length + index} />;
-            }),
+            ...Array.from({ length: addDrops }).map((_, index) => (
+              <RainDrop key={drops.length + index} />
+            )),
           ];
         } else {
           return drops;
