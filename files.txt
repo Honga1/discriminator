@@ -1,7 +1,0 @@
-src/720p.mp4
-src/chapters/chapter1/chapter1.mp4
-src/chapters/chapter2/chapter2.mp4
-src/chapters/chapter2/part1/alpha.mp4
-src/chapters/chapter2/part1/mask.mp4
-src/chapters/chapter4/chapter4.mp4
-src/videos/blinking.mp4
