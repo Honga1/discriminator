@@ -16,7 +16,7 @@ export const Timeline = () => {
         left: 0,
         right: 0,
         background: isOpen
-          ? "linear-gradient(0deg, rgba(32, 33, 34, 0.5), rgba(32, 33, 34, 0.5))"
+          ? "linear-gradient(0deg, rgba(32, 33, 34, 0.8), rgba(32, 33, 34, 0.8))"
           : "none",
         zIndex: 10,
         pointerEvents: !isOpen ? "none" : "auto",
