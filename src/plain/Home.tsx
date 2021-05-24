@@ -97,7 +97,7 @@ const Logos = () => {
       <Box width="150px">
         <TribecaLaurel />
       </Box>
-      <Box width="224px">
+      <Box width="228px">
         <ImposterMediaLogo />
       </Box>
     </Box>
@@ -109,7 +109,13 @@ const TribecaLaurel = () => {
 };
 
 const ImposterMediaLogo = () => {
-  return <Image src={imposterMediaLogoSrc} fit="contain"></Image>;
+  return (
+    <Image
+      src={imposterMediaLogoSrc}
+      fit="contain"
+      style={{ imageRendering: "crisp-edges" }}
+    ></Image>
+  );
 };
 
 const HomeContent = () => {
