@@ -156,7 +156,6 @@ export default function Chapter4() {
         height="100%"
         srcDash={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
         srcHls={`https://discriminator-media-server.jaeperris.com/part4/master.m3u8`}
-        hidden
       ></VideoPlayer>
     </Box>
   );

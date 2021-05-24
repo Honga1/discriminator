@@ -1,12 +1,12 @@
 import { SpringValue, useSpring } from "@react-spring/core";
 import { useFrame, useThree } from "@react-three/fiber";
+import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
 import { Text } from "grommet";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
-import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
-import { usePredictions } from "src/hooks/usePredictions";
-import { V3 } from "src/libs/v3";
-import { Predictions } from "src/store/PredictionsStore";
+import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
+import { useHasFirstFaceApiPrediction } from "src/hooks/useHasFirstFaceApiPrediction";
+import { FaceApiPrediction } from "src/store/FaceApiPredictionsStore";
 import { store, useStore } from "src/store/store";
 import {
   BufferGeometry,
@@ -23,7 +23,7 @@ export default function Cover4() {
 
   const [state, setState] = useState(0);
 
-  const hasFirstPrediction = useHasFirstPrediction();
+  const hasFirstPrediction = useHasFirstFaceApiPrediction();
 
   useEffect(() => {
     setState(0);
@@ -76,9 +76,15 @@ export default function Cover4() {
               userSelect: "none",
             }}
           >
-            {state === 0 && `You don't look happy :(`}
-            {state === 1 && `Let's see what we can do to fix that.`}
-            {state === 2 && `There, much better!`}
+            {!hasFirstPrediction ? (
+              "Loading Cover..."
+            ) : (
+              <>
+                {state === 0 && `You don't look happy :(`}
+                {state === 1 && `Let's see what we can do to fix that.`}
+                {state === 2 && `There, much better!`}
+              </>
+            )}
           </Text>
         </div>
       </div>
@@ -99,7 +105,7 @@ function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
     return new VideoTexture(webcam);
   }, [webcam]);
 
-  const predictions = usePredictions();
+  const predictions = useFaceApiPredictions();
 
   useMouthPosition(predictions, ref);
   useLeftEyePosition(predictions, ref);
@@ -134,126 +140,127 @@ function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
 }
 
 function useMouthPosition(
-  predictions: React.MutableRefObject<Predictions[]>,
+  predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
   ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
 ) {
-  const points = [
-    61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291, 146, 91, 181, 84, 17, 314,
-    405, 321, 375, 291,
-  ];
   useFrame(() => {
-    const prediction = predictions.current[0];
+    const prediction = predictions.current;
     if (!prediction) return;
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.landmarks.getMouth();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(points, mesh);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["mouth"]!.value.x = xMin;
-      ref.current.material.uniforms["mouth"]!.value.y = yMax + 1;
+      ref.current.material.uniforms["mouth"]!.value.y = 1 - yMax + 0.06;
       ref.current.material.uniforms["mouth"]!.value.z = xMax;
-      ref.current.material.uniforms["mouth"]!.value.w = yMin + 1;
+      ref.current.material.uniforms["mouth"]!.value.w = 1 - yMin + 0.06;
     }
   });
 }
 
 function useLeftEyePosition(
-  predictions: React.MutableRefObject<Predictions[]>,
+  predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
   ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
 ) {
-  const fourPoints: [number, number, number, number] = [225, 228, 189, 128];
   useFrame(() => {
-    const prediction = predictions.current[0];
+    const prediction = predictions.current;
     if (!prediction) return;
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.landmarks.getLeftEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(fourPoints, mesh);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["leftEye"]!.value.x = xMin;
-      ref.current.material.uniforms["leftEye"]!.value.y = yMax + 1;
+      ref.current.material.uniforms["leftEye"]!.value.y = 1 - yMax;
       ref.current.material.uniforms["leftEye"]!.value.z = xMax;
-      ref.current.material.uniforms["leftEye"]!.value.w = yMin + 1;
+      ref.current.material.uniforms["leftEye"]!.value.w = 1 - yMin;
     }
   });
 }
 
 function useRightEyePosition(
-  predictions: React.MutableRefObject<Predictions[]>,
+  predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
   ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
 ) {
-  const fourPoints: [number, number, number, number] = [445, 448, 413, 357];
   useFrame(() => {
-    const prediction = predictions.current[0];
+    const prediction = predictions.current;
     if (!prediction) return;
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.landmarks.getRightEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(fourPoints, mesh);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["rightEye"]!.value.x = xMin;
-      ref.current.material.uniforms["rightEye"]!.value.y = yMax + 1;
+      ref.current.material.uniforms["rightEye"]!.value.y = 1 - yMax;
       ref.current.material.uniforms["rightEye"]!.value.z = xMax;
-      ref.current.material.uniforms["rightEye"]!.value.w = yMin + 1;
+      ref.current.material.uniforms["rightEye"]!.value.w = 1 - yMin;
     }
   });
 }
 function useLeftIrisPosition(
-  predictions: React.MutableRefObject<Predictions[]>,
+  predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
   ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
 ) {
-  const points = [473, 474, 475, 476, 477];
   useFrame(() => {
-    const prediction = predictions.current[0];
+    const prediction = predictions.current;
     if (!prediction) return;
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.landmarks.getLeftEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(points, mesh);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
 
     if (ref.current?.material !== undefined) {
-      ref.current.material.uniforms["leftIris"]!.value.x = xMin;
-      ref.current.material.uniforms["leftIris"]!.value.y = yMax + 1;
-      ref.current.material.uniforms["leftIris"]!.value.z = xMax;
-      ref.current.material.uniforms["leftIris"]!.value.w = yMin + 1;
+      ref.current.material.uniforms["leftIris"]!.value.x = xMin + 0.008;
+      ref.current.material.uniforms["leftIris"]!.value.y = 1 - yMax - 0.003;
+      ref.current.material.uniforms["leftIris"]!.value.z = xMax + 0.008;
+      ref.current.material.uniforms["leftIris"]!.value.w = 1 - yMin - 0.003;
     }
   });
 }
 
 function useRightIrisPosition(
-  predictions: React.MutableRefObject<Predictions[]>,
+  predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
   ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
 ) {
-  const points = [468, 469, 470, 471, 472];
   useFrame(() => {
-    const prediction = predictions.current[0];
+    const prediction = predictions.current;
     if (!prediction) return;
-    const mesh = prediction.scaledMesh as V3[];
+    const mesh = prediction.landmarks.getRightEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(points, mesh);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
 
     if (ref.current?.material !== undefined) {
-      ref.current.material.uniforms["rightIris"]!.value.x = xMin;
-      ref.current.material.uniforms["rightIris"]!.value.y = yMax + 1;
-      ref.current.material.uniforms["rightIris"]!.value.z = xMax;
-      ref.current.material.uniforms["rightIris"]!.value.w = yMin + 1;
+      ref.current.material.uniforms["rightIris"]!.value.x = xMin + 0.008;
+      ref.current.material.uniforms["rightIris"]!.value.y = 1 - yMax - 0.003;
+      ref.current.material.uniforms["rightIris"]!.value.z = xMax + 0.008;
+      ref.current.material.uniforms["rightIris"]!.value.w = 1 - yMin - 0.003;
     }
   });
 }
 
-function getBoundingBox(points: number[], mesh: V3[]) {
+function getBoundingBox(
+  mesh: Point[],
+  imageWidth: number,
+  imageHeight: number
+) {
   let xMin = Infinity;
   let xMax = -Infinity;
   let yMax = -Infinity;
   let yMin = Infinity;
 
-  points.forEach((index) => {
-    const [x, y] = mesh[index]!;
+  mesh.forEach((point) => {
+    const { x, y } = point;
     xMin = Math.min(xMin, x);
     xMax = Math.max(xMax, x);
     yMin = Math.min(yMin, y);
     yMax = Math.max(yMax, y);
   });
-  return { xMin, yMax, xMax, yMin };
+  return {
+    xMin: xMin / imageWidth - 0.01,
+    yMax: yMax / imageHeight + 0.01,
+    xMax: xMax / imageWidth + 0.01,
+    yMin: yMin / imageHeight - 0.01,
+  };
 }
 
 const vert = /* glsl */ `
@@ -309,7 +316,6 @@ Result getSmile() {
 
   float y = vUv.y - pow(abs(distanceFromCenterLine.x) /3.0, 2.5) * (1.2 - (vUv.y - topLeft.y)/distance.y) * 5.0;
   float x = vUv.x + distanceFromCenterLine.x*distance.x * 0.5;
-
 
   Result result;
 
