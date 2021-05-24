@@ -1,13 +1,18 @@
-import { useContextBridge } from "@react-three/drei";
+import { Line, useContextBridge } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Box, Grid, ResponsiveContext, ThemeContext } from "grommet";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Grid, ResponsiveContext, Text, ThemeContext } from "grommet";
+import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
 import { useChapter } from "src/hooks/useChapter";
-import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
+import {
+  useFaceApiPredictions,
+  useStatefulApiPredictions,
+} from "src/hooks/useFaceApiPredictions";
+import { FaceApiPrediction } from "src/store/FaceApiPredictionsStore";
 import { useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
+import styled from "styled-components";
 import {
   Mesh,
   PlaneBufferGeometry,
@@ -15,15 +20,41 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
+import { Line2 } from "three-stdlib";
+import createHook from "zustand";
+import create from "zustand/vanilla";
 import { SquareDiv } from "../chapter3/components/SquareDiv";
-import { AIInfo } from "./AIInfo";
+
+type Stages =
+  | "VIDEO"
+  | "DRAW_WIREFRAME"
+  | "SHOW_IMAGE"
+  | "SHOW_AGE"
+  | "BLINK_GENDER"
+  | "SHOW_GENDER"
+  | "SHOW_EXPRESSION_HEADER"
+  | "TYPE_EXPRESSION";
+
+const chapter4Store = create<{
+  stage: Stages;
+  wireframePieces: number;
+}>((get, set) => ({
+  stage: "VIDEO",
+  wireframePieces: 0,
+}));
+
+const useChapter4Store = createHook(chapter4Store);
 
 export default function Chapter4() {
   const ref = useRef<HTMLVideoElement>(null);
   useChapter(ref, true);
 
-  const [part, setPart] = useState<"VIDEO" | "INTERACTIVE">("VIDEO");
+  const stage = useChapter4Store((state) => state.stage);
+  const setStage = (stage: Stages) => chapter4Store.setState({ stage });
 
+  const [preloadCanvas, setPreloadCanvas] = useState(false);
+
+  console.log(stage);
   useEffect(() => {
     if (!ref.current) return;
     const video = ref.current;
@@ -31,12 +62,34 @@ export default function Chapter4() {
       const video = event.target as HTMLVideoElement;
       const seconds = Math.round(video.currentTime);
 
-      if (seconds < 64) {
-        setPart("VIDEO");
-      } else if (seconds < 119) {
-        setPart("INTERACTIVE");
+      if (seconds > 62 && seconds < 119) {
+        setPreloadCanvas(true);
       } else {
-        setPart("VIDEO");
+        setPreloadCanvas(false);
+      }
+      if (seconds < 64) {
+        chapter4Store.setState({ stage: "VIDEO", wireframePieces: 0 });
+      } else if (seconds < 70) {
+        setStage("DRAW_WIREFRAME");
+      } else if (seconds < 80) {
+        setStage("SHOW_IMAGE");
+      } else if (seconds < 86) {
+        setStage("SHOW_AGE");
+        chapter4Store.setState({ wireframePieces: 0 });
+      } else if (seconds < 92) {
+        chapter4Store.setState({ wireframePieces: 0 });
+        setStage("BLINK_GENDER");
+      } else if (seconds < 100) {
+        chapter4Store.setState({ wireframePieces: 0 });
+        setStage("SHOW_GENDER");
+      } else if (seconds < 110) {
+        chapter4Store.setState({ wireframePieces: 0 });
+        setStage("SHOW_EXPRESSION_HEADER");
+      } else if (seconds < 119) {
+        chapter4Store.setState({ wireframePieces: 0 });
+        setStage("TYPE_EXPRESSION");
+      } else {
+        chapter4Store.setState({ stage: "VIDEO", wireframePieces: 0 });
       }
     };
 
@@ -52,13 +105,14 @@ export default function Chapter4() {
       overflow="hidden"
       flex={false}
     >
-      {part !== "VIDEO" && (
+      {preloadCanvas && (
         <Box
           flex={false}
           style={{
             position: "absolute",
             width: "100%",
             height: "100%",
+            opacity: stage === "VIDEO" ? 0 : 1,
           }}
           pad={{ horizontal: "20px", vertical: "48px" }}
           justify="center"
@@ -130,7 +184,12 @@ export default function Chapter4() {
                     <ResizeCanvas
                       linear
                       orthographic
-                      style={{ width: "100%", height: "100%" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        OTransform: "scale(-1, 1)",
+                        transform: "scale(-1, 1)",
+                      }}
                     >
                       <ContextBridge>
                         <WebcamPlane />
@@ -154,7 +213,7 @@ export default function Chapter4() {
           outline: "none",
           width: "100%",
           height: "100%",
-          opacity: part === "INTERACTIVE" ? "0" : "1",
+          opacity: stage !== "VIDEO" ? "0" : "1",
           userSelect: "none",
         }}
         width="100%"
@@ -166,9 +225,13 @@ export default function Chapter4() {
   );
 }
 
-function WebcamPlane() {
+const WebcamPlane = memo(() => {
   const webcam = useStore((state) => state.webcamHTMLElement);
   const viewport = useThree((state) => state.viewport);
+
+  const showWebcamFeed = useChapter4Store(
+    (state) => state.stage !== "VIDEO" && state.stage !== "DRAW_WIREFRAME"
+  );
 
   const videoTexture = useMemo(() => {
     return new VideoTexture(webcam);
@@ -217,17 +280,81 @@ function WebcamPlane() {
 
   const topLeft = useRef<Mesh<PlaneBufferGeometry, ShaderMaterial>>();
   return (
-    <mesh scale={[viewport.width, viewport.height, 1]} ref={topLeft}>
-      <planeBufferGeometry />
-      <primitive
-        object={facePlaneMaterial}
-        attach="material"
-        uniforms-map-value={videoTexture}
-        uniforms-boundingBox-value={new Vector4(0.2, 0.8, 0.8, 0.2)}
-      />
-    </mesh>
+    <group scale={[viewport.width, viewport.height, 1]}>
+      {showWebcamFeed && (
+        <mesh ref={topLeft}>
+          <planeBufferGeometry />
+          <primitive
+            object={facePlaneMaterial}
+            attach="material"
+            uniforms-map-value={videoTexture}
+            uniforms-boundingBox-value={new Vector4(0.2, 0.8, 0.8, 0.2)}
+          />
+        </mesh>
+      )}
+      <LineFace />
+    </group>
   );
-}
+});
+
+WebcamPlane.displayName = "WebcamPlane";
+
+const LineFace = memo(() => {
+  const predictions = useFaceApiPredictions();
+  const ref = useRef<Line2>(null);
+  const stage = useChapter4Store((state) => state.stage);
+  const wireframePieces = useChapter4Store((state) => state.wireframePieces);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (stage === "DRAW_WIREFRAME" || wireframePieces !== 0) {
+        chapter4Store.setState({
+          wireframePieces: Math.min(
+            chapter4Store.getState().wireframePieces + 1,
+            68
+          ),
+        });
+      }
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, [stage, wireframePieces]);
+
+  useFrame(() => {
+    if (!ref.current) return;
+    if (!predictions.current) return;
+
+    (window as any).data =
+      ref.current.geometry.getAttribute("position").array.length;
+
+    ref.current.geometry.setPositions([0, 0, 0, 1, 1, 1]);
+
+    const wireframePieces = chapter4Store.getState().wireframePieces;
+
+    ref.current.geometry.setPositions(
+      predictions.current.landmarks.relativePositions.flatMap(({ x, y }) => [
+        (x - 0.5) / 1.5,
+        (-y + 0.5 - 0.3 * 0.5) / 1.5,
+        1,
+      ])
+    );
+    ref.current.geometry.instanceCount = wireframePieces;
+  });
+
+  const line = useMemo(
+    () => (
+      <Line
+        ref={ref}
+        points={Array.from({ length: 68 }).map(() => [0, 0, 0])}
+        color={colorTheme.greenLight}
+      />
+    ),
+    []
+  );
+  return line;
+});
+
+LineFace.displayName = "LineFace";
 
 const vert = /* glsl */ `
 varying vec2 vUv;
@@ -272,3 +399,301 @@ const facePlaneMaterial = new ShaderMaterial({
     boundingBox: { value: undefined },
   },
 });
+
+const AIInfo = () => {
+  const predictions =
+    useStatefulApiPredictions() ??
+    ({
+      age: 0,
+      detection: { score: 0 },
+      gender: "unknown",
+      confidence: 0,
+      expressions: {
+        angry: 0,
+        disgusted: 0,
+        fearful: 0,
+        happy: 0,
+        neutral: 0,
+        sad: 0,
+        surprised: 0,
+      },
+    } as unknown as FaceApiPrediction);
+  const isSmall = useContext(ResponsiveContext) === "small";
+
+  const stage = useChapter4Store((state) => state.stage);
+
+  return (
+    <table>
+      <StyledTBody isSmall={isSmall}>
+        <tr>
+          <td>
+            <Text color={colorTheme.yellow}>confidence</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.detection.score.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.yellow}>age</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.age.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.yellow}>gender</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>{predictions.gender}</Text>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <br />
+          </td>
+          <td>
+            {/* Reserves horizontal space for gender changing between male -> female -> unknown */}
+            <Text style={{ opacity: 0 }}>unknown</Text>
+            <br />
+          </td>
+        </tr>
+
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE" &&
+              stage !== "BLINK_GENDER" &&
+              stage !== "SHOW_GENDER"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.offWhite}>emotion</Text>
+          </td>
+          <td></td>
+        </tr>
+
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE" &&
+              stage !== "BLINK_GENDER" &&
+              stage !== "SHOW_GENDER" &&
+              stage !== "SHOW_EXPRESSION_HEADER"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.redLight}>angry</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.expressions.angry.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+        {!isSmall && (
+          <>
+            <tr
+              style={{
+                opacity:
+                  stage !== "VIDEO" &&
+                  stage !== "DRAW_WIREFRAME" &&
+                  stage !== "SHOW_IMAGE" &&
+                  stage !== "SHOW_AGE" &&
+                  stage !== "BLINK_GENDER" &&
+                  stage !== "SHOW_GENDER" &&
+                  stage !== "SHOW_EXPRESSION_HEADER"
+                    ? 1
+                    : 0,
+              }}
+            >
+              <td>
+                <Text color={colorTheme.redLight}>disgusted</Text>
+              </td>
+              <td>
+                <Text color={colorTheme.offWhite}>
+                  {predictions.expressions.disgusted.toFixed(2)}
+                </Text>
+              </td>
+            </tr>
+
+            <tr
+              style={{
+                opacity:
+                  stage !== "VIDEO" &&
+                  stage !== "DRAW_WIREFRAME" &&
+                  stage !== "SHOW_IMAGE" &&
+                  stage !== "SHOW_AGE" &&
+                  stage !== "BLINK_GENDER" &&
+                  stage !== "SHOW_GENDER" &&
+                  stage !== "SHOW_EXPRESSION_HEADER"
+                    ? 1
+                    : 0,
+              }}
+            >
+              <td>
+                <Text color={colorTheme.redLight}>fearful</Text>
+              </td>
+              <td>
+                <Text color={colorTheme.offWhite}>
+                  {predictions.expressions.fearful.toFixed(2)}
+                </Text>
+              </td>
+            </tr>
+          </>
+        )}
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE" &&
+              stage !== "BLINK_GENDER" &&
+              stage !== "SHOW_GENDER" &&
+              stage !== "SHOW_EXPRESSION_HEADER"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.greenLight}>happy</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.expressions.happy.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE" &&
+              stage !== "BLINK_GENDER" &&
+              stage !== "SHOW_GENDER" &&
+              stage !== "SHOW_EXPRESSION_HEADER"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.greenLight}>neutral</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.expressions.neutral.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+        <tr
+          style={{
+            opacity:
+              stage !== "VIDEO" &&
+              stage !== "DRAW_WIREFRAME" &&
+              stage !== "SHOW_IMAGE" &&
+              stage !== "SHOW_AGE" &&
+              stage !== "BLINK_GENDER" &&
+              stage !== "SHOW_GENDER" &&
+              stage !== "SHOW_EXPRESSION_HEADER"
+                ? 1
+                : 0,
+          }}
+        >
+          <td>
+            <Text color={colorTheme.blueLight}>sad</Text>
+          </td>
+          <td>
+            <Text color={colorTheme.offWhite}>
+              {predictions.expressions.sad.toFixed(2)}
+            </Text>
+          </td>
+        </tr>
+        {!isSmall && (
+          <tr
+            style={{
+              opacity:
+                stage !== "VIDEO" &&
+                stage !== "DRAW_WIREFRAME" &&
+                stage !== "SHOW_IMAGE" &&
+                stage !== "SHOW_AGE" &&
+                stage !== "BLINK_GENDER" &&
+                stage !== "SHOW_GENDER" &&
+                stage !== "SHOW_EXPRESSION_HEADER"
+                  ? 1
+                  : 0,
+            }}
+          >
+            <td>
+              <Text color={colorTheme.blueLight}>surprised</Text>
+            </td>
+            <td>
+              <Text color={colorTheme.offWhite}>
+                {predictions.expressions.surprised.toFixed(2)}
+              </Text>
+            </td>
+          </tr>
+        )}
+      </StyledTBody>
+    </table>
+  );
+};
+
+const StyledTBody = styled.tbody<{ isSmall: boolean }>`
+  tr {
+    vertical-align: top;
+  }
+
+  td:last-child {
+    text-align: right;
+  }
+
+  td {
+    padding: 5px 15px;
+  }
+
+  span {
+    line-height: 30px;
+    font-size: 20px;
+    white-space: nowrap;
+    user-select: none;
+  }
+`;
