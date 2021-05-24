@@ -28,7 +28,7 @@ const validYears = new Set(["2015", "2016", "2017", "2018", "2019"]);
 export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
   const isSmall = useContext(ResponsiveContext) === "small";
 
-  const hideScrollBanner = useMemo(() => seconds >= 168, [seconds]);
+  const showMapBox = useMemo(() => seconds >= 164, [seconds]);
 
   const currentPlayingAudio = usePart2Screen3Store(
     (state) => state.currentPlayingAudio
@@ -158,7 +158,7 @@ export const Part2Screen3 = memo(({ seconds }: { seconds: number }) => {
         />
         <Box style={{ position: "relative" }}>
           {!isSmall && <SpriteLevelIndicators />}
-          {!isSmall && <ButtonCornerMapBox isShown={hideScrollBanner} />}
+          {!isSmall && <ButtonCornerMapBox isShown={showMapBox} />}
           {isSmall ? (
             <Box
               height="100%"

@@ -39,13 +39,13 @@ function stageIsAfter(stage: Part3Props["stage"], point: Part3Props["stage"]) {
 export const Part3Selector = ({ seconds }: { seconds: number }) => {
   let stage: Part3Props["stage"];
 
-  if (seconds < 191) {
+  if (seconds < 173) {
     stage = "NO_TINTING";
-  } else if (seconds < 195) {
+  } else if (seconds < 177) {
     stage = "WEDDING";
-  } else if (seconds < 199) {
+  } else if (seconds < 181) {
     stage = "PARTY";
-  } else if (seconds < 218) {
+  } else if (seconds < 200) {
     stage = "FAMILY";
   } else {
     stage = "USER_CONTROL";
