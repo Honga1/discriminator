@@ -70,6 +70,19 @@ import missing_image_2 from "./missing_image_2.jpg";
 import missing_image_3 from "./missing_image_3.jpg";
 import missing_image_overlay from "./missing_image_overlay.png";
 
+import image_9429824331 from "./9429824331.jpg";
+import image_9432532574 from "./9432532574.jpg";
+import image_9432741384 from "./9432741384.jpg";
+import image_9432753664 from "./9432753664.jpg";
+
+import image_5431693087 from "./5431693087.jpg";
+import image_5431693889 from "./5431693889.jpg";
+import image_5431706769 from "./5431706769.jpg";
+import image_5431715775 from "./5431715775.jpg";
+import image_5432271046 from "./5432271046.jpg";
+import image_5432404966 from "./5432404966.jpg";
+import image_5080789669 from "./5080789669.jpg";
+
 const images: Record<string, { overlay: string | undefined; image: string }> = {
   "10090346453": { overlay: undefined, image: image_10090346453 },
   "102631694": { overlay: overlay_102631694, image: image_102631694 },
@@ -106,6 +119,17 @@ const images: Record<string, { overlay: string | undefined; image: string }> = {
   "5483538802": { overlay: overlay_5483538802, image: image_5483538802 },
   "5708843240": { overlay: overlay_5708843240, image: image_5708843240 },
   "7178904372": { overlay: overlay_7178904372, image: image_7178904372 },
+  "9429824331": { overlay: undefined, image: image_9429824331 },
+  "9432532574": { overlay: undefined, image: image_9432532574 },
+  "9432741384": { overlay: undefined, image: image_9432741384 },
+  "9432753664": { overlay: undefined, image: image_9432753664 },
+  "5431693087": { overlay: undefined, image: image_5431693087 },
+  "5431693889": { overlay: undefined, image: image_5431693889 },
+  "5431706769": { overlay: undefined, image: image_5431706769 },
+  "5431715775": { overlay: undefined, image: image_5431715775 },
+  "5432271046": { overlay: undefined, image: image_5432271046 },
+  "5432404966": { overlay: undefined, image: image_5432404966 },
+  "5080789669": { overlay: undefined, image: image_5080789669 },
   missing_image_1: { overlay: missing_image_overlay, image: missing_image_1 },
   missing_image_2: { overlay: missing_image_overlay, image: missing_image_2 },
   missing_image_3: { overlay: missing_image_overlay, image: missing_image_3 },
