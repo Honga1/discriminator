@@ -89,7 +89,12 @@ export default function Chapter4() {
                   <ResizeCanvas
                     linear
                     orthographic
-                    style={{ width: "100%", height: "100%" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      OTransform: "scale(-1, 1)",
+                      transform: "scale(-1, 1)",
+                    }}
                   >
                     <ContextBridge>
                       <WebcamPlane />

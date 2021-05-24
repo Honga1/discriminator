@@ -55,7 +55,13 @@ export default function Cover4() {
       }}
     >
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        <ResizeCanvas orthographic>
+        <ResizeCanvas
+          orthographic
+          style={{
+            OTransform: "scale(-1, 1)",
+            transform: "scale(-1, 1)",
+          }}
+        >
           <WebcamPlane amount={amount} />
         </ResizeCanvas>
         <div
