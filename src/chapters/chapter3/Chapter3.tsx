@@ -4,7 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { animated } from "react-spring";
 import { useChapter } from "../../hooks/useChapter";
 import { store, useStore } from "../../store/store";
-import audioSrc from "./audio/Chapter3.mp3";
+import audioSrcOgg from "./audio/Chapter3.ogg";
+import audioSrcCaf from "./audio/Chapter3.caf";
 import { ContinueButton } from "./components/ContinueButton";
 import { useLoopedAudio } from "./hooks/useLoopedAudio";
 import { Part1Screen1 } from "./Part1Screen1/Part1Screen1";
@@ -146,7 +147,10 @@ export default function Chapter3() {
           );
         })}
       </Box>
-      <audio ref={ref} src={audioSrc} controls={false} playsInline />
+      <audio ref={ref} controls={false} playsInline>
+        <source src={audioSrcOgg} type="audio/ogg" />
+        <source src={audioSrcCaf} type="audio/x-caf" />
+      </audio>
     </>
   );
 }
