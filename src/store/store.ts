@@ -12,6 +12,7 @@ type State = {
         setProgress: (progress: number) => void;
         getIsPlaying: () => boolean;
         getProgress: () => number;
+        getCurrentTime: () => number;
         seekTimeDelta: (delta: number) => void;
         seekTime: (time: number) => void;
         setMuted: (isMuted: boolean) => void;
@@ -19,6 +20,7 @@ type State = {
         isMuted: boolean;
         intention: "PLAY" | "PAUSE";
         progress: number;
+        currentTime: number;
       }
     | undefined;
   toggleCamera: () => void;

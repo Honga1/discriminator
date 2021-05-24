@@ -29,6 +29,11 @@ export function useChapter(
     return ref.current.currentTime / ref.current.duration;
   }, [ref]);
 
+  const getCurrentTime = useCallback(() => {
+    if (!ref.current) return 0;
+    return ref.current.currentTime;
+  }, [ref]);
+
   const setProgress = useCallback(
     (progress: number) => {
       if (!ref.current) return;
@@ -96,9 +101,11 @@ export function useChapter(
           seekTime,
           setMuted,
           setVolume,
+          getCurrentTime,
           isMuted: getMuted(),
           progress: getProgress(),
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
+          currentTime: getCurrentTime(),
         },
       });
     };
@@ -132,5 +139,6 @@ export function useChapter(
     onClick,
     seekTime,
     setVolume,
+    getCurrentTime,
   ]);
 }
