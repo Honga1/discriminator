@@ -506,7 +506,12 @@ const AIInfo = () => {
             <Text color={colorTheme.yellow}>gender</Text>
           </td>
           <td>
-            <Text color={colorTheme.offWhite}>{predictions.gender}</Text>
+            <Text
+              color={colorTheme.offWhite}
+              className={stage === "BLINK_GENDER" ? "blinking-cursor" : ""}
+            >
+              {stage === "BLINK_GENDER" ? "_" : predictions.gender}
+            </Text>
           </td>
         </tr>
 
@@ -664,5 +669,19 @@ const StyledTBody = styled.tbody<{ isSmall: boolean }>`
     font-size: 20px;
     white-space: nowrap;
     user-select: none;
+  }
+
+  .blinking-cursor {
+    animation: 1s blink step-end infinite;
+  }
+
+  @keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: ${colorTheme.offWhite};
+    }
   }
 `;
