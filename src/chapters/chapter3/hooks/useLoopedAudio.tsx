@@ -61,14 +61,32 @@ export function useLoopedAudio(
       !loop1Audio.playing() && loop1Audio.play();
       !loop2Audio.playing() && loop2Audio.play();
       !loop3Audio.playing() && loop3Audio.play();
+
+      switch (true) {
+        case part.includes("PART_1"):
+          loop1Audio.fade(loop1Audio.volume(), 0.1, 2000);
+          loop2Audio.fade(loop2Audio.volume(), 0.0, 2000);
+          loop3Audio.fade(loop3Audio.volume(), 0.0, 2000);
+          break;
+        case part.includes("PART_2"):
+          loop1Audio.fade(loop1Audio.volume(), 0.0, 2000);
+          loop2Audio.fade(loop2Audio.volume(), 0.1, 2000);
+          loop3Audio.fade(loop3Audio.volume(), 0.0, 2000);
+          break;
+        case part.includes("PART_3"):
+          loop1Audio.fade(loop1Audio.volume(), 0.0, 2000);
+          loop2Audio.fade(loop2Audio.volume(), 0.0, 2000);
+          loop3Audio.fade(loop3Audio.volume(), 0.1, 2000);
+          break;
+      }
     };
     mainAudio?.addEventListener("play", onPlay);
 
     const onPause = () => {
       if (!isAutoPaused && ref.current && ref.current.currentTime < 218) {
-        loop1Audio.pause();
-        loop2Audio.pause();
-        loop3Audio.pause();
+        loop1Audio.fade(loop1Audio.volume(), 0.0, 2000);
+        loop2Audio.fade(loop2Audio.volume(), 0.0, 2000);
+        loop3Audio.fade(loop3Audio.volume(), 0.0, 2000);
       }
     };
     mainAudio?.addEventListener("pause", onPause);
@@ -77,7 +95,7 @@ export function useLoopedAudio(
       mainAudio?.removeEventListener("play", onPlay);
       mainAudio?.removeEventListener("pause", onPause);
     };
-  }, [isAutoPaused, loop1Audio, loop2Audio, loop3Audio, ref]);
+  }, [isAutoPaused, loop1Audio, loop2Audio, loop3Audio, part, ref]);
 
   useEffect(() => {
     switch (true) {
