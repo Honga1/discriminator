@@ -54,13 +54,14 @@ export default function Chapter4() {
 
   const [preloadCanvas, setPreloadCanvas] = useState(false);
 
-  console.log(stage);
   useEffect(() => {
     if (!ref.current) return;
     const video = ref.current;
     const onTimeUpdate = ({ nativeEvent: event }: { nativeEvent: Event }) => {
       const video = event.target as HTMLVideoElement;
       const seconds = Math.round(video.currentTime);
+
+      console.log(seconds);
 
       if (seconds > 62 && seconds < 119) {
         setPreloadCanvas(true);
@@ -383,10 +384,26 @@ void main() {
   vec2 bottomRight = boundingBox.zw;
   vec2 dimensions = bottomRight - topLeft;
   vec2 uv = vUv * dimensions + topLeft;
-  vec2 invertedUv = clamp(vec2(uv.x, 1.0 - uv.y), vec2(0), vec2(1));
+  vec2 invertedUv = vec2(uv.x, 1.0 - uv.y);
   
 	vec4 texelColor = texture2D( map, invertedUv );
   gl_FragColor = vec4(texelColor.rgb,1.0);
+
+  if(invertedUv.x < 0.0) {
+    float distance = abs(invertedUv.x / 0.1);
+    gl_FragColor = mix(gl_FragColor, vec4(0.0,0.0,0.0,1.0), distance);
+  } else if(invertedUv.x > 1.0) {
+    float distance = abs((invertedUv.x - 1.0) / 0.1);
+    gl_FragColor = mix(gl_FragColor, vec4(0.0,0.0,0.0,1.0), distance);
+  } 
+  
+  if(invertedUv.y < 0.0) {
+    float distance = abs(invertedUv.y / 0.1);
+    gl_FragColor = mix(gl_FragColor, vec4(0.0,0.0,0.0,1.0), distance);
+  } else if(invertedUv.y > 1.0) {
+    float distance = abs((invertedUv.y - 1.0) / 0.1);
+    gl_FragColor = mix(gl_FragColor, vec4(0.0,0.0,0.0,1.0), distance);
+  }
 }
 `;
 
@@ -422,6 +439,36 @@ const AIInfo = () => {
 
   const stage = useChapter4Store((state) => state.stage);
 
+  const emotionOpacity =
+    stage !== "VIDEO" &&
+    stage !== "DRAW_WIREFRAME" &&
+    stage !== "SHOW_IMAGE" &&
+    stage !== "SHOW_AGE" &&
+    stage !== "BLINK_GENDER" &&
+    stage !== "SHOW_GENDER" &&
+    stage !== "SHOW_EXPRESSION_HEADER"
+      ? 1
+      : 0;
+  const emotionHeaderOpacity =
+    stage !== "VIDEO" &&
+    stage !== "DRAW_WIREFRAME" &&
+    stage !== "SHOW_IMAGE" &&
+    stage !== "SHOW_AGE" &&
+    stage !== "BLINK_GENDER" &&
+    stage !== "SHOW_GENDER"
+      ? 1
+      : 0;
+  const genderOpacity =
+    stage !== "VIDEO" &&
+    stage !== "DRAW_WIREFRAME" &&
+    stage !== "SHOW_IMAGE" &&
+    stage !== "SHOW_AGE"
+      ? 1
+      : 0;
+  const ageOpacity =
+    stage !== "VIDEO" && stage !== "DRAW_WIREFRAME" && stage !== "SHOW_IMAGE"
+      ? 1
+      : 0;
   return (
     <table>
       <StyledTBody isSmall={isSmall}>
@@ -437,12 +484,7 @@ const AIInfo = () => {
         </tr>
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE"
-                ? 1
-                : 0,
+            opacity: ageOpacity,
           }}
         >
           <td>
@@ -457,13 +499,7 @@ const AIInfo = () => {
 
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE"
-                ? 1
-                : 0,
+            opacity: genderOpacity,
           }}
         >
           <td>
@@ -487,15 +523,7 @@ const AIInfo = () => {
 
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE" &&
-              stage !== "BLINK_GENDER" &&
-              stage !== "SHOW_GENDER"
-                ? 1
-                : 0,
+            opacity: emotionHeaderOpacity,
           }}
         >
           <td>
@@ -506,16 +534,7 @@ const AIInfo = () => {
 
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE" &&
-              stage !== "BLINK_GENDER" &&
-              stage !== "SHOW_GENDER" &&
-              stage !== "SHOW_EXPRESSION_HEADER"
-                ? 1
-                : 0,
+            opacity: emotionOpacity,
           }}
         >
           <td>
@@ -531,16 +550,7 @@ const AIInfo = () => {
           <>
             <tr
               style={{
-                opacity:
-                  stage !== "VIDEO" &&
-                  stage !== "DRAW_WIREFRAME" &&
-                  stage !== "SHOW_IMAGE" &&
-                  stage !== "SHOW_AGE" &&
-                  stage !== "BLINK_GENDER" &&
-                  stage !== "SHOW_GENDER" &&
-                  stage !== "SHOW_EXPRESSION_HEADER"
-                    ? 1
-                    : 0,
+                opacity: emotionOpacity,
               }}
             >
               <td>
@@ -555,16 +565,7 @@ const AIInfo = () => {
 
             <tr
               style={{
-                opacity:
-                  stage !== "VIDEO" &&
-                  stage !== "DRAW_WIREFRAME" &&
-                  stage !== "SHOW_IMAGE" &&
-                  stage !== "SHOW_AGE" &&
-                  stage !== "BLINK_GENDER" &&
-                  stage !== "SHOW_GENDER" &&
-                  stage !== "SHOW_EXPRESSION_HEADER"
-                    ? 1
-                    : 0,
+                opacity: emotionOpacity,
               }}
             >
               <td>
@@ -580,16 +581,7 @@ const AIInfo = () => {
         )}
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE" &&
-              stage !== "BLINK_GENDER" &&
-              stage !== "SHOW_GENDER" &&
-              stage !== "SHOW_EXPRESSION_HEADER"
-                ? 1
-                : 0,
+            opacity: emotionOpacity,
           }}
         >
           <td>
@@ -603,16 +595,7 @@ const AIInfo = () => {
         </tr>
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE" &&
-              stage !== "BLINK_GENDER" &&
-              stage !== "SHOW_GENDER" &&
-              stage !== "SHOW_EXPRESSION_HEADER"
-                ? 1
-                : 0,
+            opacity: emotionOpacity,
           }}
         >
           <td>
@@ -626,16 +609,7 @@ const AIInfo = () => {
         </tr>
         <tr
           style={{
-            opacity:
-              stage !== "VIDEO" &&
-              stage !== "DRAW_WIREFRAME" &&
-              stage !== "SHOW_IMAGE" &&
-              stage !== "SHOW_AGE" &&
-              stage !== "BLINK_GENDER" &&
-              stage !== "SHOW_GENDER" &&
-              stage !== "SHOW_EXPRESSION_HEADER"
-                ? 1
-                : 0,
+            opacity: emotionOpacity,
           }}
         >
           <td>
@@ -650,16 +624,7 @@ const AIInfo = () => {
         {!isSmall && (
           <tr
             style={{
-              opacity:
-                stage !== "VIDEO" &&
-                stage !== "DRAW_WIREFRAME" &&
-                stage !== "SHOW_IMAGE" &&
-                stage !== "SHOW_AGE" &&
-                stage !== "BLINK_GENDER" &&
-                stage !== "SHOW_GENDER" &&
-                stage !== "SHOW_EXPRESSION_HEADER"
-                  ? 1
-                  : 0,
+              opacity: emotionOpacity,
             }}
           >
             <td>
