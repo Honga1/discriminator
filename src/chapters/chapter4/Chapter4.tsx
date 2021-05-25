@@ -647,6 +647,10 @@ const StyledTBody = styled.tbody<{ isSmall: boolean }>`
     vertical-align: top;
   }
 
+  * {
+    transition: opacity 2s linear;
+  }
+
   td:last-child {
     text-align: right;
   }
