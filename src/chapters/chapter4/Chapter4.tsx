@@ -516,26 +516,26 @@ const AIInfo = () => {
         </tr>
 
         <tr>
-          <td>
-            <br />
-          </td>
+          <td></td>
           <td>
             {/* Reserves horizontal space for gender changing between male -> female -> unknown */}
             <Text style={{ opacity: 0 }}>unknown</Text>
-            <br />
           </td>
         </tr>
 
-        <tr
-          style={{
-            opacity: emotionHeaderOpacity,
-          }}
-        >
-          <td>
-            <Text color={colorTheme.offWhite}>emotion</Text>
-          </td>
-          <td></td>
-        </tr>
+        {!isSmall && (
+          <tr
+            style={{
+              opacity: emotionHeaderOpacity,
+            }}
+          >
+            <td>
+              <br />
+              <Text color={colorTheme.offWhite}>emotion</Text>
+            </td>
+            <td></td>
+          </tr>
+        )}
 
         <tr
           style={{
@@ -547,7 +547,7 @@ const AIInfo = () => {
           </td>
           <td>
             <Text color={colorTheme.offWhite}>
-              {predictions.expressions.angry.toFixed(2)}
+              <BarChart amount={predictions.expressions.angry} />
             </Text>
           </td>
         </tr>
@@ -563,7 +563,7 @@ const AIInfo = () => {
               </td>
               <td>
                 <Text color={colorTheme.offWhite}>
-                  {predictions.expressions.disgusted.toFixed(2)}
+                  <BarChart amount={predictions.expressions.disgusted} />
                 </Text>
               </td>
             </tr>
@@ -578,7 +578,7 @@ const AIInfo = () => {
               </td>
               <td>
                 <Text color={colorTheme.offWhite}>
-                  {predictions.expressions.fearful.toFixed(2)}
+                  <BarChart amount={predictions.expressions.fearful} />
                 </Text>
               </td>
             </tr>
@@ -594,7 +594,7 @@ const AIInfo = () => {
           </td>
           <td>
             <Text color={colorTheme.offWhite}>
-              {predictions.expressions.happy.toFixed(2)}
+              <BarChart amount={predictions.expressions.happy} />
             </Text>
           </td>
         </tr>
@@ -608,7 +608,7 @@ const AIInfo = () => {
           </td>
           <td>
             <Text color={colorTheme.offWhite}>
-              {predictions.expressions.neutral.toFixed(2)}
+              <BarChart amount={predictions.expressions.neutral} />
             </Text>
           </td>
         </tr>
@@ -622,7 +622,7 @@ const AIInfo = () => {
           </td>
           <td>
             <Text color={colorTheme.offWhite}>
-              {predictions.expressions.sad.toFixed(2)}
+              <BarChart amount={predictions.expressions.sad} />
             </Text>
           </td>
         </tr>
@@ -637,13 +637,23 @@ const AIInfo = () => {
             </td>
             <td>
               <Text color={colorTheme.offWhite}>
-                {predictions.expressions.surprised.toFixed(2)}
+                <BarChart amount={predictions.expressions.surprised} />
               </Text>
             </td>
           </tr>
         )}
       </StyledTBody>
     </table>
+  );
+};
+
+const BarChart = ({ amount }: { amount: number }) => {
+  return (
+    <>
+      {Array.from({ length: Math.floor(amount * 10) })
+        .map(() => "|")
+        .join("")}
+    </>
   );
 };
 
