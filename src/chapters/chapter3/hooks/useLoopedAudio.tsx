@@ -58,10 +58,6 @@ export function useLoopedAudio(
   useEffect(() => {
     const mainAudio = ref.current;
     const onPlay = () => {
-      !loop1Audio.playing() && loop1Audio.play();
-      !loop2Audio.playing() && loop2Audio.play();
-      !loop3Audio.playing() && loop3Audio.play();
-
       switch (true) {
         case part.includes("PART_1"):
           loop1Audio.fade(loop1Audio.volume(), 0.1, 2000);
@@ -79,6 +75,9 @@ export function useLoopedAudio(
           loop3Audio.fade(loop3Audio.volume(), 0.1, 2000);
           break;
       }
+      !loop1Audio.playing() && loop1Audio.play();
+      !loop2Audio.playing() && loop2Audio.play();
+      !loop3Audio.playing() && loop3Audio.play();
     };
     mainAudio?.addEventListener("play", onPlay);
 

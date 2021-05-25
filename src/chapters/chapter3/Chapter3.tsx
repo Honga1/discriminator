@@ -147,7 +147,7 @@ export default function Chapter3() {
           );
         })}
       </Box>
-      <audio ref={ref} controls={false} playsInline>
+      <audio ref={ref} controls={false} playsInline autoPlay>
         <source src={audioSrcOgg} type="audio/ogg" />
         <source src={audioSrcCaf} type="audio/x-caf" />
       </audio>
