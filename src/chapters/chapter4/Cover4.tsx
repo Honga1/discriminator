@@ -22,8 +22,9 @@ export default function Cover4() {
   }, []);
 
   const [state, setState] = useState(0);
-
   const hasFirstPrediction = useHasFirstFaceApiPrediction();
+
+  const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);
 
   useEffect(() => {
     setState(0);
@@ -36,7 +37,7 @@ export default function Cover4() {
         clearTimeout(timeout2);
       };
     }
-  }, [hasFirstPrediction]);
+  }, [hasFirstPrediction, hasWebcamStream]);
 
   const [{ amount }] = useSpring(
     () => ({
@@ -82,7 +83,9 @@ export default function Cover4() {
               userSelect: "none",
             }}
           >
-            {!hasFirstPrediction ? (
+            {!hasWebcamStream ? (
+              "Awaiting webcam permission"
+            ) : !hasFirstPrediction ? (
               "Loading Cover..."
             ) : (
               <>
