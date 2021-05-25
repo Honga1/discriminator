@@ -4,6 +4,7 @@ import { createBrowserHistory } from "history";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import WebFont from "webfontloader";
+import App from "./App";
 import "./index.css";
 import PasswordChallenge from "./PasswordChallenge";
 import { useStore } from "./store/store";
@@ -24,13 +25,10 @@ Sentry.init({
 WebFont.load({
   custom: { families: ["Roboto"] },
 });
-const App = React.lazy(async () => import("./App"));
 
 const Boarding = () => {
   const allowed = useStore((state) => state.allowed);
   localStorage.setItem("allowed", "true");
-
-  console.log(allowed);
 
   if (allowed) {
     return (
