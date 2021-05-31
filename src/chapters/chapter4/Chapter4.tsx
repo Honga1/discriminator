@@ -163,12 +163,15 @@ export default function Chapter4() {
             </Grid>
           ) : (
             <Grid
-              style={{ width: "100%", maxWidth: "800px" }}
+              style={{ width: "100%", maxWidth: "800px", height: "100%" }}
               rows={["auto"]}
               columns={["auto", "min-content"]}
               gap="59px"
             >
-              <Box style={{ position: "relative", height: "100%" }}>
+              <Box
+                style={{ position: "relative", height: "100%" }}
+                flex={false}
+              >
                 <Box
                   style={{
                     position: "absolute",
@@ -199,7 +202,7 @@ export default function Chapter4() {
                   </SquareDiv>
                 </Box>
               </Box>
-              <Box justify="start">
+              <Box justify="center">
                 <AIInfo />
               </Box>
             </Grid>
