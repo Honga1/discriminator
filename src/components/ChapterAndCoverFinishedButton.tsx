@@ -14,7 +14,7 @@ export const ChapterAndCoverNextButton = () => {
   const chapterNumber = useChapterNumber();
 
   let text: string;
-  if (chapterNumber === 4) {
+  if (chapterNumber === 4 && pageType === "chapter") {
     text = "Want to help?";
   } else if (pageType === "cover") {
     text = "Start chapter";
