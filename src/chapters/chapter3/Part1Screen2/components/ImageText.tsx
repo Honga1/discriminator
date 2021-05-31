@@ -40,28 +40,24 @@ export function ImageText({ show }: { show: boolean }) {
         <AnimatedBox
           style={{ ...style, textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)` }}
         >
-          <StyledText small={isSmall} size={"24px"}>
-            &#123;
-          </StyledText>
-          <StyledText small={isSmall} size={"24px"}>
+          <StyledText small={isSmall}>&#123;</StyledText>
+          <StyledText small={isSmall}>
             &nbsp;&nbsp;date: {currentDescriptor?.date},
           </StyledText>
-          <StyledText small={isSmall} size={"24px"}>
+          <StyledText small={isSmall}>
             &nbsp;&nbsp;license: {currentDescriptor?.license},
           </StyledText>
-          <StyledText small={isSmall} size={"24px"}>
+          <StyledText small={isSmall}>
             &nbsp;&nbsp;nsid: {currentDescriptor?.nsid},
           </StyledText>
-          <StyledText small={isSmall} size={"24px"}>
+          <StyledText small={isSmall}>
             &nbsp;&nbsp;path_alias: {currentDescriptor?.path_alias},
           </StyledText>
 
-          <StyledText small={isSmall} size={"24px"}>
+          <StyledText small={isSmall}>
             &nbsp;&nbsp;tagged: {currentDescriptor?.tagged},
           </StyledText>
-          <StyledText small={isSmall} size={"24px"}>
-            &#125;
-          </StyledText>
+          <StyledText small={isSmall}>&#125;</StyledText>
         </AnimatedBox>
       )
   );
@@ -70,7 +66,8 @@ export function ImageText({ show }: { show: boolean }) {
 const AnimatedBox = animated(Box);
 
 const StyledText = styled(Text)<{ small: boolean }>`
-  line-height: ${(props) => (props.small ? `24px` : `32px`)};
+  font-size: ${(props) => (props.small ? "20px" : "24px")};
+  line-height: ${(props) => (props.small ? `32px` : `32px`)};
   color: ${colorTheme.offWhite};
   user-select: none;
 `;
