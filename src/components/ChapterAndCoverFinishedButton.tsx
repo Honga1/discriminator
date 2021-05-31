@@ -21,6 +21,7 @@ export const ChapterAndCoverNextButton = () => {
       text={text}
       textWidth={width}
       toProgress={nextStep}
+      expanded={pageType === "cover" ? true : "auto"}
     />
   );
 };

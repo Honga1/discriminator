@@ -23,6 +23,7 @@ export function ContinueButton(props: {
           text="Continue"
           textWidth="200px"
           toProgress={() => props.play?.()}
+          expanded={"auto"}
         />
       )}
     </Box>

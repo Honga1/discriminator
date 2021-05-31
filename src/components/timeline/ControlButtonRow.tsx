@@ -1,6 +1,7 @@
 import { Grid, ResponsiveContext } from "grommet";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
+import { store } from "src/store/store";
 import { useIsActive } from "../../hooks/useIsActive";
 import { usePageType } from "../../hooks/usePageType";
 import { ChapterSelectDropdown } from "./ChapterSelectDropdown";
@@ -26,7 +27,12 @@ export const ControlButtonRow = ({
   const location = useLocation();
 
   useEffect(() => {
-    setIsOpen(false);
+    if (store.getState().firstLoad) {
+      setIsOpen(true);
+      store.setState({ firstLoad: false });
+    } else {
+      setIsOpen(false);
+    }
   }, [location]);
 
   useEffect(() => {

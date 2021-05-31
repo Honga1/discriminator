@@ -3,6 +3,7 @@ import create from "zustand/vanilla";
 import { NonFunctionProperties } from "../@types/NonFunctionProperties";
 
 type State = {
+  firstLoad: boolean;
   allowed: boolean;
   webcamStream: MediaStream | undefined;
   chapter:
@@ -35,6 +36,7 @@ type State = {
 };
 
 const initialState: NonFunctionProperties<State> = {
+  firstLoad: true,
   allowed: localStorage.getItem("allowed") === "true" ?? false,
   webcamStream: undefined,
   chapter: undefined,

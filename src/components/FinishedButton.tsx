@@ -10,6 +10,7 @@ export const FinishedButton = memo(
     shouldShow: boolean;
     shouldProgress: boolean;
     toProgress?: () => void;
+    expanded: true | "auto";
   }) => {
     const [progress, setProgress] = useState(0);
     const shouldShow = props.shouldShow;
@@ -36,6 +37,7 @@ export const FinishedButton = memo(
     const text = props.text;
     const width = props.textWidth;
 
+    const isContracted = progress < 2 && props.expanded !== true;
     return (
       <Box style={shouldShow ? {} : { display: "none" }}>
         <Button
@@ -46,7 +48,7 @@ export const FinishedButton = memo(
               border={{ size: "3px", color: colorTheme.white }}
               style={{ zIndex: 10, position: "relative" }}
               pad={{ horizontal: "21px", vertical: "5px" }}
-              currentWidth={progress < 2 ? "80px" : width}
+              currentWidth={isContracted ? "80px" : width}
               fullWidth={width}
               background={{ color: "black", opacity: 0.9 }}
             >

@@ -1,11 +1,13 @@
 import { Box } from "grommet";
 import React, { useState } from "react";
+import { store } from "src/store/store";
 import { ChapterIndicators } from "./ChapterIndicators";
 import { ControlButtonRow } from "./ControlButtonRow";
 import { FadeOutBox } from "./FadeOutBox";
 
 export const Timeline = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(store.getState().firstLoad);
+
   return (
     <Box
       gap="8px"
