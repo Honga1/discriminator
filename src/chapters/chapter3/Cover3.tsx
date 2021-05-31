@@ -14,6 +14,8 @@ export default function Cover3() {
     store.setState({ isCameraEnabled: true });
   }, []);
 
+  const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);
+
   const [maskType, setMaskType] = useState<"video" | "brett" | "own">("own");
   const webcam = useStore((state) => state.webcamHTMLElement);
   const aspect = useStore((state) => state.webcamAspect);
@@ -69,7 +71,11 @@ export default function Cover3() {
               textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
             }}
           >
-            Tap the screen to change your mask
+            {!hasWebcamStream
+              ? "Awaiting webcam permission"
+              : !hasFirstPrediction
+              ? "Loading..."
+              : "Tap the screen to change your mask"}
           </Text>
         </div>
       </div>

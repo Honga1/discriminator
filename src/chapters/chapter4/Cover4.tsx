@@ -86,7 +86,7 @@ export default function Cover4() {
             {!hasWebcamStream ? (
               "Awaiting webcam permission"
             ) : !hasFirstPrediction ? (
-              "Loading Cover..."
+              "Loading..."
             ) : (
               <>
                 {state === 0 && `You don't look happy :(`}

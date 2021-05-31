@@ -2,13 +2,17 @@ import { Text } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
+import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { usePredictions } from "src/hooks/usePredictions";
-import { store } from "../../store/store";
+import { store, useStore } from "../../store/store";
 import { eyes } from "./eyes/eyes";
 
 export default function Cover2() {
   const ref = useRef<HTMLCanvasElement>(null);
   const predictions = usePredictions();
+
+  const hasFirstPrediction = useHasFirstPrediction();
+  const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);
 
   const [openCount, setOpenCount] = useState(0);
   const wasOpenLastFrame = useRef(false);
@@ -107,7 +111,13 @@ export default function Cover2() {
               textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
             }}
           >
-            You have blinked {openCount} time{openCount === 1 ? "" : "s"}
+            {!hasWebcamStream
+              ? "Awaiting webcam permission"
+              : !hasFirstPrediction
+              ? `Do not blink`
+              : `You have blinked ${openCount} time${
+                  openCount === 1 ? `` : "s"
+                }`}
           </Text>
         </div>
         <canvas
