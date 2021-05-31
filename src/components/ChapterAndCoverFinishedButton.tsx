@@ -1,3 +1,4 @@
+import { useChapterNumber } from "src/hooks/useChapterNumber";
 import { useIsActive } from "src/hooks/useIsActive";
 import { useNextStep } from "../hooks/useNextStep";
 import { usePageType } from "../hooks/usePageType";
@@ -10,9 +11,18 @@ export const ChapterAndCoverNextButton = () => {
   const isChapterComplete = useStore((state) => state.chapter?.progress === 1);
   const isActive = useIsActive();
   const shouldShow = pageType === "cover" || isChapterComplete;
+  const chapterNumber = useChapterNumber();
 
-  const text = pageType === "cover" ? "Go to chapter" : "Go to next chapter";
-  const width = pageType === "cover" ? "235px" : "286px";
+  let text: string;
+  if (chapterNumber === 4) {
+    text = "Want to help?";
+  } else if (pageType === "cover") {
+    text = "Start chapter";
+  } else {
+    text = "Next chapter";
+  }
+
+  const width = pageType === "cover" ? "240px" : "240px";
 
   return (
     <FinishedButton
