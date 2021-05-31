@@ -142,7 +142,7 @@ export const SpriteText = memo(
           &nbsp;&nbsp;&nbsp;
           <TypingText
             bold={false}
-            text={replaceAll(" ", "\xa0") + `   •••   `}
+            text={replaceAll(text, " ", "\xa0") + `   •••   `}
             state={state}
             onFinished={onFinished}
           />
