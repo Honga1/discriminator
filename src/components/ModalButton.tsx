@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from "grommet";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { store } from "src/store/store";
 import { useQuery } from "../hooks/useQuery";
 
 export const OpenModalButton = (
@@ -22,6 +23,7 @@ export const OpenModalButton = (
       {...props}
       as={"div"}
       onClick={(event) => {
+        store.getState().chapter?.pause();
         props.onClick?.(event);
         query.set("modal", props.modal);
         history.push({
