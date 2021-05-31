@@ -9,18 +9,14 @@ import React, {
 import { useHistory } from "react-router-dom";
 import { clamp } from "src/libs/math";
 import styled from "styled-components";
+import useResizeObserver from "use-resize-observer/polyfilled";
 import { useChapterNumber } from "../../hooks/useChapterNumber";
 import { usePageType } from "../../hooks/usePageType";
 import { store, useStore } from "../../store/store";
 
 export const ChapterIndicators = () => {
   return (
-    <Grid
-      fill
-      responsive={false}
-      columns={{ count: 4, size: "auto" }}
-      gap={"4px"}
-    >
+    <Grid responsive={false} columns={{ count: 4, size: "auto" }} gap={"4px"}>
       <ChapterIndicator chapter={1} />
       <ChapterIndicator chapter={2} />
       <ChapterIndicator chapter={3} />
@@ -186,7 +182,7 @@ const Scrubber = ({
       position: "absolute",
       pointerEvents: "auto",
       top: "50%",
-      transform: "translateY(-50%)",
+      transform: "translate(-50%, -50%)",
       width: "auto",
       height: "auto",
     };
@@ -228,6 +224,7 @@ function useDraggableElement(
   onDrag: ((relativePosition: number) => void) | undefined,
   onDragEnd: ((relativePosition: number) => void) | undefined
 ) {
+  const { width, height } = useResizeObserver({ ref: container });
   useEffect(() => {
     if (!container.current || !element.current) return;
     const containerDimensions = container.current.getBoundingClientRect();
@@ -265,11 +262,14 @@ function useDraggableElement(
 
       dragCurrent = x - dragInitial;
 
+      const elementBb = element.current.getBoundingClientRect();
+
       const clippedX = Math.min(
         Math.max(dragCurrent, 0),
-        containerDimensions.width
+        containerDimensions.width - elementBb.width / 2
       );
       dragCurrent = clippedX;
+
       const relativeX = clamp(clippedX / containerDimensions.width, 0, 1);
 
       onDrag?.(relativeX);
@@ -278,11 +278,16 @@ function useDraggableElement(
 
     const onDragEndInner = (event: TouchEvent | MouseEvent) => {
       if (!isDragging) return;
+      if (!element.current) return;
+
       event.preventDefault();
       startPosition = dragCurrent;
+
+      const elementBb = element.current.getBoundingClientRect();
+
       const clippedX = Math.min(
         Math.max(dragCurrent, 0),
-        containerDimensions.width
+        containerDimensions.width - elementBb.width / 2
       );
       const relativeX = clippedX / containerDimensions.width;
 
@@ -307,5 +312,14 @@ function useDraggableElement(
       window.removeEventListener("touchstart", onDragStartInner);
       window.removeEventListener("touchend", onDragEndInner);
     };
-  }, [element, onDragEnd, relativePosition, container, onDragStart, onDrag]);
+  }, [
+    element,
+    onDragEnd,
+    relativePosition,
+    container,
+    onDragStart,
+    onDrag,
+    width,
+    height,
+  ]);
 }

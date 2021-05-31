@@ -3,6 +3,7 @@ import { Box, Text } from "grommet";
 import React, { memo, Suspense, useEffect, useMemo } from "react";
 import { animated } from "react-spring";
 import { PredictionsStore } from "src/store/PredictionsStore";
+import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
 
 const Cover4 = React.lazy(async () => import("./chapter4/Cover4"));
@@ -55,9 +56,12 @@ export const Chapter = memo(
             top: 0,
           }}
         >
-          <Suspense fallback={<Text>Loading...</Text>}>{component}</Suspense>
+          <Suspense
+            fallback={<Text color={colorTheme.yellow}>Loading...</Text>}
+          >
+            {component}
+          </Suspense>
         </animated.div>
-        );
       </Box>
     );
   }
