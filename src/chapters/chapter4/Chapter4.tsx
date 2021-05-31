@@ -74,16 +74,16 @@ export default function Chapter4() {
         setStage("DRAW_WIREFRAME");
       } else if (seconds < 80) {
         setStage("SHOW_IMAGE");
-      } else if (seconds < 86) {
+      } else if (seconds < 85) {
         setStage("SHOW_AGE");
         chapter4Store.setState({ wireframePieces: 0 });
-      } else if (seconds < 92) {
+      } else if (seconds < 88) {
         chapter4Store.setState({ wireframePieces: 0 });
         setStage("BLINK_GENDER");
-      } else if (seconds < 100) {
+      } else if (seconds < 94) {
         chapter4Store.setState({ wireframePieces: 0 });
         setStage("SHOW_GENDER");
-      } else if (seconds < 110) {
+      } else if (seconds < 98) {
         chapter4Store.setState({ wireframePieces: 0 });
         setStage("SHOW_EXPRESSION_HEADER");
       } else if (seconds < 119) {
