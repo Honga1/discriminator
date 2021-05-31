@@ -169,7 +169,14 @@ const HomeContent = () => {
           </Text>
         </Box>
       </Box>
-      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
+      <Text
+        size={"20px"}
+        style={{
+          lineHeight: "30px",
+          paddingRight: size === "small" || size === "medium" ? "0" : "128px",
+        }}
+        color="black"
+      >
         If you’re interested in a more personalized experience, consider joining{" "}
         <Anchor href="https://coil.com/">Coil</Anchor>, a micropayments service
         to support creators. All payments for viewing this film as a Coil
