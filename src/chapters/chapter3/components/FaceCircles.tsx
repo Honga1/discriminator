@@ -3,7 +3,7 @@ import { animated, useSpring } from "react-spring";
 import { SquareDiv } from "./SquareDiv";
 import blinking from "src/videos/blinking.mp4";
 
-const FaceCircle = ({
+export const FaceCircle = ({
   isTalking,
   background,
   children,

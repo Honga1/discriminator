@@ -1,13 +1,14 @@
 import { SpringValue, useSpring } from "@react-spring/core";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
-import { Text } from "grommet";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Box, Text } from "grommet";
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useHasFirstFaceApiPrediction } from "src/hooks/useHasFirstFaceApiPrediction";
 import { FaceApiPrediction } from "src/store/FaceApiPredictionsStore";
 import { store, useStore } from "src/store/store";
+import { colorTheme } from "src/theme";
 import {
   BufferGeometry,
   Mesh,
@@ -15,6 +16,7 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
+import { SquareDiv } from "../chapter3/components/SquareDiv";
 
 export default function Cover4() {
   useEffect(() => {
@@ -55,22 +57,20 @@ export default function Cover4() {
         height: "100%",
       }}
     >
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        <ResizeCanvas
-          orthographic
-          style={{
-            OTransform: "scale(-1, 1)",
-            transform: "scale(-1, 1)",
-          }}
-        >
-          <WebcamPlane amount={amount} />
-        </ResizeCanvas>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gridTemplateRows: "min-content auto",
+        }}
+      >
         <div
           style={{
-            position: "absolute",
             width: "100%",
-            padding: "58px",
-            top: 0,
+            paddingTop: "58px",
             boxSizing: "border-box",
             textAlign: "center",
           }}
@@ -96,6 +96,20 @@ export default function Cover4() {
             )}
           </Text>
         </div>
+
+        <Box align="start">
+          <FaceCircle isTalking={false} background={colorTheme.yellow}>
+            <ResizeCanvas
+              orthographic
+              style={{
+                OTransform: "scale(-1, 1)",
+                transform: "scale(-1, 1)",
+              }}
+            >
+              <WebcamPlane amount={amount} />
+            </ResizeCanvas>
+          </FaceCircle>
+        </Box>
       </div>
     </div>
   );
@@ -107,8 +121,8 @@ function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
   const viewport = useThree((state) => state.viewport);
 
   const ref = useRef<Mesh<BufferGeometry, ShaderMaterial>>();
-  const width = Math.min(viewport.width, viewport.height * aspect);
-  const height = Math.min(viewport.width / aspect, viewport.height);
+  const width = Math.max(viewport.width, viewport.height * aspect);
+  const height = Math.max(viewport.width / aspect, viewport.height);
 
   const videoTexture = useMemo(() => {
     return new VideoTexture(webcam);
@@ -411,3 +425,53 @@ const maskMaterial = new ShaderMaterial({
     amount: { value: undefined },
   },
 });
+
+const FaceCircle = ({
+  background,
+  children,
+}: {
+  background: string;
+  isTalking: boolean;
+  children: ReactNode;
+}) => {
+  return (
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <div style={{ width: "100%", height: "100%", transform: "scale(0.83)" }}>
+        <SquareDiv
+          style={{
+            background: background,
+            borderRadius: "50%",
+          }}
+        />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <SquareDiv
+          maxWidth="80%"
+          maxHeight="80%"
+          style={{
+            overflow: "hidden",
+            borderRadius: "50%",
+            background: "#202122",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+          }}
+        >
+          {children}
+        </SquareDiv>
+      </div>
+    </div>
+  );
+};
