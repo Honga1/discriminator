@@ -1,3 +1,4 @@
+import { useIsActive } from "src/hooks/useIsActive";
 import { useNextStep } from "../hooks/useNextStep";
 import { usePageType } from "../hooks/usePageType";
 import { useStore } from "../store/store";
@@ -7,6 +8,7 @@ export const ChapterAndCoverNextButton = () => {
   const pageType = usePageType();
   const nextStep = useNextStep();
   const isChapterComplete = useStore((state) => state.chapter?.progress === 1);
+  const isActive = useIsActive();
   const shouldShow = pageType === "cover" || isChapterComplete;
 
   const text = pageType === "cover" ? "Go to chapter" : "Go to next chapter";
@@ -14,7 +16,7 @@ export const ChapterAndCoverNextButton = () => {
 
   return (
     <FinishedButton
-      shouldProgress={false}
+      shouldProgress={isChapterComplete && !isActive}
       shouldShow={shouldShow}
       text={text}
       textWidth={width}
