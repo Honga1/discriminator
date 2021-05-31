@@ -62,10 +62,15 @@ const LinksFloating = ({
 }) => {
   const style: CSSProperties =
     position === "below"
-      ? { position: "relative", left: "-454px", top: "0px" }
+      ? { position: "relative", left: "-230px", top: "0px" }
       : { position: "relative", left: "-282px", top: "-100px" };
   return (
-    <Box className="links" direction="row" justify="end" style={style}>
+    <Box
+      className="links"
+      direction="row"
+      justify={position === "below" ? "center" : "end"}
+      style={style}
+    >
       <div style={{ position: "relative" }}>
         <div
           style={{
