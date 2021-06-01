@@ -26,6 +26,7 @@ export interface Predictions {
 
   mouthOpened: number;
   eyesOpened: boolean;
+  confidence: number;
 }
 
 export class PredictionsStore {
@@ -96,6 +97,7 @@ export class PredictionsStore {
         mouthOpened,
         mesh,
         eyesOpened,
+        confidence: prediction.faceInViewConfidence,
       };
     });
 
