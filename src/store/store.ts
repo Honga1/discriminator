@@ -130,8 +130,11 @@ function getWebcam() {
         })
         .then((stream) => resolve(stream))
         .catch((error) => {
-          console.error("Something went wrong accessing webcam!");
-          reject(error);
+          if (error.name === "NotAllowedError") console.warn(error);
+          else {
+            console.error("Something went wrong accessing webcam!");
+            reject(error);
+          }
         });
     } catch (error) {
       console.error("Something went wrong accessing webcam!");
