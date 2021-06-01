@@ -32,7 +32,7 @@ function App({ history }: { history: History }) {
             <Home />
           </PageContainer>
         </KnownRoute>
-        <KnownRoute path={["/home", "/coil"]}>
+        <KnownRoute path={"/home"}>
           <PageContainer backgroundColor={"yellow"}>
             <Home />
           </PageContainer>
