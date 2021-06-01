@@ -132,6 +132,8 @@ const HomeContent = () => {
   const textSize = isSmall ? "20px" : "24px";
   const lineHeight = isSmall ? "30px" : "36px";
 
+  const isCoilUser = !!(document as any).monetization;
+
   return (
     <Box
       gap={"40px"}
@@ -177,12 +179,24 @@ const HomeContent = () => {
         }}
         color="black"
       >
-        If you’re interested in a more personalized experience, consider joining{" "}
-        <Anchor target="_blank" href="https://coil.com/">
-          Coil
-        </Anchor>
-        , a micropayments service to support creators. All payments for viewing
-        this film as a Coil subscriber support the{" "}
+        {isCoilUser ? (
+          <>
+            As a Coil subscriber, please enjoy this personalized viewing
+            experience! All payments for viewing this film as a Coil subscriber
+            support the{" "}
+          </>
+        ) : (
+          <>
+            {" "}
+            If you’re interested in a more personalized experience, consider
+            joining{" "}
+            <Anchor target="_blank" href="https://coil.com/">
+              Coil
+            </Anchor>
+            , a micropayments service to support creators. All payments for
+            viewing this film as a Coil subscriber support the{" "}
+          </>
+        )}
         <Anchor target="_blank" href="https://www.stopspying.org/">
           Surveillance Technology Oversight Project
         </Anchor>
