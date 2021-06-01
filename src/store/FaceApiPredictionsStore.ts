@@ -51,11 +51,21 @@ export class FaceApiPredictionsStore {
       console.log("Loading FaceAPI model");
 
       FaceApiPredictionsStore.modelPromise = Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
-        faceapi.nets.ageGenderNet.loadFromUri("/models"),
-        faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-        faceapi.nets.faceLandmark68TinyNet.loadFromUri("/models"),
-        faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+        faceapi.nets.tinyFaceDetector.loadFromUri(
+          "https://discriminator-media-server.jaeperris.com/models"
+        ),
+        faceapi.nets.ageGenderNet.loadFromUri(
+          "https://discriminator-media-server.jaeperris.com/models"
+        ),
+        faceapi.nets.faceExpressionNet.loadFromUri(
+          "https://discriminator-media-server.jaeperris.com/models"
+        ),
+        faceapi.nets.faceLandmark68TinyNet.loadFromUri(
+          "https://discriminator-media-server.jaeperris.com/models"
+        ),
+        faceapi.nets.faceRecognitionNet.loadFromUri(
+          "https://discriminator-media-server.jaeperris.com/models"
+        ),
       ]);
       console.log("Loaded FaceAPI model");
     }
