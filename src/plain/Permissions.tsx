@@ -59,7 +59,7 @@ const Content = () => {
             onClick: async () => {
               store.setState({ isCameraEnabled: false });
               store.getState().turnOnCamera();
-              history.push("/chapter/1?type=chapter");
+              history.push("/chapter/1?type=cover");
             },
           }}
           size={isSmall ? "small" : "large"}

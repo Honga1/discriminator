@@ -6,9 +6,10 @@ import { PredictionsStore } from "src/store/PredictionsStore";
 import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
 
-const Cover4 = React.lazy(async () => import("./chapter4/Cover4"));
+const Cover1 = React.lazy(async () => import("./chapter1/Cover1"));
 const Cover2 = React.lazy(async () => import("./chapter2/Cover2"));
 const Cover3 = React.lazy(async () => import("./chapter3/Cover3"));
+const Cover4 = React.lazy(async () => import("./chapter4/Cover4"));
 const Chapter1 = React.lazy(async () => import("./chapter1/Chapter1"));
 const Chapter2 = React.lazy(async () => import("./chapter2/Chapter2"));
 const Chapter3 = React.lazy(async () => import("./chapter3/Chapter3"));
@@ -73,7 +74,8 @@ function getComponent(isCover: boolean, chapterNumber: number) {
   if (isCover) {
     switch (chapterNumber) {
       case 1:
-        throw new Error("No cover for chapter 1");
+        component = <Cover1 />;
+        break;
       case 2:
         component = <Cover2 />;
         break;

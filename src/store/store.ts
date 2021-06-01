@@ -1,8 +1,11 @@
+import { MathUtils } from "three";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
 import { NonFunctionProperties } from "../@types/NonFunctionProperties";
 
 type State = {
+  photo: FormData | undefined;
+  session: string;
   firstLoad: boolean;
   allowed: boolean;
   webcamStream: MediaStream | undefined;
@@ -28,6 +31,7 @@ type State = {
   toggleCamera: () => void;
   turnOnCamera: () => Promise<void>;
   turnOffCamera: () => void;
+  submitToAi: () => Promise<void>;
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
   isActive: boolean;
@@ -36,6 +40,7 @@ type State = {
 };
 
 const initialState: NonFunctionProperties<State> = {
+  session: MathUtils.generateUUID(),
   firstLoad: true,
   allowed: localStorage.getItem("allowed") === "true" ?? false,
   webcamStream: undefined,
@@ -44,6 +49,7 @@ const initialState: NonFunctionProperties<State> = {
   isCameraEnabled: false,
   isActive: true,
   webcamAspect: 4 / 3,
+  photo: undefined,
   webcamHTMLElement: document.createElement("video"),
 };
 
@@ -102,6 +108,24 @@ export const store = create<State>((set, get) => ({
         set({ webcamAspect: videoAspect, webcamHTMLElement: webcam });
       })
       .catch((error) => console.error(error));
+  },
+
+  async submitToAi() {
+    const photo = get().photo;
+    if (!photo) return;
+    console.log("Submitting to AI");
+    return fetch(`https://discriminator-ai.jaeperris.com/add-video`, {
+      method: "POST",
+      body: photo,
+      mode: "no-cors",
+    }).then(async (response) => {
+      if (response.status === 500) {
+        console.error(await response.text());
+      } else {
+        const src = await response.text();
+        console.log(src);
+      }
+    });
   },
 }));
 
