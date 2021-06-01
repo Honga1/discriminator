@@ -34,12 +34,13 @@ export const Mask = ({
   track,
   maskType,
   webcam,
+  loop,
 }: {
   webcam: HTMLVideoElement;
   track: "center" | "webcam";
   maskType: "brett" | "own" | "video";
+  loop: boolean;
 }) => {
-  const isCover = usePageType() === "cover";
   const textures = useMemo(() => {
     const mapVideo = document.createElement("video");
     mapVideo.crossOrigin = "anonymous";
@@ -47,7 +48,7 @@ export const Mask = ({
     mapVideo.muted = true;
     mapVideo.playsInline = true;
     mapVideo.muted = true;
-    mapVideo.loop = isCover;
+    mapVideo.loop = loop;
 
     const alphaMapVideo = document.createElement("video");
     alphaMapVideo.crossOrigin = "anonymous";
@@ -55,7 +56,7 @@ export const Mask = ({
     alphaMapVideo.muted = true;
     alphaMapVideo.playsInline = true;
     alphaMapVideo.muted = true;
-    alphaMapVideo.loop = isCover;
+    alphaMapVideo.loop = loop;
 
     const videoMaskMap = new VideoTexture(mapVideo);
     const videoMaskAlpha = new VideoTexture(alphaMapVideo);
@@ -76,7 +77,7 @@ export const Mask = ({
       own: { albedo: webcamTexture, alpha: brettsFaceAlpha },
       brett: { albedo: brettsFaceAlbedo, alpha: brettsFaceAlpha },
     };
-  }, [webcam]);
+  }, [loop, webcam]);
 
   const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
   const predictions = usePredictions();

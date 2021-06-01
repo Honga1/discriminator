@@ -32,7 +32,12 @@ export const Part1 = ({
       {hasFirstPrediction && aspect !== undefined && (
         <>
           <WorldOffset targetAspect={aspect}>
-            <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
+            <Mask
+              track="center"
+              maskType={maskType}
+              webcam={webcam}
+              loop={false}
+            ></Mask>
           </WorldOffset>
           <RainbowVomit targetAspect={aspect} />
         </>

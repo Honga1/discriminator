@@ -48,7 +48,12 @@ export default function Cover3() {
           {hasFirstPrediction && aspect !== undefined && (
             <>
               <WorldOffset targetAspect={aspect}>
-                <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
+                <Mask
+                  track="center"
+                  maskType={maskType}
+                  webcam={webcam}
+                  loop={true}
+                ></Mask>
               </WorldOffset>
               <RainbowVomit targetAspect={aspect} />
             </>
