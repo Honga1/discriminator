@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useMemo, useRef } from "react";
+import { usePageType } from "src/hooks/usePageType";
 import { usePredictions } from "src/hooks/usePredictions";
 import {
   BufferGeometry,
@@ -38,6 +39,7 @@ export const Mask = ({
   track: "center" | "webcam";
   maskType: "brett" | "own" | "video";
 }) => {
+  const isCover = usePageType() === "cover";
   const textures = useMemo(() => {
     const mapVideo = document.createElement("video");
     mapVideo.crossOrigin = "anonymous";
@@ -45,7 +47,7 @@ export const Mask = ({
     mapVideo.muted = true;
     mapVideo.playsInline = true;
     mapVideo.muted = true;
-    mapVideo.loop = true;
+    mapVideo.loop = isCover;
 
     const alphaMapVideo = document.createElement("video");
     alphaMapVideo.crossOrigin = "anonymous";
@@ -53,7 +55,7 @@ export const Mask = ({
     alphaMapVideo.muted = true;
     alphaMapVideo.playsInline = true;
     alphaMapVideo.muted = true;
-    alphaMapVideo.loop = true;
+    alphaMapVideo.loop = isCover;
 
     const videoMaskMap = new VideoTexture(mapVideo);
     const videoMaskAlpha = new VideoTexture(alphaMapVideo);
