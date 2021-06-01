@@ -100,7 +100,17 @@ function Heading() {
 }
 
 const WebcamNotification = () => {
-  const [isShown, setIsShown] = useState(true);
+  const isNeeded = useStore((state) => state.isCameraEnabled);
+  const isOn = useStore((state) => state.webcamStream !== undefined);
+
+  const [isShown, setIsShown] = useState(isNeeded && !isOn);
+
+  useEffect(() => {
+    if (isNeeded && !isOn) {
+      setIsShown(true);
+    }
+  }, [isNeeded, isOn]);
+
   useEffect(() => {
     const timeout =
       isShown &&
@@ -108,9 +118,11 @@ const WebcamNotification = () => {
         setIsShown(false);
       }, 3000);
     return () => {
+      setIsShown(false);
+
       timeout && clearTimeout(timeout);
     };
-  }, [isShown]);
+  }, [isShown, isNeeded]);
 
   return (
     <FadeOutBox

@@ -1,8 +1,7 @@
 const routes = [
   "/",
   "/home",
-  "/cover",
-  "/coil",
+  "/permissions",
   "/chapter/1?type=chapter",
   "/chapter/2?type=cover",
   "/chapter/2?type=chapter",
