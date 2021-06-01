@@ -1,5 +1,5 @@
 import { Box, Button, ResponsiveContext, Text } from "grommet";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useHasPredictionConfidence } from "src/hooks/useHasPredictionConfidence";
 import { PredictionsStore } from "src/store/PredictionsStore";
