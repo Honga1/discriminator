@@ -8,7 +8,10 @@ import { FinishedButton } from "./FinishedButton";
 export const ChapterAndCoverNextButton = () => {
   const pageType = usePageType();
   const nextStep = useNextStep();
-  const isChapterComplete = useStore((state) => state.chapter?.progress === 1);
+  const isChapterComplete = useStore(
+    (state) => (state.chapter?.progress ?? 0) >= 1
+  );
+
   const isActive = useIsActive();
   const shouldShow = pageType === "cover" || isChapterComplete;
   const chapterNumber = useChapterNumber();
