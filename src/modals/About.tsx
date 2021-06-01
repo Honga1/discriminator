@@ -1309,6 +1309,25 @@ export const About = () => {
                 </Anchor>
               </td>
             </tr>
+            <tr>
+              <td>
+                <Anchor
+                  target="_blank"
+                  href="https://www.youtube.com/watch?v=W6X2B2nIPJw"
+                >
+                  CACM Feb. 2015 - YFCC100M: The New Data in Multimedia Research
+                  HD
+                </Anchor>
+              </td>
+              <td>
+                <Anchor
+                  target="_blank"
+                  href="https://www.youtube.com/user/TheOfficialACM"
+                >
+                  Association for Computing Machinery (ACM)
+                </Anchor>
+              </td>
+            </tr>
           </tbody>
         </table>
       </Text>
