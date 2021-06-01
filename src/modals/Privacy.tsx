@@ -30,8 +30,10 @@ export const Privacy = () => {
         <br />
         <br />
         This website does not use Google Analytics. We use{" "}
-        <Anchor href="https://www.goatcounter.com/">Goat Counter</Anchor>, a
-        privacy respecting analytics tool.
+        <Anchor target="_blank" href="https://www.goatcounter.com/">
+          Goat Counter
+        </Anchor>
+        , a privacy respecting analytics tool.
         <br />
         <br />
         There is a possibility that this Privacy Policy will be adapted in the

@@ -23,7 +23,7 @@ export const Support = () => {
         <br />
         By watching this film with a Coil membership, micropayments are sent to
         the{" "}
-        <Anchor href={"https://www.stopspying.org/"}>
+        <Anchor target="_blank" href={"https://www.stopspying.org/"}>
           Surveillance Technology Oversight Project
         </Anchor>
         , an advocacy and policy group in New York that campaigns against mass
@@ -42,7 +42,10 @@ export const Support = () => {
           data-ab-token="wmfRiNtihQRta36GbM4bSmvU"
           data-ab-height="auto"
         >
-          <Anchor href="https://secure.actblue.com/donate/stopfilm">
+          <Anchor
+            target="_blank"
+            href="https://secure.actblue.com/donate/stopfilm"
+          >
             Donate
           </Anchor>
         </div>
