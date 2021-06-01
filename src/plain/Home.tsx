@@ -1,25 +1,15 @@
 import { Anchor, Box, BoxProps, Image, ResponsiveContext, Text } from "grommet";
-import React, { PropsWithChildren, useContext, useEffect } from "react";
-import { colorTheme } from "../theme";
-import { PageBodyButton } from "./PageBodyButton";
-import { PageFrame, PageFrameWithCameraIndicator } from "../components/Frames";
-import { Links } from "./Links";
-import { store } from "../store/store";
-
+import React, { PropsWithChildren, useContext } from "react";
 import imposterMediaLogoSrc from "src/images/imposter-media-logo.png";
 import tribecaLogoSrc from "src/images/tribeca-logo.png";
-import { CameraIndicatorBox } from "src/components/CameraIndicator";
+import { PageFrame, PageFrameWithCameraIndicator } from "../components/Frames";
+import { colorTheme } from "../theme";
+import { Links } from "./Links";
+import { PageBodyButton } from "./PageBodyButton";
 
 export const Home = () => {
-  useEffect(() => {
-    store.setState({ isCameraEnabled: true });
-  }, []);
-
-  const isSmall = useContext(ResponsiveContext) === "small";
-
   return (
     <>
-      {!isSmall && <CameraIndicator />}
       <HomeContainer>
         <HomeContent />
       </HomeContainer>
@@ -27,7 +17,7 @@ export const Home = () => {
   );
 };
 
-const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
+export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -105,16 +95,23 @@ const Logos = () => {
 };
 
 const TribecaLaurel = () => {
-  return <Image src={tribecaLogoSrc} fit="contain"></Image>;
+  return (
+    <Anchor href="https://tribecafilm.com/festival" target="_blank">
+      <Image width="100%" src={tribecaLogoSrc} fit="contain"></Image>
+    </Anchor>
+  );
 };
 
 const ImposterMediaLogo = () => {
   return (
-    <Image
-      src={imposterMediaLogoSrc}
-      fit="contain"
-      style={{ imageRendering: "crisp-edges" }}
-    ></Image>
+    <Anchor href="https://impostermedia.com/" target="_blank">
+      <Image
+        width="100%"
+        src={imposterMediaLogoSrc}
+        fit="contain"
+        style={{ imageRendering: "crisp-edges" }}
+      ></Image>
+    </Anchor>
   );
 };
 
@@ -152,17 +149,11 @@ const HomeContent = () => {
         directed by Brett Gaylor.
       </Text>
 
-      <Text size={textSize} style={{ lineHeight: lineHeight }} color="black">
-        For the best experience, enable your webcam so we can demonstrate how
-        facial recognition works. We don’t store your data - for more
-        information, read our privacy policy.
-      </Text>
-
       <Box direction={isSmall ? "column" : "row"} gap="16px">
         <PageBodyButton
           color="blue"
           textContent="Start"
-          href="/chapter/1?type=chapter"
+          config={{ type: "href", href: "/permissions" }}
           size={isSmall ? "small" : "large"}
         />
         <Box alignSelf={isSmall ? "start" : "center"}>
@@ -202,17 +193,6 @@ const HomeContent = () => {
         </Anchor>
         .
       </Text>
-    </Box>
-  );
-};
-
-const CameraIndicator = () => {
-  return (
-    <Box
-      style={{ position: "sticky", width: "100%", height: 0, top: 0 }}
-      align="end"
-    >
-      <CameraIndicatorBox />
     </Box>
   );
 };

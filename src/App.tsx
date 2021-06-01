@@ -11,6 +11,7 @@ import { Chapter } from "./chapters/Chapters";
 import { Media } from "./components/MediaContainer";
 import { PageContainer } from "./components/PageContainer";
 import { Home } from "./plain/Home";
+import { Permissions } from "./plain/Permissions";
 import {
   parseChapterNumber,
   parsePageTypeQuery,
@@ -35,6 +36,11 @@ function App({ history }: { history: History }) {
         <KnownRoute path={"/home"}>
           <PageContainer backgroundColor={"yellow"}>
             <Home />
+          </PageContainer>
+        </KnownRoute>
+        <KnownRoute path={"/permissions"}>
+          <PageContainer backgroundColor={"yellow"}>
+            <Permissions />
           </PageContainer>
         </KnownRoute>
 

@@ -26,7 +26,7 @@ type State = {
       }
     | undefined;
   toggleCamera: () => void;
-  turnOnCamera: () => void;
+  turnOnCamera: () => Promise<void>;
   turnOffCamera: () => void;
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
@@ -41,7 +41,7 @@ const initialState: NonFunctionProperties<State> = {
   webcamStream: undefined,
   chapter: undefined,
   isHeadingShown: true,
-  isCameraEnabled: true,
+  isCameraEnabled: false,
   isActive: true,
   webcamAspect: 4 / 3,
   webcamHTMLElement: document.createElement("video"),
@@ -76,7 +76,7 @@ export const store = create<State>((set, get) => ({
     const webcamIsOpen = get().webcamStream !== undefined;
     if (webcamIsOpen) return;
 
-    getWebcam()
+    return getWebcam()
       .then((stream) => {
         stream.getTracks().forEach((track) => {
           track.addEventListener("ended", () => {
