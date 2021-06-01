@@ -2,6 +2,7 @@ const routes = [
   "/",
   "/home",
   "/permissions",
+  "/chapter/1?type=cover",
   "/chapter/1?type=chapter",
   "/chapter/2?type=cover",
   "/chapter/2?type=chapter",
@@ -32,22 +33,15 @@ export const parseChapterNumber = (
   }
 };
 
-export const validatePageTypeQuery = (
-  query: URLSearchParams,
-  chapterNumber: number
-) => {
+export const validatePageTypeQuery = (query: URLSearchParams) => {
   const type = query.get("type");
-  if (chapterNumber === 1 && type === "cover") return false;
   const isValidQuery = type === "cover" || type === "chapter";
 
   return isValidQuery;
 };
 
-export const parsePageTypeQuery = (
-  query: URLSearchParams,
-  chapterNumber: number
-) => {
-  if (!validatePageTypeQuery(query, chapterNumber)) {
+export const parsePageTypeQuery = (query: URLSearchParams) => {
+  if (!validatePageTypeQuery(query)) {
     throw new Error("Invalid page type");
   } else {
     return query.get("type") as "cover" | "chapter";

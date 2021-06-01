@@ -73,7 +73,7 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
 
     const chapterNumber = parseChapterNumber(maybeChapterNumber);
     const query = new URLSearchParams(location.search);
-    const isValidQuery = validatePageTypeQuery(query, chapterNumber);
+    const isValidQuery = validatePageTypeQuery(query);
 
     if (!isValidQuery) {
       history.replace(
@@ -87,11 +87,11 @@ const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
   if (!isValidChapterNumber) return null;
   const chapterNumber = parseChapterNumber(maybeChapterNumber);
   const query = new URLSearchParams(location.search);
-  const isValidQuery = validatePageTypeQuery(query, chapterNumber);
+  const isValidQuery = validatePageTypeQuery(query);
 
   if (!isValidQuery) return null;
 
-  const type = parsePageTypeQuery(query, chapterNumber);
+  const type = parsePageTypeQuery(query);
   return (
     <Media>
       <Chapter isCover={type !== "chapter"} chapterNumber={chapterNumber} />
