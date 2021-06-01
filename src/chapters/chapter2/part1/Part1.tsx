@@ -4,6 +4,7 @@ import { WorldOffset } from "src/components/WorldOffset";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useStore } from "src/store/store";
 import { Mask } from "./Mask";
+import { RainbowVomit } from "./RainbowVomit";
 import { StaticBackground } from "./StaticBackground";
 
 export const Part1 = ({
@@ -33,6 +34,7 @@ export const Part1 = ({
           <WorldOffset targetAspect={aspect}>
             <Mask track="center" maskType={maskType} webcam={webcam}></Mask>
           </WorldOffset>
+          <RainbowVomit targetAspect={aspect} />
         </>
       )}
     </ResizeCanvas>
