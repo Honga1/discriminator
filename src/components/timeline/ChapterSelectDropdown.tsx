@@ -70,7 +70,7 @@ export const ChapterSelectDropdown = () => {
         >
           <RoutedButton
             plain
-            href="/chapter/1?type=chapter"
+            href="/chapter/1?type=cover"
             onClick={onClose}
             label={
               <Text color="offWhite" size="24px" style={{ lineHeight: "36px" }}>
