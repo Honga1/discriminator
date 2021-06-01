@@ -16,8 +16,16 @@ export const ChapterAndCoverNextButton = () => {
   const shouldShow = pageType === "cover" || isChapterComplete;
   const chapterNumber = useChapterNumber();
 
+  const hasPhoto = useStore((state) => state.photo !== undefined);
   let text: string;
-  if (chapterNumber === 4 && pageType === "chapter") {
+
+  if (chapterNumber === 1 && pageType === "cover") {
+    if (hasPhoto) {
+      text = "Enjoy the film";
+    } else {
+      text = "No photo taken";
+    }
+  } else if (chapterNumber === 4 && pageType === "chapter") {
     text = "Want to help?";
   } else if (pageType === "cover") {
     text = "Start chapter";
@@ -25,7 +33,7 @@ export const ChapterAndCoverNextButton = () => {
     text = "Next chapter";
   }
 
-  const width = pageType === "cover" ? "240px" : "240px";
+  const width = pageType === "cover" ? "255px" : "240px";
 
   return (
     <FinishedButton
