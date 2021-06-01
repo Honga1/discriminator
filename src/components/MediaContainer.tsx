@@ -22,6 +22,7 @@ export const Media = ({ children }: PropsWithChildren<{}>) => {
       style={{ position: "relative" }}
       frameColor="yellow"
       align="center"
+      overflow={"hidden"}
     >
       {children}
 
