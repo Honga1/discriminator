@@ -13,11 +13,14 @@ import {
   VideoTexture,
 } from "three";
 import { V3 } from "../../../libs/v3";
-import alphaSrc from "./alpha.mp4";
 import brettMaskAlpha from "./brett-mask-alpha.png";
 import brettMaskMap from "./brett-mask-map.png";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
-import maskSrc from "./mask.mp4";
+
+const maskSrc =
+  "https://discriminator-media-server.jaeperris.com/video-textures/mask.mp4";
+const alphaSrc =
+  "https://discriminator-media-server.jaeperris.com/video-textures/alpha.mp4";
 
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
@@ -37,16 +40,20 @@ export const Mask = ({
 }) => {
   const textures = useMemo(() => {
     const mapVideo = document.createElement("video");
+    mapVideo.crossOrigin = "anonymous";
     mapVideo.src = maskSrc;
     mapVideo.muted = true;
     mapVideo.playsInline = true;
     mapVideo.muted = true;
+    mapVideo.loop = true;
 
     const alphaMapVideo = document.createElement("video");
+    alphaMapVideo.crossOrigin = "anonymous";
     alphaMapVideo.src = alphaSrc;
     alphaMapVideo.muted = true;
     alphaMapVideo.playsInline = true;
     alphaMapVideo.muted = true;
+    alphaMapVideo.loop = true;
 
     const videoMaskMap = new VideoTexture(mapVideo);
     const videoMaskAlpha = new VideoTexture(alphaMapVideo);
