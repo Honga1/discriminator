@@ -19,6 +19,7 @@ export function useNextStep() {
     if (nextPageType === "chapter") {
       store.getState().chapter?.play();
     } else {
+      store.getState().chapter?.pause();
       store.getState().chapter?.rewind();
     }
 
