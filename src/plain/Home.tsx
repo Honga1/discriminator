@@ -1,5 +1,6 @@
 import { Anchor, Box, BoxProps, Image, ResponsiveContext, Text } from "grommet";
 import React, { PropsWithChildren, useContext } from "react";
+import { FullWidthStack } from "src/components/FullWidthStack";
 import imposterMediaLogoSrc from "src/images/imposter-media-logo.png";
 import tribecaLogoSrc from "src/images/tribeca-logo.png";
 import { PageFrame, PageFrameWithCameraIndicator } from "../components/Frames";
@@ -54,7 +55,7 @@ export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
       break;
   }
 
-  const Frame = size === "small" ? PageFrameWithCameraIndicator : PageFrame;
+  const Frame = size === "small" ? SmallFrame : PageFrame;
 
   return (
     <Box className="home container" {...props}>
@@ -193,6 +194,60 @@ const HomeContent = () => {
         </Anchor>
         .
       </Text>
+    </Box>
+  );
+};
+
+const SmallFrame = ({
+  children,
+  frameColor,
+  textColor,
+  heading,
+}: PropsWithChildren<{
+  frameColor: string;
+  textColor: string;
+  heading: string;
+}>) => {
+  const style = {
+    outlineOffset: `-3px`,
+    outline: `3px ${frameColor} solid`,
+  };
+
+  const size = useContext(ResponsiveContext) as "small" | string;
+  const isSmall = size === "small";
+  const textSize = isSmall ? "24px" : "48px";
+
+  return (
+    <Box
+      className="page frame with camera indicator"
+      style={style}
+      flex={false}
+    >
+      <FullWidthStack fill anchor="top-fill">
+        <Box fill>{children}</Box>
+
+        <Box
+          className="heading-block"
+          direction="row"
+          flex={false}
+          justify="between"
+          align="start"
+          style={{ userSelect: "none", pointerEvents: "none" }}
+        >
+          <Box
+            background={frameColor}
+            pad={{ horizontal: isSmall ? "16px" : "20px", vertical: "12px" }}
+          >
+            <Text
+              size={textSize}
+              color={textColor}
+              style={{ lineHeight: "100%" }}
+            >
+              {heading}
+            </Text>
+          </Box>
+        </Box>
+      </FullWidthStack>
     </Box>
   );
 };
