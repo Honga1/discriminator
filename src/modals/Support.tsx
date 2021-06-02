@@ -1,5 +1,6 @@
 import { Anchor, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
+import { MailchimpForm } from "src/components/MailChimp";
 
 export const Support = () => {
   const size = useContext(ResponsiveContext) as
@@ -37,6 +38,21 @@ export const Support = () => {
         and Imposter Media.
         <br />
         <br />
+        <MailchimpForm
+          action="https://impostermedia.us6.list-manage.com/subscribe/post?u=5aaeb25c155592449bceaf3ee&amp;id=6181594551"
+          fields={[
+            {
+              name: "EMAIL",
+              label: "Email Address",
+              placeholder: "email",
+              type: "email",
+              required: true,
+            },
+          ]}
+        />
+        <br />
+        <br />
+        Donate to S.T.O.P:
         <div
           data-ab-form
           data-ab-token="wmfRiNtihQRta36GbM4bSmvU"
