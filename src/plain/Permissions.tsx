@@ -1,14 +1,17 @@
-import { Box, ResponsiveContext, Text } from "grommet";
-import React, { useContext, useEffect } from "react";
+import { Box, BoxProps, ResponsiveContext, Text } from "grommet";
+import React, { PropsWithChildren, useContext, useEffect } from "react";
 import { useHistory } from "react-router";
 import { CameraIndicatorBox } from "src/components/CameraIndicator";
+import { PageFrame, PageFrameWithCameraIndicator } from "src/components/Frames";
+import { colorTheme } from "src/theme";
 import { store } from "../store/store";
-import { HomeContainer } from "./Home";
+import { Links } from "./Links";
+import { Logos } from "./Logos";
 import { PageBodyButton } from "./PageBodyButton";
 
 export const Permissions = () => {
   useEffect(() => {
-    store.setState({ isCameraEnabled: true });
+    store.setState({ isCameraEnabled: false });
   }, []);
 
   const isSmall = useContext(ResponsiveContext) === "small";
@@ -16,10 +19,64 @@ export const Permissions = () => {
   return (
     <>
       {!isSmall && <CameraIndicator />}
-      <HomeContainer>
+      <PermissionsContainer>
         <Content />
-      </HomeContainer>
+      </PermissionsContainer>
     </>
+  );
+};
+
+export const PermissionsContainer = ({ children }: PropsWithChildren<{}>) => {
+  const size = useContext(ResponsiveContext) as
+    | "small"
+    | "medium"
+    | "large"
+    | "xlarge";
+
+  let props: BoxProps;
+  switch (size) {
+    case "small":
+      const isXSmall = window.innerWidth < 500;
+      props = {
+        margin: isXSmall ? "8px" : "16px",
+        gap: "48px",
+        pad: { bottom: "72px" },
+      };
+      break;
+    case "medium":
+      props = {
+        margin: { horizontal: "64px", top: "96px", bottom: "64px" },
+        gap: "48px",
+      };
+      break;
+    case "large":
+      props = {
+        margin: { left: "64px", top: "96px", bottom: "20px" },
+        width: { max: "904px" },
+      };
+      break;
+    case "xlarge":
+      props = {
+        margin: { left: "112px", top: "112px", bottom: "20px" },
+        width: { max: "1024px" },
+      };
+      break;
+  }
+
+  const Frame = size === "small" ? PageFrameWithCameraIndicator : PageFrame;
+
+  return (
+    <Box className="home container" {...props}>
+      <Frame
+        textColor={colorTheme.yellow}
+        frameColor={colorTheme.black}
+        heading="Discriminator"
+      >
+        {children}
+      </Frame>
+      <Links />
+      <Logos />
+    </Box>
   );
 };
 

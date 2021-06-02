@@ -18,7 +18,7 @@ export const CameraIndicatorBox = ({
   const isCameraEnabled = useStore((state) => state.isCameraEnabled);
 
   if (!isCameraEnabled) {
-    return <DisabledCameraBox />;
+    return <DisabledCameraBox borderColor={borderColor} />;
   }
   if (isSmall) {
     return <CameraIndicatorBoxSmall borderColor={borderColor} />;
@@ -105,11 +105,15 @@ const CameraIndicatorBoxSmall = ({
   );
 };
 
-function DisabledCameraBox() {
+function DisabledCameraBox({
+  borderColor = "yellow",
+}: {
+  borderColor?: "yellow" | "black";
+}) {
   return (
     <Box fill="horizontal" flex={false}>
       <Box justify="end" gap={"16px"}>
-        <CameraIndicatorBoxSmall borderColor={"yellow"} />
+        <CameraIndicatorBoxSmall borderColor={borderColor} />
       </Box>
     </Box>
   );

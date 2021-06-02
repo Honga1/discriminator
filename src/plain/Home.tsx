@@ -6,6 +6,7 @@ import tribecaLogoSrc from "src/images/tribeca-logo.png";
 import { PageFrame, PageFrameWithCameraIndicator } from "../components/Frames";
 import { colorTheme } from "../theme";
 import { Links } from "./Links";
+import { Logos } from "./Logos";
 import { PageBodyButton } from "./PageBodyButton";
 
 export const Home = () => {
@@ -72,30 +73,7 @@ export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
-const Logos = () => {
-  const size = useContext(ResponsiveContext);
-  const isSmall = size === "small";
-  const isLargeOrXL = size === "large" || size === "xlarge";
-  return (
-    <Box
-      direction={isSmall ? "column" : "row"}
-      gap={isSmall ? "64px" : "32px"}
-      flex={false}
-      align="center"
-      justify={isLargeOrXL ? "start" : "center"}
-      pad={{ top: size === "medium" ? "212px" : isLargeOrXL ? "100px" : "0px" }}
-    >
-      <Box width="150px">
-        <TribecaLaurel />
-      </Box>
-      <Box width="228px">
-        <ImposterMediaLogo />
-      </Box>
-    </Box>
-  );
-};
-
-const TribecaLaurel = () => {
+export const TribecaLaurel = () => {
   return (
     <Anchor href="https://tribecafilm.com/festival" target="_blank">
       <Image width="100%" src={tribecaLogoSrc} fit="contain"></Image>
@@ -103,7 +81,7 @@ const TribecaLaurel = () => {
   );
 };
 
-const ImposterMediaLogo = () => {
+export const ImposterMediaLogo = () => {
   return (
     <Anchor href="https://impostermedia.com/" target="_blank">
       <Image

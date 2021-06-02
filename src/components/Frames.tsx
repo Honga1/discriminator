@@ -93,7 +93,9 @@ export const PageFrameWithCameraIndicator = ({
               {heading}
             </Text>
           </Box>
-          <CameraIndicatorBox borderColor="black" />
+          <Box>
+            <CameraIndicatorBox borderColor="black" />
+          </Box>
         </Box>
       </FullWidthStack>
     </Box>
