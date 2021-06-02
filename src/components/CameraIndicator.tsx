@@ -128,6 +128,7 @@ export const ChapterCameraIndicator = () => {
         <Box justify="end" gap={"16px"}>
           <CameraIndicatorBox />
           <WebcamNotification />
+          <WebcamDisabledInSystem />
         </Box>
       </Box>
     );
@@ -176,6 +177,43 @@ const WebcamNotification = () => {
     >
       <Text size="xsmall" color="offWhite">
         To make this sequence interactive, turn on your webcam
+      </Text>
+    </FadeOutBox>
+  );
+};
+
+const WebcamDisabledInSystem = () => {
+  const isShown = useStore((state) => state.webcamDisabledInSystemNotification);
+
+  useEffect(() => {
+    const timeout =
+      isShown &&
+      setTimeout(() => {
+        store.setState({ webcamDisabledInSystemNotification: false });
+      }, 3000);
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [isShown]);
+
+  return (
+    <FadeOutBox
+      isShown={isShown}
+      flex={false}
+      style={{
+        position: "absolute",
+        top: "calc(16px + 100%)",
+        right: 0,
+        zIndex: 1,
+        width: "186px",
+      }}
+      background={"black"}
+      pad="10px"
+      border={{ color: "red", size: "3px" }}
+    >
+      <Text size="xsmall" color="offWhite">
+        Something went wrong enabling your webcam. Try re-enable your camera in
+        the browser.
       </Text>
     </FadeOutBox>
   );

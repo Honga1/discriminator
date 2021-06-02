@@ -10,7 +10,7 @@ import { CameraIndicatorBox, ChapterCameraIndicator } from "./CameraIndicator";
 import { ChapterAndCoverNextButton } from "./ChapterAndCoverFinishedButton";
 import { Timeline } from "./timeline/Timeline";
 import { useIsActive } from "../hooks/useIsActive";
-import { useStore } from "../store/store";
+import { store, useStore } from "../store/store";
 import { colorTheme } from "../theme";
 
 export const Media = ({ children }: PropsWithChildren<{}>) => {
@@ -80,7 +80,12 @@ function Heading() {
           vertical: "12px",
         }}
       >
-        {isSmallOrMedium && <WebcamNotification />}
+        {isSmallOrMedium && (
+          <>
+            <WebcamNotification />
+            <WebcamDisabledInSystem />
+          </>
+        )}
         <Text
           size="24px"
           color={colorTheme.black}
@@ -118,11 +123,11 @@ const WebcamNotification = () => {
         setIsShown(false);
       }, 3000);
     return () => {
-      setIsShown(false);
-
       timeout && clearTimeout(timeout);
     };
-  }, [isShown, isNeeded]);
+  }, [isShown]);
+
+  console.log(isNeeded, isOn);
 
   return (
     <FadeOutBox
@@ -142,6 +147,44 @@ const WebcamNotification = () => {
     >
       <Text size="xsmall" color="offWhite">
         To make this sequence interactive, turn on your webcam
+      </Text>
+    </FadeOutBox>
+  );
+};
+
+const WebcamDisabledInSystem = () => {
+  const isShown = useStore((state) => state.webcamDisabledInSystemNotification);
+
+  useEffect(() => {
+    const timeout =
+      isShown &&
+      setTimeout(() => {
+        store.setState({ webcamDisabledInSystemNotification: false });
+      }, 3000);
+    return () => {
+      timeout && clearTimeout(timeout);
+    };
+  }, [isShown]);
+
+  return (
+    <FadeOutBox
+      isShown={isShown}
+      flex={false}
+      style={{
+        position: "absolute",
+        minHeight: "100%",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1,
+      }}
+      background={"black"}
+      pad="10px"
+      border={{ color: "red", size: "3px" }}
+    >
+      <Text size="xsmall" color="offWhite">
+        Something went wrong enabling your webcam. Try re-enable your camera in
+        the browser.
       </Text>
     </FadeOutBox>
   );

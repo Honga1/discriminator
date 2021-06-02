@@ -5,6 +5,7 @@ import { NonFunctionProperties } from "../@types/NonFunctionProperties";
 
 type State = {
   photo: FormData | undefined;
+  webcamDisabledInSystemNotification: boolean;
   session: string;
   firstLoad: boolean;
   allowed: boolean;
@@ -40,6 +41,7 @@ type State = {
 };
 
 const initialState: NonFunctionProperties<State> = {
+  webcamDisabledInSystemNotification: false,
   session: MathUtils.generateUUID(),
   firstLoad: true,
   allowed: localStorage.getItem("allowed") === "true" ?? false,
@@ -154,13 +156,17 @@ function getWebcam() {
         })
         .then((stream) => resolve(stream))
         .catch((error) => {
-          if (error.name === "NotAllowedError") console.warn(error);
-          else {
+          if (error.name === "NotAllowedError") {
+            console.warn(error);
+            store.setState({ webcamDisabledInSystemNotification: true });
+          } else {
             console.error("Something went wrong accessing webcam!");
+            store.setState({ webcamDisabledInSystemNotification: true });
             reject(error);
           }
         });
     } catch (error) {
+      store.setState({ webcamDisabledInSystemNotification: true });
       console.error("Something went wrong accessing webcam!");
       reject(error);
     }
