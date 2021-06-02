@@ -12,6 +12,7 @@ type State = {
   webcamStream: MediaStream | undefined;
   chapter:
     | {
+        element: HTMLVideoElement | HTMLAudioElement;
         play: () => void;
         pause: () => void;
         rewind: () => void;

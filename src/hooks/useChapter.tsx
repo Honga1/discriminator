@@ -89,8 +89,10 @@ export function useChapter(
 
   useEffect(() => {
     const updateStore = () => {
+      if (!ref.current) return;
       return store.setState({
         chapter: {
+          element: ref.current,
           play,
           pause,
           rewind,
