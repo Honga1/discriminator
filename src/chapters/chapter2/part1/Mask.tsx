@@ -9,7 +9,6 @@ import {
   sRGBEncoding,
   Texture,
   TextureLoader,
-  Vector2,
   VideoTexture,
 } from "three";
 import { V3 } from "../../../libs/v3";
@@ -113,10 +112,6 @@ export const Mask = ({
       mesh = prediction.mesh as V3[];
     } else {
       mesh = prediction.scaledMesh as V3[];
-    }
-
-    if (maskType === "own") {
-      maskTexture.albedo.center = new Vector2(mesh[4]![0], mesh[4]![1]);
     }
 
     const { topLeft, bottomRight } = prediction.boundingBox;

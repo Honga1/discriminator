@@ -1,5 +1,5 @@
-import { Box, Button, Grid, ResponsiveContext, Text } from "grommet";
-import React, { useContext, useEffect, useRef } from "react";
+import { Box, Button, Grid, Text } from "grommet";
+import React, { useEffect, useRef } from "react";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useHasPredictionConfidence } from "src/hooks/useHasPredictionConfidence";
 import { PredictionsStore } from "src/store/PredictionsStore";
@@ -63,8 +63,6 @@ export default function Cover1() {
 
     store.setState({ photo: formData });
   };
-
-  const size = useContext(ResponsiveContext);
 
   return (
     <div

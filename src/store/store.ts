@@ -1,4 +1,4 @@
-import { MathUtils } from "three";
+import { generateUUID } from "three/src/math/MathUtils";
 import createStoreHook from "zustand";
 import create from "zustand/vanilla";
 import { NonFunctionProperties } from "../@types/NonFunctionProperties";
@@ -43,7 +43,7 @@ type State = {
 
 const initialState: NonFunctionProperties<State> = {
   webcamDisabledInSystemNotification: false,
-  session: MathUtils.generateUUID(),
+  session: generateUUID(),
   firstLoad: true,
   allowed: localStorage.getItem("allowed") === "true" ?? false,
   webcamStream: undefined,
