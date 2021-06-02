@@ -1,4 +1,4 @@
-import { Box, Button, ResponsiveContext, Text } from "grommet";
+import { Box, Button, Grid, ResponsiveContext, Text } from "grommet";
 import React, { useContext, useEffect, useRef } from "react";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useHasPredictionConfidence } from "src/hooks/useHasPredictionConfidence";
@@ -74,88 +74,23 @@ export default function Cover1() {
         height: "100%",
       }}
     >
-      <div
+      <Grid
         style={{
           position: "relative",
           width: "100%",
           height: "100%",
-          flexDirection: "column",
         }}
+        columns={["auto"]}
+        rows={["auto", "auto", "auto"]}
+        pad={{ vertical: "58px", horizontal: "24px" }}
       >
         <Box
           style={{
-            position: "absolute",
-            width: "100%",
-            paddingTop: "58px",
-            boxSizing: "border-box",
             textAlign: "center",
             pointerEvents: "all",
+            position: "relative",
           }}
           align="center"
-        >
-          <Text
-            color="yellow"
-            size="32px"
-            style={{
-              textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-              userSelect: "none",
-            }}
-          >
-            {!hasWebcamStream ? (
-              "Awaiting webcam permission"
-            ) : !hasFirstPrediction ? (
-              "Loading..."
-            ) : !isConfident ? (
-              <>
-                Our AI cannot find your face. <br />
-                Try adjust your lighting or positioning
-              </>
-            ) : (
-              <Button
-                plain
-                onClick={() => {
-                  if (photo === undefined) {
-                    webcam.current?.pause();
-                    takePhoto();
-                  } else {
-                    webcam.current?.play();
-                    store.setState({ photo: undefined });
-                  }
-                }}
-                label={
-                  <OnHoverBox
-                    border={{ color: "yellow", style: "solid", size: "3px" }}
-                    fillColor={colorTheme.blue}
-                    pad={
-                      size === "small"
-                        ? { horizontal: "24px", vertical: "9px" }
-                        : { horizontal: "30px", vertical: "13px" }
-                    }
-                  >
-                    <Text
-                      size="24px"
-                      style={{ lineHeight: "100%" }}
-                      color={"yellow"}
-                    >
-                      {photo === undefined ? "Take Photo" : "Re-take photo"}
-                    </Text>
-                  </OnHoverBox>
-                }
-              />
-            )}
-          </Text>
-        </Box>
-
-        {/* Reserves height for text */}
-        <Box
-          style={{
-            width: "100%",
-            paddingTop: "58px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            paddingBottom: "32px",
-            pointerEvents: "none",
-          }}
         >
           <Text
             color="yellow"
@@ -166,23 +101,82 @@ export default function Cover1() {
               opacity: 0,
             }}
           >
-            Our AI cannot find your face. <br />
-            Try adjust your lighting or positioning
+            <>
+              Our AI cannot find your face. <br />
+              Try adjust your lighting or positioning
+            </>
           </Text>
+          <Box
+            style={{
+              position: "absolute",
+              textAlign: "center",
+              pointerEvents: "all",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+            align="center"
+          >
+            <Text
+              color="yellow"
+              size="32px"
+              style={{
+                textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+                userSelect: "none",
+              }}
+            >
+              {!hasWebcamStream ? (
+                "Awaiting webcam permission"
+              ) : !hasFirstPrediction ? (
+                "Loading..."
+              ) : !isConfident ? (
+                <>
+                  Our AI cannot find your face. <br />
+                  Try adjust your lighting or positioning
+                </>
+              ) : (
+                <Button
+                  plain
+                  onClick={() => {
+                    if (photo === undefined) {
+                      webcam.current?.pause();
+                      takePhoto();
+                    } else {
+                      webcam.current?.play();
+                      store.setState({ photo: undefined });
+                    }
+                  }}
+                  size="small"
+                  label={
+                    <OnHoverBox
+                      border={{ color: "yellow", style: "solid", size: "3px" }}
+                      fillColor={colorTheme.blue}
+                      pad={{ horizontal: "30px", vertical: "13px" }}
+                    >
+                      <Text
+                        size="24px"
+                        style={{ lineHeight: "24px" }}
+                        color={"yellow"}
+                      >
+                        {photo === undefined ? "Take Photo" : "Re-take photo"}
+                      </Text>
+                    </OnHoverBox>
+                  }
+                />
+              )}
+            </Text>
+          </Box>
         </Box>
 
-        <Box
-          flex={false}
-          align="center"
-          justify="center"
-          pad={{ bottom: "150px" }}
-        >
+        <Box align="center" justify="center">
           <Box
+            flex={false}
             style={{
               maxWidth: "540px",
               maxHeight: "540px",
-              width: "66vw",
-              height: "66vw",
+              width: "100%",
+              height: "100%",
             }}
           >
             <SquareDiv
@@ -201,22 +195,22 @@ export default function Cover1() {
               />
             </SquareDiv>
           </Box>
-          <Box align="center">
-            <Text
-              color="yellow"
-              size="16px"
-              style={{
-                textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-                userSelect: "none",
-                lineHeight: "32px",
-                opacity: photo ? 1 : 0,
-              }}
-            >
-              Photo taken
-            </Text>
-          </Box>
         </Box>
-      </div>
+        <Box align="center">
+          <Text
+            color="yellow"
+            size="16px"
+            style={{
+              textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+              userSelect: "none",
+              lineHeight: "32px",
+              opacity: photo ? 1 : 0,
+            }}
+          >
+            Photo taken
+          </Text>
+        </Box>
+      </Grid>
     </div>
   );
 }
