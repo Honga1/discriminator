@@ -32,65 +32,71 @@ export function MailchimpForm<T extends string>({
 
   return (
     <form action={action} className={className} method="POST" target="_blank">
-      {fields.map((input, index) => (
-        <label>
-          <Text
-            size={textSize}
-            style={{ lineHeight: lineHeight }}
-            color="black"
-          >
-            {input.label}
-          </Text>
-          :
-          <br />
-          <input
-            style={{
-              lineHeight,
-              fontSize: textSize,
-              paddingLeft: "13px",
-              paddingRight: "13px",
-              paddingTop: "3px",
-              paddingBottom: "3px",
-              background: colorTheme.offWhite,
-            }}
-            name={input.name}
-            placeholder={input.placeholder}
-            type={input.type}
-            required={input.required}
-            key={input.name}
-            onChange={({ target }) =>
-              setState((state) => ({ ...state, [input.name]: target.value }))
-            }
-            defaultValue={state[input.name]}
-          />
-        </label>
-      ))}
-      <Button
-        plain
-        type="submit"
-        label={
-          <OnHoverBox
-            fillColor="blue"
-            pad={pad}
-            border={{ color: "blue", style: "solid", size: "3px" }}
-            margin={{ horizontal: "13px" }}
-          >
-            <Text size={textSize} style={{ lineHeight }} color={"blue"}>
-              Subscribe
+      <Box gap="4px">
+        {fields.map((input, index) => (
+          <label>
+            <Text
+              size={textSize}
+              style={{ lineHeight: lineHeight }}
+              color="black"
+            >
+              {input.label}
             </Text>
-          </OnHoverBox>
-        }
-      />
+            :
+            <br />
+            <input
+              style={{
+                lineHeight,
+                fontSize: textSize,
+                paddingLeft: "13px",
+                paddingRight: "13px",
+                paddingTop: "3px",
+                paddingBottom: "3px",
+                background: colorTheme.offWhite,
+              }}
+              name={input.name}
+              placeholder={input.placeholder}
+              type={input.type}
+              required={input.required}
+              key={input.name}
+              onChange={({ target }) =>
+                setState((state) => ({ ...state, [input.name]: target.value }))
+              }
+              defaultValue={state[input.name]}
+            />
+          </label>
+        ))}
+        <Box direction="row">
+          <Button
+            plain
+            type="submit"
+            label={
+              <OnHoverBox
+                fillColor="blue"
+                pad={pad}
+                border={{ color: "blue", style: "solid", size: "3px" }}
+              >
+                <Text size={textSize} style={{ lineHeight }} color={"blue"}>
+                  Subscribe
+                </Text>
+              </OnHoverBox>
+            }
+          />
+        </Box>
 
-      {/* Bot protection */}
-      <div style={{ position: "absolute", left: "-5000px" }} aria-hidden="true">
-        <input
-          type="text"
-          name="b_5aaeb25c155592449bceaf3ee_6181594551"
-          tabIndex={-1}
-          defaultValue=""
-        />
-      </div>
+        {/* Bot protection */}
+        <div
+          style={{ position: "absolute", left: "-5000px" }}
+          aria-hidden="true"
+        >
+          <input
+            type="text"
+            name="b_5aaeb25c155592449bceaf3ee_6181594551"
+            tabIndex={-1}
+            defaultValue=""
+          />
+        </div>
+      </Box>
     </form>
   );
 }
