@@ -1,6 +1,5 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useEffect, useMemo, useRef } from "react";
-import { usePageType } from "src/hooks/usePageType";
 import { usePredictions } from "src/hooks/usePredictions";
 import {
   BufferGeometry,

@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useContext } from "react";
 import { FullWidthStack } from "src/components/FullWidthStack";
 import imposterMediaLogoSrc from "src/images/imposter-media-logo.png";
 import tribecaLogoSrc from "src/images/tribeca-logo.png";
-import { PageFrame, PageFrameWithCameraIndicator } from "../components/Frames";
+import { PageFrame } from "../components/Frames";
 import { colorTheme } from "../theme";
 import { Links } from "./Links";
 import { Logos } from "./Logos";
