@@ -88,6 +88,13 @@ export function useChapter(
   );
 
   useEffect(() => {
+    return store.subscribe<boolean>(
+      (isMuted) => setMuted(isMuted),
+      (state) => state.isMuted
+    );
+  }, [setMuted]);
+
+  useEffect(() => {
     const updateStore = () => {
       if (!ref.current) return;
       return store.setState({
@@ -101,10 +108,8 @@ export function useChapter(
           setProgress,
           seekTimeDelta,
           seekTime,
-          setMuted,
           setVolume,
           getCurrentTime,
-          isMuted: getMuted(),
           progress: getProgress(),
           intention: getIsPlaying() ? "PLAY" : "PAUSE",
           currentTime: getCurrentTime(),

@@ -39,7 +39,7 @@ export default function Chapter3() {
       | "PART_3_SCREEN_1"
     >("PART_1_SCREEN_1");
 
-  const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
+  const isMuted = useStore((state) => state.isMuted);
   useLoopedAudio(ref, isAutoPaused, part, isMuted);
 
   useEffect(() => {

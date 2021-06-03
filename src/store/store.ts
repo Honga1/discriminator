@@ -22,9 +22,7 @@ type State = {
         getCurrentTime: () => number;
         seekTimeDelta: (delta: number) => void;
         seekTime: (time: number) => void;
-        setMuted: (isMuted: boolean) => void;
         setVolume: (volume: number) => void;
-        isMuted: boolean;
         intention: "PLAY" | "PAUSE";
         progress: number;
         currentTime: number;
@@ -34,11 +32,13 @@ type State = {
   turnOnCamera: () => Promise<void>;
   turnOffCamera: () => void;
   submitToAi: () => Promise<void>;
+  isMuted: boolean;
   isCameraEnabled: boolean;
   isHeadingShown: boolean;
   isActive: boolean;
   webcamHTMLElement: HTMLVideoElement;
   webcamAspect: number;
+  pageAnimationState: "ANIMATE_IN" | "ANIMATE_OUT" | "REST";
 };
 
 const initialState: NonFunctionProperties<State> = {
@@ -53,7 +53,9 @@ const initialState: NonFunctionProperties<State> = {
   isActive: true,
   webcamAspect: 4 / 3,
   photo: undefined,
+  isMuted: false,
   webcamHTMLElement: document.createElement("video"),
+  pageAnimationState: "REST",
 };
 
 export const store = create<State>((set, get) => ({

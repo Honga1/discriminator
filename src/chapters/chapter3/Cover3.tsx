@@ -2,6 +2,7 @@ import { Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { WorldOffset } from "src/components/WorldOffset";
+import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { store, useStore } from "src/store/store";
 import { Mask } from "../chapter2/part1/Mask";
@@ -13,6 +14,8 @@ export default function Cover3() {
   useEffect(() => {
     store.setState({ isCameraEnabled: true });
   }, []);
+
+  useCoverAudio(3);
 
   const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);
 

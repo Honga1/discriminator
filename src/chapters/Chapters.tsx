@@ -3,6 +3,7 @@ import { Box, Text } from "grommet";
 import React, { memo, Suspense, useEffect, useMemo } from "react";
 import { animated } from "react-spring";
 import { PredictionsStore } from "src/store/PredictionsStore";
+import { store } from "src/store/store";
 import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
 
@@ -28,6 +29,9 @@ export const Chapter = memo(
       chapterNumber,
     ] as [boolean, 1 | 2 | 3 | 4]);
 
+    useEffect(() => {
+      store.setState({ pageAnimationState: stage });
+    }, [stage]);
     useEffect(() => {
       PredictionsStore.pauseFor(700);
     }, [currentPage]);

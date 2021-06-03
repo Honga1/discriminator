@@ -2,6 +2,7 @@ import { Text } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
+import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { usePredictions } from "src/hooks/usePredictions";
 import { store, useStore } from "../../store/store";
@@ -10,6 +11,8 @@ import { eyes } from "./eyes/eyes";
 export default function Cover2() {
   const ref = useRef<HTMLCanvasElement>(null);
   const predictions = usePredictions();
+
+  useCoverAudio(2);
 
   const hasFirstPrediction = useHasFirstPrediction();
   const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);

@@ -5,11 +5,11 @@ import { colorTheme } from "../../theme";
 export const MuteButton = () => {
   const offWhite = colorTheme.offWhite;
 
-  const isMuted = useStore((state) => state.chapter?.isMuted ?? false);
+  const isMuted = useStore((state) => state.isMuted);
   return (
     <Button
       plain
-      onClick={() => store.getState().chapter?.setMuted(!isMuted)}
+      onClick={() => store.setState({ isMuted: !isMuted })}
       icon={
         isMuted ? (
           <svg

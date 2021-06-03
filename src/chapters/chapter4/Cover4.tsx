@@ -4,6 +4,7 @@ import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
 import { Box, Text } from "grommet";
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
+import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useHasFirstFaceApiPrediction } from "src/hooks/useHasFirstFaceApiPrediction";
 import { FaceApiPrediction } from "src/store/FaceApiPredictionsStore";
@@ -22,6 +23,8 @@ export default function Cover4() {
   useEffect(() => {
     store.setState({ isCameraEnabled: true });
   }, []);
+
+  useCoverAudio(4);
 
   const [state, setState] = useState(0);
   const hasFirstPrediction = useHasFirstFaceApiPrediction();
