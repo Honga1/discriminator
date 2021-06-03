@@ -127,8 +127,6 @@ const WebcamNotification = () => {
     };
   }, [isShown]);
 
-  console.log(isNeeded, isOn);
-
   return (
     <FadeOutBox
       isShown={isShown}

@@ -61,8 +61,6 @@ export default function Chapter4() {
       const video = event.target as HTMLVideoElement;
       const seconds = Math.round(video.currentTime);
 
-      console.log(seconds);
-
       if (seconds > 62 && seconds < 119) {
         setPreloadCanvas(true);
       } else {

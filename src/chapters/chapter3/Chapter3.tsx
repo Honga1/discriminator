@@ -47,7 +47,6 @@ export default function Chapter3() {
       const audio = event.target as HTMLAudioElement;
       const seconds = Math.round(audio.currentTime);
       setSeconds(seconds);
-      console.log(seconds);
       if (seconds < 15) {
         store.setState({ isHeadingShown: true });
       } else {
