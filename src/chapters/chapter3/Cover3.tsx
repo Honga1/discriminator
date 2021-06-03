@@ -45,6 +45,7 @@ export default function Cover3() {
             OTransform: "scale(-1, 1)",
             transform: "scale(-1, 1)",
           }}
+          linear
           orthographic={false}
         >
           <StaticBackground></StaticBackground>
