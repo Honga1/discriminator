@@ -1,5 +1,3 @@
-import { MediaPlayer } from "dashjs";
-import Hls from "hls.js";
 import { forwardRef, useEffect, useRef } from "react";
 import { useCombinedRef } from "../hooks/useCombinedRef";
 
@@ -21,20 +19,34 @@ export const VideoPlayer = forwardRef<
     if (!video) return;
 
     if (!!window.MediaSource) {
-      console.log("Using Dash.js player");
-      const player = MediaPlayer().create();
-      player.initialize(video, srcDash, true);
+      import(
+        /* webpackChunkName: "dashjs" */
+        "dashjs"
+      ).then(({ MediaPlayer }) => {
+        console.log("Using Dash.js player");
+        const player = MediaPlayer().create();
+        player.initialize(video, srcDash, true);
+      });
     } else {
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = srcHls;
         video.play();
         console.log("Using native HLS support");
-      } else if (Hls.isSupported()) {
-        console.log("Using Hls.js player");
-        const hls = new Hls();
-        hls.loadSource(srcHls);
-        hls.attachMedia(video);
-        video.play();
+      } else {
+        import(
+          /* webpackChunkName: "hls.js" */
+          "hls.js/dist/hls.light"
+        ).then(({ default: Hls }) => {
+          if (Hls.isSupported()) {
+            console.log("Using Hls.js light player");
+            const hls = new Hls();
+            hls.loadSource(srcHls);
+            hls.attachMedia(video);
+            video.play();
+          } else {
+            throw new Error("No video player supported");
+          }
+        });
       }
     }
   }, [combinedRef, srcDash, srcHls]);

@@ -6,14 +6,30 @@ import { store } from "src/store/store";
 import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
 
-const Cover1 = React.lazy(async () => import("./chapter1/Cover1"));
-const Cover2 = React.lazy(async () => import("./chapter2/Cover2"));
-const Cover3 = React.lazy(async () => import("./chapter3/Cover3"));
-const Cover4 = React.lazy(async () => import("./chapter4/Cover4"));
-const Chapter1 = React.lazy(async () => import("./chapter1/Chapter1"));
-const Chapter2 = React.lazy(async () => import("./chapter2/Chapter2"));
-const Chapter3 = React.lazy(async () => import("./chapter3/Chapter3"));
-const Chapter4 = React.lazy(async () => import("./chapter4/Chapter4"));
+const Cover1 = React.lazy(
+  async () => import(/* webpackChunkName: "Cover1" */ "./chapter1/Cover1")
+);
+const Cover2 = React.lazy(
+  async () => import(/* webpackChunkName: "Cover2" */ "./chapter2/Cover2")
+);
+const Cover3 = React.lazy(
+  async () => import(/* webpackChunkName: "Cover3" */ "./chapter3/Cover3")
+);
+const Cover4 = React.lazy(
+  async () => import(/* webpackChunkName: "Cover4" */ "./chapter4/Cover4")
+);
+const Chapter1 = React.lazy(
+  async () => import(/* webpackChunkName: "Chapter1" */ "./chapter1/Chapter1")
+);
+const Chapter2 = React.lazy(
+  async () => import(/* webpackChunkName: "Chapter2" */ "./chapter2/Chapter2")
+);
+const Chapter3 = React.lazy(
+  async () => import(/* webpackChunkName: "Chapter3" */ "./chapter3/Chapter3")
+);
+const Chapter4 = React.lazy(
+  async () => import(/* webpackChunkName: "Chapter4" */ "./chapter4/Chapter4")
+);
 
 export const Chapter = memo(
   ({
