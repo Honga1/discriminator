@@ -105,8 +105,9 @@ export default function Chapter2() {
       width="100%"
       height="100%"
       justify="center"
-      onClick={() => {
+      onClick={(event) => {
         ref.current?.click();
+        event.preventDefault();
       }}
     >
       <Box
