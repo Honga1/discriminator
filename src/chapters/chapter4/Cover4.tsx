@@ -1,8 +1,8 @@
-import { SpringValue, useSpring } from "@react-spring/core";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
 import { Box, Text } from "grommet";
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { SpringValue, useSpring } from "react-spring";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";

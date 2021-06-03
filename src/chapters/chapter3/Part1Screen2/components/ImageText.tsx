@@ -1,7 +1,6 @@
-import { useTransition } from "@react-spring/core";
 import { Box, ResponsiveContext, Text } from "grommet";
 import { useContext, useEffect, useState } from "react";
-import { animated } from "react-spring";
+import { animated, useTransition } from "react-spring";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import { usePart1Screen2Store } from "../store/Part1Screen2Store";

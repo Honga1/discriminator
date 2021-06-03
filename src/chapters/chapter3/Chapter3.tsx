@@ -1,11 +1,10 @@
-import { useTransition } from "@react-spring/core";
 import { Box } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
-import { animated } from "react-spring";
+import { animated, useTransition } from "react-spring";
 import { useChapter } from "../../hooks/useChapter";
 import { store, useStore } from "../../store/store";
-import audioSrcOgg from "./audio/Chapter3.ogg";
 import audioSrcCaf from "./audio/Chapter3.caf";
+import audioSrcOgg from "./audio/Chapter3.ogg";
 import { ContinueButton } from "./components/ContinueButton";
 import { useLoopedAudio } from "./hooks/useLoopedAudio";
 import { Part1Screen1 } from "./Part1Screen1/Part1Screen1";

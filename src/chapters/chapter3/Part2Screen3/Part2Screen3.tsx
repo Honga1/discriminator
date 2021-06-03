@@ -1,6 +1,6 @@
 import fromEntries from "fromentries";
 import { Box, ResponsiveContext } from "grommet";
-import { throttle } from "lodash";
+import throttle from "lodash.throttle";
 import {
   memo,
   useCallback,
