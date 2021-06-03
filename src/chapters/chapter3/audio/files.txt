@@ -1,0 +1,4 @@
+file 'Chapter3Part1.wav'
+file 'Chapter3Part2.wav'
+file 'silence.wav'
+file 'Chapter3Part3.wav'
