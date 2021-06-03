@@ -1,27 +1,17 @@
 import { History } from "history";
-import React, { useEffect } from "react";
-import {
-  Route,
-  RouteComponentProps,
-  RouteProps,
-  Router,
-  Switch,
-} from "react-router-dom";
-import { Chapter } from "./chapters/Chapters";
-import { Media } from "./components/MediaContainer";
+import React, { lazy, Suspense } from "react";
+import { Route, RouteProps, Router, Switch } from "react-router-dom";
 import { PageContainer } from "./components/PageContainer";
 import { Home } from "./plain/Home";
 import { Permissions } from "./plain/Permissions";
-import {
-  parseChapterNumber,
-  parsePageTypeQuery,
-  Routes,
-  validateChapterNumber,
-  validatePageTypeQuery,
-} from "./Routes";
+import { Routes } from "./Routes";
 
 const KnownRoute = (props: RouteProps & { path: Routes | Routes[] }) => (
   <Route {...props} />
+);
+
+const ChapterRouter = lazy(
+  async () => import(/* webpackChunkName: "ChapterRouter" */ "./ChapterRouter")
 );
 
 function App({ history }: { history: History }) {
@@ -48,7 +38,9 @@ function App({ history }: { history: History }) {
           path={"/chapter/:chapterNumber"}
           render={(props) => (
             <PageContainer backgroundColor="black">
-              <ChapterRouter {...props} />
+              <Suspense fallback={""}>
+                <ChapterRouter {...props} />
+              </Suspense>
             </PageContainer>
           )}
         ></Route>
@@ -58,45 +50,5 @@ function App({ history }: { history: History }) {
     </Router>
   );
 }
-
-const ChapterRouter = ({ match, history, location }: RouteComponentProps) => {
-  const maybeChapterNumber = (match.params as any)["chapterNumber"] as
-    | string
-    | undefined;
-
-  useEffect(() => {
-    const isValidChapterNumber = validateChapterNumber(maybeChapterNumber);
-    if (!isValidChapterNumber) {
-      history.replace(`/chapter/1?type=chapter`);
-      return;
-    }
-
-    const chapterNumber = parseChapterNumber(maybeChapterNumber);
-    const query = new URLSearchParams(location.search);
-    const isValidQuery = validatePageTypeQuery(query);
-
-    if (!isValidQuery) {
-      history.replace(
-        `${match.url}?type=${chapterNumber === 1 ? "chapter" : "cover"}`
-      );
-      return;
-    }
-  }, [history, location.search, match.url, maybeChapterNumber]);
-
-  const isValidChapterNumber = validateChapterNumber(maybeChapterNumber);
-  if (!isValidChapterNumber) return null;
-  const chapterNumber = parseChapterNumber(maybeChapterNumber);
-  const query = new URLSearchParams(location.search);
-  const isValidQuery = validatePageTypeQuery(query);
-
-  if (!isValidQuery) return null;
-
-  const type = parsePageTypeQuery(query);
-  return (
-    <Media>
-      <Chapter isCover={type !== "chapter"} chapterNumber={chapterNumber} />
-    </Media>
-  );
-};
 
 export default App;

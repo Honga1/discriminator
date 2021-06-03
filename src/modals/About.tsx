@@ -6,7 +6,7 @@ import ccaLogo from "src/images/cca-logo.png";
 import creativeBCLogo from "src/images/creative-bc-logo.png";
 import gftwLogo from "src/images/gftw-logo.svg";
 
-export const About = () => {
+const About = () => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -1334,3 +1334,5 @@ export const About = () => {
     </>
   );
 };
+
+export default About;

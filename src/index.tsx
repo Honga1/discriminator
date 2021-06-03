@@ -3,7 +3,6 @@ import { Integrations } from "@sentry/tracing";
 import { createBrowserHistory } from "history";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
-import WebFont from "webfontloader";
 import App from "./App";
 import "./index.css";
 import PasswordChallenge from "./PasswordChallenge";
@@ -20,10 +19,6 @@ Sentry.init({
   ],
 
   tracesSampleRate: 0.2,
-});
-
-WebFont.load({
-  custom: { families: ["Roboto"] },
 });
 
 const Boarding = () => {

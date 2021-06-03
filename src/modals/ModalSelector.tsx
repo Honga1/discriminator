@@ -1,6 +1,7 @@
 import { Box, BoxProps, Layer, ResponsiveContext, Text } from "grommet";
 import {
   CSSProperties,
+  lazy,
   PropsWithChildren,
   useCallback,
   useContext,
@@ -11,10 +12,19 @@ import { CloseModalButton } from "../components/ModalButton";
 import { useQuery } from "../hooks/useQuery";
 import { useStore } from "../store/store";
 import { colorTheme } from "../theme";
-import { About } from "./About";
-import { Support } from "./Support";
 import { CustomScrollbarBox } from "../components/CustomScrollbarBox";
-import { Privacy } from "./Privacy";
+
+const About = lazy(
+  async () => import(/* webpackChunkName: "About" */ "./About")
+);
+
+const Support = lazy(
+  async () => import(/* webpackChunkName: "Support" */ "./Support")
+);
+
+const Privacy = lazy(
+  async () => import(/* webpackChunkName: "Privacy" */ "./Privacy")
+);
 
 export const ModalSelector = () => {
   const query = useQuery();

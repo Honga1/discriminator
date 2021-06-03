@@ -1,7 +1,7 @@
 import { Anchor, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
 
-export const Privacy = () => {
+const Privacy = () => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -47,3 +47,5 @@ export const Privacy = () => {
     </>
   );
 };
+
+export default Privacy;

@@ -2,7 +2,7 @@ import { Anchor, ResponsiveContext, Text } from "grommet";
 import React, { useContext } from "react";
 import { MailchimpForm } from "src/components/MailChimp";
 
-export const Support = () => {
+const Support = () => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
@@ -69,3 +69,5 @@ export const Support = () => {
     </>
   );
 };
+
+export default Support;

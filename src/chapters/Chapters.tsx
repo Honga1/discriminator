@@ -1,33 +1,33 @@
 import { Box, Text } from "grommet";
-import React, { memo, Suspense, useEffect, useMemo } from "react";
+import React, { lazy, memo, Suspense, useEffect, useMemo } from "react";
 import { animated, useSpring } from "react-spring";
 import { PredictionsStore } from "src/store/PredictionsStore";
 import { store } from "src/store/store";
 import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
 
-const Cover1 = React.lazy(
+const Cover1 = lazy(
   async () => import(/* webpackChunkName: "Cover1" */ "./chapter1/Cover1")
 );
-const Cover2 = React.lazy(
+const Cover2 = lazy(
   async () => import(/* webpackChunkName: "Cover2" */ "./chapter2/Cover2")
 );
-const Cover3 = React.lazy(
+const Cover3 = lazy(
   async () => import(/* webpackChunkName: "Cover3" */ "./chapter3/Cover3")
 );
-const Cover4 = React.lazy(
+const Cover4 = lazy(
   async () => import(/* webpackChunkName: "Cover4" */ "./chapter4/Cover4")
 );
-const Chapter1 = React.lazy(
+const Chapter1 = lazy(
   async () => import(/* webpackChunkName: "Chapter1" */ "./chapter1/Chapter1")
 );
-const Chapter2 = React.lazy(
+const Chapter2 = lazy(
   async () => import(/* webpackChunkName: "Chapter2" */ "./chapter2/Chapter2")
 );
-const Chapter3 = React.lazy(
+const Chapter3 = lazy(
   async () => import(/* webpackChunkName: "Chapter3" */ "./chapter3/Chapter3")
 );
-const Chapter4 = React.lazy(
+const Chapter4 = lazy(
   async () => import(/* webpackChunkName: "Chapter4" */ "./chapter4/Chapter4")
 );
 
