@@ -19,7 +19,7 @@ export const Home = () => {
   );
 };
 
-export const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
+const HomeContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"

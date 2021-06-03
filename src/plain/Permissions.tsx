@@ -26,7 +26,7 @@ export const Permissions = () => {
   );
 };
 
-export const PermissionsContainer = ({ children }: PropsWithChildren<{}>) => {
+const PermissionsContainer = ({ children }: PropsWithChildren<{}>) => {
   const size = useContext(ResponsiveContext) as
     | "small"
     | "medium"
