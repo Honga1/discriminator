@@ -154,7 +154,7 @@ const WebcamNotification = () => {
       isShown &&
       setTimeout(() => {
         setIsShown(false);
-      }, 3000);
+      }, 5000);
     return () => {
       timeout && clearTimeout(timeout);
     };
@@ -190,7 +190,7 @@ const WebcamDisabledInSystem = () => {
       isShown &&
       setTimeout(() => {
         store.setState({ webcamDisabledInSystemNotification: false });
-      }, 3000);
+      }, 5000);
     return () => {
       timeout && clearTimeout(timeout);
     };
