@@ -208,21 +208,26 @@ export default function Chapter4() {
         </Box>
       )}
 
-      <VideoPlayer
-        ref={ref}
-        style={{
-          boxSizing: "border-box",
-          outline: "none",
-          width: "100%",
-          height: "100%",
-          opacity: stage !== "VIDEO" ? "0" : "1",
-          userSelect: "none",
-        }}
+      <Box
         width="100%"
         height="100%"
-        srcDash={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
-        srcHls={`https://discriminator-media-server.jaeperris.com/part4/master.m3u8`}
-      ></VideoPlayer>
+        style={{ opacity: stage !== "VIDEO" ? "0" : "1" }}
+      >
+        <VideoPlayer
+          ref={ref}
+          style={{
+            boxSizing: "border-box",
+            outline: "none",
+            width: "100%",
+            height: "100%",
+            userSelect: "none",
+          }}
+          width="100%"
+          height="100%"
+          srcDash={`https://discriminator-media-server.jaeperris.com/part4/stream.mpd`}
+          srcHls={`https://discriminator-media-server.jaeperris.com/part4/master.m3u8`}
+        ></VideoPlayer>
+      </Box>
     </Box>
   );
 }
