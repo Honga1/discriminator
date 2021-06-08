@@ -189,7 +189,13 @@ export default function Cover1() {
                 disablePictureInPicture
                 autoPlay
                 ref={webcam}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  OTransform: "scale(-1, 1)",
+                  transform: "scale(-1, 1)",
+                }}
               />
             </SquareDiv>
           </Box>
