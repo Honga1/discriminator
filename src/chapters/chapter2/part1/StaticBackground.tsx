@@ -70,7 +70,7 @@ void main() {
     float n2 =  noise(pos - vec2(random(pos)));
     float n3 = noise(pos);
 
-    gl_FragColor = vec4(n1,n2,n3, 1.0);
+    gl_FragColor = vec4(n1 * 0.4,n2 * 0.4,n3 * 0.4, 1.0);
 }
 `;
 const vertexShader = `
