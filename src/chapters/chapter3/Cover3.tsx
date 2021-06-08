@@ -81,7 +81,7 @@ export default function Cover3() {
             }}
           >
             {!hasWebcamStream
-              ? "Awaiting webcam permission"
+              ? ""
               : !hasFirstPrediction
               ? "Loading..."
               : "Tap the screen to change your mask"}

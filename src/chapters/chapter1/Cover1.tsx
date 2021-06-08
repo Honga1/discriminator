@@ -125,7 +125,7 @@ export default function Cover1() {
               }}
             >
               {!hasWebcamStream ? (
-                "Awaiting webcam permission"
+                ""
               ) : !hasFirstPrediction ? (
                 "Loading..."
               ) : !isConfident ? (

@@ -115,7 +115,7 @@ export default function Cover2() {
             }}
           >
             {!hasWebcamStream
-              ? "Awaiting webcam permission"
+              ? ""
               : !hasFirstPrediction
               ? `Do not blink`
               : `You have blinked ${openCount} time${
