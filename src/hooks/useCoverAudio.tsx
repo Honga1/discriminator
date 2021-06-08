@@ -1,3 +1,4 @@
+import device from "current-device";
 import { Howl } from "howler";
 import { useEffect, useMemo } from "react";
 import cover2Caf from "src/audio/cover2_drone.caf";
@@ -10,25 +11,27 @@ import { useStore } from "src/store/store";
 
 export function useCoverAudio(cover: 2 | 3 | 4) {
   const audio = useMemo(() => {
+    const useHTML5Loading = !device.ios();
+
     switch (cover) {
       case 2:
         return new Howl({
           src: [cover2Ogg, cover2Caf],
-          html5: true,
+          html5: useHTML5Loading,
           loop: true,
           volume: 0.0,
         });
       case 3:
         return new Howl({
           src: [cover3Ogg, cover3Caf],
-          html5: true,
+          html5: useHTML5Loading,
           loop: true,
           volume: 0.0,
         });
       case 4:
         return new Howl({
           src: [cover4Ogg, cover4Caf],
-          html5: true,
+          html5: useHTML5Loading,
           loop: true,
           volume: 0.0,
         });

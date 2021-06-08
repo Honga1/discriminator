@@ -1,3 +1,4 @@
+import device from "current-device";
 import { Howl } from "howler";
 import React, { useEffect, useMemo } from "react";
 import loop1Caf from "../audio/part1.caf";
@@ -14,23 +15,24 @@ export function useLoopedAudio(
   isMuted: boolean
 ) {
   const [loop1Audio, loop2Audio, loop3Audio] = useMemo(() => {
+    const useHTML5Loading = !device.ios();
     const loop1Audio = new Howl({
       src: [loop1Ogg, loop1Caf],
-      html5: true,
+      html5: useHTML5Loading,
       loop: true,
       volume: 0.0,
     });
 
     const loop2Audio = new Howl({
       src: [loop2Ogg, loop2Caf],
-      html5: true,
+      html5: useHTML5Loading,
       loop: true,
       volume: 0.0,
     });
 
     const loop3Audio = new Howl({
       src: [loop3Ogg, loop3Caf],
-      html5: true,
+      html5: useHTML5Loading,
       loop: true,
       volume: 0.0,
     });
