@@ -128,7 +128,7 @@ const HomeContent = () => {
         directed by Brett Gaylor.
       </Text>
 
-      <Box direction={isSmall ? "column" : "row"} gap="16px">
+      <Box direction={isSmall ? "column" : "row"} gap="16px" flex={false}>
         <PageBodyButton
           color="blue"
           textContent="Start"
@@ -149,6 +149,12 @@ const HomeContent = () => {
         }}
         color="black"
       >
+        <>
+          For the best experience, we recommend using Google Chrome, and a
+          moderately powerful device.
+        </>
+        <br />
+        <br />
         {isCoilUser ? (
           <>
             As a Coil subscriber, please enjoy this personalized viewing
