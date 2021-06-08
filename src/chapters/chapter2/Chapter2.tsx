@@ -1,6 +1,6 @@
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { Box } from "grommet";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
@@ -13,7 +13,6 @@ import {
   Float32BufferAttribute,
   Material,
   Mesh,
-  PlaneBufferGeometry,
   ShaderMaterial,
   TextureLoader,
   VideoTexture,
@@ -185,14 +184,16 @@ function DeepFakeVideoPlane({ part }: { part: 1 | 2 | 0 }) {
     [undefined, undefined]
   );
 
-  useFrame(() => {
+  useEffect(() => {
+    video?.play();
     if (!ref.current) return;
     ref.current.material.uniforms["isPartOne"]!.value = part === 1;
     ref.current.material.uniformsNeedUpdate = true;
-  });
+  }, [part, video]);
 
   const sourceElement = useStore((state) => state.chapter?.element);
   const startOffset = 31;
+
   useEffect(() => {
     if (sourceElement && video) {
       const onSeeked = (event: Event): void => {
@@ -249,12 +250,14 @@ function DeepFakeVideoPlane({ part }: { part: 1 | 2 | 0 }) {
     return () => video.removeEventListener("loadedmetadata", onLoadedMetaData);
   }, [video]);
 
-  const geometry: PlaneBufferGeometry = useMemo(() => {
-    const geometry = new PlaneBufferGeometry();
+  useEffect(() => {
+    const geometry = ref.current?.geometry;
 
+    if (!geometry) return;
     if (part === 0) {
       geometry.scale(0, 0, 0);
     } else if (part === 1) {
+      geometry.scale(1, 1, 1);
       const topLeft: V3 = [794, -609, 0];
       const topRight: V3 = [961, -620, 0];
       const bottomRight: V3 = [959, -739, 0];
@@ -303,6 +306,8 @@ function DeepFakeVideoPlane({ part }: { part: 1 | 2 | 0 }) {
         new Float32BufferAttribute(vertices, 3)
       );
     } else {
+      geometry.scale(1, 1, 1);
+
       const topLeft: V3 = [470, -180, 0];
       const topRight: V3 = [1311, -261, 0];
       const bottomRight: V3 = [1281, -954, 0];
@@ -366,7 +371,7 @@ function DeepFakeVideoPlane({ part }: { part: 1 | 2 | 0 }) {
         new Float32BufferAttribute(vertices, 3)
       );
     }
-    return geometry;
+    geometry.getAttribute("position").needsUpdate = true;
   }, [deepFakeAspect, part]);
 
   return (
@@ -374,7 +379,7 @@ function DeepFakeVideoPlane({ part }: { part: 1 | 2 | 0 }) {
       <group scale={[1 / 1920, 1 / 1080, 1]} position={[-0.5, 0.5, 0]}>
         {material && (
           <mesh ref={ref}>
-            <primitive attach="geometry" object={geometry} />
+            <planeBufferGeometry />
             <primitive attach="material" object={material} />
           </mesh>
         )}
