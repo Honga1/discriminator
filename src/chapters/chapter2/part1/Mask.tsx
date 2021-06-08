@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
+import { attachStreamerToVideo } from "src/components/VideoPlayer";
 import { usePredictions } from "src/hooks/usePredictions";
 import {
   BufferGeometry,
@@ -16,11 +17,6 @@ import brettMaskAlpha from "./brett-mask-alpha.png";
 import brettMaskMap from "./brett-mask-map.png";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
 
-const maskSrc =
-  "https://discriminator-media-server.jaeperris.com/video-textures/mask.mp4";
-const alphaSrc =
-  "https://discriminator-media-server.jaeperris.com/video-textures/alpha.mp4";
-
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
     map: IUniform<VideoTexture | Texture | undefined>;
@@ -28,130 +24,151 @@ interface MaskMaterial extends ShaderMaterial {
   };
 }
 
-export const Mask = ({
-  track,
-  maskType,
-  webcam,
-  loop,
-}: {
-  webcam: HTMLVideoElement;
-  track: "center" | "webcam";
-  maskType: "brett" | "own" | "video";
-  loop: boolean;
-}) => {
-  const textures = useMemo(() => {
-    const mapVideo = document.createElement("video");
-    mapVideo.crossOrigin = "anonymous";
-    mapVideo.src = maskSrc;
-    mapVideo.muted = true;
-    mapVideo.playsInline = true;
-    mapVideo.muted = true;
-    mapVideo.loop = loop;
+export const Mask = memo(
+  ({
+    track,
+    maskType,
+    webcam,
+    loop,
+  }: {
+    webcam: HTMLVideoElement;
+    track: "center" | "webcam";
+    maskType: "brett" | "own" | "video";
+    loop: boolean;
+  }) => {
+    const videoMaskTexture = useMemo(() => {
+      const mapVideo = document.createElement("video");
+      mapVideo.crossOrigin = "anonymous";
+      mapVideo.muted = true;
+      mapVideo.playsInline = true;
+      mapVideo.muted = true;
+      mapVideo.loop = loop;
 
-    const alphaMapVideo = document.createElement("video");
-    alphaMapVideo.crossOrigin = "anonymous";
-    alphaMapVideo.src = alphaSrc;
-    alphaMapVideo.muted = true;
-    alphaMapVideo.playsInline = true;
-    alphaMapVideo.muted = true;
-    alphaMapVideo.loop = loop;
+      attachStreamerToVideo(
+        mapVideo,
+        `https://discriminator-media-server.jaeperris.com/mask/stream.mpd`,
+        `https://discriminator-media-server.jaeperris.com/mask/master.m3u8`
+      );
 
-    const videoMaskMap = new VideoTexture(mapVideo);
-    const videoMaskAlpha = new VideoTexture(alphaMapVideo);
+      const alphaMapVideo = document.createElement("video");
+      alphaMapVideo.crossOrigin = "anonymous";
+      alphaMapVideo.muted = true;
+      alphaMapVideo.playsInline = true;
+      alphaMapVideo.muted = true;
+      alphaMapVideo.loop = loop;
 
-    videoMaskMap.encoding = sRGBEncoding;
-    videoMaskAlpha.encoding = sRGBEncoding;
+      const videoMaskMap = new VideoTexture(mapVideo);
+      const videoMaskAlpha = new VideoTexture(alphaMapVideo);
 
-    mapVideo.play();
-    alphaMapVideo.play();
+      videoMaskMap.encoding = sRGBEncoding;
+      videoMaskAlpha.encoding = sRGBEncoding;
 
-    const webcamTexture = new VideoTexture(webcam);
+      attachStreamerToVideo(
+        alphaMapVideo,
+        `https://discriminator-media-server.jaeperris.com/maskAlpha/stream.mpd`,
+        `https://discriminator-media-server.jaeperris.com/maskAlpha/master.m3u8`
+      );
 
-    const brettsFaceAlbedo = new TextureLoader().load(brettMaskMap);
-    const brettsFaceAlpha = new TextureLoader().load(brettMaskAlpha);
+      mapVideo.play();
+      alphaMapVideo.play();
 
-    return {
-      video: { alpha: videoMaskAlpha, albedo: videoMaskMap },
-      own: { albedo: webcamTexture, alpha: brettsFaceAlpha },
-      brett: { albedo: brettsFaceAlbedo, alpha: brettsFaceAlpha },
-    };
-  }, [loop, webcam]);
+      return {
+        alpha: videoMaskAlpha,
+        albedo: videoMaskMap,
+      };
+    }, []);
+    const textures = useMemo(() => {
+      const webcamTexture = new VideoTexture(webcam);
 
-  const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
-  const predictions = usePredictions();
-  const maskTexture = textures[maskType];
+      const brettsFaceAlbedo = new TextureLoader().load(brettMaskMap);
+      const brettsFaceAlpha = new TextureLoader().load(brettMaskAlpha);
 
-  useEffect(() => {
-    const maskMesh = mask.current;
-    if (!maskMesh) return;
+      return {
+        own: { albedo: webcamTexture, alpha: brettsFaceAlpha },
+        brett: { albedo: brettsFaceAlbedo, alpha: brettsFaceAlpha },
+      };
+    }, [webcam]);
 
-    const geometry = maskMesh.geometry;
+    const mask = useRef<Mesh<BufferGeometry, MaskMaterial>>();
+    const predictions = usePredictions();
+    const maskTexture =
+      maskType === "video" ? videoMaskTexture : textures[maskType];
 
-    if (geometry === undefined) return;
+    useEffect(() => {
+      const maskMesh = mask.current;
+      if (!maskMesh) return;
 
-    const uvs = geometry.getAttribute("uv");
-    TRIANGULATION.forEach((vertexIndex, index) => {
-      const uv = UV_COORDS[vertexIndex];
-      if (!uv) return;
-      const [u, v] = uv;
-      uvs.setXY(index, u, v);
-    });
-    uvs.needsUpdate = true;
-  }, []);
+      const geometry = maskMesh.geometry;
 
-  useFrame(() => {
-    const geometry = mask.current?.geometry;
+      if (geometry === undefined) return;
 
-    const prediction = predictions.current[0];
-    if (geometry === undefined) return;
-    if (!prediction) return;
-
-    let mesh: V3[];
-
-    if (track === "center") {
-      mesh = prediction.mesh as V3[];
-    } else {
-      mesh = prediction.scaledMesh as V3[];
-    }
-
-    const { topLeft, bottomRight } = prediction.boundingBox;
-
-    const positions = geometry.getAttribute("position");
-    const uvs = geometry.getAttribute("uv");
-    TRIANGULATION.forEach((vertexIndex, index) => {
-      const vertex = mesh[vertexIndex];
-      const uv = UV_COORDS[vertexIndex];
-      if (!vertex) return;
-      if (!uv) return;
-      const [u, v] = uv;
-      const [x, y, z] = vertex;
-      positions.setXYZ(index, x, y, z);
-
-      if (maskType === "own") {
-        // Correct for head rotation and center position
-        const nextU =
-          (u + mesh[4]![0] - 0.5) * (bottomRight[0] - topLeft[0]) + topLeft[0];
-        const nextV = v * (topLeft[1] - bottomRight[1]) - topLeft[1];
-        uvs.setXY(index, nextU, nextV);
-      } else {
+      const uvs = geometry.getAttribute("uv");
+      TRIANGULATION.forEach((vertexIndex, index) => {
+        const uv = UV_COORDS[vertexIndex];
+        if (!uv) return;
+        const [u, v] = uv;
         uvs.setXY(index, u, v);
-      }
-    });
-    uvs.needsUpdate = true;
-    positions.needsUpdate = true;
-  });
+      });
+      uvs.needsUpdate = true;
+    }, []);
 
-  return (
-    <mesh ref={mask} geometry={maskMesh.geometry}>
-      <primitive
-        object={maskMaterial}
-        attach="material"
-        uniforms-map-value={maskTexture.albedo}
-        uniforms-alphaMap-value={maskTexture.alpha}
-      />
-    </mesh>
-  );
-};
+    useFrame(() => {
+      const geometry = mask.current?.geometry;
+
+      const prediction = predictions.current[0];
+      if (geometry === undefined) return;
+      if (!prediction) return;
+
+      let mesh: V3[];
+
+      if (track === "center") {
+        mesh = prediction.mesh as V3[];
+      } else {
+        mesh = prediction.scaledMesh as V3[];
+      }
+
+      const { topLeft, bottomRight } = prediction.boundingBox;
+
+      const positions = geometry.getAttribute("position");
+      const uvs = geometry.getAttribute("uv");
+      TRIANGULATION.forEach((vertexIndex, index) => {
+        const vertex = mesh[vertexIndex];
+        const uv = UV_COORDS[vertexIndex];
+        if (!vertex) return;
+        if (!uv) return;
+        const [u, v] = uv;
+        const [x, y, z] = vertex;
+        positions.setXYZ(index, x, y, z);
+
+        if (maskType === "own") {
+          // Correct for head rotation and center position
+          const nextU =
+            (u + mesh[4]![0] - 0.5) * (bottomRight[0] - topLeft[0]) +
+            topLeft[0];
+          const nextV = v * (topLeft[1] - bottomRight[1]) - topLeft[1];
+          uvs.setXY(index, nextU, nextV);
+        } else {
+          uvs.setXY(index, u, v);
+        }
+      });
+      uvs.needsUpdate = true;
+      positions.needsUpdate = true;
+    });
+
+    return (
+      <mesh ref={mask} geometry={maskMesh.geometry}>
+        <primitive
+          object={maskMaterial}
+          attach="material"
+          uniforms-map-value={maskTexture.albedo}
+          uniforms-alphaMap-value={maskTexture.alpha}
+        />
+      </mesh>
+    );
+  }
+);
+
+Mask.displayName = "Mask";
 
 const vert = /* glsl */ `
 varying vec2 vUv;
