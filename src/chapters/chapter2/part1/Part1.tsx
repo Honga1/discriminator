@@ -28,6 +28,7 @@ export const Part1 = ({
         pointerEvents: "none",
       }}
       orthographic={false}
+      linear
     >
       <StaticBackground></StaticBackground>
       {hasFirstPrediction && aspect !== undefined && (
