@@ -1,6 +1,6 @@
 import { Box, Text } from "grommet";
 import React, { lazy, memo, Suspense, useEffect, useMemo } from "react";
-import { animated, useSpring } from "react-spring";
+import { animated, to, useSpring } from "react-spring";
 import { PredictionsStore } from "src/store/PredictionsStore";
 import { store } from "src/store/store";
 import { colorTheme } from "src/theme";
@@ -39,7 +39,7 @@ export const Chapter = memo(
     isCover: boolean;
     chapterNumber: 1 | 2 | 3 | 4;
   }) => {
-    const [currentPage, stage] = useAnimationSequence([
+    const [[currentPageIsCover, currentPage], stage] = useAnimationSequence([
       isCover,
       chapterNumber,
     ] as [boolean, 1 | 2 | 3 | 4]);
@@ -49,7 +49,12 @@ export const Chapter = memo(
     }, [stage]);
     useEffect(() => {
       PredictionsStore.pauseFor(700);
-    }, [currentPage]);
+
+      if (currentPageIsCover) {
+        store.getState().chapter?.pause();
+        store.getState().chapter?.rewind();
+      }
+    }, [currentPage, currentPageIsCover]);
 
     const [style] = useSpring(() => {
       if (stage === "ANIMATE_IN") {
@@ -60,66 +65,80 @@ export const Chapter = memo(
       }
     }, [stage]);
 
-    const component = useMemo(
-      () => getComponent(currentPage[0], currentPage[1]),
+    const { cover, chapter } = useMemo(
+      () => getComponent(currentPage),
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [currentPage[0], currentPage[1]]
+      [currentPage]
     );
+
     return (
       <Box fill flex={false} style={{ position: "relative" }}>
-        <animated.div
-          style={{
-            ...style,
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            top: 0,
-          }}
-        >
-          <Suspense
-            fallback={<Text color={colorTheme.yellow}>Loading...</Text>}
+        <Suspense fallback={<Text color={colorTheme.yellow}>Loading...</Text>}>
+          <animated.div
+            style={{
+              opacity: to([style.opacity], (opacity) =>
+                currentPageIsCover ? 0 : opacity
+              ),
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              pointerEvents: currentPageIsCover ? "none" : "auto",
+              top: 0,
+            }}
           >
-            {component}
-          </Suspense>
-        </animated.div>
+            {chapter}
+          </animated.div>
+          {currentPageIsCover && (
+            <animated.div
+              style={{
+                opacity: style.opacity,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                top: 0,
+              }}
+            >
+              {cover}
+            </animated.div>
+          )}
+        </Suspense>
       </Box>
     );
   }
 );
 
 Chapter.displayName = "Chapter";
-function getComponent(isCover: boolean, chapterNumber: number) {
-  let component;
-  if (isCover) {
-    switch (chapterNumber) {
-      case 1:
-        component = <Cover1 />;
-        break;
-      case 2:
-        component = <Cover2 />;
-        break;
-      case 3:
-        component = <Cover3 />;
-        break;
-      case 4:
-        component = <Cover4 />;
-        break;
-    }
-  } else {
-    switch (chapterNumber) {
-      case 1:
-        component = <Chapter1 />;
-        break;
-      case 2:
-        component = <Chapter2 />;
-        break;
-      case 3:
-        component = <Chapter3 />;
-        break;
-      case 4:
-        component = <Chapter4 />;
-        break;
-    }
+function getComponent(chapterNumber: 1 | 2 | 3 | 4) {
+  let cover;
+  let chapter;
+  switch (chapterNumber) {
+    case 1:
+      cover = <Cover1 />;
+      break;
+    case 2:
+      cover = <Cover2 />;
+      break;
+    case 3:
+      cover = <Cover3 />;
+      break;
+    case 4:
+      cover = <Cover4 />;
+      break;
   }
-  return component;
+
+  switch (chapterNumber) {
+    case 1:
+      chapter = <Chapter1 />;
+      break;
+    case 2:
+      chapter = <Chapter2 />;
+      break;
+    case 3:
+      chapter = <Chapter3 />;
+      break;
+    case 4:
+      chapter = <Chapter4 />;
+      break;
+  }
+  return { cover, chapter };
 }

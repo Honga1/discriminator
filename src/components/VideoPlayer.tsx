@@ -48,12 +48,11 @@ export function attachStreamerToVideo(
     ).then(({ MediaPlayer }) => {
       console.log("Using Dash.js player", srcDash);
       const player = MediaPlayer().create();
-      player.initialize(video, srcDash, true);
+      player.initialize(video, srcDash, false);
     });
   } else {
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = srcHls;
-      video.play();
       console.log("Using native HLS support", srcHls);
     } else {
       import(
@@ -65,7 +64,6 @@ export function attachStreamerToVideo(
           const hls = new Hls();
           hls.loadSource(srcHls);
           hls.attachMedia(video);
-          video.play();
         } else {
           throw new Error("No video player supported");
         }
