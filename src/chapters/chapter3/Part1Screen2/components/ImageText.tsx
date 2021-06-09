@@ -13,8 +13,6 @@ export function ImageText({ show }: { show: boolean }) {
       show
   );
 
-  console.log(isShown);
-
   const nextDescriptor = usePart1Screen2Store((state) => state.focusedData);
 
   const isSmall = useContext(ResponsiveContext) === "small";
