@@ -1,6 +1,5 @@
 import { useFrame } from "@react-three/fiber";
 import React, { memo, useEffect, useMemo, useRef } from "react";
-import { attachStreamerToVideo } from "src/components/VideoPlayer";
 import { usePredictions } from "src/hooks/usePredictions";
 import {
   BufferGeometry,
@@ -13,9 +12,11 @@ import {
   VideoTexture,
 } from "three";
 import { V3 } from "../../../libs/v3";
+import videoMaskAlphaSrc from "./alpha.mp4";
 import brettMaskAlpha from "./brett-mask-alpha.png";
 import brettMaskMap from "./brett-mask-map.png";
 import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
+import videoMaskSrc from "./mask.mp4";
 
 interface MaskMaterial extends ShaderMaterial {
   uniforms: {
@@ -38,36 +39,24 @@ export const Mask = memo(
   }) => {
     const videoMaskTexture = useMemo(() => {
       const mapVideo = document.createElement("video");
-      mapVideo.crossOrigin = "anonymous";
       mapVideo.muted = true;
       mapVideo.playsInline = true;
       mapVideo.muted = true;
       mapVideo.loop = loop;
-
-      attachStreamerToVideo(
-        mapVideo,
-        `https://discriminator-media-server.jaeperris.com/mask/stream.mpd`,
-        `https://discriminator-media-server.jaeperris.com/mask/master.m3u8`
-      );
+      mapVideo.src = videoMaskSrc;
 
       const alphaMapVideo = document.createElement("video");
-      alphaMapVideo.crossOrigin = "anonymous";
       alphaMapVideo.muted = true;
       alphaMapVideo.playsInline = true;
       alphaMapVideo.muted = true;
       alphaMapVideo.loop = loop;
+      alphaMapVideo.src = videoMaskAlphaSrc;
 
       const videoMaskMap = new VideoTexture(mapVideo);
       const videoMaskAlpha = new VideoTexture(alphaMapVideo);
 
       videoMaskMap.encoding = sRGBEncoding;
       videoMaskAlpha.encoding = sRGBEncoding;
-
-      attachStreamerToVideo(
-        alphaMapVideo,
-        `https://discriminator-media-server.jaeperris.com/maskAlpha/stream.mpd`,
-        `https://discriminator-media-server.jaeperris.com/maskAlpha/master.m3u8`
-      );
 
       mapVideo.play();
       alphaMapVideo.play();
