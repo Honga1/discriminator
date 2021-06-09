@@ -1,7 +1,15 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
-import { Box, Text } from "grommet";
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { Box, ResponsiveContext, Text } from "grommet";
+import React, {
+  memo,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { SpringValue, useSpring } from "react-spring";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { useCoverAudio } from "src/hooks/useCoverAudio";
@@ -30,6 +38,7 @@ export default function Cover4() {
   const hasFirstPrediction = useHasFirstFaceApiPrediction();
 
   const hasWebcamStream = useStore((state) => state.webcamStream !== undefined);
+  const isSmall = useContext(ResponsiveContext) === "small";
 
   useEffect(() => {
     setState(0);
@@ -50,6 +59,25 @@ export default function Cover4() {
       config: { duration: 5000 },
     }),
     [state]
+  );
+
+  const interactive = useMemo(
+    () => (
+      <Box align="start">
+        <FaceCircle isTalking={false} background={colorTheme.yellow}>
+          <ResizeCanvas
+            orthographic
+            style={{
+              OTransform: "scale(-1, 1)",
+              transform: "scale(-1, 1)",
+            }}
+          >
+            <WebcamPlane amount={amount} />
+          </ResizeCanvas>
+        </FaceCircle>
+      </Box>
+    ),
+    [amount]
   );
 
   return (
@@ -93,32 +121,21 @@ export default function Cover4() {
             ) : (
               <>
                 {state === 0 && `You don't look happy :(`}
-                {state === 1 && `Let's see what we can do to fix that.`}
+                {state === 1 &&
+                  `Let's ${!isSmall ? "see what we can do to " : ""}fix that.`}
                 {state === 2 && `There, much better!`}
               </>
             )}
           </Text>
         </div>
 
-        <Box align="start">
-          <FaceCircle isTalking={false} background={colorTheme.yellow}>
-            <ResizeCanvas
-              orthographic
-              style={{
-                OTransform: "scale(-1, 1)",
-                transform: "scale(-1, 1)",
-              }}
-            >
-              <WebcamPlane amount={amount} />
-            </ResizeCanvas>
-          </FaceCircle>
-        </Box>
+        {interactive}
       </div>
     </div>
   );
 }
 
-function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
+const WebcamPlane = memo(({ amount }: { amount: SpringValue<number> }) => {
   const webcam = useStore((state) => state.webcamHTMLElement);
   const aspect = useStore((state) => state.webcamAspect);
   const viewport = useThree((state) => state.viewport);
@@ -133,11 +150,11 @@ function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
 
   const predictions = useFaceApiPredictions();
 
-  useMouthPosition(predictions, ref);
-  useLeftEyePosition(predictions, ref);
-  useRightEyePosition(predictions, ref);
-  useLeftIrisPosition(predictions, ref);
-  useRightIrisPosition(predictions, ref);
+  useMouthPosition(predictions, ref, webcam);
+  useLeftEyePosition(predictions, ref, webcam);
+  useRightEyePosition(predictions, ref, webcam);
+  useLeftIrisPosition(predictions, ref, webcam);
+  useRightIrisPosition(predictions, ref, webcam);
 
   useFrame(() => {
     if (ref.current) {
@@ -163,18 +180,25 @@ function WebcamPlane({ amount }: { amount: SpringValue<number> }) {
       </mesh>
     </group>
   );
-}
+});
+
+WebcamPlane.displayName = "WebcamPlane";
 
 function useMouthPosition(
   predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
-  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
+  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>,
+  webcamElement: HTMLVideoElement
 ) {
   useFrame(() => {
     const prediction = predictions.current;
     if (!prediction) return;
     const mesh = prediction.landmarks.getMouth();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(
+      mesh,
+      webcamElement.videoWidth,
+      webcamElement.videoHeight
+    );
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["mouth"]!.value.x = xMin;
@@ -187,14 +211,19 @@ function useMouthPosition(
 
 function useLeftEyePosition(
   predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
-  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
+  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>,
+  webcamElement: HTMLVideoElement
 ) {
   useFrame(() => {
     const prediction = predictions.current;
     if (!prediction) return;
     const mesh = prediction.landmarks.getLeftEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(
+      mesh,
+      webcamElement.videoWidth,
+      webcamElement.videoHeight
+    );
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["leftEye"]!.value.x = xMin;
@@ -207,14 +236,19 @@ function useLeftEyePosition(
 
 function useRightEyePosition(
   predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
-  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
+  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>,
+  webcamElement: HTMLVideoElement
 ) {
   useFrame(() => {
     const prediction = predictions.current;
     if (!prediction) return;
     const mesh = prediction.landmarks.getRightEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(
+      mesh,
+      webcamElement.videoWidth,
+      webcamElement.videoHeight
+    );
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["rightEye"]!.value.x = xMin;
@@ -226,14 +260,19 @@ function useRightEyePosition(
 }
 function useLeftIrisPosition(
   predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
-  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
+  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>,
+  webcamElement: HTMLVideoElement
 ) {
   useFrame(() => {
     const prediction = predictions.current;
     if (!prediction) return;
     const mesh = prediction.landmarks.getLeftEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(
+      mesh,
+      webcamElement.videoWidth,
+      webcamElement.videoHeight
+    );
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["leftIris"]!.value.x = xMin + 0.008;
@@ -246,14 +285,19 @@ function useLeftIrisPosition(
 
 function useRightIrisPosition(
   predictions: React.MutableRefObject<FaceApiPrediction | undefined>,
-  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>
+  ref: React.MutableRefObject<Mesh<BufferGeometry, ShaderMaterial> | undefined>,
+  webcamElement: HTMLVideoElement
 ) {
   useFrame(() => {
     const prediction = predictions.current;
     if (!prediction) return;
     const mesh = prediction.landmarks.getRightEye();
 
-    const { xMin, yMax, xMax, yMin } = getBoundingBox(mesh, 640, 480);
+    const { xMin, yMax, xMax, yMin } = getBoundingBox(
+      mesh,
+      webcamElement.videoWidth,
+      webcamElement.videoHeight
+    );
 
     if (ref.current?.material !== undefined) {
       ref.current.material.uniforms["rightIris"]!.value.x = xMin + 0.008;
