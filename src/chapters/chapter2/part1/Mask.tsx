@@ -58,8 +58,19 @@ export const Mask = memo(
       videoMaskMap.encoding = sRGBEncoding;
       videoMaskAlpha.encoding = sRGBEncoding;
 
-      mapVideo.play();
-      alphaMapVideo.play();
+      new Promise(async () => {
+        const canPlayMap = new Promise((resolve) => {
+          mapVideo.oncanplay = resolve;
+        });
+        const canPlayAlpha = new Promise((resolve) => {
+          alphaMapVideo.oncanplay = resolve;
+        });
+
+        await canPlayMap;
+        await canPlayAlpha;
+        mapVideo.play();
+        alphaMapVideo.play();
+      });
 
       return {
         alpha: videoMaskAlpha,
