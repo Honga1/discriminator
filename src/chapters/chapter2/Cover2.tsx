@@ -28,7 +28,7 @@ export default function Cover2() {
             new Promise<HTMLImageElement>((resolve, reject) => {
               const image = new Image();
               image.onload = () => resolve(image);
-              image.onerror = () => reject();
+              image.onerror = (error) => reject(error);
               image.src = src;
             })
         )
