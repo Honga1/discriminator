@@ -53,6 +53,7 @@ export function attachStreamerToVideo(
   } else {
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = srcHls;
+      video.onload = () => video.play();
       console.log("Using native HLS support", srcHls);
     } else {
       import(
