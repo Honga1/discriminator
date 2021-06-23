@@ -1,14 +1,36 @@
 import { Text } from "grommet";
-import React, { useEffect, useRef, useState } from "react";
+import { Howl } from "howler";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
+import { StaticBackground } from "src/components/StaticBackground";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
 import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { usePredictions } from "src/hooks/usePredictions";
-import { store, useStore } from "../../store/store";
+import { store, useStore } from "src/store/store";
+import sound1Caf from "./audio/1.caf";
+import sound1Ogg from "./audio/1.ogg";
+import sound2Caf from "./audio/2.caf";
+import sound2Ogg from "./audio/2.ogg";
+import sound3Caf from "./audio/3.caf";
+import sound3Ogg from "./audio/3.ogg";
+import sound4Caf from "./audio/4.caf";
+import sound4Ogg from "./audio/4.ogg";
+import sound5Caf from "./audio/5.caf";
+import sound5Ogg from "./audio/5.ogg";
+import sound6Caf from "./audio/6.caf";
+import sound6Ogg from "./audio/6.ogg";
 import { eyes } from "./eyes/eyes";
-import { StaticBackground } from "../../components/StaticBackground";
+
+const soundSrc = {
+  1: { ogg: sound1Ogg, caf: sound1Caf },
+  2: { ogg: sound2Ogg, caf: sound2Caf },
+  3: { ogg: sound3Ogg, caf: sound3Caf },
+  4: { ogg: sound4Ogg, caf: sound4Caf },
+  5: { ogg: sound5Ogg, caf: sound5Caf },
+  6: { ogg: sound6Ogg, caf: sound6Caf },
+};
 
 export default function Cover2() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -69,6 +91,41 @@ export default function Cover2() {
       wasOpenLastFrame.current = false;
     }
   });
+
+  const sounds = useMemo(() => {
+    const sounds = Array.from({ length: 6 }).map((_, index) => {
+      return new Howl({
+        src: [
+          soundSrc[(index + 1) as keyof typeof soundSrc].ogg,
+          soundSrc[(index + 1) as keyof typeof soundSrc].caf,
+        ],
+        volume: 0.5,
+      });
+    });
+
+    function* generator() {
+      let lastPlayed = 0;
+
+      while (true) {
+        let toPlay = Math.floor(Math.random() * sounds.length);
+        if (toPlay === lastPlayed) {
+          toPlay++;
+        }
+
+        toPlay %= sounds.length;
+        lastPlayed = toPlay;
+
+        yield sounds[lastPlayed]!;
+      }
+    }
+
+    return generator();
+  }, []);
+
+  useEffect(() => {
+    if (openCount === 0) return;
+    sounds.next().value?.play();
+  }, [openCount, sounds]);
 
   useEffect(() => {
     if (!ref.current) return;
