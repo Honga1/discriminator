@@ -91,7 +91,7 @@ export default function Cover4() {
 
     return new Howl({
       src: [soundSrc[soundNumber].ogg, soundSrc[soundNumber].caf],
-      volume: 0.1,
+      volume: 0.5,
     });
   }, []);
 
