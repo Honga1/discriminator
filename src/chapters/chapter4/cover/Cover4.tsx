@@ -96,6 +96,7 @@ export default function Cover4() {
   }, []);
 
   useEffect(() => {
+    if (store.getState().isMuted) return;
     if (state === 2) {
       successSound.play();
     }

@@ -143,6 +143,7 @@ export default function Cover3() {
 
   useEffect(() => {
     if (openCount === 0) return;
+    if (store.getState().isMuted) return;
     sounds.next().value?.play();
   }, [openCount, sounds]);
 

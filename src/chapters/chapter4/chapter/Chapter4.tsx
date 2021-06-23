@@ -11,7 +11,7 @@ import {
   useStatefulApiPredictions,
 } from "src/hooks/useFaceApiPredictions";
 import { FaceApiPrediction } from "src/store/FaceApiPredictionsStore";
-import { useStore } from "src/store/store";
+import { store, useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
 import {
@@ -143,12 +143,14 @@ export default function Chapter4() {
   }, []);
 
   useEffect(() => {
+    if (store.getState().isMuted) return;
     switch (stage) {
       case "VIDEO":
         break;
 
       default:
         sounds.next().value?.play();
+        break;
     }
   }, [sounds, stage]);
 
