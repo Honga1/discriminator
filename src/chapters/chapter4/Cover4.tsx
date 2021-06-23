@@ -1,6 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { Point } from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
 import { Box, ResponsiveContext, Text } from "grommet";
+import { Howl } from "howler";
 import React, {
   memo,
   ReactNode,
@@ -27,6 +28,27 @@ import {
   VideoTexture,
 } from "three";
 import { SquareDiv } from "../chapter3/components/SquareDiv";
+import sound1Caf from "./audio/1.caf";
+import sound1Ogg from "./audio/1.ogg";
+import sound2Caf from "./audio/2.caf";
+import sound2Ogg from "./audio/2.ogg";
+import sound3Caf from "./audio/3.caf";
+import sound3Ogg from "./audio/3.ogg";
+import sound4Caf from "./audio/4.caf";
+import sound4Ogg from "./audio/4.ogg";
+import sound5Caf from "./audio/5.caf";
+import sound5Ogg from "./audio/5.ogg";
+import sound6Caf from "./audio/6.caf";
+import sound6Ogg from "./audio/6.ogg";
+
+const soundSrc = {
+  1: { ogg: sound1Ogg, caf: sound1Caf },
+  2: { ogg: sound2Ogg, caf: sound2Caf },
+  3: { ogg: sound3Ogg, caf: sound3Caf },
+  4: { ogg: sound4Ogg, caf: sound4Caf },
+  5: { ogg: sound5Ogg, caf: sound5Caf },
+  6: { ogg: sound6Ogg, caf: sound6Caf },
+};
 
 export default function Cover4() {
   useEffect(() => {
@@ -61,6 +83,23 @@ export default function Cover4() {
     }),
     [state]
   );
+
+  const successSound = useMemo(() => {
+    const soundNumber = Math.floor(
+      1 + Math.random() * 6
+    ) as keyof typeof soundSrc;
+
+    return new Howl({
+      src: [soundSrc[soundNumber].ogg, soundSrc[soundNumber].caf],
+      volume: 0.1,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (state === 2) {
+      successSound.play();
+    }
+  }, [state, successSound]);
 
   const interactive = useMemo(
     () => (
