@@ -14,7 +14,7 @@ const Cover2 = lazy(
   async () => import(/* webpackChunkName: "Cover2" */ "./chapter2/cover/Cover2")
 );
 const Cover3 = lazy(
-  async () => import(/* webpackChunkName: "Cover3" */ "./chapter3/Cover3")
+  async () => import(/* webpackChunkName: "Cover3" */ "./chapter3/cover/Cover3")
 );
 const Cover4 = lazy(
   async () => import(/* webpackChunkName: "Cover4" */ "./chapter4/cover/Cover4")
