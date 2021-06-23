@@ -5,7 +5,7 @@ import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useStore } from "src/store/store";
 import { Mask } from "./Mask";
 import { RainbowVomit } from "./RainbowVomit";
-import { StaticBackground } from "./StaticBackground";
+import { StaticBackground } from "../../../components/StaticBackground";
 
 export const Part1 = ({
   maskType,

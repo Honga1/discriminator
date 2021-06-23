@@ -1,11 +1,13 @@
 import { Box, Button, Grid, Text } from "grommet";
 import React, { useEffect, useRef } from "react";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { useHasPredictionConfidence } from "src/hooks/useHasPredictionConfidence";
 import { PredictionsStore } from "src/store/PredictionsStore";
 import { store, useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
 import styled from "styled-components";
+import { StaticBackground } from "../../components/StaticBackground";
 import { SquareDiv } from "../chapter3/components/SquareDiv";
 
 export default function Cover1() {
@@ -64,7 +66,7 @@ export default function Cover1() {
     store.setState({ photo: formData });
   };
 
-  return (
+  return hasWebcamStream ? (
     <div
       style={{
         position: "absolute",
@@ -216,6 +218,19 @@ export default function Cover1() {
         </Box>
       </Grid>
     </div>
+  ) : (
+    <ResizeCanvas
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+      orthographic={false}
+      linear
+    >
+      <StaticBackground />
+    </ResizeCanvas>
   );
 }
 

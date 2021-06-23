@@ -7,7 +7,7 @@ import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { store, useStore } from "src/store/store";
 import { Mask } from "../chapter2/part1/Mask";
 import { RainbowVomit } from "../chapter2/part1/RainbowVomit";
-import { StaticBackground } from "../chapter2/part1/StaticBackground";
+import { StaticBackground } from "../../components/StaticBackground";
 
 export default function Cover3() {
   const hasFirstPrediction = useHasFirstPrediction();

@@ -12,6 +12,7 @@ import React, {
 } from "react";
 import { SpringValue, useSpring } from "react-spring";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
+import { StaticBackground } from "src/components/StaticBackground";
 import { useCoverAudio } from "src/hooks/useCoverAudio";
 import { useFaceApiPredictions } from "src/hooks/useFaceApiPredictions";
 import { useHasFirstFaceApiPrediction } from "src/hooks/useHasFirstFaceApiPrediction";
@@ -81,57 +82,76 @@ export default function Cover4() {
   );
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <>
+      {!hasWebcamStream && (
+        <ResizeCanvas
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+          }}
+          orthographic={false}
+          linear
+        >
+          <StaticBackground />
+        </ResizeCanvas>
+      )}
       <div
         style={{
-          position: "relative",
+          position: "absolute",
           width: "100%",
           height: "100%",
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gridTemplateRows: "min-content auto",
+          opacity: hasWebcamStream ? 1 : 0,
         }}
       >
         <div
           style={{
+            position: "relative",
             width: "100%",
-            paddingTop: "58px",
-            boxSizing: "border-box",
-            textAlign: "center",
+            height: "100%",
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gridTemplateRows: "min-content auto",
           }}
         >
-          <Text
-            color="yellow"
-            size="32px"
+          <div
             style={{
-              textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
-              userSelect: "none",
+              width: "100%",
+              paddingTop: "58px",
+              boxSizing: "border-box",
+              textAlign: "center",
             }}
           >
-            {!hasWebcamStream ? (
-              ""
-            ) : !hasFirstPrediction ? (
-              "Loading..."
-            ) : (
-              <>
-                {state === 0 && `You don't look happy :(`}
-                {state === 1 &&
-                  `Let's ${!isSmall ? "see what we can do to " : ""}fix that.`}
-                {state === 2 && `There, much better!`}
-              </>
-            )}
-          </Text>
-        </div>
+            <Text
+              color="yellow"
+              size="32px"
+              style={{
+                textShadow: `0px 4px 4px rgba(0, 0, 0, 0.25)`,
+                userSelect: "none",
+              }}
+            >
+              {!hasWebcamStream ? (
+                ""
+              ) : !hasFirstPrediction ? (
+                "Loading..."
+              ) : (
+                <>
+                  {state === 0 && `You don't look happy :(`}
+                  {state === 1 &&
+                    `Let's ${
+                      !isSmall ? "see what we can do to " : ""
+                    }fix that.`}
+                  {state === 2 && `There, much better!`}
+                </>
+              )}
+            </Text>
+          </div>
 
-        {interactive}
+          {interactive}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

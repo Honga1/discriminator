@@ -1,5 +1,6 @@
 import { Text } from "grommet";
 import React, { useEffect, useRef, useState } from "react";
+import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { useAnimationFrame } from "src/hooks/useAnimationFrame";
 import { useAsyncMemo } from "src/hooks/useAsyncMemo";
 import { useCoverAudio } from "src/hooks/useCoverAudio";
@@ -7,6 +8,7 @@ import { useHasFirstPrediction } from "src/hooks/useHasFirstPrediction";
 import { usePredictions } from "src/hooks/usePredictions";
 import { store, useStore } from "../../store/store";
 import { eyes } from "./eyes/eyes";
+import { StaticBackground } from "../../components/StaticBackground";
 
 export default function Cover2() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -123,12 +125,27 @@ export default function Cover2() {
                 }`}
           </Text>
         </div>
-        <canvas
-          width={window.innerWidth / 2}
-          height={window.innerHeight / 2}
-          style={{ width: "100%", height: "100%" }}
-          ref={ref}
-        ></canvas>
+        {hasWebcamStream ? (
+          <canvas
+            width={window.innerWidth / 2}
+            height={window.innerHeight / 2}
+            style={{ width: "100%", height: "100%" }}
+            ref={ref}
+          ></canvas>
+        ) : (
+          <ResizeCanvas
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              pointerEvents: "none",
+            }}
+            orthographic={false}
+            linear
+          >
+            <StaticBackground />
+          </ResizeCanvas>
+        )}
       </div>
     </div>
   );
