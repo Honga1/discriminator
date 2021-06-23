@@ -17,7 +17,7 @@ const Cover3 = lazy(
   async () => import(/* webpackChunkName: "Cover3" */ "./chapter3/Cover3")
 );
 const Cover4 = lazy(
-  async () => import(/* webpackChunkName: "Cover4" */ "./chapter4/Cover4")
+  async () => import(/* webpackChunkName: "Cover4" */ "./chapter4/cover/Cover4")
 );
 const Chapter1 = lazy(
   async () => import(/* webpackChunkName: "Chapter1" */ "./chapter1/Chapter1")
@@ -29,7 +29,8 @@ const Chapter3 = lazy(
   async () => import(/* webpackChunkName: "Chapter3" */ "./chapter3/Chapter3")
 );
 const Chapter4 = lazy(
-  async () => import(/* webpackChunkName: "Chapter4" */ "./chapter4/Chapter4")
+  async () =>
+    import(/* webpackChunkName: "Chapter4" */ "./chapter4/chapter/Chapter4")
 );
 
 export const Chapter = memo(

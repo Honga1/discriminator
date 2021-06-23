@@ -1,6 +1,7 @@
 import { Line, useContextBridge } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Box, Grid, ResponsiveContext, Text, ThemeContext } from "grommet";
+import { Howl } from "howler";
 import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ResizeCanvas } from "src/components/ResizeCanvas";
 import { VideoPlayer } from "src/components/VideoPlayer";
@@ -23,7 +24,28 @@ import {
 import { Line2 } from "three-stdlib";
 import createHook from "zustand";
 import create from "zustand/vanilla";
-import { SquareDiv } from "../chapter3/components/SquareDiv";
+import { SquareDiv } from "../../chapter3/components/SquareDiv";
+import sound1Caf from "./audio/1.caf";
+import sound1Ogg from "./audio/1.ogg";
+import sound2Caf from "./audio/2.caf";
+import sound2Ogg from "./audio/2.ogg";
+import sound3Caf from "./audio/3.caf";
+import sound3Ogg from "./audio/3.ogg";
+import sound4Caf from "./audio/4.caf";
+import sound4Ogg from "./audio/4.ogg";
+import sound5Caf from "./audio/5.caf";
+import sound5Ogg from "./audio/5.ogg";
+import sound6Caf from "./audio/6.caf";
+import sound6Ogg from "./audio/6.ogg";
+
+const soundSrc = {
+  1: { ogg: sound1Ogg, caf: sound1Caf },
+  2: { ogg: sound2Ogg, caf: sound2Caf },
+  3: { ogg: sound3Ogg, caf: sound3Caf },
+  4: { ogg: sound4Ogg, caf: sound4Caf },
+  5: { ogg: sound5Ogg, caf: sound5Caf },
+  6: { ogg: sound6Ogg, caf: sound6Caf },
+};
 
 type Stages =
   | "VIDEO"
@@ -94,6 +116,41 @@ export default function Chapter4() {
 
     video.ontimeupdate = (event) => onTimeUpdate({ nativeEvent: event });
   }, []);
+
+  const sounds = useMemo(() => {
+    const sounds = Array.from({ length: 6 }).map((_, index) => {
+      return new Howl({
+        src: [
+          soundSrc[(index + 1) as keyof typeof soundSrc].ogg,
+          soundSrc[(index + 1) as keyof typeof soundSrc].caf,
+        ],
+        volume: 0.5,
+      });
+    });
+
+    function* generator() {
+      let index = 0;
+
+      while (true) {
+        index++;
+        index %= sounds.length;
+
+        yield sounds[index]!;
+      }
+    }
+
+    return generator();
+  }, []);
+
+  useEffect(() => {
+    switch (stage) {
+      case "VIDEO":
+        break;
+
+      default:
+        sounds.next().value?.play();
+    }
+  }, [sounds, stage]);
 
   const ContextBridge = useContextBridge(ThemeContext, ResponsiveContext);
   const isSmall = useContext(ResponsiveContext) === "small";

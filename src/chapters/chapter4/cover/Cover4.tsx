@@ -27,7 +27,7 @@ import {
   Vector4,
   VideoTexture,
 } from "three";
-import { SquareDiv } from "../chapter3/components/SquareDiv";
+import { SquareDiv } from "../../chapter3/components/SquareDiv";
 import sound1Caf from "./audio/1.caf";
 import sound1Ogg from "./audio/1.ogg";
 import sound2Caf from "./audio/2.caf";
