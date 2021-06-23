@@ -351,7 +351,6 @@ const LineFace = memo(() => {
   const line = useMemo(
     () => (
       <Line
-        skinning
         ref={ref}
         points={Array.from({ length: 68 }).map(() => [0, 0, 0])}
         color={colorTheme.greenLight}
