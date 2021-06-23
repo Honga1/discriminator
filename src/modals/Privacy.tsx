@@ -36,13 +36,22 @@ const Privacy = () => {
         , a privacy respecting analytics tool.
         <br />
         <br />
+        As the website uses a number of unstable and experimental technologies,
+        we use{" "}
+        <Anchor target="_blank" href="https://sentry.io/">
+          Sentry
+        </Anchor>
+        , which captures bugs and errors that occur in your browser so that we
+        may stomp them out.
+        <br />
+        <br />
         There is a possibility that this Privacy Policy will be adapted in the
         future, to clarify or modify it in response to feature changes or user
         feedback. You can refer to the last updated timestamp at the bottom of
         the page.
         <br />
         <br />
-        Last updated: May 19 2021
+        Last updated: June 23 2021
       </Text>
     </>
   );
