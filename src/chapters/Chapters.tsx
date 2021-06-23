@@ -2,9 +2,10 @@ import { Box, Text } from "grommet";
 import React, { lazy, memo, Suspense, useEffect, useMemo } from "react";
 import { animated, to, useSpring } from "react-spring";
 import { PredictionsStore } from "src/store/PredictionsStore";
-import { store } from "src/store/store";
+import { store, useStore } from "src/store/store";
 import { colorTheme } from "src/theme";
 import { useAnimationSequence } from "./chapter3/hooks/useAnimationSequence";
+import cursor from "src/images/cursor.png";
 
 const Cover1 = lazy(
   async () => import(/* webpackChunkName: "Cover1" */ "./chapter1/Cover1")
@@ -71,6 +72,10 @@ export const Chapter = memo(
       [currentPage]
     );
 
+    const hasWebcamStream = useStore(
+      (state) => state.webcamStream !== undefined
+    );
+
     return (
       <Box fill flex={false} style={{ position: "relative" }}>
         <Suspense fallback={<Text color={colorTheme.yellow}>Loading...</Text>}>
@@ -96,6 +101,7 @@ export const Chapter = memo(
                 height: "100%",
                 position: "absolute",
                 top: 0,
+                cursor: !hasWebcamStream ? `url(${cursor}), auto` : "auto",
               }}
             >
               {cover}
