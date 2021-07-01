@@ -47,15 +47,14 @@ export default function Chapter2() {
 
   useChapter(ref, true);
 
-  const [part, setPart] =
-    useState<
-      | "SCREEN_1_MASK_1"
-      | "SCREEN_1_MASK_2"
-      | "SCREEN_1_MASK_3"
-      | "DEEPFAKE_1"
-      | "DEEPFAKE_2"
-      | "REST_OF_VIDEO"
-    >("SCREEN_1_MASK_1");
+  const [part, setPart] = useState<
+    | "SCREEN_1_MASK_1"
+    | "SCREEN_1_MASK_2"
+    | "SCREEN_1_MASK_3"
+    | "DEEPFAKE_1"
+    | "DEEPFAKE_2"
+    | "REST_OF_VIDEO"
+  >("SCREEN_1_MASK_1");
 
   useEffect(() => {
     if (!ref.current) return;
@@ -68,11 +67,11 @@ export default function Chapter2() {
         setPart("DEEPFAKE_1");
       }
 
-      if (seconds >= 36.5 && seconds < 46.5) {
+      if (seconds >= 36.5 && seconds < 47) {
         setPart("DEEPFAKE_2");
       }
 
-      if (seconds > 46.5) {
+      if (seconds > 47) {
         setPart("REST_OF_VIDEO");
       }
 
