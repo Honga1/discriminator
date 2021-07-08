@@ -23,25 +23,6 @@ import deepFakeMask2 from "./deepfake-mask-2.png";
 import deepFakeFallback from "./fallback.mp4";
 import { Part1 } from "./part1/Part1";
 
-function Part2(props: { part: string }) {
-  return (
-    <ResizeCanvas
-      style={{
-        position: "absolute",
-        opacity: props.part.includes("DEEPFAKE") ? 1 : 0,
-      }}
-      orthographic
-      linear
-    >
-      <DeepFakeVideoPlane
-        part={
-          props.part === "DEEPFAKE_1" ? 1 : props.part === "DEEPFAKE_2" ? 2 : 0
-        }
-      />
-    </ResizeCanvas>
-  );
-}
-
 export default function Chapter2() {
   const ref = useRef<HTMLVideoElement>(null);
 
@@ -52,6 +33,7 @@ export default function Chapter2() {
     | "SCREEN_1_MASK_2"
     | "SCREEN_1_MASK_3"
     | "DEEPFAKE_1"
+    | "TRANSITION_SIZE"
     | "DEEPFAKE_2"
     | "REST_OF_VIDEO"
   >("SCREEN_1_MASK_1");
@@ -63,11 +45,15 @@ export default function Chapter2() {
       const video = event.target as HTMLVideoElement;
       const seconds = video.currentTime;
 
-      if (seconds > 31 && seconds < 36.5) {
+      if (seconds > 31 && seconds < 35.5) {
         setPart("DEEPFAKE_1");
       }
 
-      if (seconds >= 36.5 && seconds < 47) {
+      if (seconds >= 35.5 && seconds < 37) {
+        setPart("TRANSITION_SIZE");
+      }
+
+      if (seconds >= 37 && seconds < 47) {
         setPart("DEEPFAKE_2");
       }
 
@@ -113,6 +99,7 @@ export default function Chapter2() {
         align="center"
         overflow="hidden"
       >
+        {part !== "REST_OF_VIDEO" && <Part2 part={part} />}
         <VideoPlayer
           ref={ref}
           style={{
@@ -120,16 +107,35 @@ export default function Chapter2() {
             outline: "none",
             width: "100%",
             height: "100%",
+            zIndex: 0,
           }}
           width="100%"
           height="100%"
-          srcDash={`https://discriminator-media-server.jaeperris.com/part2/stream.mpd`}
+          srcDash={`https://discriminator-media-server.jaeperris.com/part2alpha/stream.mpd`}
           srcHls={`https://discriminator-media-server.jaeperris.com/part2/master.m3u8`}
         />
-        {part !== "REST_OF_VIDEO" && <Part2 part={part} />}
       </Box>
       {part.includes("SCREEN_1") && <Part1 maskType={maskType} />}
     </Box>
+  );
+}
+
+function Part2(props: { part: string }) {
+  return (
+    <ResizeCanvas
+      style={{
+        position: "absolute",
+        opacity: props.part.includes("DEEPFAKE") ? 1 : 0,
+      }}
+      orthographic
+      linear
+    >
+      <DeepFakeVideoPlane
+        part={
+          props.part === "DEEPFAKE_1" ? 1 : props.part === "DEEPFAKE_2" ? 2 : 0
+        }
+      />
+    </ResizeCanvas>
   );
 }
 
@@ -403,10 +409,6 @@ void main() {
 
   vec2 aspectCorrection = vec2(1.0, 9.0/16.0);
   vScreenUv = (gl_Position.xy + 1.0) / 2.0;
-
-  // set height to correct aspect
-
-
 }
 `;
 
