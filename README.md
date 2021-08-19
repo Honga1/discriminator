@@ -75,3 +75,12 @@ The live version of this webpage is currently hosted by [Netlify](https://www.ne
 ## Analytics & Error Logging
 
 The project uses [Sentry](https://sentry.io/) for error logging, and [Goat Counter](https://www.goatcounter.com/) for simple anonymous analytics.
+
+## How to run
+
+```bash
+git clone https://github.com/honga1/discriminator
+cd discriminator
+npm i
+npm start
+```
