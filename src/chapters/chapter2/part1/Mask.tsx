@@ -15,7 +15,7 @@ import { V3 } from "../../../libs/v3";
 import videoMaskAlphaSrc from "./alpha.mp4";
 import brettMaskAlpha from "./brett-mask-alpha.png";
 import brettMaskMap from "./brett-mask-map.png";
-import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask";
+import { maskMesh, TRIANGULATION, UV_COORDS } from "./mask-mesh";
 import videoMaskSrc from "./mask.mp4";
 
 interface MaskMaterial extends ShaderMaterial {
